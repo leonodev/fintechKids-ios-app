@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5D84DCF12EC8D91E00F6DDFE /* FHKUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 5D84DCF02EC8D91E00F6DDFE /* FHKUtils */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5D30BFC52EC1E6FE005C42B4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D84DCF12EC8D91E00F6DDFE /* FHKUtils in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = fintechKids;
 			packageProductDependencies = (
+				5D84DCF02EC8D91E00F6DDFE /* FHKUtils */,
 			);
 			productName = fintechKids;
 			productReference = 5D30BFB72EC1E6FB005C42B4 /* fintechKids.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 5D30BFAE2EC1E6FB005C42B4;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5D84DCEF2EC8D91E00F6DDFE /* XCRemoteSwiftPackageReference "fintechKids-modulo-utils-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5D30BFB82EC1E6FB005C42B4 /* Products */;
 			projectDirPath = "";
@@ -578,6 +587,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5D84DCEF2EC8D91E00F6DDFE /* XCRemoteSwiftPackageReference "fintechKids-modulo-utils-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-utils-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5D84DCF02EC8D91E00F6DDFE /* FHKUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D84DCEF2EC8D91E00F6DDFE /* XCRemoteSwiftPackageReference "fintechKids-modulo-utils-ios" */;
+			productName = FHKUtils;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5D30BFAF2EC1E6FB005C42B4 /* Project object */;
 }

@@ -1,0 +1,15 @@
+{
+  "originHash" : "3fa85c7aa0f71fa7cd9074a0d9ad6fa755ea344ce6dd0f6f61b707787d50c288",
+  "pins" : [
+    {
+      "identity" : "fintechkids-modulo-utils-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-utils-ios.git",
+      "state" : {
+        "revision" : "30c56b65e312f8d68dc2cac7dbb70a665c49df9d",
+        "version" : "1.0.1"
+      }
+    }
+  ],
+  "version" : 3
+}

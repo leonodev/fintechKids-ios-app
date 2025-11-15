@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FHKUtils
 
 struct ContentView: View {
     var body: some View {
@@ -16,6 +17,9 @@ struct ContentView: View {
             Text("Hello, world!")
         }
         .padding()
+        .onAppear  {
+            Logger.info("Success")
+        }
     }
 }
 
