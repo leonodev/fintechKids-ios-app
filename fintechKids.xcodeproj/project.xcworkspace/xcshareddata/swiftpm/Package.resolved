@@ -1,6 +1,33 @@
 {
-  "originHash" : "3fa85c7aa0f71fa7cd9074a0d9ad6fa755ea344ce6dd0f6f61b707787d50c288",
+  "originHash" : "2bd9b51d034fff6e6d7abb91f8eff523a9a8b41a1f0237b3f8040456f0b99202",
   "pins" : [
+    {
+      "identity" : "fintechkids-modulo-authentication-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-authentication-ios",
+      "state" : {
+        "revision" : "f4fa2e770be59a54e4d613e36be3ad60a6f05240",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "fintechkids-modulo-core-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-core-ios",
+      "state" : {
+        "revision" : "77db3a712a23c5dc426fc52e6dc6de072df09b83",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "fintechkids-modulo-designsystem-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-designsystem-ios",
+      "state" : {
+        "revision" : "de22eda00e69055f0d9d2df023c1e7e726f44a29",
+        "version" : "1.0.1"
+      }
+    },
     {
       "identity" : "fintechkids-modulo-utils-ios",
       "kind" : "remoteSourceControl",

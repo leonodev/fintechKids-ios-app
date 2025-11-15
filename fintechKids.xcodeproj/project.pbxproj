@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D28A2552EC8F48E00AFF43A /* FHKCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A2542EC8F48E00AFF43A /* FHKCore */; };
+		5D28A2582EC8F4AB00AFF43A /* FHKDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A2572EC8F4AB00AFF43A /* FHKDesignSystem */; };
+		5D28A25B2EC8F4C800AFF43A /* FHKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A25A2EC8F4C800AFF43A /* FHKAuth */; };
 		5D84DCF12EC8D91E00F6DDFE /* FHKUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 5D84DCF02EC8D91E00F6DDFE /* FHKUtils */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +60,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D84DCF12EC8D91E00F6DDFE /* FHKUtils in Frameworks */,
+				5D28A2552EC8F48E00AFF43A /* FHKCore in Frameworks */,
+				5D28A25B2EC8F4C800AFF43A /* FHKAuth in Frameworks */,
+				5D28A2582EC8F4AB00AFF43A /* FHKDesignSystem in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +124,9 @@
 			name = fintechKids;
 			packageProductDependencies = (
 				5D84DCF02EC8D91E00F6DDFE /* FHKUtils */,
+				5D28A2542EC8F48E00AFF43A /* FHKCore */,
+				5D28A2572EC8F4AB00AFF43A /* FHKDesignSystem */,
+				5D28A25A2EC8F4C800AFF43A /* FHKAuth */,
 			);
 			productName = fintechKids;
 			productReference = 5D30BFB72EC1E6FB005C42B4 /* fintechKids.app */;
@@ -203,6 +212,9 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5D84DCEF2EC8D91E00F6DDFE /* XCRemoteSwiftPackageReference "fintechKids-modulo-utils-ios" */,
+				5D28A2532EC8F48E00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-core-ios" */,
+				5D28A2562EC8F4AB00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-designsystem-ios" */,
+				5D28A2592EC8F4C800AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5D30BFB82EC1E6FB005C42B4 /* Products */;
@@ -589,6 +601,30 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5D28A2532EC8F48E00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-core-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-core-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
+		5D28A2562EC8F4AB00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-designsystem-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-designsystem-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
+		5D28A2592EC8F4C800AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-authentication-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
 		5D84DCEF2EC8D91E00F6DDFE /* XCRemoteSwiftPackageReference "fintechKids-modulo-utils-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-utils-ios.git";
@@ -600,6 +636,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5D28A2542EC8F48E00AFF43A /* FHKCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D28A2532EC8F48E00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-core-ios" */;
+			productName = FHKCore;
+		};
+		5D28A2572EC8F4AB00AFF43A /* FHKDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D28A2562EC8F4AB00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-designsystem-ios" */;
+			productName = FHKDesignSystem;
+		};
+		5D28A25A2EC8F4C800AFF43A /* FHKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D28A2592EC8F4C800AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */;
+			productName = FHKAuth;
+		};
 		5D84DCF02EC8D91E00F6DDFE /* FHKUtils */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5D84DCEF2EC8D91E00F6DDFE /* XCRemoteSwiftPackageReference "fintechKids-modulo-utils-ios" */;
