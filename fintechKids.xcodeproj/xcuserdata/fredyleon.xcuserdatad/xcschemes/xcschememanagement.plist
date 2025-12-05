@@ -4,10 +4,33 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>fintechKids.xcscheme_^#shared#^_</key>
+		<key>FintechKids-Dev.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>FintechKids-Pro.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>5D30BFB62EC1E6FB005C42B4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5D30BFC32EC1E6FE005C42B4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5D30BFCD2EC1E6FE005C42B4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

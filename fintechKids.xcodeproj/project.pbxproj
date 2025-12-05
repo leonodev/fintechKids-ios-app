@@ -36,9 +36,22 @@
 		5D30BFCE2EC1E6FE005C42B4 /* fintechKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5D28A2952ED0ED4200AFF43A /* Exceptions for "fintechKids" folder in "fintechKids" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Configuration/Info-Dev.plist",
+			);
+			target = 5D30BFB62EC1E6FB005C42B4 /* fintechKids */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5D30BFB92EC1E6FB005C42B4 /* fintechKids */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5D28A2952ED0ED4200AFF43A /* Exceptions for "fintechKids" folder in "fintechKids" target */,
+			);
 			path = fintechKids;
 			sourceTree = "<group>";
 		};
@@ -421,6 +434,7 @@
 				DEVELOPMENT_TEAM = TZ6ZTCG253;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "fintechKids/Configuration/Info-Dev.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -453,6 +467,7 @@
 				DEVELOPMENT_TEAM = TZ6ZTCG253;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "fintechKids/Configuration/Info-Pro.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -12,19 +12,26 @@ import FHKAuth
 import FHKDesignSystem
 
 struct ContentView: View {
+    var environment: String {
+        #if DEBUG
+        return "🚀 DESARROLLO - ATS Deshabilitado"
+        #else
+        
+        return "📱 DESARROLLO - ATS HABILITADO"
+        #endif
+    }
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            EnvironmentView()
         }
-        .padding()
         .onAppear  {
             Logger.info("Success")
         }
+        
     }
 }
+
 
 #Preview {
     ContentView()
