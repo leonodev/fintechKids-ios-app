@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D03F3B32EE49BC3001FB7F9 /* FHKIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5D03F3B22EE49BC3001FB7F9 /* FHKIcon.icon */; };
 		5D28A2552EC8F48E00AFF43A /* FHKCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A2542EC8F48E00AFF43A /* FHKCore */; };
 		5D28A2582EC8F4AB00AFF43A /* FHKDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A2572EC8F4AB00AFF43A /* FHKDesignSystem */; };
 		5D28A25B2EC8F4C800AFF43A /* FHKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A25A2EC8F4C800AFF43A /* FHKAuth */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D03F3B22EE49BC3001FB7F9 /* FHKIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = FHKIcon.icon; sourceTree = "<group>"; };
 		5D30BFB72EC1E6FB005C42B4 /* fintechKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fintechKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30BFC42EC1E6FE005C42B4 /* fintechKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30BFCE2EC1E6FE005C42B4 /* fintechKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,6 +113,7 @@
 		5D30BFAE2EC1E6FB005C42B4 = {
 			isa = PBXGroup;
 			children = (
+				5D03F3B22EE49BC3001FB7F9 /* FHKIcon.icon */,
 				5D34319E2EE44B530056CF6F /* FintechKids-Dev.xctestplan */,
 				5D3D4ACB2EE44686003DE89A /* FintechKidsUI-Dev.xctestplan */,
 				5D30BFB92EC1E6FB005C42B4 /* fintechKids */,
@@ -266,6 +269,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D03F3B32EE49BC3001FB7F9 /* FHKIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +453,7 @@
 		5D30BFD92EC1E6FE005C42B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = FHKIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -482,7 +486,7 @@
 		5D30BFDA2EC1E6FE005C42B4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = FHKIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
