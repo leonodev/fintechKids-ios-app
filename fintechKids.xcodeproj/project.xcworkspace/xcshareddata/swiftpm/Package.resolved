@@ -1,5 +1,5 @@
 {
-  "originHash" : "2bd9b51d034fff6e6d7abb91f8eff523a9a8b41a1f0237b3f8040456f0b99202",
+  "originHash" : "93d60e8ff7463f5bd6165abe628f0369a33228424d21cac359f81d8b31039b88",
   "pins" : [
     {
       "identity" : "fintechkids-modulo-authentication-ios",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leonodev/fintechKids-modulo-designsystem-ios",
       "state" : {
-        "revision" : "de22eda00e69055f0d9d2df023c1e7e726f44a29",
-        "version" : "1.0.1"
+        "revision" : "4396fc3904b008771d0748ab60cce4c948e1db16",
+        "version" : "1.0.4"
       }
     },
     {
@@ -35,6 +35,51 @@
       "state" : {
         "revision" : "30c56b65e312f8d68dc2cac7dbb70a665c49df9d",
         "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "swift-custom-dump",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-custom-dump",
+      "state" : {
+        "revision" : "82645ec760917961cfa08c9c0c7104a57a0fa4b1",
+        "version" : "1.3.3"
+      }
+    },
+    {
+      "identity" : "swift-snapshot-testing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-snapshot-testing.git",
+      "state" : {
+        "revision" : "a8b7c5e0ed33d8ab8887d1654d9b59f2cbad529b",
+        "version" : "1.18.7"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
+      }
+    },
+    {
+      "identity" : "viewinspector",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nalexn/ViewInspector.git",
+      "state" : {
+        "revision" : "e9a06346499a3a889165647e3f23f8a7b2609a1c",
+        "version" : "0.10.3"
+      }
+    },
+    {
+      "identity" : "xctest-dynamic-overlay",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
+      "state" : {
+        "revision" : "31073495cae9caf243c440eac94b3ab067e3d7bc",
+        "version" : "1.8.0"
       }
     }
   ],

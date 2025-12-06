@@ -10,6 +10,12 @@
 		5D28A2552EC8F48E00AFF43A /* FHKCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A2542EC8F48E00AFF43A /* FHKCore */; };
 		5D28A2582EC8F4AB00AFF43A /* FHKDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A2572EC8F4AB00AFF43A /* FHKDesignSystem */; };
 		5D28A25B2EC8F4C800AFF43A /* FHKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5D28A25A2EC8F4C800AFF43A /* FHKAuth */; };
+		5D3431A02EE44BCD0056CF6F /* FintechKids-Dev.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 5D34319E2EE44B530056CF6F /* FintechKids-Dev.xctestplan */; };
+		5D3431B22EE458B90056CF6F /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 5D3431B12EE458B90056CF6F /* ViewInspector */; };
+		5D3431B52EE466410056CF6F /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 5D3431B42EE466410056CF6F /* InlineSnapshotTesting */; };
+		5D3431B72EE466410056CF6F /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 5D3431B62EE466410056CF6F /* SnapshotTesting */; };
+		5D3431B92EE466410056CF6F /* SnapshotTestingCustomDump in Frameworks */ = {isa = PBXBuildFile; productRef = 5D3431B82EE466410056CF6F /* SnapshotTestingCustomDump */; };
+		5D3D4ACD2EE446FB003DE89A /* FintechKidsUI-Dev.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 5D3D4ACB2EE44686003DE89A /* FintechKidsUI-Dev.xctestplan */; };
 		5D84DCF12EC8D91E00F6DDFE /* FHKUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 5D84DCF02EC8D91E00F6DDFE /* FHKUtils */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +40,8 @@
 		5D30BFB72EC1E6FB005C42B4 /* fintechKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fintechKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30BFC42EC1E6FE005C42B4 /* fintechKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30BFCE2EC1E6FE005C42B4 /* fintechKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D34319E2EE44B530056CF6F /* FintechKids-Dev.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FintechKids-Dev.xctestplan"; sourceTree = "<group>"; };
+		5D3D4ACB2EE44686003DE89A /* FintechKidsUI-Dev.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FintechKidsUI-Dev.xctestplan"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -83,6 +91,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D3431B92EE466410056CF6F /* SnapshotTestingCustomDump in Frameworks */,
+				5D3431B72EE466410056CF6F /* SnapshotTesting in Frameworks */,
+				5D3431B52EE466410056CF6F /* InlineSnapshotTesting in Frameworks */,
+				5D3431B22EE458B90056CF6F /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +111,8 @@
 		5D30BFAE2EC1E6FB005C42B4 = {
 			isa = PBXGroup;
 			children = (
+				5D34319E2EE44B530056CF6F /* FintechKids-Dev.xctestplan */,
+				5D3D4ACB2EE44686003DE89A /* FintechKidsUI-Dev.xctestplan */,
 				5D30BFB92EC1E6FB005C42B4 /* fintechKids */,
 				5D30BFC72EC1E6FE005C42B4 /* fintechKidsTests */,
 				5D30BFD12EC1E6FE005C42B4 /* fintechKidsUITests */,
@@ -163,6 +177,10 @@
 			);
 			name = fintechKidsTests;
 			packageProductDependencies = (
+				5D3431B12EE458B90056CF6F /* ViewInspector */,
+				5D3431B42EE466410056CF6F /* InlineSnapshotTesting */,
+				5D3431B62EE466410056CF6F /* SnapshotTesting */,
+				5D3431B82EE466410056CF6F /* SnapshotTestingCustomDump */,
 			);
 			productName = fintechKidsTests;
 			productReference = 5D30BFC42EC1E6FE005C42B4 /* fintechKidsTests.xctest */;
@@ -228,6 +246,8 @@
 				5D28A2532EC8F48E00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-core-ios" */,
 				5D28A2562EC8F4AB00AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-designsystem-ios" */,
 				5D28A2592EC8F4C800AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */,
+				5D3431B02EE458B90056CF6F /* XCRemoteSwiftPackageReference "ViewInspector" */,
+				5D3431B32EE466410056CF6F /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5D30BFB82EC1E6FB005C42B4 /* Products */;
@@ -253,6 +273,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D3431A02EE44BCD0056CF6F /* FintechKids-Dev.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +281,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D3D4ACD2EE446FB003DE89A /* FintechKidsUI-Dev.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,7 +651,7 @@
 			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-designsystem-ios";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
+				minimumVersion = 1.0.4;
 			};
 		};
 		5D28A2592EC8F4C800AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */ = {
@@ -638,6 +660,22 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.1;
+			};
+		};
+		5D3431B02EE458B90056CF6F /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.3;
+			};
+		};
+		5D3431B32EE466410056CF6F /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.18.7;
 			};
 		};
 		5D84DCEF2EC8D91E00F6DDFE /* XCRemoteSwiftPackageReference "fintechKids-modulo-utils-ios" */ = {
@@ -665,6 +703,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5D28A2592EC8F4C800AFF43A /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */;
 			productName = FHKAuth;
+		};
+		5D3431B12EE458B90056CF6F /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D3431B02EE458B90056CF6F /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
+		5D3431B42EE466410056CF6F /* InlineSnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D3431B32EE466410056CF6F /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = InlineSnapshotTesting;
+		};
+		5D3431B62EE466410056CF6F /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D3431B32EE466410056CF6F /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		5D3431B82EE466410056CF6F /* SnapshotTestingCustomDump */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D3431B32EE466410056CF6F /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTestingCustomDump;
 		};
 		5D84DCF02EC8D91E00F6DDFE /* FHKUtils */ = {
 			isa = XCSwiftPackageProductDependency;
