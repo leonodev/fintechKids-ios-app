@@ -6,14 +6,26 @@
 //
 
 import SwiftUI
+import FHKCore
+import FHKInjections
 
 @main
 struct fintechKidsApp: App {
-      @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @Inject(\.languageManager) private var langManager
+    
+    init() {
+        Dependencies.registerAll()
+    }
     
     var body: some Scene {
         WindowGroup {
-            LanguageView()
+            NavigationContainer<Routes, SplashScreen> {
+                SplashScreen()
+            }
+            .onAppear {
+                Task { await langManager.readLanguage() }
+            }
         }
     }
 }

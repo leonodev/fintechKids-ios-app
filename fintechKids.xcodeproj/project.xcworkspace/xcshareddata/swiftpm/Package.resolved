@@ -1,5 +1,5 @@
 {
-  "originHash" : "91575ec362e339d9bfdc30e8eb99294a9a36900e230560c272c736cf40b02741",
+  "originHash" : "32f64599acaab9fb8b543a667f52c6a37e734bd7f7ea75beda6acebc8ca110ef",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -24,8 +24,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leonodev/fintechKids-modulo-authentication-ios",
       "state" : {
-        "revision" : "f4fa2e770be59a54e4d613e36be3ad60a6f05240",
-        "version" : "1.0.1"
+        "branch" : "main",
+        "revision" : "f28b1a1a7e4e341b519e06444952bfb32436418b"
+      }
+    },
+    {
+      "identity" : "fintechkids-modulo-config-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-config-ios.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0b50d79a4caa98d5f0b270b19c95e80f29805aa2"
       }
     },
     {
@@ -33,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leonodev/fintechKids-modulo-core-ios",
       "state" : {
-        "revision" : "77db3a712a23c5dc426fc52e6dc6de072df09b83",
-        "version" : "1.0.1"
+        "branch" : "main",
+        "revision" : "6db4fc763cda4abcf3233c94db8d9924e1aed93a"
       }
     },
     {
@@ -42,8 +51,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leonodev/fintechKids-modulo-designsystem-ios",
       "state" : {
-        "revision" : "4396fc3904b008771d0748ab60cce4c948e1db16",
-        "version" : "1.0.4"
+        "branch" : "main",
+        "revision" : "475686d2dfc8c5187482ea947ece5b2565fdfbd2"
+      }
+    },
+    {
+      "identity" : "fintechkids-modulo-injections-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-injections-ios.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "c76ad46f38ff51048fa02b83384ce190eced6785"
+      }
+    },
+    {
+      "identity" : "fintechkids-modulo-storage-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-storage-ios.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "db3aa94ece3e00ad361bc79a990849cba2472d02"
       }
     },
     {
@@ -51,17 +78,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leonodev/fintechKids-modulo-utils-ios.git",
       "state" : {
-        "revision" : "30c56b65e312f8d68dc2cac7dbb70a665c49df9d",
-        "version" : "1.0.1"
+        "branch" : "main",
+        "revision" : "ec644a8d61dcb404ae2e1c33083db09b693ddcbf"
       }
     },
     {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/firebase-ios-sdk",
+      "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "087bb95235f676c1a37e928769a5b6645dcbd325",
-        "version" : "12.6.0"
+        "revision" : "45210bd1ea695779e6de016ab00fea8c0b7eb2ef",
+        "version" : "12.7.0"
       }
     },
     {
@@ -137,6 +164,15 @@
       }
     },
     {
+      "identity" : "lottie-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-spm.git",
+      "state" : {
+        "revision" : "04f2fd18cc9404a0a0917265a449002674f24ec9",
+        "version" : "4.5.2"
+      }
+    },
+    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
@@ -155,12 +191,66 @@
       }
     },
     {
+      "identity" : "supabase-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/supabase/supabase-swift",
+      "state" : {
+        "revision" : "f633f1ce9ff6dac9f33a1717d191a6c3985148fa",
+        "version" : "2.39.0"
+      }
+    },
+    {
+      "identity" : "swift-asn1",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-asn1.git",
+      "state" : {
+        "revision" : "810496cf121e525d660cd0ea89a758740476b85f",
+        "version" : "1.5.1"
+      }
+    },
+    {
+      "identity" : "swift-clocks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-clocks",
+      "state" : {
+        "revision" : "cc46202b53476d64e824e0b6612da09d84ffde8e",
+        "version" : "1.0.6"
+      }
+    },
+    {
+      "identity" : "swift-concurrency-extras",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-concurrency-extras",
+      "state" : {
+        "revision" : "5a3825302b1a0d744183200915a47b508c828e6f",
+        "version" : "1.3.2"
+      }
+    },
+    {
+      "identity" : "swift-crypto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-crypto.git",
+      "state" : {
+        "revision" : "6f70fa9eab24c1fd982af18c281c4525d05e3095",
+        "version" : "4.2.0"
+      }
+    },
+    {
       "identity" : "swift-custom-dump",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-custom-dump",
       "state" : {
         "revision" : "82645ec760917961cfa08c9c0c7104a57a0fa4b1",
         "version" : "1.3.3"
+      }
+    },
+    {
+      "identity" : "swift-http-types",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-http-types.git",
+      "state" : {
+        "revision" : "45eb0224913ea070ec4fba17291b9e7ecf4749ca",
+        "version" : "1.5.1"
       }
     },
     {

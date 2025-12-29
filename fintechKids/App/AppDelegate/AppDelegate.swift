@@ -7,7 +7,7 @@
 
 import SwiftUI
 import FirebaseCore
-
+import FHKConfig
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -16,4 +16,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     return true
   }
+    
+    private func setupConfig() {
+        
+#if DEBUG
+        Configuration.setEnvironment(.develop)
+#else
+        Configuration.setEnvironment(.production)
+#endif
+     
+    }
 }

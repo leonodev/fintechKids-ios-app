@@ -21,10 +21,8 @@ platform :ios do
     
     current_scheme = options[:scheme] || "FintechKids-Pro" 
 
-    # Esto busca el valor actual de Build Number en Xcode y lo incrementa en 1.
     increment_build_number(
-        xcodeproj: "fintechKids.xcodeproj", 
-        build_number: options[:build] 
+        xcodeproj: "fintechKids.xcodeproj" # Solo le pasamos el proyecto
     )
     
     # 1. Compilación (Generar el .ipa)
@@ -48,9 +46,18 @@ platform :ios do
 
     # Opcional: git_add y commit para guardar el cambio del número de build
     commit_version_bump(
-        message: "Increment build number to #{get_build_number}",
-        xcodeproj: "fintechKids.xcodeproj",
-        include: ["fintechKids.xcodeproj/project.pbxproj", "Info.plist"] # Archivos afectados por el cambio
-    )
+    message: "Increment build number to #{get_build_number}",
+    xcodeproj: "fintechKids.xcodeproj", 
+    # Usamos `force: true` para ignorar archivos que puedan no existir
+    # y confiamos SOLO en las rutas que nosotros definimos.
+    force: true, 
+    # Especificamos SÓLO los archivos que sabemos que existen y fueron modificados
+    # por increment_build_number.
+    include: [
+        "fintechKids.xcodeproj/project.pbxproj", 
+        "fintechKids/Configuration/Info-Dev.plist", 
+        "fintechKids/Configuration/Info-Pro.plist"
+    ]
+  )
   end
 end

@@ -21,7 +21,7 @@ final class fintechKidsTests: XCTestCase {
     }
 
     func testMenu_language_Exist() throws {
-        let languageView = LanguageView()
+        let languageView = LanguageScreen()
         let identifierMenuLanguage = "menu_language"
         let menuLanguage = try languageView.inspect().find(viewWithAccessibilityIdentifier: identifierMenuLanguage)
         
@@ -30,7 +30,7 @@ final class fintechKidsTests: XCTestCase {
     
     func testMenu_language_ScreenShot() throws {
         withSnapshotTesting(diffTool: .ksdiff) {
-            let languageView = LanguageView()
+            let languageView = LanguageScreen()
             
             // Asegúrate de usar assertSnapshot con la vista y el nombre correcto del snapshot
             assertSnapshot(of: languageView, as: .image)
