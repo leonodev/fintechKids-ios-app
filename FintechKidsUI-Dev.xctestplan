@@ -1,0 +1,30 @@
+{
+  "configurations" : [
+    {
+      "id" : "94E88488-DF0B-4F86-A169-61AEB1610531",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:fintechKids.xcodeproj",
+      "identifier" : "5D30BFCD2EC1E6FE005C42B4",
+      "name" : "fintechKidsUITests"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:fintechKids.xcodeproj",
+        "identifier" : "5D30BFCD2EC1E6FE005C42B4",
+        "name" : "fintechKidsUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
