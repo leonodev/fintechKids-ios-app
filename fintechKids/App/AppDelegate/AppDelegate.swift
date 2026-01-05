@@ -8,22 +8,27 @@
 import SwiftUI
 import FirebaseCore
 import FHKConfig
+import FHKUtils
+import FHKCore
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-
-    return true
-  }
+class AppDelegate: ServicesApplicationDelegate {
     
-    private func setupConfig() {
+    // Register services from here!
+    override var services: [ApplicationService] {
+        return [
+            FirebaseRemoteService(),
+            PushNotificationService()
+        ]
+    }
+   
+    override func application(_ application: UIApplication,
+                              didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
-#if DEBUG
-        Configuration.setEnvironment(.develop)
-#else
-        Configuration.setEnvironment(.production)
-#endif
-     
+        let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        Logger.info("All Services Registered => \(servicesResult)")
+        
+        Dependencies.registerAll()
+        Logger.info("All Injection Values Success")
+        return true
     }
 }
