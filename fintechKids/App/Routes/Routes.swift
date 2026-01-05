@@ -10,10 +10,11 @@ import FHKCore
 import FHKUtils
 
 // Define each case for a navigation route
-public enum Routes: String, NavigationDestination {
+public enum Routes: NavigationDestination {
     case splash
     case language
     case login
+    case goal(id: String)
     
     public var hidesNavigationBar: Bool {
         switch self {
@@ -25,7 +26,12 @@ public enum Routes: String, NavigationDestination {
     }
     
     public var id: String {
-        return self.rawValue
+        switch self {
+        case .splash: return "splash"
+        case .language: return "language"
+        case .login: return "login"
+        case .goal(let id): return "goal_\(id)"
+        }
     }
 }
 
@@ -43,11 +49,14 @@ extension Routes {
             
         case .login:
             return nil
+            
+        case .goal:
+            return "goal".localized().capitalizingFirstLetter()
         }
     }
 }
 
-// DDefine the respective view for each navigation
+// Define the respective view for each navigation
 extension Routes {
     
     @MainActor @ViewBuilder
@@ -62,6 +71,9 @@ extension Routes {
             
         case .login:
             LoginScreen()
+            
+        case .goal(let id):
+            GoalScreen(id: id)
         }
     }
 }
