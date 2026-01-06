@@ -26,6 +26,7 @@ struct LanguageScreen: View {
                 LottieView(animationName: Lotties.language,
                            loopMode: .loop,
                            contentMode: .scaleAspectFit)
+                .accessibilityHidden(true)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
                 
@@ -64,7 +65,7 @@ struct LanguageScreen: View {
                     .padding()
                     
                     Text("version".localized())
-                    
+                        .accessibilityLabel("Versión de la aplicación: \(Text("version".localized()))")
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -124,6 +125,9 @@ extension LanguageScreen {
     var menuClosedView: some View {
         viewModel.selectedFlag
             .resizable()
+            .accessibilityLabel("Idioma actual: \(viewModel.selectedFlag.imageToCode)")
+            .accessibilityHint("Toca para cambiar el idioma")
+            .accessibilityAddTraits(.isButton) // Indica que es interactivo
             .frame(width: FHKSize.size52, height: FHKSize.size52)
             .onTapGesture {
                 withAnimation(flagAnimation) {
@@ -137,6 +141,8 @@ extension LanguageScreen {
             ForEach(Array(menuOptions.enumerated()), id: \.offset) { _, img in
                 img
                     .resizable()
+                    .accessibilityLabel("Cambiar a \(img.imageToCode)")
+                    .accessibilityAddTraits(.isButton)
                     .frame(width: FHKSize.size48, height: FHKSize.size48)
                     .onTapGesture {
                         withAnimation(flagAnimation) {
