@@ -30,10 +30,10 @@ final class fintechKidsTests: XCTestCase {
     
     func testMenu_language_ScreenShot() throws {
         withSnapshotTesting(diffTool: .ksdiff) {
-            let languageView = LanguageScreen()
+            let languageScreen = LanguageScreen()
             
             // Asegúrate de usar assertSnapshot con la vista y el nombre correcto del snapshot
-            assertSnapshot(of: languageView, as: .image)
+            assertSnapshot(of: languageScreen, as: .image)
         }
     }
 }
