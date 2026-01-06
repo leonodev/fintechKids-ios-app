@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import FHKUtils
 
 struct GoalScreen: View {
     var id: String
     
     var body: some View {
-        Text("Hello, Goals ID! \(id)")
+        ScreenContainer {
+            Text("goal".localized().capitalizingFirstLetter() + " \(id)")
+        }
     }
 }
 

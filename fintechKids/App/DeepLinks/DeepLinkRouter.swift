@@ -27,6 +27,7 @@ final class DeepLinkRouter: DeepLinkRouterProtocol {
         guard url.scheme == "fhkApp" else { return }
         
         // Example parsing: fhkApp://goal/123
+        // xcrun simctl openurl booted fhkApp://goal/123
         if url.host == "goal" {
             let id = url.lastPathComponent
             appRouter?.navigate(to: .goal(id: id))
