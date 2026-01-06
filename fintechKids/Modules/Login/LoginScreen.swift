@@ -54,11 +54,11 @@ struct LoginScreen: View {
                         Spacer()
                         Button(action: {
                             // Acción para recuperar contraseña
-                        }) {
+                        }, label: {
                             Text("you_forgot_your_password".localized())
                                 .font(.PangramSans.bold(FHKSize.size16))
                                 .foregroundColor(.fuchsiaPink)
-                        }
+                        })
                     }
                     .padding(.trailing, 4)
                     
@@ -73,7 +73,7 @@ struct LoginScreen: View {
                     // Enlace de Registro
                     Button(action: {
                         // Acción para ir a registro
-                    }) {
+                    }, label: {
                         HStack {
                             Text("you_not_have_an_account".localized())
                                 .font(.PangramSans.extraboldItalic(FHKSize.size16))
@@ -83,7 +83,7 @@ struct LoginScreen: View {
                                 .font(.PangramSans.bold(FHKSize.size16))
                                 .foregroundColor(.basicWhite.opacity(0.8))
                         }
-                    }
+                    })
                     .font(.caption)
                 }
                 .padding(30)
@@ -102,7 +102,6 @@ struct LoginScreen: View {
 #Preview {
     LoginScreen()
 }
-
 
 // --- 1. COMPONENTE AUXILIAR: Campo de Texto con Borde Degradado ---
 struct GradientBorderField: View {

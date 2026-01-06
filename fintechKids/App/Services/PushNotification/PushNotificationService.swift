@@ -33,7 +33,8 @@ final class PushNotificationService: NSObject, ApplicationService {
     ///   - launchOptions: A dictionary indicating the reason the app was launched (if any).
     /// - Returns: A boolean value indicating whether the app can handle the launch process.
     func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]?) -> Bool {
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         // Assigning delegates to handle notification interactions and FCM token updates
         UNUserNotificationCenter.current().delegate = self
         Messaging.messaging().delegate = self
@@ -100,7 +101,7 @@ extension PushNotificationService: UNUserNotificationCenterDelegate {
     /// - Returns: Options for presenting the notification (Banner, Sound, and List are enabled).
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        return [.banner, .sound, .list]
+        [.banner, .sound, .list]
     }
 }
 

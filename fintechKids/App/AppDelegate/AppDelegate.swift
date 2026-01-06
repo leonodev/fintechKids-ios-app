@@ -15,15 +15,15 @@ class AppDelegate: ServicesApplicationDelegate {
     
     // Register services from here!
     override var services: [ApplicationService] {
-        return [
+        [
             FirebaseRemoteService(),
             PushNotificationService()
         ]
     }
    
     override func application(_ application: UIApplication,
-                              didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        
+                              didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         Logger.info("All Services Registered => \(servicesResult)")
         

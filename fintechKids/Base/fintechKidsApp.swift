@@ -11,7 +11,7 @@ import FHKInjections
 import FHKDesignSystem
 
 @main
-struct fintechKidsApp: App {
+struct FintechKidsApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var appState = AppState()
     @State private var appRouter = NavigationRouter<Routes>()
@@ -46,7 +46,8 @@ struct fintechKidsApp: App {
     }
     
     private func setupNotificationService() {
-        if let pushService = delegate.services.first(where: { $0 is PushNotificationService }) as? PushNotificationService {
+        if let pushService = delegate.services.first(where: {
+            $0 is PushNotificationService }) as? PushNotificationService {
             // We passed the PROCESSOR to the notifications service
             pushService.updateRouter(deepLinkProcessor)
         }

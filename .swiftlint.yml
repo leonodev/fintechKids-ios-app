@@ -1,0 +1,32 @@
+# Reglas que se activan por defecto y que queremos apagar
+disabled_rules:
+  - trailing_whitespace        # A veces molesto con las líneas vacías
+  - function_body_length       # Swift 6 con SwiftUI a veces crea cuerpos largos
+  - identifier_name            # Para no tener problemas con nombres cortos como 'id'
+
+# Reglas adicionales que no vienen activas por defecto (recomendadas para Swift 6)
+opt_in_rules:
+  - array_init
+  - contains_over_first_not_nil
+  - empty_count
+  - force_unwrapping           # Te obliga a no usar '!' (Seguridad ante todo)
+  - implicit_return            # Limpia el código eliminando 'return' innecesarios
+  - redundant_nil_coalescing
+  - vertical_whitespace_closing_braces
+
+# Configuración de carpetas
+included:
+  - fintechKids              # Cambia esto por el nombre de tu carpeta de código
+excluded:
+  - Pods
+  - DerivedData
+  - fintechKidsTests         # Opcional: si no quieres linting en tests
+
+# Personalización de reglas específicas
+line_length: 120               # Un poco más ancho que los 100 por defecto
+type_body_length:
+  warning: 300
+  error: 500
+
+# Formato de salida
+reporter: "xcode"              # Para que los avisos salgan integrados en Xcode

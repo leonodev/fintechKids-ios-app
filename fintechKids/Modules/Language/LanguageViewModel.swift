@@ -27,7 +27,6 @@ public final class LanguageViewModel<T: RemoteConfigManagerProtocol>: Observable
         .franceCircleFlag
     ]
     
-    
     private let storage: UserDefaultsProtocol
     private var cancellables = Set<AnyCancellable>()
     
@@ -54,7 +53,7 @@ public final class LanguageViewModel<T: RemoteConfigManagerProtocol>: Observable
 
     public func loadConfig() {
         configManager.fetchConfig { [weak self] error in
-            guard let _ = self else { return }
+            guard self != nil else { return }
             if let error = error {
                 Logger.error("Error obtaining remote configuration: \(error.localizedDescription)")
             } else {

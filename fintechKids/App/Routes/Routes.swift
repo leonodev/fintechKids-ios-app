@@ -35,7 +35,6 @@ public enum Routes: NavigationDestination {
     }
 }
 
-
 // Define each title by navigation bar
 extension Routes {
     

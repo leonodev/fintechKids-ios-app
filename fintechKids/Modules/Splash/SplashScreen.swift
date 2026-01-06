@@ -33,10 +33,9 @@ struct SplashScreen: View {
             LottieView(animationName: Lotties.progressBar,
                        loopMode: .loop,
                        contentMode: .scaleAspectFit)
-      
         }
-        .onChange(of: viewModel.isConfigLanguageReady) { _, hasLanguage in
-            guard let _ = viewModel.languageApp else {
+        .onChange(of: viewModel.isConfigLanguageReady) { _, _ in
+            guard viewModel.languageApp != nil else {
                 router.navigate(to: .language)
                 return
             }

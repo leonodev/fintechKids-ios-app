@@ -29,7 +29,6 @@ struct LanguageScreen: View {
                 .accessibilityHidden(true)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                
                 VStack {
                     
                     HStack(alignment: .top) {
@@ -85,7 +84,6 @@ struct LanguageScreen: View {
     }
 }
 
-
 #Preview {
     LanguageScreen()
 }
@@ -95,7 +93,7 @@ extension LanguageScreen {
     
     private var menuOptions: [Image] {
         // Exclude the currently selected flag from the menu
-        return viewModel.allFlags.filter { flag in
+        viewModel.allFlags.filter { flag in
             // Get the language code from the flag name (ES, IT, EN, FR)"
             let code = flag.imageToCode
             

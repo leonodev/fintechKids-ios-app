@@ -34,5 +34,3 @@ final class SplashScreenVM: ObservableObject {
         isConfigLanguageReady = true
     }
 }
-
-

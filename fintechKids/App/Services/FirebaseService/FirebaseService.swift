@@ -17,7 +17,9 @@ var remoteConfig = RemoteConfig.remoteConfig()
 
 final class FirebaseRemoteService: NSObject, ApplicationService {
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]?) -> Bool {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
             fetchRemoteConfig()
@@ -29,7 +31,7 @@ final class FirebaseRemoteService: NSObject, ApplicationService {
     private func fetchRemoteConfig() {
         remoteConfig.fetch(withExpirationDuration: 0) { (status, error) in
             guard error == nil else { return }
-            Logger.info("Got the value from remote config Firebase")
+            Logger.info("Got the value from remote config Firebase status \(status)")
             remoteConfig.activate()
         }
     }

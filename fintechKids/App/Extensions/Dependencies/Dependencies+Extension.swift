@@ -17,8 +17,6 @@ public class Dependencies {
         
         // implementatios to inject here
         deps.set(LanguageManager.shared, for: (any LanguageManagerProtocol).self)
-
-        
         Logger.info("All dependencies registered successfully")
     }
 }
