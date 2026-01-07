@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import FHKInjections
+import FHKDesignSystem
 
 public struct ScreenContainer<Content: View>: View {
     @Inject(\.languageManager) private var langManager
@@ -23,8 +24,7 @@ public struct ScreenContainer<Content: View>: View {
 
     public var body: some View {
         ZStack {
-            // Fondo base de la aplicación (puedes centralizarlo aquí)
-            Color(.systemBackground)
+            Color(Color.backgroundPrimary)
                 .ignoresSafeArea()
             
             content

@@ -14,13 +14,6 @@ struct LoginScreen: View {
     @State private var email = ""
     @State private var password = ""
     
-    // Degradado para el borde y el botón
-    let accentGradient = LinearGradient(
-        gradient: Gradient(colors: [Color.blue, Color.purple]),
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-    
     var body: some View {
         ScreenContainer {
             ZStack {
@@ -32,7 +25,7 @@ struct LoginScreen: View {
                                contentMode: .scaleAspectFit)
                     .frame(height: 150)
                     
-                    // Títulos
+                    // Titles
                     VStack(spacing: 4) {
                         Text("wellcome".localized().capitalizingFirstLetter())
                             .font(.PangramSans.bold(FHKSize.size28))
@@ -42,14 +35,13 @@ struct LoginScreen: View {
                     }
                     .padding(.bottom, 20)
                     
-                    // Campos de Entrada
+                    // Fields
                     VStack(spacing: 15) {
                         GradientBorderField(text: $email, placeholder: "email".localized())
                         
                         GradientBorderField(text: $password, placeholder: "password".localized(), isSecure: true)
                     }
                     
-                    // Enlace "¿Olvidaste la Contraseña?"
                     HStack {
                         Spacer()
                         Button(action: {
@@ -62,7 +54,6 @@ struct LoginScreen: View {
                     }
                     .padding(.trailing, 4)
                     
-                    // Botón de Inicio de Sesión
                     FHKButtonPrimary(title: "start_sesion".localized().capitalizingFirstLetter(),
                                      state: .enabled,
                                      mode: .solid,
@@ -70,7 +61,6 @@ struct LoginScreen: View {
                         // router.navigate(to: .login)
                     })
                     
-                    // Enlace de Registro
                     Button(action: {
                         // Acción para ir a registro
                     }, label: {
@@ -88,7 +78,6 @@ struct LoginScreen: View {
                 }
                 .padding(30)
                 .background(
-                    // Fondo semi-transparente para la tarjeta
                     RoundedRectangle(cornerRadius: 25)
                         .fill(Color.white.opacity(0.15))
                         .shadow(radius: 20)
@@ -101,42 +90,4 @@ struct LoginScreen: View {
 
 #Preview {
     LoginScreen()
-}
-
-// --- 1. COMPONENTE AUXILIAR: Campo de Texto con Borde Degradado ---
-struct GradientBorderField: View {
-    @Binding var text: String
-    var placeholder: String
-    var isSecure: Bool = false
-    
-    // Degradado para el borde y el botón
-    let accentGradient = LinearGradient(
-        gradient: Gradient(colors: [Color.blue, Color.purple]),
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
-    
-    var body: some View {
-        // Contenedor para aplicar el degradado al borde
-        ZStack {
-            // El degradado que actuará como el borde
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(accentGradient, lineWidth: 3)
-            
-            // El campo de texto en sí
-            Group {
-                if isSecure {
-                    SecureField(placeholder, text: $text)
-                } else {
-                    TextField(placeholder, text: $text)
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(Color.white) // Fondo blanco para el campo
-            .cornerRadius(10)
-            .padding(4) // Ajuste para que se vea el degradado del ZStack
-        }
-        .frame(height: 50)
-    }
 }

@@ -10,7 +10,9 @@ import SwiftUI
 import Combine
 import FHKCore
 
+@MainActor
 protocol DeepLinkRouterProtocol {
+    func setAppRouter(_ router: NavigationRouter<Routes>)
     func handle(url: URL)
 }
 

@@ -15,7 +15,7 @@ struct FintechKidsApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var appState = AppState()
     @State private var appRouter = NavigationRouter<Routes>()
-    private let deepLinkProcessor = DeepLinkRouter()
+    private let deepLinkProcessor: DeepLinkRouterProtocol = DeepLinkRouter()
    
     @Inject(\.languageManager) private var langManager
     

@@ -167,7 +167,8 @@
 				5D30BFB32EC1E6FB005C42B4 /* Sources */,
 				5D30BFB42EC1E6FB005C42B4 /* Frameworks */,
 				5D30BFB52EC1E6FB005C42B4 /* Resources */,
-				5D25AB082F0D6C5D00140E1E /* ShellScript */,
+				5D25AB082F0D6C5D00140E1E /* Run Script Swiftlint */,
+				5D25AB092F0D8E4500140E1E /* Run Script Periphery */,
 			);
 			buildRules = (
 			);
@@ -335,7 +336,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5D25AB082F0D6C5D00140E1E /* ShellScript */ = {
+		5D25AB082F0D6C5D00140E1E /* Run Script Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -345,6 +346,7 @@
 			);
 			inputPaths = (
 			);
+			name = "Run Script Swiftlint";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -352,6 +354,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\nif which swiftlint >/dev/null; then\n  # Pasamos la ruta directamente después del comando lint\n  swiftlint lint \"${SRCROOT}\"\nelse\n  echo \"warning: SwiftLint not installed\"\nfi\n";
+		};
+		5D25AB092F0D8E4500140E1E /* Run Script Periphery */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script Periphery";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\n\nif which periphery >/dev/null; then\n  # Localizamos la ruta del índice\n  INDEX_PATH=\"$OBJROOT/../../Index.noindex/DataStore\"\n  \n  # Ejecutamos periphery:\n  # 2>&1 redirige los errores al flujo normal\n  # grep -v descarta la línea del aviso molesto\n  periphery scan --index-store-path \"$INDEX_PATH\" 2>&1 | grep -v \"ensure that Xcode is not running\" || true\nelse\n  echo \"warning: Periphery no instalado. Ejecuta 'brew install periphery'\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

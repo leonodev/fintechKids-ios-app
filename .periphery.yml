@@ -1,0 +1,14 @@
+project: fintechKids.xcodeproj
+schemes:
+  - "FintechKids-Dev"
+
+# Configuración de análisis
+format: xcode
+skip_build: true
+index_store_path: "DerivedData/Index.noindex/DataStore"
+
+# Reglas de retención (Clave para proyectos multimodulares)
+retain_public: true
+retain_unused_protocol_func_params: true
+comment_commands: true
+
