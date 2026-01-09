@@ -69,7 +69,8 @@ extension Routes {
             LanguageScreen()
             
         case .login:
-            LoginScreen()
+            let vm = LoginScreenVM()
+            LoginScreen(viewModel: vm)
             
         case .goal(let id):
             GoalScreen(id: id)

@@ -24,7 +24,7 @@ public struct ScreenContainer<Content: View>: View {
 
     public var body: some View {
         ZStack {
-            Color(Color.backgroundPrimary)
+            Color(FHKColor.backgroundPrimary)
                 .ignoresSafeArea()
             
             content
