@@ -36,12 +36,19 @@ final class LoginScreenVM: FHKCore.ViewModel {
     @MainActor
     func fetchLogin() async {
         model.loginState = .loading
+        
         do {
             try await loginActor.loginUser(platform: .supabase,
                                            email: model.email,
                                            password: model.password)
             model.loginState = .loaded(nil)
+        } catch let error as AuthDomainError {
+            // Capturamos nuestros errores de dominio ya procesados
+            model.msnError = error.userMessageError
+            model.loginState = .error(error)
         } catch {
+            // Cualquier otro error que no hayamos previsto
+            model.msnError = "\(error.localizedDescription)"
             model.loginState = .error(error)
         }
     }
