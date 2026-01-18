@@ -12,28 +12,30 @@ import FHKUtils
 import FHKCore
 
 struct LoginScreen<VM: LoginScreenVM>: View {
+    @NavigationRouterWrapper<Routes> private var router
     @State var viewModel: VM
     
     var body: some View {
         ScreenContainer {
             switch viewModel.model.loginState {
-            case .none:
+            case .loaded:
                 FormView
                 
             case .loading:
                 LoadingView(msn: viewModel.model.msnLoading)
                 
-            case .loaded(let t):
-                Text("loaded")
-                
-            case .error(let error):
+            case .error:
                 ErrorView(title: viewModel.model.titleError,
                           msnError: viewModel.model.msnError,
                           titleBtn: viewModel.model.titleBtnError,
                           onActionPressed: {
-                    
                 })
                 Text("error")
+            }
+        }
+        .onChange(of: viewModel.model.isLogginSuccess) { _, isSucces in
+            if isSucces {
+                router.navigate(to: .home)
             }
         }
     }
@@ -104,7 +106,6 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                             .underline()
                             .font(.PangramSans.bold(FHKSize.size16))
                             .foregroundColor(FHKColor.basicBlack.opacity(0.7))
-                            
                     }
                     .padding(.top, 14)
                 })

@@ -41,7 +41,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
             try await loginActor.loginUser(platform: .supabase,
                                            email: model.email,
                                            password: model.password)
-            model.loginState = .loaded(nil)
+            model.isLogginSuccess = true
         } catch let error as AuthDomainError {
             // Capturamos nuestros errores de dominio ya procesados
             model.msnError = error.userMessageError

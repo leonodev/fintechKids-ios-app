@@ -17,7 +17,8 @@ class AppDelegate: ServicesApplicationDelegate {
     override var services: [ApplicationService] {
         [
             FirebaseRemoteService(),
-            PushNotificationService()
+            PushNotificationService(),
+            CameraPermissionService()
         ]
     }
    

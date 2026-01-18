@@ -14,11 +14,12 @@ public enum Routes: NavigationDestination {
     case splash
     case language
     case login
+    case home
     case goal(id: String)
     
     public var hidesNavigationBar: Bool {
         switch self {
-        case .splash, .language, .login:
+        case .splash, .language, .login, .home:
             return true
         default:
             return false
@@ -30,6 +31,7 @@ public enum Routes: NavigationDestination {
         case .splash: return "splash"
         case .language: return "language"
         case .login: return "login"
+        case .home: return "home"
         case .goal(let id): return "goal_\(id)"
         }
     }
@@ -47,6 +49,9 @@ extension Routes {
             return "language".localized().capitalizingFirstLetter()
             
         case .login:
+            return nil
+            
+        case .home:
             return nil
             
         case .goal:
@@ -71,6 +76,9 @@ extension Routes {
         case .login:
             let vm = LoginScreenVM()
             LoginScreen(viewModel: vm)
+            
+        case .home:
+            HomeScreen()
             
         case .goal(let id):
             GoalScreen(id: id)
