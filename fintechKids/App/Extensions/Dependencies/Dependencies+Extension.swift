@@ -17,11 +17,15 @@ public class Dependencies {
         let deps = DependenciesInjection.shared
         
         // implementatios to inject here
+        
+        /// Language
         deps.set(LanguageManager.shared, for: (any LanguageManagerProtocol).self)
         
-        let cameraService = CameraPermissionService()
-        deps.set(cameraService, for: PermissionProtocol.self)
+        /// Camera Permission
+        deps.set(CameraPermissionService(), for: PermissionProtocol.self)
         
+        /// Toast
+        deps.set(ToastService(), for: ToastServiceProtocol.self)
         Logger.info("All dependencies registered successfully")
     }
 }

@@ -11,11 +11,14 @@ import FHKDesignSystem
 
 struct HomeScreen: View {
     @Inject(\.camaraPermission) var camaraPermission: PermissionProtocol
+    
     @State private var showPermissions = false
     
     var body: some View {
         VStack {
             Text("Bienvenido a FintechKids")
+            
+            
         }
         .onAppear {
             if camaraPermission.status != .authorized {

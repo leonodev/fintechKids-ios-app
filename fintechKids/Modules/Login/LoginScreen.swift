@@ -10,10 +10,13 @@ import Lottie
 import FHKDesignSystem
 import FHKUtils
 import FHKCore
+import FHKInjections
 
 struct LoginScreen<VM: LoginScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     @State var viewModel: VM
+    
+    @Inject(\.toastService) var toastService: ToastServiceProtocol
     
     var body: some View {
         ScreenContainer {
@@ -110,6 +113,18 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     .padding(.top, 14)
                 })
                 .font(.caption)
+                
+                Button(action: {
+                    toastService.show(info:
+                                        ToastInfo(
+                                            type: .notification,
+                                            message: "Prueba de notificacion si incluso a doble linea o mas ...",
+                                            hasIcon: true),
+                                      duration: 5.0)
+                },
+                label: {
+                    Text("Mostrar Notificacion")
+                })
             }
             .padding(30)
             .background(
