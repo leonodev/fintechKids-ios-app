@@ -15,7 +15,7 @@ struct LanguageScreen: View {
     private let flagAnimation = Animation.spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0.15)
     
     @NavigationRouterWrapper<Routes> private var router
-    @StateObject private var viewModel = LanguageViewModel(configManager: RemoteConfigManager())
+    @StateObject private var viewModel = LanguageScreenVM(configManager: RemoteConfigManager())
     @Namespace var nameSpaceMenu
     @State private var isExpanded = false
 
@@ -39,6 +39,7 @@ struct LanguageScreen: View {
                         
                         HStack {
                             Text("select_language_now".localized().capitalizingFirstLetter())
+                                .foregroundStyle(FHKColor.basicWhite)
                                 .multilineTextAlignment(.center)
                                 .font(.PangramSans.bold(FHKSize.size28))
                                 .padding(.top, FHKSize.size44)
@@ -65,11 +66,11 @@ struct LanguageScreen: View {
                     
                     Text("version".localized())
                         .accessibilityLabel("Versión de la aplicación: \(Text("version".localized()))")
+                        .foregroundStyle(FHKColor.basicWhite)
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .background(Color(.systemBackground).ignoresSafeArea())
             .onAppear {
                 viewModel.loadConfig()
             }

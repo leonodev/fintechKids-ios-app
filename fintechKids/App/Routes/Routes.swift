@@ -14,6 +14,7 @@ public enum Routes: NavigationDestination {
     case splash
     case language
     case login
+    case register
     case home
     case goal(id: String)
     
@@ -31,6 +32,7 @@ public enum Routes: NavigationDestination {
         case .splash: return "splash"
         case .language: return "language"
         case .login: return "login"
+        case .register: return "register"
         case .home: return "home"
         case .goal(let id): return "goal_\(id)"
         }
@@ -50,6 +52,9 @@ extension Routes {
             
         case .login:
             return nil
+            
+        case .register:
+            return ""
             
         case .home:
             return nil
@@ -74,11 +79,13 @@ extension Routes {
             LanguageScreen()
             
         case .login:
-            let vm = LoginScreenVM()
-            LoginScreen(viewModel: vm)
+            LoginScreen(viewModel: LoginScreenVM())
+            
+        case .register:
+            RegisterScreen(viewModel: RegisterScreenVM())
             
         case .home:
-            HomeScreen()
+            HomeScreen(viewModel: HomeScreenVM())
             
         case .goal(let id):
             GoalScreen(id: id)

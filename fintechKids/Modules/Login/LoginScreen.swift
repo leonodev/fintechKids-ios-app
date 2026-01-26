@@ -58,11 +58,11 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     
                     Text(viewModel.model.wellcome)
                         .font(.PangramSans.bold(FHKSize.size28))
-                        .foregroundColor(FHKColor.fuchsiaPink)
+                        .foregroundColor(FHKColor.lunarSand)
                     
                     Text(viewModel.model.startSesionYourAccount)
                         .font(.PangramSans.bold(FHKSize.size16))
-                        .foregroundColor(.purple.opacity(0.3))
+                        .foregroundColor(FHKColor.lunarSand.opacity(0.3))
                 }
                 .padding(.bottom, 20)
                 
@@ -83,7 +83,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     }, label: {
                         Text(viewModel.model.youForgotYourPassword)
                             .font(.PangramSans.bold(FHKSize.size16))
-                            .foregroundColor(FHKColor.fuchsiaPink)
+                            .foregroundColor(FHKColor.lunarSand)
                     })
                 }
                 .padding(.trailing, 4)
@@ -98,7 +98,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 })
                 
                 Button(action: {
-                    // Acción para ir a registro
+                    router.navigate(to: .register)
                 }, label: {
                     HStack {
                         Text(viewModel.model.youNotHaveAccount)
@@ -108,7 +108,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                         Text(viewModel.model.register)
                             .underline()
                             .font(.PangramSans.bold(FHKSize.size16))
-                            .foregroundColor(FHKColor.basicBlack.opacity(0.7))
+                            .foregroundColor(FHKColor.lunarSand.opacity(0.7))
                     }
                     .padding(.top, 14)
                 })
@@ -133,6 +133,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     .shadow(radius: 20)
             )
             .padding(.horizontal, 30)
+            .shadow(radius: 20)
         }
     }
 }

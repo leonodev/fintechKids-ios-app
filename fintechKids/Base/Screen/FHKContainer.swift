@@ -21,19 +21,25 @@ public struct ScreenContainer<Content: View>: View {
         self.showNavigationBar = showNavigationBar
         self.content = content()
     }
-
+    
     public var body: some View {
         ZStack {
-            Color(FHKColor.backgroundPrimary)
-                .ignoresSafeArea()
-            
+            LinearGradient(
+                stops: [
+                    .init(color: FHKColor.indigo, location: 0.1),
+                    .init(color: .indigo, location: 0.9)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea() 
             content
-                // Automatic language reactivity is applied
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
                 .observeLanguage()
-                
-                // add here others global features
-                // .onTapGesture { hideKeyboard() }
-                // .trackScreenView("NombreDeLaPantalla")
+            // add here others global features
+            // .onTapGesture { hideKeyboard() }
+            // .trackScreenView("NombreDeLaPantalla")
         }
         .navigationBarHidden(!showNavigationBar)
     }

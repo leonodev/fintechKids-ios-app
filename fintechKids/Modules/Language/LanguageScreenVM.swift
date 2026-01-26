@@ -1,5 +1,5 @@
 //
-//  LanguageViewModel.swift
+//  LanguageScreenVM.swift
 //  fintechKids
 //
 //  Created by Fredy Leon on 10/12/25.
@@ -13,7 +13,7 @@ import FHKAuth
 import FHKStorage
 import FHKDesignSystem
 
-public final class LanguageViewModel<T: RemoteConfigManagerProtocol>: ObservableObject {
+public final class LanguageScreenVM<T: RemoteConfigManagerProtocol>: ObservableObject {
     private var configManager: T
     
     @Published var languages: [String] = []

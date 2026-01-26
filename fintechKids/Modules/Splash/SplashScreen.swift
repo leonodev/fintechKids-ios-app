@@ -15,31 +15,32 @@ struct SplashScreen: View {
     @StateObject var viewModel: SplashScreenVM = SplashScreenVM()
     
     var body: some View {
-        
-        VStack(spacing: 20) {
-            Spacer()
-            
-             GradientText(title: "FintechHome", subtitle: "Kids")
-                .padding(.vertical, FHKSize.size20)
-            
-            Spacer()
-            
-            LottieView(animationName: Lotties.operationsBoard,
-                       loopMode: .loop,
-                       contentMode: .scaleAspectFit)
-            
-            Spacer()
-            
-            LottieView(animationName: Lotties.progressBar,
-                       loopMode: .loop,
-                       contentMode: .scaleAspectFit)
-        }
-        .onChange(of: viewModel.isConfigLanguageReady) { _, _ in
-            guard viewModel.languageApp != nil else {
-                router.navigate(to: .language)
-                return
+        ScreenContainer {
+            VStack(spacing: 20) {
+                Spacer()
+                
+                GradientText(title: "FintechHome", subtitle: "Kids")
+                    .padding(.vertical, FHKSize.size20)
+                
+                Spacer()
+                
+                LottieView(animationName: Lotties.operationsBoard,
+                           loopMode: .loop,
+                           contentMode: .scaleAspectFit)
+                
+                Spacer()
+                
+                LottieView(animationName: Lotties.progressBar,
+                           loopMode: .loop,
+                           contentMode: .scaleAspectFit)
             }
-            router.navigate(to: .login)
+            .onChange(of: viewModel.isConfigLanguageReady) { _, _ in
+                guard viewModel.languageApp != nil else {
+                    router.navigate(to: .language)
+                    return
+                }
+                router.navigate(to: .login)
+            }
         }
     }
 }

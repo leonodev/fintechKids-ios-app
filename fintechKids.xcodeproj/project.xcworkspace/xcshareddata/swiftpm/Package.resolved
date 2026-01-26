@@ -43,7 +43,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-core-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "df03ff9b1a33dd2b5a5e972624ac8faaafbe6a22"
+        "revision" : "3aa3c3929306ce0826f636219a524b52da9e5ebe"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-designsystem-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "d1cdc14bf511d7f02b38030ef3e189ec904ca284"
+        "revision" : "d7abf1df2562779cfd293bec64d7b308272b4d5d"
       }
     },
     {
@@ -200,6 +200,15 @@
       }
     },
     {
+      "identity" : "swift-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-algorithms.git",
+      "state" : {
+        "revision" : "87e50f483c54e6efd60e885f7f5aa946cee68023",
+        "version" : "1.2.1"
+      }
+    },
+    {
       "identity" : "swift-asn1",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
@@ -251,6 +260,15 @@
       "state" : {
         "revision" : "45eb0224913ea070ec4fba17291b9e7ecf4749ca",
         "version" : "1.5.1"
+      }
+    },
+    {
+      "identity" : "swift-numerics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-numerics.git",
+      "state" : {
+        "revision" : "0c0290ff6b24942dadb83a929ffaaa1481df04a2",
+        "version" : "1.1.1"
       }
     },
     {
