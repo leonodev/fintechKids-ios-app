@@ -53,11 +53,16 @@ public final class LanguageScreenVM<T: RemoteConfigManagerProtocol>: ObservableO
 
     public func loadConfig() {
         configManager.fetchConfig { [weak self] error in
-            guard self != nil else { return }
-            if let error = error {
-                Logger.error("Error obtaining remote configuration: \(error.localizedDescription)")
-            } else {
-                Logger.info("Remote Language Active")
+            // Forzamos la actualización al terminar el fetch
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if let error = error {
+                    Logger.error("Error: \(error.localizedDescription)")
+                } else {
+                    // Actualizamos manualmente para asegurar que tenemos la última data
+                    self.languages = self.configManager.enabledLanguages
+                    Logger.info("Remote Config Cargado: \(self.languages)")
+                }
             }
         }
     }

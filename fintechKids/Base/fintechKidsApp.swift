@@ -18,6 +18,7 @@ struct FintechKidsApp: App {
     private let deepLinkProcessor: DeepLinkRouterProtocol = DeepLinkRouter()
     
     @Inject(\.toastService) var toastService: ToastServiceProtocol
+    @Inject(\.modalManager) var modalManager: FHKModalProtocol
     @Inject(\.languageManager) private var langManager
     
     var body: some Scene {
@@ -31,7 +32,7 @@ struct FintechKidsApp: App {
                             titleBtn: "title_btn_screen_security".localized())
                     } else {
                         NavigationContainer(router: appRouter) {
-                            SplashScreen()
+                            SplashScreen(viewModel: SplashScreenVM())
                         }
                         .onAppear {
                             Task { await langManager.readLanguage() }
@@ -41,6 +42,7 @@ struct FintechKidsApp: App {
                         .onOpenURL { url in
                             deepLinkProcessor.handle(url: url)
                         }
+                        .modifier(FHKModalPresenter(manager: modalManager)) // draw overlay by modal blur
                     }
                 }
                 .animation(.default, value: appState.isJailbroken)

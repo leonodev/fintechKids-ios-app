@@ -8,29 +8,41 @@
 import Foundation
 import SwiftUI
 import Combine
+import Observation
 import FHKCore
 import FHKConfig
 import FHKStorage
 import FHKUtils
 
-final class SplashScreenVM: ObservableObject {
+@Observable
+final class SplashScreenVM {
+    enum NavigationDestination {
+        case login
+        case language
+    }
     
     private let storage: UserDefaultsProtocol
     var languageApp: String?
-    @Published var isConfigLanguageReady: Bool = false
+    /*
+     When using destination within @Observable, it is necessary to use
+     this property within the Screen so that the property propagates
+     its new value to the view
+     */
+    var destination: NavigationDestination?
     
     public init(storage: UserDefaultsProtocol = UserDefaultStorage()) {
-        self.storage = storage
-        
-        Task { await readLanguage() }
+        self.storage = storage   
     }
     
+    @MainActor
     public func readLanguage() async {
-        do {
-            languageApp = try await storage.read(String.self, forKey: UserDefaultsKeys.languageKey)
-        } catch {
-            Logger.error("Error reading: \(error)")
+        guard destination == nil else { return }
+        
+        let language = try? await storage.read(String.self, forKey: UserDefaultsKeys.languageKey)
+        if language != nil {
+            destination = .login
+        } else {
+            destination = .language
         }
-        isConfigLanguageReady = true
     }
 }

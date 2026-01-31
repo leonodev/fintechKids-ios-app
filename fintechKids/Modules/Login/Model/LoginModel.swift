@@ -81,36 +81,36 @@ public class LoginModel {
     private func updateErrorView() {
         // update label string from here
     }
-}
-
-extension AuthDomainError {
     
-    public var userMessageError: String {
-        switch self {
-            
+    public func setMessageLoginError(error: AuthDomainError) {
+        
+        switch error {
         case .invalidCredentials:
-            return "invalid_credentials_error".localized().capitalizingFirstLetter()
+            msnError = "invalid_credentials_error".localized().capitalizingFirstLetter()
             
         case .userNotFound:
-            return "user_not_found_error".localized().capitalizingFirstLetter()
+            msnError = "user_not_found_error".localized().capitalizingFirstLetter()
             
         case .emailNotConfirmed:
-            return "email_not_confirmed_error".localized().capitalizingFirstLetter()
+            msnError = "email_not_confirmed_error".localized().capitalizingFirstLetter()
             
         case .otpExpired:
-            return "otp_expired_error".localized().capitalizingFirstLetter()
+            msnError = "otp_expired_error".localized().capitalizingFirstLetter()
             
         case .tooManyRequests:
-            return "too_many_requests_error".localized().capitalizingFirstLetter()
-          
+            msnError = "too_many_requests_error".localized().capitalizingFirstLetter()
+            
         case .authenticationNotImplemented:
-            return "authentication_not_Implemented_error".localized().capitalizingFirstLetter()
+            msnError = "authentication_not_Implemented_error".localized().capitalizingFirstLetter()
             
         case .refreshSession:
-            return "refresh_session_error".localized().capitalizingFirstLetter()
+            msnError = "refresh_session_error".localized().capitalizingFirstLetter()
             
         case .unknown(let code):
-            return "unknown_error".localized() + " (\(code))."
+            msnError = "unknown_error".localized() + " (\(code))."
+            
+        default:
+            msnError = "unknown_error".localized()
         }
     }
 }

@@ -109,7 +109,7 @@ struct BasicCardView<Content: View, T>: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            FHKColor.lunarSand.opacity(0.05)
+            FHKColor.lunarSand.opacity(0.08)
         )
         .cornerRadius(20)
         .onTapGesture {

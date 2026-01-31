@@ -26,6 +26,10 @@ public class Dependencies {
         
         /// Toast
         deps.set(ToastService(), for: ToastServiceProtocol.self)
+        
+        /// Modal
+        deps.set(FHKModal(), for: FHKModalProtocol.self)
+        
         Logger.info("All dependencies registered successfully")
     }
 }

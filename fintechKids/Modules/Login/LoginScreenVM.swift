@@ -44,7 +44,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
             model.isLogginSuccess = true
         } catch let error as AuthDomainError {
             // Capturamos nuestros errores de dominio ya procesados
-            model.msnError = error.userMessageError
+            model.setMessageLoginError(error: error)
             model.loginState = .error(error)
         } catch {
             // Cualquier otro error que no hayamos previsto

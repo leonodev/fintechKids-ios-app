@@ -12,7 +12,6 @@ public extension String {
     func localized() -> String {
         let langCode = LanguageManager.shared.selectedLanguage
         
-        print("DEBUG: Buscando carpeta para el código: '\(langCode)'")
         guard let path = Bundle.main.path(forResource: langCode, ofType: "lproj"),
               let bundle = Bundle(path: path) else {
             return NSLocalizedString(self, comment: "")

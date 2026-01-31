@@ -9,42 +9,56 @@ import SwiftUI
 import FHKCore
 import FHKConfig
 import FHKDesignSystem
+import FHKUtils
 
-struct SplashScreen: View {
+struct SplashScreen<VM: SplashScreenVM>: View {
+    @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
-    @StateObject var viewModel: SplashScreenVM = SplashScreenVM()
     
     var body: some View {
         ScreenContainer {
-            VStack(spacing: 20) {
-                Spacer()
-                
-                GradientText(title: "FintechHome", subtitle: "Kids")
+            /*
+             viewModel.destination used in the view
+             to detect the change of state
+             */
+            if viewModel.destination == nil {
+                VStack(spacing: 20) {
+                    Spacer()
+                    
+                    GradientText(title: "title_name_app".localized(),
+                                 subtitle: "title_kids".localized())
                     .padding(.vertical, FHKSize.size20)
-                
-                Spacer()
-                
-                LottieView(animationName: Lotties.operationsBoard,
-                           loopMode: .loop,
-                           contentMode: .scaleAspectFit)
-                
-                Spacer()
-                
-                LottieView(animationName: Lotties.progressBar,
-                           loopMode: .loop,
-                           contentMode: .scaleAspectFit)
-            }
-            .onChange(of: viewModel.isConfigLanguageReady) { _, _ in
-                guard viewModel.languageApp != nil else {
-                    router.navigate(to: .language)
-                    return
+                    
+                    Spacer()
+                    
+                    LottieView(animationName: Lotties.operationsBoard,
+                               loopMode: .loop,
+                               contentMode: .scaleAspectFit)
+                    
+                    Spacer()
+                    
+                    LottieView(animationName: Lotties.progressBar,
+                               loopMode: .loop,
+                               contentMode: .scaleAspectFit)
                 }
+                .task {
+                    await viewModel.readLanguage()
+                }
+            }
+        }
+        .onChange(of: viewModel.destination) { _, destination in
+            guard let destination else { return }
+            
+            switch destination {
+            case .login:
                 router.navigate(to: .login)
+            case .language:
+                router.navigate(to: .language)
             }
         }
     }
 }
 
 #Preview {
-    SplashScreen()
+    SplashScreen(viewModel: SplashScreenVM())
 }

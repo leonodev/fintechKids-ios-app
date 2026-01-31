@@ -20,7 +20,7 @@ struct LanguageScreen: View {
     @State private var isExpanded = false
 
     var body: some View {
-        ScreenContainer {
+        ScreenContainer(title: Routes.language.title) {
             ZStack {
                 
                 LottieView(animationName: Lotties.language,
@@ -130,7 +130,7 @@ extension LanguageScreen {
             .frame(width: FHKSize.size52, height: FHKSize.size52)
             .onTapGesture {
                 withAnimation(flagAnimation) {
-                    isExpanded.toggle()
+                    isExpanded = true
                 }
             }
     }
@@ -156,10 +156,10 @@ extension LanguageScreen {
                     }
             }
         }
-        .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity),
-                                 removal: .move(edge: .top).combined(with: .opacity)))
-        .glassEffect()
-        .glassEffectUnion(id: 1, namespace: nameSpaceMenu)
-        .glassEffectTransition(.matchedGeometry)
+//        .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity),
+//                                 removal: .move(edge: .top).combined(with: .opacity)))
+//        .glassEffect()
+//        .glassEffectUnion(id: 1, namespace: nameSpaceMenu)
+//        .glassEffectTransition(.matchedGeometry)
     }
 }

@@ -13,11 +13,14 @@ public struct ScreenContainer<Content: View>: View {
     
     private let content: Content
     private let showNavigationBar: Bool
+    private let title: String?
 
     public init(
+        title: String? = nil,
         showNavigationBar: Bool = true,
         @ViewBuilder content: () -> Content
     ) {
+        self.title = title
         self.showNavigationBar = showNavigationBar
         self.content = content()
     }
@@ -42,5 +45,7 @@ public struct ScreenContainer<Content: View>: View {
             // .trackScreenView("NombreDeLaPantalla")
         }
         .navigationBarHidden(!showNavigationBar)
+        .navigationTitle(title ?? "")
+        .navigationBarTitleDisplayMode(.inline) // O el que prefieras
     }
 }

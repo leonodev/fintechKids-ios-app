@@ -11,7 +11,6 @@ import FHKUtils
 
 // Define each case for a navigation route
 public enum Routes: NavigationDestination {
-    case splash
     case language
     case login
     case register
@@ -20,7 +19,7 @@ public enum Routes: NavigationDestination {
     
     public var hidesNavigationBar: Bool {
         switch self {
-        case .splash, .language, .login, .home:
+        case .language, .login, .home:
             return true
         default:
             return false
@@ -29,7 +28,6 @@ public enum Routes: NavigationDestination {
     
     public var id: String {
         switch self {
-        case .splash: return "splash"
         case .language: return "language"
         case .login: return "login"
         case .register: return "register"
@@ -44,8 +42,6 @@ extension Routes {
     
     public var title: String? {
         switch self {
-        case .splash:
-            return nil
             
         case .language:
             return "language".localized().capitalizingFirstLetter()
@@ -71,10 +67,7 @@ extension Routes {
     @MainActor @ViewBuilder
     public func view() -> some View {
         switch self {
-            
-        case .splash:
-            SplashScreen()
-            
+
         case .language:
             LanguageScreen()
             

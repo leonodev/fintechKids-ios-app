@@ -51,7 +51,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 LottieView(animationName: Lotties.login,
                            loopMode: .loop,
                            contentMode: .scaleAspectFit)
-                .frame(height: 300)
+                .frame(height: 200)
                 
                 // Titles
                 VStack(spacing: 4) {
@@ -62,12 +62,12 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     
                     Text(viewModel.model.startSesionYourAccount)
                         .font(.PangramSans.bold(FHKSize.size16))
-                        .foregroundColor(FHKColor.lunarSand.opacity(0.3))
+                        .foregroundColor(FHKColor.lunarSand.opacity(0.6))
                 }
-                .padding(.bottom, 20)
+                .padding(.bottom, FHKSpace.space20)
                 
                 // Fields
-                VStack(spacing: 15) {
+                VStack(spacing: FHKSpace.space16) {
                     GradientBorderField(text: $viewModel.model.email,
                                         placeholder: viewModel.model.emailPlaceholder)
                     
@@ -86,7 +86,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                             .foregroundColor(FHKColor.lunarSand)
                     })
                 }
-                .padding(.trailing, 4)
+                .padding(.trailing, FHKSpace.space04)
                 
                 FHKButtonPrimary(title: viewModel.model.startSesion,
                                  state: .enabled,
@@ -103,14 +103,15 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     HStack {
                         Text(viewModel.model.youNotHaveAccount)
                             .font(.PangramSans.extraboldItalic(FHKSize.size16))
-                            .foregroundColor(FHKColor.basicBlack.opacity(0.3))
+                            .foregroundColor(FHKColor.silver.opacity(0.8))
                         
                         Text(viewModel.model.register)
                             .underline()
                             .font(.PangramSans.bold(FHKSize.size16))
-                            .foregroundColor(FHKColor.lunarSand.opacity(0.7))
+                            .foregroundColor(FHKColor.pastelPink)
+                            .padding(.bottom, 2)
                     }
-                    .padding(.top, 14)
+                    .padding(.top, FHKSpace.space16)
                 })
                 .font(.caption)
                 
@@ -126,15 +127,16 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     Text("Mostrar Notificacion")
                 })
             }
-            .padding(30)
+            .padding(FHKSpace.space28)
             .background(
                 RoundedRectangle(cornerRadius: 25)
                     .fill(Color.white.opacity(0.15))
                     .shadow(radius: 20)
             )
-            .padding(.horizontal, 30)
+            .padding(.horizontal, FHKSpace.space28)
             .shadow(radius: 20)
         }
+        .padding(.bottom, FHKSpace.space28)
     }
 }
 

@@ -7,11 +7,12 @@
 
 import SwiftUI
 import FHKDesignSystem
+import FHKInjections
 
 struct RegisterScreen<VM: RegisterScreenVM>: View {
-    private let sizeAvatar: CGFloat = FHKSize.size120
     @State var viewModel: VM
-    @State private var selectedAvatarName: String? = nil
+    
+    @Inject(\.modalManager) var modalManager: FHKModalProtocol
     
     var body: some View {
         ScreenContainer {
@@ -21,9 +22,12 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
                 
                 // cardview with credentials
                 credentialsField
-
-                // scrollview with avatars list
-                avatarsOptions
+                
+                // add new members
+                addMembers
+                
+                // list of members added
+                familyMembersList
                 
                 Spacer()
                 // button register
@@ -39,7 +43,6 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
             Text(viewModel.model.titleFamilyName)
                 .font(.PangramSans.bold(FHKSize.size16))
                 .foregroundColor(FHKColor.lunarSand.opacity(0.9))
-                .padding(.top, FHKSize.size20)
             
             GradientBorderField(text: $viewModel.model.familyName,
                                 placeholder: viewModel.model.familyNamePlaceholder)
@@ -50,11 +53,12 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     var credentialsField: some View {
         BasicCardView(action: {_ in },
                       content: {
+            
             VStack(alignment: .leading) {
                 Text(viewModel.model.titleEmailFamily)
                     .font(.PangramSans.bold(FHKSize.size16))
                     .foregroundColor(FHKColor.lunarSand.opacity(0.9))
-                    .padding(.top, FHKSize.size20)
+                    .padding(.top, FHKSize.size04)
                 
                 GradientBorderField(text: $viewModel.model.emailFamily,
                                     placeholder: viewModel.model.emailFamilyPlaceholder)
@@ -75,23 +79,79 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
         .padding(.top, FHKSize.size24)
     }
     
-    var avatarsOptions: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(viewModel.model.avatarIList, id: \.self) { avatar in
-                    AvatarView(imageName: avatar.image, size: sizeAvatar)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: sizeAvatar / 2)
-                                .stroke(selectedAvatarName == avatar.name ? Color.yellow : Color.clear, lineWidth: 4)
-                        )
-                        .onTapGesture {
-                            selectedAvatarName = avatar.name
-                            print("Seleccionado: \(avatar.name)")
+    var addMembers: some View {
+        HStack {
+            Spacer()
+        HStack {
+            Text(viewModel.model.titleBtnAddMember)
+                .font(.PangramSans.bold(FHKSize.size16))
+                .foregroundColor(FHKColor.lunarSand)
+                .padding(.vertical)
+                .padding(.leading)
+            
+            Image(systemName: "person")
+                .resizable()
+                .scaledToFit()
+                .frame(width: FHKSize.size20, height: FHKSize.size20)
+                .foregroundColor(FHKColor.lunarSand)
+                .padding(.trailing)
+        }
+        .background(FHKColor.lunarSand.opacity(0.2))
+        .cornerRadius(FHKSize.size16)
+        .onTapGesture {
+            Task { await viewModel.action(.clearInfomember) }
+
+            modalManager.show {
+                VStack(alignment: .leading, spacing: FHKSpace.space08) {
+                    
+                        Text(viewModel.model.titleMemberNewName)
+                            .font(.PangramSans.bold(FHKSize.size16))
+                            .foregroundColor(FHKColor.lunarSand.opacity(0.9))
+                            .padding(.top, FHKSize.size08)
+                        
+                        GradientBorderField(text: $viewModel.model.memberNewName,
+                                            placeholder: viewModel.model.memberNewNamePlaceholder)
+                        .padding(.top, FHKSize.size04)
+                        
+                    NewMemberContentView(viewModel: viewModel,
+                                        selectedAvatarName: $viewModel.model.selectedAvatarName)
+                    }
+                }
+        }
+        .padding(.top, FHKSize.size08)
+    }
+        .frame(maxWidth: .infinity)
+    }
+    
+    var familyMembersList: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 10) {
+                
+                ForEach(viewModel.model.familyMembers) { member in
+                    FHKListItem(name: member.name,
+                                avatarName: member.avatarImage,
+                                iconName: member.iconName,
+                                action: {
+                        modalManager.show {
+                            VStack(alignment: .leading, spacing: FHKSpace.space08) {
+                                FHKConfirmationView(title: viewModel.model.titleRemoveMember,
+                                                    message: viewModel.model.msnRemoveMember(name: member.name),
+                                                    confirmButtonText: viewModel.model.titleBtnConfirm,
+                                                    cancelButtonText: viewModel.model.titleBtnCancel,
+                                                    confirmAction: {
+                                    Task {
+                                        await viewModel.removeMember(member)
+                                        modalManager.dismiss()
+                                    }
+                                },
+                                                    cancelAction: {
+                                    modalManager.dismiss()
+                                })
+                            }
                         }
-                        .animation(.easeInOut(duration: 0.2), value: selectedAvatarName)
+                    })
                 }
             }
-            .padding()
         }
     }
     
@@ -101,11 +161,58 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
                          mode: .solid,
                          action: {
             Task {
-//                        await viewModel.action(.doLogin)
+                await viewModel.action(.registerUser)
             }
         })
     }
 }
+
+internal struct NewMemberContentView: View {
+    @Inject(\.modalManager) var modalManager: FHKModalProtocol
+    @Bindable var viewModel: RegisterScreenVM
+    @Binding var selectedAvatarName: String?
+    private let sizeAvatar: CGFloat = FHKSize.size120
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            
+            Text(viewModel.model.titleSelectAvatar)
+                .foregroundColor(FHKColor.lunarSand)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: FHKSpace.space16) {
+                    ForEach(viewModel.model.avatarIList, id: \.self) { avatar in
+                        AvatarView(imageName: avatar.image, size: sizeAvatar)
+                            .overlay(
+                                Circle()
+                                    .stroke(selectedAvatarName == avatar.name
+                                            ? Color.yellow
+                                            : Color.clear, lineWidth: FHKSize.size04)
+                            )
+                            .onTapGesture {
+                                selectedAvatarName = avatar.name
+                            }
+                    }
+                }
+                .padding()
+            }
+            
+            FHKButtonPrimary(title: viewModel.model.titleBtnAddMember,
+                             state: viewModel.model.stateButtonCreateMember,
+                             action: {
+                let name = viewModel.model.memberNewName
+                let avatarMember = selectedAvatarName ?? "boy_9"
+                let newMember = FamilyMember(name: name, avatarImage: avatarMember)
+                
+                viewModel.model.familyMembers.append(newMember)
+                modalManager.dismiss()
+            })
+            .padding(.top, FHKSize.size20)
+        }
+        .padding(.top, FHKSize.size20)
+    }
+}
+
 
 #Preview {
     RegisterScreen(viewModel: RegisterScreenVM())
