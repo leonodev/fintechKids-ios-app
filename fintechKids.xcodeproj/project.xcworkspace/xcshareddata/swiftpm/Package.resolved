@@ -1,5 +1,5 @@
 {
-  "originHash" : "32f64599acaab9fb8b543a667f52c6a37e734bd7f7ea75beda6acebc8ca110ef",
+  "originHash" : "176f85d2b5359c927c29b74ba05107ad46956b42f2c6b2ad4c22288d00a8ed8f",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -25,7 +25,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-authentication-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "db5eb9470802641ca245f98e03434b77bdf7f915"
+        "revision" : "851d0122333a54c27c83f951beff9186a2943d99"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-config-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "c17ba0561988fdca4f93cc4d8eae29bf6f3bfb2c"
+        "revision" : "58834e6310b230765190737b25e75734640a3aab"
       }
     },
     {
@@ -43,7 +43,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-core-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "3aa3c3929306ce0826f636219a524b52da9e5ebe"
+        "revision" : "1f66c8d11c36a712211b97ff4cfa71b11937688d"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-designsystem-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "71ad8e00ae0315d8b02c9cfd05b0ca39fce40364"
+        "revision" : "a60ad6e985f7630888aa947c435e72b524545426"
       }
     },
     {
@@ -61,7 +61,16 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-injections-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "c76ad46f38ff51048fa02b83384ce190eced6785"
+        "revision" : "ecab87f9f53fa30e344bf3f030f91c00e0cad097"
+      }
+    },
+    {
+      "identity" : "fintechkids-modulo-observability-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leonodev/fintechKids-modulo-observability-ios.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "886330a2f0266549a55c973f7e22584951a14c23"
       }
     },
     {
@@ -70,7 +79,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-storage-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "db3aa94ece3e00ad361bc79a990849cba2472d02"
+        "revision" : "1222999a4c9069ffe1656bc0dc19d92db4923db1"
       }
     },
     {
@@ -87,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "674d9a7ee9858207181a3dd0b42c77298c6fb71b",
-        "version" : "12.8.0"
+        "revision" : "9b3aed4fa6226125305b82d4d86c715bef250785",
+        "version" : "12.9.0"
       }
     },
     {
@@ -141,8 +150,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "fb7f2740b1570d2f7599c6bb9531bf4fad6974b7",
-        "version" : "5.0.0"
+        "revision" : "a883ddb9fd464216133a5ab441f1ae8995978573",
+        "version" : "5.1.0"
       }
     },
     {
@@ -195,8 +204,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/supabase/supabase-swift",
       "state" : {
-        "revision" : "75f4ab992dfbcef4a22c75ec1ec9dba95a36efca",
-        "version" : "2.41.0"
+        "revision" : "0f8bf83b55709e5530cd842a0185b9abba7a3c6c",
+        "version" : "2.41.1"
       }
     },
     {

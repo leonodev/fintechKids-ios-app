@@ -11,34 +11,39 @@ import FHKDesignSystem
 import FHKUtils
 import FHKCore
 import FHKInjections
+import FHKObservability
 
 struct LoginScreen<VM: LoginScreenVM>: View {
-    @NavigationRouterWrapper<Routes> private var router
     @State var viewModel: VM
+    @NavigationRouterWrapper<Routes> private var router
     
-    @Inject(\.toastService) var toastService: ToastServiceProtocol
+    // Properties Injected
+    private let toastService = inject.toastService
+    private let modalManager = inject.modalManager
     
     var body: some View {
         ScreenContainer {
             switch viewModel.model.loginState {
-            case .loaded:
-                FormView
-                
+    
             case .loading:
                 LoadingView(msn: viewModel.model.msnLoading)
                 
-            case .error:
-                ErrorView(title: viewModel.model.titleError,
-                          msnError: viewModel.model.msnError,
-                          titleBtn: viewModel.model.titleBtnError,
-                          onActionPressed: {
-                })
-                Text("error")
+            default:
+                FormView
             }
         }
-        .onChange(of: viewModel.model.isLogginSuccess) { _, isSucces in
-            if isSucces {
+        .onChange(of: viewModel.model.loginState) { _, state in
+            switch state {
+            case .finish:
                 router.navigate(to: .home)
+                
+            case .error:
+                modalManager.show {
+                    modalInformationError
+                }
+                
+            default:
+                break
             }
         }
     }
@@ -76,6 +81,20 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                                         isSecure: true)
                 }
                 
+                // Solo mostramos el botón de FaceID si existe un token previo
+                if viewModel.hasSavedAuthToken {
+                    Button(action: {
+                        Task { await viewModel.action(.doLoginWithBiometrics) }
+                    })
+                    {
+                        Image(systemName: "faceid")
+                            .resizable()
+                            .frame(width: FHKSize.size44, height: FHKSize.size44)
+                            .foregroundStyle(FHKColor.basicWhite)
+                    }
+                    .padding(.vertical, FHKSpace.space08)
+                }
+                
                 HStack {
                     Spacer()
                     Button(action: {
@@ -89,7 +108,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 .padding(.trailing, FHKSpace.space04)
                 
                 FHKButtonPrimary(title: viewModel.model.startSesion,
-                                 state: .enabled,
+                                 state: viewModel.model.isBtnContinueEnable,
                                  mode: .solid,
                                  action: {
                     Task {
@@ -116,12 +135,11 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 .font(.caption)
                 
                 Button(action: {
-                    toastService.show(info:
-                                        ToastInfo(
-                                            type: .notification,
-                                            message: "Prueba de notificacion si incluso a doble linea o mas ...",
-                                            hasIcon: true),
-                                      duration: 5.0)
+                    toastService.show(
+                        info: ToastInfo(type: .notification,
+                                        message: "Prueba de notificacion si incluso a doble linea o mas ...",
+                                        hasIcon: true),
+                        duration: 5.0)
                 },
                 label: {
                     Text("Mostrar Notificacion")
@@ -137,6 +155,18 @@ struct LoginScreen<VM: LoginScreenVM>: View {
             .shadow(radius: 20)
         }
         .padding(.bottom, FHKSpace.space28)
+    }
+    
+    var modalInformationError: some View {
+        VStack(alignment: .leading, spacing: FHKSpace.space08) {
+            FHKInformationView(title: viewModel.model.titleError,
+                               message: viewModel.model.msnError,
+                               type: .error,
+                               confirmButtonText: viewModel.model.titleBtnError,
+                                confirmAction: {
+                modalManager.dismiss()
+            })
+        }
     }
 }
 

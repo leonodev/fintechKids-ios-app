@@ -6,24 +6,28 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 import Supabase
 import FHKCore
 import FHKAuth
-import Observation
+import FHKStorage
+import FHKUtils
+import FHKInjections
 
 @Observable
 final class RegisterScreenVM: FHKCore.ViewModel {
     private let loginActor: Login
     var model: RegisterModel = .init()
     
+    // Properties injected
+    var securityManager = inject.securitymanager
+    var storageManager = inject.storagemanager
+    
     init(loginActor: Login = Login(factory: DefaultAuthServiceFactory())) {
         self.loginActor = loginActor
     }
     
     enum Action: Equatable {
-        case clearInfomember
-        case removeMember(member: FamilyMember)
         case registerUser
         case onAppear
     }
@@ -31,46 +35,121 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     @MainActor
     func action(_ action: Action) async {
         switch action {
-        case .clearInfomember:
-            clearInfomember()
-            
-        case .removeMember(let member):
-            await removeMember(member)
             
         case .registerUser:
-            await registerUser()
+            // Generate securitySeed
+            let securitySeed = securityManager.generateSecuritySeed()
             
+            // Generate hashed password
+            let hashedPassword = await generateHashedPassword(securitySeed: securitySeed)
+            
+            // Make register
+            await registerUser(passwordHashed: hashedPassword)
+            
+            // save securitySeed in Keychain
+            await saveSecuritySeedIntoKeychain(securitySeed: securitySeed)
+            
+            // save user in Keychain
+            await saveUserIntoKeychain()
+             
         case .onAppear:
             await onAppear()
         }
     }
     
-    func onAppear() async {
-       
-    }
-    
-    func clearInfomember() {
-        model.clearInfoNewmember()
-    }
-    
-    func removeMember(_ member: FamilyMember) async {
-        model.familyMembers.removeAll(where: { $0.id == member.id })
-    }
+    func onAppear() async {}
     
     @MainActor
-    func registerUser() async {
-        model.registerState = .loading
+    func registerUser(passwordHashed: String?) async {
+        guard let pwdHashed = passwordHashed else {
+            model.registerState = .error(
+                Log(error: FHKSecurityError.generateHashPassword,
+                    attributes: LogAttributes(action: self.nameAction,
+                                              feature: .register,
+                                              extraInfo: ["keychain": "passwordHashed"])
+                )
+            )
+            
+            return
+        }
         
         do {
             try await loginActor.registerUser(platform: .supabase,
                                               email: model.emailFamily,
-                                              password: model.password)
-            model.isRegisterSuccess = true
+                                              password: pwdHashed)
+            
+            Logger.info("REGISTER USER SUCCESS")
+            model.registerState = .finish(nil)
         } catch let error as AuthDomainError {
-            model.setMessageRegisterError(error: error)
-            model.registerState = .error(error)
+            model.registerState = .error(
+                Log(error: error,
+                    attributes: LogAttributes(action: self.nameAction,
+                                              feature: .register)
+                )
+            )
         } catch {
-            model.registerState = .error(error)
+            model.registerState = .error(
+                Log(error: error,
+                    attributes: LogAttributes(action: self.nameAction,
+                                              feature: .register)
+                )
+            )
+        }
+    }
+}
+
+private extension RegisterScreenVM {
+    
+    func generateHashedPassword(securitySeed: Data?) async -> String? {
+        model.registerState = .loading
+        
+        // Generate the Hash using the securitySeed
+        guard let seed = securitySeed,
+                let hashedPassword = securityManager.hashPassword(model.password,
+                                                                  securitySeed: seed
+        ) else {
+            model.registerState = .error(
+                Log(error: FHKSecurityError.generateHashPassword,
+                    attributes: LogAttributes(action: self.nameAction,
+                                              feature: .register,
+                                              extraInfo: ["keychain": "hashedPassword"])
+                )
+            )
+            return nil
+        }
+        
+        Logger.info("GENERATE HASED PASSWORD SUCCESS")
+        return hashedPassword
+    }
+    
+    func saveSecuritySeedIntoKeychain(securitySeed: Data?) async {
+        do {
+            // We save the securitySeed in the keychain so that it is available even when reinstalling.
+            try storageManager.saveKeychain(securitySeed, for: "securitySeed_\(model.emailFamily)")
+            Logger.info("SECURITY-SEED SAVED INTO KEYCHAIN SUCCESS")
+        } catch {
+            model.registerState = .error(
+                Log(error: error,
+                    attributes: LogAttributes(action: self.nameAction,
+                                              feature: .register,
+                                              extraInfo: ["keychain": "securitySeed"])
+                )
+            )
+        }
+    }
+    
+    func saveUserIntoKeychain() async {
+        do {
+            try storageManager.saveKeychain(model.emailFamily, for: KeychainKeys.userKey)
+            Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
+        } catch {
+            model.registerState = .error(
+                Log(error: error,
+                    attributes: LogAttributes(action: self.nameAction,
+                                              feature: .register,
+                                              extraInfo: ["keychain": "user"])
+                )
+            )
         }
     }
 }

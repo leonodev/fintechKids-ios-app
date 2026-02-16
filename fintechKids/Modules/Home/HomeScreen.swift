@@ -57,6 +57,13 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 Spacer()
                 
                 FloatMenu(options: viewModel.model.options, callback: { index in
+                    switch index {
+                    case 0:
+                        router.navigate(to: .members)
+                        
+                    default:
+                        break
+                    }
                     print(index)
                 })
             }

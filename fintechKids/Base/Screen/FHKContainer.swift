@@ -9,20 +9,18 @@ import FHKInjections
 import FHKDesignSystem
 
 public struct ScreenContainer<Content: View>: View {
-    @Inject(\.languageManager) private var langManager
-    
-    private let content: Content
+    private let content: () -> Content
     private let showNavigationBar: Bool
     private let title: String?
 
     public init(
         title: String? = nil,
         showNavigationBar: Bool = true,
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: @escaping () -> Content
     ) {
         self.title = title
         self.showNavigationBar = showNavigationBar
-        self.content = content()
+        self.content = content
     }
     
     public var body: some View {
@@ -36,16 +34,14 @@ public struct ScreenContainer<Content: View>: View {
                 endPoint: .bottom
             )
             .ignoresSafeArea() 
-            content
+            content()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
                 .observeLanguage()
             // add here others global features
             // .onTapGesture { hideKeyboard() }
-            // .trackScreenView("NombreDeLaPantalla")
         }
         .navigationBarHidden(!showNavigationBar)
         .navigationTitle(title ?? "")
-        .navigationBarTitleDisplayMode(.inline) // O el que prefieras
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

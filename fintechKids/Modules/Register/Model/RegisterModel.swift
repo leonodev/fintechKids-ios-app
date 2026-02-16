@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 import Observation
+import Supabase
 import FHKAuth
 import FHKUtils
 import FHKCore
@@ -22,46 +23,21 @@ public struct FamilyMember: Identifiable, Hashable {
 
 @Observable
 public class RegisterModel {
-    public var familyName = ""
-    public var titleFamilyName = ""
-    public var familyNamePlaceholder = ""
-    
+    // Properties Observable
     public var emailFamily = ""
-    public var titleEmailFamily = ""
-    public var emailFamilyPlaceholder = ""
-    
-    public var titlePassword = ""
-    public var passwordPlaceholder = ""
     public var password = ""
     
-    public var titleSelectAvatar = ""
-    public var titleBtnAddMember = ""
+    // Properties View
+    public var emailFamilyPlaceholder = "email".localized().capitalizingFirstLetter()
+    public var passwordPlaceholder = "password".localized().capitalizingFirstLetter()
+    public var titleRegisterBtn = "register".localized().uppercased()
+    public var msnLoading = ""
+    public var titleRegisterConfirmation = "title_register_user".localized().uppercased()
+    public var msnRegisterConfirmation = "msn_register_user_success".localized().capitalizingFirstLetter()
+    public var titleButtonContinue = "continue".localized().uppercased()
     
-    public var titleMemberNewName = ""
-    public var memberNewName = ""
-    public var memberNewNamePlaceholder = ""
-    public var titleRegisterBtn = ""
-    
-    public var titleRemoveMember = ""
-    public var titleBtnCancel = ""
-    public var titleBtnConfirm = ""
-    
-    public var selectedAvatarName: String?
-    public var familyMembers: [FamilyMember] = []
-    public let avatarIList = AvatarType.allCases
-    
-    public var msnError = ""
-    
-    public var stateButtonCreateMember: FHKButtonComponent.State {
-        (selectedAvatarName != nil && !memberNewName.isEmpty)
-        ? .enabled
-        : .disabled
-    }
-    
-    public var isRegisterSuccess: Bool = false
-    
-    private var _registerState: FHKCore.State<SupabaseAuthResponse> = .loaded(nil)
-    var registerState: FHKCore.State<SupabaseAuthResponse> {
+    private var _registerState: FHKCore.State<Never> = .loaded
+    var registerState: FHKCore.State<Never> {
         get { _registerState }
         set {
             _registerState = newValue
@@ -69,66 +45,35 @@ public class RegisterModel {
             case .loading:
                 updateLoadingView()
                 
-            case .loaded(let info):
-                updateLoadedView()
+            case .loaded:
+                break
                 
-            case .error:
-                updateErrorView()
+            case .error(let error):
+                sendCrashlyticsError(error)
+                
+            case .finish:
+                informateFinishState()
             }
         }
     }
     
-    init() {
-        titleFamilyName = "family_name".localized().capitalizingFirstLetter()
-        familyNamePlaceholder = "family_name".localized().capitalizingFirstLetter()
-        
-        titleEmailFamily = "email".localized().capitalizingFirstLetter()
-        emailFamilyPlaceholder = "email".localized().capitalizingFirstLetter()
-        
-        titlePassword = "password".localized().capitalizingFirstLetter()
-        passwordPlaceholder = "password".localized().capitalizingFirstLetter()
-        
-        titleSelectAvatar = "title_select_your_avatar".localized().capitalizingFirstLetter()
-        titleBtnAddMember = "title_add_member".localized().capitalizingFirstLetter()
-        
-        titleRemoveMember = "title_remove_member".localized().capitalizingFirstLetter()
-        
-        titleBtnCancel = "cancel".localized().capitalizingFirstLetter()
-        titleBtnConfirm = "confirm".localized().capitalizingFirstLetter()
-        titleRegisterBtn = "register".localized().uppercased()
-        titleMemberNewName = "title_name_new_member".localized().capitalizingFirstLetter()
-    }
-    
-    public func msnRemoveMember(name: String) -> String {
-        "msn_want_remove_member".localized(name).capitalizingFirstLetter()
-    }
-    
-    public func clearInfoNewmember() {
-        selectedAvatarName = nil
-        memberNewName = ""
-    }
-    
-    public func setMessageRegisterError(error: AuthDomainError) {
-        switch error {
-        case .userAlreadyExist:
-            msnError = "user_already_exist_error".localized().capitalizingFirstLetter()
-            
-        default:
-            msnError = "unknown_error".localized()
-        }
+    var isBtnContinueEnable: FHKButtonComponent.State {
+        return !emailFamily.isEmpty && !password.isEmpty ? .enabled : .disabled
     }
 }
 
 extension RegisterModel {
     private func updateLoadingView() {
-        // update label string from here
+        msnLoading = "title_loading_registering_user".localized().capitalizingFirstLetter()
+    }
+
+    private func sendCrashlyticsError(_ error: Log) {
+        msnRegisterConfirmation = "msn_register_user_error".localized().capitalizingFirstLetter()
+        CrashlyticsError.send(log: error)
     }
     
-    private func updateLoadedView() {
-        // update label string from here
-    }
-    
-    private func updateErrorView() {
-        // update label string from here
+    private func informateFinishState() {
+        msnRegisterConfirmation = "msn_register_user_success".localized().capitalizingFirstLetter()
+        Logger.info("User Registered Success")
     }
 }

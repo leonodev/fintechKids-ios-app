@@ -26,10 +26,9 @@ class AppDelegate: ServicesApplicationDelegate {
     override func application(_ application: UIApplication,
                               didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        Dependencies.registerAll()
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         Logger.info("All Services Registered => \(servicesResult)")
-        
-        Dependencies.registerAll()
         Logger.info("All Injection Values Success")
         return true
     }

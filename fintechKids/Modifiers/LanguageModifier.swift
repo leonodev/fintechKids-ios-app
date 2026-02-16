@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
+import FHKInjections
 
 public struct LanguageObserverModifier: ViewModifier {
-    @State private var languageId = UUID()
+    
+    // Injections Dependency
+    private let languageManager = inject.languageManager
 
     public func body(content: Content) -> some View {
+        let currentLanguage = languageManager.selectedLanguage
+        
         content
-            .id(languageId) // Fuerza el refresh
-            .onReceive(NotificationCenter.default.publisher(for: .languageDidChange)) { _ in
-                self.languageId = UUID()
-            }
+            .environment(\.locale, .init(identifier: currentLanguage))
     }
 }
 

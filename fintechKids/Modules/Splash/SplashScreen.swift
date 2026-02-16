@@ -17,43 +17,48 @@ struct SplashScreen<VM: SplashScreenVM>: View {
     
     var body: some View {
         ScreenContainer {
-            /*
-             viewModel.destination used in the view
-             to detect the change of state
-             */
-            if viewModel.destination == nil {
-                VStack(spacing: 20) {
-                    Spacer()
-                    
-                    GradientText(title: "title_name_app".localized(),
-                                 subtitle: "title_kids".localized())
-                    .padding(.vertical, FHKSize.size20)
-                    
-                    Spacer()
-                    
-                    LottieView(animationName: Lotties.operationsBoard,
-                               loopMode: .loop,
-                               contentMode: .scaleAspectFit)
-                    
-                    Spacer()
-                    
-                    LottieView(animationName: Lotties.progressBar,
-                               loopMode: .loop,
-                               contentMode: .scaleAspectFit)
-                }
-                .task {
-                    await viewModel.readLanguage()
-                }
+            switch viewModel.model.splashState {
+            default:
+                infoSplashVew
             }
         }
-        .onChange(of: viewModel.destination) { _, destination in
-            guard let destination else { return }
-            
-            switch destination {
-            case .login:
+        .onChange(of: viewModel.model.splashState) { _, state in
+            switch state {
+            case .finish(.goToLogin):
                 router.navigate(to: .login)
-            case .language:
+                
+            case .finish(.goToLanguage):
                 router.navigate(to: .language)
+                
+            default:
+                break
+            }
+        }
+    }
+    
+    var infoSplashVew: some View {
+        VStack(spacing: 20) {
+            Spacer()
+            
+            GradientText(title: viewModel.model.titleApp,
+                         subtitle: viewModel.model.subtitleApp)
+            .padding(.vertical, FHKSize.size20)
+            
+            Spacer()
+            
+            LottieView(animationName: Lotties.operationsBoard,
+                       loopMode: .loop,
+                       contentMode: .scaleAspectFit)
+            
+            Spacer()
+            
+            LottieView(animationName: Lotties.progressBar,
+                       loopMode: .loop,
+                       contentMode: .scaleAspectFit)
+        }
+        .onAppear {
+            Task {
+                await viewModel.action(.readLanguageCurrent)
             }
         }
     }

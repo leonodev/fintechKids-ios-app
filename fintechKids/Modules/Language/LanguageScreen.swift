@@ -10,87 +10,90 @@ import FHKUtils
 import FHKCore
 import FHKConfig
 import FHKDesignSystem
+import FHKObservability
 
-struct LanguageScreen: View {
+struct LanguageScreen<VM: LanguageScreenVM>: View {
     private let flagAnimation = Animation.spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0.15)
     
     @NavigationRouterWrapper<Routes> private var router
-    @StateObject private var viewModel = LanguageScreenVM(configManager: RemoteConfigManager())
+    @State var viewModel: VM
     @Namespace var nameSpaceMenu
     @State private var isExpanded = false
-
+    
     var body: some View {
         ScreenContainer(title: Routes.language.title) {
-            ZStack {
+            switch viewModel.model.languageState {
+            
+            case .loaded:
+                contentMainView
                 
-                LottieView(animationName: Lotties.language,
-                           loopMode: .loop,
-                           contentMode: .scaleAspectFit)
-                .accessibilityHidden(true)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                VStack {
-                    
-                    HStack(alignment: .top) {
-                        EnvironmentView()
-                            .padding(.top, FHKSize.size08)
-                        
-                        Spacer()
-                        
-                        HStack {
-                            Text("select_language_now".localized().capitalizingFirstLetter())
-                                .foregroundStyle(FHKColor.basicWhite)
-                                .multilineTextAlignment(.center)
-                                .font(.PangramSans.bold(FHKSize.size28))
-                                .padding(.top, FHKSize.size44)
-                        }
-                        
-                        Spacer()
-                        
-                        VStack {
-                            menuLanguageView
-                                .accessibilityIdentifier("menu_language")
-                            Spacer()
-                        }
-                        .frame(width: FHKSize.size60)
-                    }
-                    .padding(.trailing, FHKSize.size08)
-                    
-                    FHKButtonPrimary(title: "continue".localized().capitalizingFirstLetter(),
-                                     state: .enabled,
-                                     mode: .solid,
-                                     action: {
-                        router.navigate(to: .login)
-                    })
-                    .padding()
-                    
-                    Text("version".localized())
-                        .accessibilityLabel("Versión de la aplicación: \(Text("version".localized()))")
-                        .foregroundStyle(FHKColor.basicWhite)
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            default:
+                LoadingView(msn: viewModel.model.msnLoading)
             }
-            .onAppear {
-                viewModel.loadConfig()
-            }
-            .onChange(of: viewModel.initialLanguageCode) { _, newCode in
-                let languageType = Configuration.languageTypeFromCode(newCode)
-                self.viewModel.selectedFlag = languageType.languageTypeToImageFlag
-                Task {
-                    await viewModel.saveLanguage(newCode)
-                }
+        }
+        .onAppear {
+            Task {
+                await viewModel.action(.loadRemoteConfig)
+                await viewModel.action(.sendAnalitycOpenScreen)
             }
         }
     }
 }
 
-#Preview {
-    LanguageScreen()
-}
-
 // MARK: config view language
 extension LanguageScreen {
+    
+    private var contentMainView: some View {
+        ZStack {
+            LottieView(animationName: Lotties.language,
+                       loopMode: .loop,
+                       contentMode: .scaleAspectFit)
+            .accessibilityHidden(true)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            VStack {
+                
+                HStack(alignment: .top) {
+                    EnvironmentView()
+                        .padding(.top, FHKSize.size08)
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Text(viewModel.model.selectLanguageNow)
+                            .foregroundStyle(FHKColor.basicWhite)
+                            .multilineTextAlignment(.center)
+                            .font(.PangramSans.bold(FHKSize.size28))
+                            .padding(.top, FHKSize.size44)
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        menuLanguageView
+                            .accessibilityIdentifier(viewModel.model.menuLanguageIdentifier)
+                        Spacer()
+                    }
+                    .frame(width: FHKSize.size60)
+                }
+                .padding(.trailing, FHKSize.size08)
+                
+                FHKButtonPrimary(title: viewModel.model.continueButtom,
+                                 state: .enabled,
+                                 mode: .solid,
+                                 action: {
+                    router.navigate(to: .login)
+                })
+                .padding()
+                
+                Text(viewModel.model.version)
+                    .accessibilityLabel(viewModel.model.version)
+                    .foregroundStyle(FHKColor.basicWhite)
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
     
     private var menuOptions: [Image] {
         // Exclude the currently selected flag from the menu
@@ -149,17 +152,21 @@ extension LanguageScreen {
                             
                             Task {
                                 let codeLanguage = img.imageToCode
-                                await viewModel.saveLanguage(codeLanguage.lowercased())
+                                let btnAnatilycs = Screens.Language.getBtnLanguag(lng: codeLanguage)
+
+                                await viewModel.action(.changeImageFlag(codeLanguage))
+                                await viewModel.action(.changeLanguageApp(codeLanguage))
+                                await viewModel.action(.saveLanguage(codeLanguage))
+                                await viewModel.action(.sendAnalitycSelectLanguage(btn: btnAnatilycs))
                             }
                             isExpanded = false
                         }
                     }
             }
         }
-//        .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity),
-//                                 removal: .move(edge: .top).combined(with: .opacity)))
-//        .glassEffect()
-//        .glassEffectUnion(id: 1, namespace: nameSpaceMenu)
-//        .glassEffectTransition(.matchedGeometry)
     }
+}
+
+#Preview {
+    LanguageScreen(viewModel: LanguageScreenVM())
 }

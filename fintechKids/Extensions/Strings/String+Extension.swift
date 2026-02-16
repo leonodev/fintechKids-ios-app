@@ -7,12 +7,16 @@
 
 import Foundation
 import FHKConfig
+import FHKInjections
 
 public extension String {
     func localized() -> String {
-        let langCode = LanguageManager.shared.selectedLanguage
         
-        guard let path = Bundle.main.path(forResource: langCode, ofType: "lproj"),
+        // Injections Dependency
+        let languageManager = inject.languageManager
+        
+        guard let path = Bundle.main.path(forResource: languageManager.selectedLanguage,
+                                          ofType: "lproj"),
               let bundle = Bundle(path: path) else {
             return NSLocalizedString(self, comment: "")
         }

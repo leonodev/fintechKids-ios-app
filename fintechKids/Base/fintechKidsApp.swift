@@ -19,7 +19,6 @@ struct FintechKidsApp: App {
     
     @Inject(\.toastService) var toastService: ToastServiceProtocol
     @Inject(\.modalManager) var modalManager: FHKModalProtocol
-    @Inject(\.languageManager) private var langManager
     
     var body: some Scene {
         WindowGroup {
@@ -35,7 +34,6 @@ struct FintechKidsApp: App {
                             SplashScreen(viewModel: SplashScreenVM())
                         }
                         .onAppear {
-                            Task { await langManager.readLanguage() }
                             deepLinkProcessor.setAppRouter(appRouter)
                             setupNotificationService()
                         }

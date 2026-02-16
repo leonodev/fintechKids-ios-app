@@ -7,42 +7,47 @@
 
 import Foundation
 import SwiftUI
-import Combine
 import Observation
 import FHKCore
 import FHKConfig
 import FHKStorage
 import FHKUtils
+import FHKInjections
 
 @Observable
-final class SplashScreenVM {
-    enum NavigationDestination {
-        case login
-        case language
-    }
+final class SplashScreenVM: FHKCore.ViewModel {
+    var model: SplashModel = .init()
     
-    private let storage: UserDefaultsProtocol
-    var languageApp: String?
-    /*
-     When using destination within @Observable, it is necessary to use
-     this property within the Screen so that the property propagates
-     its new value to the view
-     */
-    var destination: NavigationDestination?
+    // Properties Injected
+    private let storagemanager = inject.storagemanager
     
-    public init(storage: UserDefaultsProtocol = UserDefaultStorage()) {
-        self.storage = storage   
+    public enum Action: Equatable {
+        case readLanguageCurrent
     }
     
     @MainActor
-    public func readLanguage() async {
-        guard destination == nil else { return }
+    public func action(_ action: Action) async {
+        switch action {
+            
+        case .readLanguageCurrent:
+            await readLanguageCurrent()
+        }
+    }
+    
+    @MainActor
+    public func readLanguageCurrent() async {
         
-        let language = try? await storage.read(String.self, forKey: UserDefaultsKeys.languageKey)
-        if language != nil {
-            destination = .login
-        } else {
-            destination = .language
+        do {
+            let isLanguageSelected =
+            try await storagemanager.readUserDefaults(String.self,
+                                                      forKey: UserDefaultsKeys.languageKey)
+            
+            model.splashState = isLanguageSelected != nil
+                ? .finish(.goToLogin)
+                : .finish(.goToLanguage)
+        } catch {
+            model.splashState = .finish(.goToLanguage)
+            Logger.error(error.localizedDescription)
         }
     }
 }

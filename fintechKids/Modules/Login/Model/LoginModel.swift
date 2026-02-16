@@ -6,37 +6,73 @@
 //
 
 import SwiftUI
-import Combine
 import FHKAuth
 import FHKUtils
 import FHKCore
-import Observation
+import FHKDesignSystem
 
-@Observable
-public class LoginModel {
+public struct LoginModel {
+    // Properties Observable
     public var email = ""
     public var password = ""
     
-    // form view
-    public var emailPlaceholder = ""
-    public var passwordPlaceholder = ""
-    public var wellcome = ""
-    public var startSesionYourAccount = ""
-    public var youForgotYourPassword = ""
-    public var startSesion = ""
-    public var youNotHaveAccount = ""
-    public var register = ""
+    // Properties Screen View
+    public var emailPlaceholder: String {
+        "email".localized()
+    }
+    
+    public var passwordPlaceholder: String {
+        "password".localized()
+    }
+    
+    public var wellcome: String {
+        "wellcome".localized().capitalizingFirstLetter()
+    }
+    
+    public var startSesionYourAccount: String { "start_sesion_your_account".localized().capitalizingFirstLetter()
+    }
+    
+    public var youForgotYourPassword: String { "you_forgot_your_password".localized().capitalizingFirstLetter()
+    }
+    
+    public var startSesion: String {
+        "start_sesion".localized().capitalizingFirstLetter()
+    }
+    
+    public var youNotHaveAccount: String { "you_not_have_an_account".localized().capitalizingFirstLetter()
+    }
+    
+    public var register: String {
+        "register".localized().capitalizingFirstLetter()
+    }
+    
+    // msn loading
+    public var msnLoading: String {
+        "loading".localized().capitalizingFirstLetter()
+    }
     
     // errors screen
-    public var msnLoading = ""
-    public var titleError = ""
-    public var msnError = ""
-    public var titleBtnError = ""
+    public var titleError: String {
+        "title_error".localized().capitalizingFirstLetter()
+    }
     
-    public var isLogginSuccess: Bool = false
+    public var msnError: String {
+        "invalid_credentials_error".localized().capitalizingFirstLetter()
+    }
+
+    public var titleBtnError: String {
+        "title_btn_error".localized().capitalizingFirstLetter()
+    }
     
-    private var _loginState: FHKCore.State<SupabaseAuthResponse> = .loaded(nil)
-    var loginState: FHKCore.State<SupabaseAuthResponse> {
+    var isBtnContinueEnable: FHKButtonComponent.State {
+        !email.isEmpty && !password.isEmpty ? .enabled : .disabled
+    }
+    
+    // Properties Logs Error
+    public let attributesLoginError = ["platform": "supabase"]
+    
+    private var _loginState: FHKCore.State<Never> = .loaded
+    var loginState: FHKCore.State<Never> {
         get { _loginState }
         set {
             _loginState = newValue
@@ -44,73 +80,31 @@ public class LoginModel {
             case .loading:
                 updateLoadingView()
                 
-            case .loaded(let info):
-                updateLoadedView()
+            case .loaded:
+                informateLoadedState()
                 
-            case .error:
-                updateErrorView()
+            case .error(let error):
+                sendCrashlyticsError(error)
+                
+            case .finish:
+                informateFinishState()
             }
         }
-    }
-    
-    init() {
-        emailPlaceholder = "email".localized()
-        passwordPlaceholder = "password".localized()
-        msnLoading = "loading".localized().capitalizingFirstLetter()
-        
-        wellcome = "wellcome".localized().capitalizingFirstLetter()
-        startSesionYourAccount = "start_sesion_your_account".localized().capitalizingFirstLetter()
-        youForgotYourPassword = "you_forgot_your_password".localized().capitalizingFirstLetter()
-        startSesion = "start_sesion".localized().capitalizingFirstLetter()
-        youNotHaveAccount = "you_not_have_an_account".localized().capitalizingFirstLetter()
-        register = "register".localized().capitalizingFirstLetter()
-        
-        titleError = "title_error".localized().capitalizingFirstLetter()
-        msnError = "msn_error".localized().capitalizingFirstLetter()
-        titleBtnError = "title_btn_error".localized().capitalizingFirstLetter()
     }
     
     private func updateLoadingView() {
         // update label string from here
     }
     
-    private func updateLoadedView() {
-        // update label string from here
+    private func informateLoadedState() {
+        Logger.info("LoginScreen loaded correctly")
     }
     
-    private func updateErrorView() {
-        // update label string from here
+    private func sendCrashlyticsError(_ error: Log) {
+        CrashlyticsError.send(log: error)
     }
     
-    public func setMessageLoginError(error: AuthDomainError) {
-        
-        switch error {
-        case .invalidCredentials:
-            msnError = "invalid_credentials_error".localized().capitalizingFirstLetter()
-            
-        case .userNotFound:
-            msnError = "user_not_found_error".localized().capitalizingFirstLetter()
-            
-        case .emailNotConfirmed:
-            msnError = "email_not_confirmed_error".localized().capitalizingFirstLetter()
-            
-        case .otpExpired:
-            msnError = "otp_expired_error".localized().capitalizingFirstLetter()
-            
-        case .tooManyRequests:
-            msnError = "too_many_requests_error".localized().capitalizingFirstLetter()
-            
-        case .authenticationNotImplemented:
-            msnError = "authentication_not_Implemented_error".localized().capitalizingFirstLetter()
-            
-        case .refreshSession:
-            msnError = "refresh_session_error".localized().capitalizingFirstLetter()
-            
-        case .unknown(let code):
-            msnError = "unknown_error".localized() + " (\(code))."
-            
-        default:
-            msnError = "unknown_error".localized()
-        }
+    private func informateFinishState() {
+        Logger.info("Login Success")
     }
 }

@@ -12,6 +12,7 @@ import FirebaseMessaging
 import FirebaseRemoteConfig
 import FHKUtils
 import FHKCore
+import FirebaseCrashlytics
 
 var remoteConfig = RemoteConfig.remoteConfig()
 
@@ -23,8 +24,17 @@ final class FirebaseRemoteService: NSObject, ApplicationService {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
             fetchRemoteConfig()
+            Logger.info("FirebaseApp configured")
+        } else {
+            Logger.info("FirebaseApp already initialized")
         }
 
+#if DEBUG
+    Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
+#else
+    // Siempre activado para los usuarios reales
+    Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
+#endif
         return true
     }
     

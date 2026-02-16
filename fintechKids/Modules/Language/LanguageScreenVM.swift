@@ -6,19 +6,27 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
+import FHKCore
 import FHKConfig
 import FHKUtils
 import FHKAuth
 import FHKStorage
 import FHKDesignSystem
+import FHKObservability
+import FHKInjections
 
-public final class LanguageScreenVM<T: RemoteConfigManagerProtocol>: ObservableObject {
-    private var configManager: T
+@Observable
+public final class LanguageScreenVM: FHKCore.ViewModel {
+    var model: LanguageModel = .init()
+    var languages: [String] = []
+    var selectedFlag: Image = .noneFlag
     
-    @Published var languages: [String] = []
-    @Published var initialLanguageCode: String = Configuration.getLanguage().code()
-    @Published var selectedFlag: Image = .spainCircleFlag
+    // Injections Dependency
+    private let languageManager = inject.languageManager
+    private let storagemanager = inject.storagemanager
+    private let remoteConfigManager = inject.remoteConfigManager
+    private let analitycsManager = inject.analitycsManager
     
     public let allFlags: [Image] = [
         .spainCircleFlag,
@@ -27,58 +35,56 @@ public final class LanguageScreenVM<T: RemoteConfigManagerProtocol>: ObservableO
         .franceCircleFlag
     ]
     
-    private let storage: UserDefaultsProtocol
-    private var cancellables = Set<AnyCancellable>()
-    
-    public init(configManager: T, storage: UserDefaultsProtocol = UserDefaultStorage()) {
-        self.configManager = configManager
-        self.storage = storage
-        Task {
-            await readLanguage()
-        }
-        
-        configManager.objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                let newLanguages = configManager.enabledLanguages
-                self?.languages = newLanguages
-                Logger.info("\(newLanguages)")
-                
-                if self?.initialLanguageCode == Configuration.LanguageType.es.code() && !newLanguages.isEmpty {
-                    self?.initialLanguageCode = newLanguages.first ?? Configuration.LanguageType.es.code()
-                }
-            }
-            .store(in: &cancellables)
-    }
-
-    public func loadConfig() {
-        configManager.fetchConfig { [weak self] error in
-            // Forzamos la actualización al terminar el fetch
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                if let error = error {
-                    Logger.error("Error: \(error.localizedDescription)")
-                } else {
-                    // Actualizamos manualmente para asegurar que tenemos la última data
-                    self.languages = self.configManager.enabledLanguages
-                    Logger.info("Remote Config Cargado: \(self.languages)")
-                }
-            }
-        }
+    public enum Action: Equatable {
+        case loadRemoteConfig
+        case changeImageFlag(String)
+        case changeLanguageApp(String)
+        case saveLanguage(String)
+        case sendAnalitycOpenScreen
+        case sendAnalitycSelectLanguage(btn: AnalyticsEvent.Button)
     }
     
-    public func saveLanguage(_ language: String) async {
-        await LanguageManager.shared.saveLanguage(language)
-        await MainActor.run {
+    public init() {}
+    
+    @MainActor
+    public func action(_ action: Action) async {
+        switch action {
+            
+        case .loadRemoteConfig:
+            await loadRemoteConfig()
+            
+        case .changeImageFlag(let language):
             setImageFlag(code: language)
+            
+        case .changeLanguageApp(let language):
+            await changeLanguageApp(language)
+            
+        case .saveLanguage(let language):
+            await saveLanguage(language)
+            
+        case .sendAnalitycOpenScreen:
+            await sendAnalitycOpenScreen()
+            
+        case .sendAnalitycSelectLanguage(let btn):
+            await sendAnalitycSelectLanguage(btn: btn)
         }
     }
     
-    public func readLanguage() async {
-        await LanguageManager.shared.readLanguage()
-        let languageCode = LanguageManager.shared.selectedLanguage
-        await MainActor.run {
-            setImageFlag(code: languageCode)
+    private func loadRemoteConfig() async {
+        remoteConfigManager.fetchConfig { [weak self] error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                self.model.languageState = .error(
+                    Log(error: error,
+                        attributes: LogAttributes(action: self.nameAction,
+                                                  feature: .language)
+                    )
+                )
+            } else {
+                self.languages = self.remoteConfigManager.enabledLanguages
+                self.model.languageState = .loaded
+            }
         }
     }
     
@@ -86,5 +92,35 @@ public final class LanguageScreenVM<T: RemoteConfigManagerProtocol>: ObservableO
         let languageCode = code ?? Configuration.LanguageType.es.code()
         let languageType = Configuration.languageTypeFromCode(languageCode)
         selectedFlag =  languageType.languageTypeToImageFlag
+    }
+    
+    private func changeLanguageApp(_ language: String) async {
+        languageManager.selectedLanguage = language
+    }
+    
+    private func saveLanguage(_ language: String) async {
+        do {
+            try await storagemanager.saveUserDefaults(language, forKey: UserDefaultsKeys.languageKey)
+        }
+        catch {
+            self.model.languageState = .error(
+                Log(error: error,
+                    attributes: LogAttributes(action: self.nameAction,
+                                              feature: .language)
+                )
+            )
+        }
+    }
+}
+
+// Analytics Methods
+extension LanguageScreenVM {
+    
+    private func sendAnalitycOpenScreen() async {
+        analitycsManager.track(.screenView(Screens.Language.screen))
+    }
+    
+    private func sendAnalitycSelectLanguage(btn: AnalyticsEvent.Button) async {
+        analitycsManager.track(.tapButton(btn))
     }
 }
