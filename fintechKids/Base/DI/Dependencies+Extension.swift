@@ -40,8 +40,7 @@ public class Dependencies {
         deps.set(FHKSecurity(), for: FHKSecurityProtocol.self)
         
         /// Configuration App
-        deps.set(FHKConfiguration(storageManager: deps.storageManager),
-                 for: (any FHKConfigurationProtocol).self)
+        deps.set(FHKConfiguration(), for: (any FHKConfigurationProtocol).self)
         
         // API Services
         deps.set(ServicesAPI(), for: (any ServicesAPIProtocol).self)
@@ -49,10 +48,11 @@ public class Dependencies {
         // Supabase
         deps.set(FHKSupabase(), for: (any FHKSupabaseProtocol).self)
         let currentSupabase = deps.supabaseManager
-        let client = currentSupabase.client
-        deps.set(FHKSupabaseMembers(supabaseClient: client), for: (any FHKSupabaseMembersProtocol).self)
         
-
+        Task {
+            let client = try await currentSupabase.getClient()
+            deps.set(FHKSupabaseMembers(supabaseClient: client), for: (any FHKSupabaseMembersProtocol).self)
+        }
         Logger.info("Main dependencies registered successfully")
     }
     

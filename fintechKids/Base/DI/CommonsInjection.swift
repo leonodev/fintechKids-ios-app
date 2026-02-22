@@ -1,5 +1,5 @@
 //
-//  ModalInjections.swift
+//  CommonsInjection.swift
 //  fintechKids
 //
 //  Created by Fredy Leon on 26/1/26.
@@ -11,6 +11,7 @@ import FHKObservability
 import FHKConfig
 import FHKStorage
 import FHKAuth
+import FHKCore
 
 public extension DependenciesInjection {
     

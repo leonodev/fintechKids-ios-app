@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FHKInjections
+import FHKCore
 
 public struct LanguageObserverModifier: ViewModifier {
     

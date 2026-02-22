@@ -8,6 +8,7 @@
 import Foundation
 import FHKConfig
 import FHKInjections
+import FHKCore
 
 public extension String {
     func localized() -> String {
