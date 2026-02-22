@@ -20,8 +20,8 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     var model: RegisterModel = .init()
     
     // Properties injected
-    var securityManager = inject.securitymanager
-    var storageManager = inject.storagemanager
+    var securityManager = inject.securityManager
+    var storageManager = inject.storageManager
     
     init(loginActor: Login = Login(factory: DefaultAuthServiceFactory())) {
         self.loginActor = loginActor
@@ -62,14 +62,7 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     @MainActor
     func registerUser(passwordHashed: String?) async {
         guard let pwdHashed = passwordHashed else {
-            model.registerState = .error(
-                Log(error: FHKSecurityError.generateHashPassword,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .register,
-                                              extraInfo: ["keychain": "passwordHashed"])
-                )
-            )
-            
+            model.registerState = .error(FHKSecurityError.generatePasswordHashedFailed)
             return
         }
         
@@ -78,22 +71,11 @@ final class RegisterScreenVM: FHKCore.ViewModel {
                                               email: model.emailFamily,
                                               password: pwdHashed)
             
-            Logger.info("REGISTER USER SUCCESS")
             model.registerState = .finish(nil)
-        } catch let error as AuthDomainError {
-            model.registerState = .error(
-                Log(error: error,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .register)
-                )
-            )
+        } catch let error as FHKDomainError {
+            model.registerState = .error(error)
         } catch {
-            model.registerState = .error(
-                Log(error: error,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .register)
-                )
-            )
+            model.registerState = .error(FHKAppError.registerUserFailed)
         }
     }
 }
@@ -103,18 +85,12 @@ private extension RegisterScreenVM {
     func generateHashedPassword(securitySeed: Data?) async -> String? {
         model.registerState = .loading
         
-        // Generate the Hash using the securitySeed
+        // Generate the Hash using the seed
         guard let seed = securitySeed,
                 let hashedPassword = securityManager.hashPassword(model.password,
                                                                   securitySeed: seed
         ) else {
-            model.registerState = .error(
-                Log(error: FHKSecurityError.generateHashPassword,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .register,
-                                              extraInfo: ["keychain": "hashedPassword"])
-                )
-            )
+            model.registerState = .error(FHKSecurityError.generatePasswordHashedFailed)
             return nil
         }
         
@@ -124,17 +100,11 @@ private extension RegisterScreenVM {
     
     func saveSecuritySeedIntoKeychain(securitySeed: Data?) async {
         do {
-            // We save the securitySeed in the keychain so that it is available even when reinstalling.
+            // We save the seed in the keychain so that it is available even when reinstalling.
             try storageManager.saveKeychain(securitySeed, for: "securitySeed_\(model.emailFamily)")
             Logger.info("SECURITY-SEED SAVED INTO KEYCHAIN SUCCESS")
         } catch {
-            model.registerState = .error(
-                Log(error: error,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .register,
-                                              extraInfo: ["keychain": "securitySeed"])
-                )
-            )
+            model.registerState = .error(FHKSecurityError.saveSeedFailed)
         }
     }
     
@@ -143,13 +113,7 @@ private extension RegisterScreenVM {
             try storageManager.saveKeychain(model.emailFamily, for: KeychainKeys.userKey)
             Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
         } catch {
-            model.registerState = .error(
-                Log(error: error,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .register,
-                                              extraInfo: ["keychain": "user"])
-                )
-            )
+            model.registerState = .error(FHKSecurityError.saveUserMailKeychainFailed)
         }
     }
 }

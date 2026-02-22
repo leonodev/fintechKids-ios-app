@@ -7,6 +7,4 @@
 
 import FHKStorage
 
-public extension KeychainKeys {
-    static let userKey = "user_key"
-}
+public extension KeychainKeys {}

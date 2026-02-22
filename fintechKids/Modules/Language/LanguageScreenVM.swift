@@ -24,7 +24,6 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
     
     // Injections Dependency
     private let languageManager = inject.languageManager
-    private let storagemanager = inject.storagemanager
     private let remoteConfigManager = inject.remoteConfigManager
     private let analitycsManager = inject.analitycsManager
     
@@ -39,7 +38,6 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
         case loadRemoteConfig
         case changeImageFlag(String)
         case changeLanguageApp(String)
-        case saveLanguage(String)
         case sendAnalitycOpenScreen
         case sendAnalitycSelectLanguage(btn: AnalyticsEvent.Button)
     }
@@ -59,9 +57,6 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
         case .changeLanguageApp(let language):
             await changeLanguageApp(language)
             
-        case .saveLanguage(let language):
-            await saveLanguage(language)
-            
         case .sendAnalitycOpenScreen:
             await sendAnalitycOpenScreen()
             
@@ -74,13 +69,8 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
         remoteConfigManager.fetchConfig { [weak self] error in
             guard let self = self else { return }
             
-            if let error = error {
-                self.model.languageState = .error(
-                    Log(error: error,
-                        attributes: LogAttributes(action: self.nameAction,
-                                                  feature: .language)
-                    )
-                )
+            if error != nil {
+                self.model.languageState = .error(FHKSystemError.remoteConfigFailed)
             } else {
                 self.languages = self.remoteConfigManager.enabledLanguages
                 self.model.languageState = .loaded
@@ -89,27 +79,13 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
     }
     
     private func setImageFlag(code: String?) {
-        let languageCode = code ?? Configuration.LanguageType.es.code()
-        let languageType = Configuration.languageTypeFromCode(languageCode)
+        let languageCode = code ?? LanguageType.es.code()
+        let languageType = languageManager.languageTypeFromCode(languageCode)
         selectedFlag =  languageType.languageTypeToImageFlag
     }
     
     private func changeLanguageApp(_ language: String) async {
-        languageManager.selectedLanguage = language
-    }
-    
-    private func saveLanguage(_ language: String) async {
-        do {
-            try await storagemanager.saveUserDefaults(language, forKey: UserDefaultsKeys.languageKey)
-        }
-        catch {
-            self.model.languageState = .error(
-                Log(error: error,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .language)
-                )
-            )
-        }
+        languageManager.changeLanguage(to: language)
     }
 }
 

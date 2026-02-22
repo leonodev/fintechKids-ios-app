@@ -65,7 +65,7 @@ class ProfileScreenVM  {
              // Esto hace que 'hasSavedAuthToken' devuelva false inmediatamente
              storageManager.deleteKeychain(for: KeychainKey.authToken.rawValue)
              
-             // 3. Opcional: ¿Borramos la semilla (securitySeed)?
+             // 3. Opcional: ¿Borramos la semilla (seed)?
              // Normalmente NO se borra, para que el usuario pueda volver a
              // loguearse manualmente en este dispositivo sin problemas.
              
@@ -82,7 +82,7 @@ class ProfileScreenVM  {
      
      
      Resumen del ciclo de vida del Token
-     Registro: Creas la securitySeed (se queda para siempre en el dispositivo).
+     Registro: Creas la seed (se queda para siempre en el dispositivo).
 
      Login Manual: Generas el Hash → Obtienes Token → Lo guardas con FaceID.
 

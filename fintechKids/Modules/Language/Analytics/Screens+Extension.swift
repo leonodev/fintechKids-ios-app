@@ -19,13 +19,13 @@ public extension Screens {
         static func getBtnLanguag(lng: String) -> AnalyticsEvent.Button {
             switch lng {
             
-            case Configuration.LanguageType.en.code():
+            case LanguageType.en.code():
                 AnalyticsEvent.Button(name: "BTN_LANGUAGE_EN")
                 
-            case Configuration.LanguageType.fr.code():
+            case LanguageType.fr.code():
                 AnalyticsEvent.Button(name: "BTN_LANGUAGE_FR")
                 
-            case Configuration.LanguageType.it.code():
+            case LanguageType.it.code():
                 AnalyticsEvent.Button(name: "BTN_LANGUAGE_IT")
                 
             default:

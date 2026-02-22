@@ -19,7 +19,7 @@ final class SplashScreenVM: FHKCore.ViewModel {
     var model: SplashModel = .init()
     
     // Properties Injected
-    private let storagemanager = inject.storagemanager
+    private let storagemanager = inject.storageManager
     
     public enum Action: Equatable {
         case readLanguageCurrent

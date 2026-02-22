@@ -17,7 +17,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     @Inject(\.modalManager) var modalManager: FHKModalProtocol
     
     var body: some View {
-        ScreenContainer {
+        ScreenContainer(title: Routes.register.title) {
             switch viewModel.model.registerState {
                 
             case .loading:
@@ -42,15 +42,34 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     
     var formView: some View {
         VStack(alignment: .leading) {
+            Spacer()
             
+            LottieView(animationName: Lotties.register,
+                       loopMode: .loop,
+                       contentMode: .scaleAspectFit)
+            .frame(height: 200)
+            
+            // text informative
+            informativeText
+
             // cardview with credentials
             credentialsField
             
             Spacer()
             // button register
             registermeButton
+            
+            Spacer()
         }
         .padding()
+    }
+    
+    var informativeText: some View {
+        Text("register_email_instruction".localized().capitalizingFirstLetter())
+            .lineSpacing(4)
+            .font(.PangramSans.bold(FHKSize.size16))
+            .foregroundColor(FHKColor.lunarSand.opacity(0.5))
+            .padding()
     }
     
     var credentialsField: some View {
@@ -87,7 +106,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
             FHKInformationView(title: viewModel.model.titleRegisterConfirmation,
                                message: viewModel.model.msnRegisterConfirmation,
-                               type: .success,
+                               type: viewModel.model.stateRegisterOperation,
                                confirmButtonText: viewModel.model.titleButtonContinue,
                                 confirmAction: {
                 modalManager.dismiss()

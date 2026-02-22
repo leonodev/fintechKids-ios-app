@@ -9,4 +9,5 @@ import FHKStorage
 
 public extension UserDefaultsKeys {
     static let languageKey = "language_user"
+    static let userMailKey = "user_email"
 }

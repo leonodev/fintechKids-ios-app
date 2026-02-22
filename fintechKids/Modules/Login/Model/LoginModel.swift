@@ -10,11 +10,16 @@ import FHKAuth
 import FHKUtils
 import FHKCore
 import FHKDesignSystem
+import FHKInjections
+import FHKObservability
 
 public struct LoginModel {
     // Properties Observable
     public var email = ""
     public var password = ""
+    
+    // Injections Dependency
+    private let analitycsManager = inject.analitycsManager
     
     // Properties Screen View
     public var emailPlaceholder: String {
@@ -64,8 +69,21 @@ public struct LoginModel {
         "title_btn_error".localized().capitalizingFirstLetter()
     }
     
+    func getBiometryPrompt(biometryType: BiometryType) -> String {
+        switch biometryType {
+        case .faceID:
+            "prompt_face_id".localized().capitalizingFirstLetter()
+            
+        case .touchID:
+            "prompt_touch_id".localized().capitalizingFirstLetter()
+   
+        default:
+            "prompt_generic_id".localized().capitalizingFirstLetter()
+        }
+    }
+    
     var isBtnContinueEnable: FHKButtonComponent.State {
-        !email.isEmpty && !password.isEmpty ? .enabled : .disabled
+        !email.isEmpty && !password.isEmpty && email.isValidEmail ? .enabled : .disabled
     }
     
     // Properties Logs Error
@@ -84,7 +102,7 @@ public struct LoginModel {
                 informateLoadedState()
                 
             case .error(let error):
-                sendCrashlyticsError(error)
+                informateError(error)
                 
             case .finish:
                 informateFinishState()
@@ -100,8 +118,12 @@ public struct LoginModel {
         Logger.info("LoginScreen loaded correctly")
     }
     
-    private func sendCrashlyticsError(_ error: Log) {
-        CrashlyticsError.send(log: error)
+    private func informateError(_ error: any FHKError) {
+        if error.isShouldTrack {
+            analitycsManager.track(.error(.init(from: error)))
+        }
+        
+        Logger.error(error.logMessage)
     }
     
     private func informateFinishState() {

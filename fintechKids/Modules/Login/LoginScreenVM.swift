@@ -20,11 +20,19 @@ final class LoginScreenVM: FHKCore.ViewModel {
     var model: LoginModel = .init()
     
     // Properties injected
-    var securityManager = inject.securitymanager
-    var storageManager = inject.storagemanager
+    var securityManager = inject.securityManager
+    var storageManager = inject.storageManager
     
     var hasSavedAuthToken: Bool {
         storageManager.exists(key: KeychainKey.authToken.rawValue)
+    }
+    
+    var isBiometryAvailable: Bool {
+        securityManager.getBiometryType() != .none
+    }
+    
+    var biometryIconName: String {
+        securityManager.biometryIcon
     }
     
     init(loginActor: Login = Login(factory: DefaultAuthServiceFactory())) {
@@ -53,78 +61,80 @@ final class LoginScreenVM: FHKCore.ViewModel {
         model.loginState = .loading
         
         do {
-            // Recuperar la semilla (Security Seed) del Keychain
-            guard let seed: Data = try storageManager.readKeychain(Data.self,
-                                                                   for: "securitySeed_\(model.email)",
-                                                                   prompt: nil) else {
-                
-                model.loginState = .error(
-                    Log(error: FHKSecurityError.userNotRegisteredIntoDevice,
-                        attributes: LogAttributes(action: self.nameAction,
-                                                  feature: .login)
-                       )
-                )
-                
-                Logger.error("The user did not register on this device.")
+            // Recover the Keychain Security Seed
+            guard let seed: Data = getSeed() else {
+                model.loginState = .error(FHKSecurityError.readSeedFailed)
                 return
             }
             
-            // Generar el Hash usando la contraseña que escribió el usuario y la semilla recuperada
-            guard let hashedPassword = securityManager.hashPassword(model.password, securitySeed: seed) else {
-                throw FHKSecurityError.hashingFailed
+            // Generate the hash using the password entered by the user and the retrieved seed
+            guard let hashedPassword = generarHash(seed: seed) else {
+                model.loginState = .error(FHKSecurityError.generateHashFailed)
+                return
             }
             
             // Send Login User
-            let tokenAccessToken = try await loginActor.loginUser(platform: .supabase,
+            let tokenAccess = try await loginActor.loginUser(platform: .supabase,
                                                                   email: model.email,
                                                                   password: hashedPassword)
             
-            // guardamos el Session Token PROTEGIDO por FaceID para el futuro
-            try storageManager.saveKeychain(
-                tokenAccessToken,
-                for: KeychainKey.authToken.rawValue,
-                requireBiometry: true
-            )
-            
+            // We saved the Session Token PROTECTED by Face ID for the future
+            saveSessionToken(tokenAccess: tokenAccess, isHasBiometry: isBiometryAvailable)
             model.loginState = .finish(nil)
-        } catch let error as AuthDomainError {
-            model.loginState = .error(
-                Log(error: error,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .login)
-                   )
-            )
+        } catch let error as FHKDomainError {
+            model.loginState = .error(error)
         } catch {
-            model.loginState = .error(
-                Log(error: error,
-                    attributes: LogAttributes(action: self.nameAction,
-                                              feature: .login)
-                   )
-            )
+            model.loginState = .error(FHKAppError.loginUserFailed)
         }
     }
     
     @MainActor
     private func loginWithBiometrics() async {
-        // si Podemos usar FaceID
+        // Yes, we can use Face ID
         guard storageManager.isBiometryAvailable() else {
-            Logger.error("Biometry not available")
+            model.loginState = .error(FHKBiometryError.notAvailable)
             return
         }
         
         do {
-            // Intenta leer el token del Keychain
-            if let savedToken: String = try storageManager.readKeychain(String.self,
-                                                                        for: KeychainKey.authToken.rawValue,
-                                                                        prompt: "Inicia sesión rápidamente con tu cara"
+            // Try reading the Keychain token
+            if let savedToken: String = try storageManager.readKeychain(
+                String.self,
+                for: KeychainKey.authToken.rawValue,
+                prompt: model.getBiometryPrompt(biometryType: securityManager.getBiometryType())
             ) {
-                // Si FaceID aceptó, entramos directamente a la sesión
+                // If FaceID accepted, we went directly into the session
                 try await loginActor.restoreSession(platform: .supabase, token: savedToken)
                 model.loginState = .finish(nil)
             }
         } catch {
-            // Si el usuario cancela, no hacemos nada, solo lo dejamos en el login manual
-            print("Autenticación biométrica cancelada o fallida")
+            // If the user cancels, we do nothing; we just leave them on manual login.
+            model.loginState = .error(FHKBiometryError.userCancelAuthentication)
+        }
+    }
+}
+
+private extension LoginScreenVM {
+    
+    func getSeed(prompt: String? = nil) -> Data? {
+        try? storageManager.readKeychain(Data.self,
+                                        for: "securitySeed_\(model.email)",
+                                        prompt: prompt)
+    }
+    
+    func generarHash(seed: Data) -> String? {
+        securityManager.hashPassword(model.password, securitySeed: seed)
+    }
+    
+    func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) {
+        do {
+            try storageManager.saveKeychain(
+                tokenAccess,
+                for: KeychainKey.authToken.rawValue,
+                requireBiometry: isHasBiometry
+            )
+        } catch {
+            model.loginState = .error(FHKSecurityError.saveTokenAccessKeychainFailed)
         }
     }
 }

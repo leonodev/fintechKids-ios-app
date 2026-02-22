@@ -52,13 +52,13 @@ extension Routes {
             return nil
             
         case .register:
-            return ""
+            return "register".localized().capitalizingFirstLetter()
             
         case .home:
             return nil
             
         case .members:
-            return nil
+            return "title_add_member".localized().capitalizingFirstLetter()
             
         case .goal:
             return "goal".localized().capitalizingFirstLetter()

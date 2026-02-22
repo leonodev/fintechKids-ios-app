@@ -19,6 +19,11 @@ public extension DependenciesInjection {
         set { self[(any FHKConfigManagerProtocol).self] = newValue }
     }
     
+    var configManager: any FHKConfigurationProtocol {
+        get { self[(any FHKConfigurationProtocol).self] }
+        set { self[(any FHKConfigurationProtocol).self] = newValue }
+    }
+    
     var modalManager: any FHKModalProtocol {
         get { self[(any FHKModalProtocol).self] }
         set { self[(any FHKModalProtocol).self] = newValue }
@@ -34,13 +39,23 @@ public extension DependenciesInjection {
         set { self[(any FHKLanguageManagerProtocol).self] = newValue }
     }
     
-    var storagemanager: any FHKStorageManagerProtocol {
+    var storageManager: any FHKStorageManagerProtocol {
         get { self[(any FHKStorageManagerProtocol).self] }
         set { self[(any FHKStorageManagerProtocol).self] = newValue }
     }
     
-    var securitymanager: any FHKSecurityProtocol {
+    var securityManager: any FHKSecurityProtocol {
         get { self[(any FHKSecurityProtocol).self] }
         set { self[(any FHKSecurityProtocol).self] = newValue }
+    }
+    
+    var supabaseManager: any FHKSupabaseProtocol {
+        get { self[(any FHKSupabaseProtocol).self] }
+        set { self[(any FHKSupabaseProtocol).self] = newValue }
+    }
+    
+    var supabaseTableMembersManager: any FHKSupabaseMembersProtocol {
+        get { self[(any FHKSupabaseMembersProtocol).self] }
+        set { self[(any FHKSupabaseMembersProtocol).self] = newValue }
     }
 }

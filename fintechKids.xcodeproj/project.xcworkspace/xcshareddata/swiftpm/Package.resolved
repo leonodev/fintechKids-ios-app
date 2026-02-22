@@ -25,7 +25,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-authentication-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "851d0122333a54c27c83f951beff9186a2943d99"
+        "revision" : "9eedc3ac19fec63ea56bfbb61f4eb72ec65d312e"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-config-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "58834e6310b230765190737b25e75734640a3aab"
+        "revision" : "dd07b2ce758ebb774ab98ba890534ee6edfc7435"
       }
     },
     {
@@ -43,7 +43,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-core-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "1f66c8d11c36a712211b97ff4cfa71b11937688d"
+        "revision" : "993bd8e89450c1fb890345a6a850b531a6091b89"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-designsystem-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "a60ad6e985f7630888aa947c435e72b524545426"
+        "revision" : "ad9517511cb080e876450c1efff737b1fb103217"
       }
     },
     {
@@ -70,7 +70,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-observability-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "886330a2f0266549a55c973f7e22584951a14c23"
+        "revision" : "680965cbcf44dd58399aa5f72526a5609c8ac688"
       }
     },
     {
@@ -79,7 +79,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-storage-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "1222999a4c9069ffe1656bc0dc19d92db4923db1"
+        "revision" : "c34c0a37ee9a2b47ebb46dc10e30f7bf558832e0"
       }
     },
     {
@@ -312,8 +312,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "34e463e98ab8541c604af706c99bed7160f5ec70",
-        "version" : "1.8.1"
+        "revision" : "dfd70507def84cb5fb821278448a262c6ff2bbad",
+        "version" : "1.9.0"
       }
     }
   ],

@@ -381,14 +381,15 @@
 		};
 		5D93B26E2F434471001EEDAD /* [Firebase] Upload dSYMs */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-				"$(SRCROOT)/$(SRCROOT)/GoogleService-Info.plist",
+				"$(DWARF_DSYM_FOLDER_PATH)/$(DWARF_DSYM_FILE_NAME)/Contents/Resources/DWARF/$(TARGET_NAME)",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "[Firebase] Upload dSYMs";
 			outputFileListPaths = (
@@ -397,7 +398,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Este script localiza el ejecutable de Crashlytics dentro de los paquetes de SPM\n# y sube automáticamente los dSYMs a Firebase.\n\nif [ \"${CONFIGURATION}\" != \"Debug\" ] || [ \"${FORCE_CRASHLYTICS_UPLOAD}\" = \"YES\" ]; then\n  \n  # Ruta estándar para instalaciones vía Swift Package Manager\n  SCRIPT_PATH=\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n  \n  if [ -f \"$SCRIPT_PATH\" ]; then\n    echo \"Firebase: Subiendo dSYMs desde $SCRIPT_PATH\"\n    \"$SCRIPT_PATH\"\n  else\n    echo \"Firebase Error: No se encontró el script de Crashlytics en $SCRIPT_PATH\"\n    echo \"Asegúrate de haber instalado Firebase vía SPM.\"\n    exit 1\n  fi\n  \nfi\n";
+			shellScript = "# Script para SPM\nDIRECTORY=$(find \"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics\" -name upload-symbols | head -n 1)\n\nif [ -n \"$DIRECTORY\" ]; then\n  \"${DIRECTORY}\" -gsp \"${PROJECT_DIR}/GoogleService-Info.plist\" -p ios \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\nelse\n  echo \"error: No se pudo encontrar el ejecutable upload-symbols de Firebase en SourcePackages\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

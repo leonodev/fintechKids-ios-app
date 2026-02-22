@@ -46,6 +46,10 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 break
             }
         }
+        .onAppear {
+            viewModel.model.email = "leonfrcol@gmail.com"
+            viewModel.model.password = "1234567890"
+        }
     }
     
     var FormView: some View {
@@ -81,24 +85,23 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                                         isSecure: true)
                 }
                 
-                // Solo mostramos el botón de FaceID si existe un token previo
-                if viewModel.hasSavedAuthToken {
+                // We only show the Face ID button if a previous token exists.
+                if  viewModel.isBiometryAvailable && viewModel.hasSavedAuthToken {
                     Button(action: {
                         Task { await viewModel.action(.doLoginWithBiometrics) }
-                    })
-                    {
-                        Image(systemName: "faceid")
+                    }, label: {
+                        Image(systemName: viewModel.biometryIconName)
                             .resizable()
                             .frame(width: FHKSize.size44, height: FHKSize.size44)
                             .foregroundStyle(FHKColor.basicWhite)
-                    }
+                    })
                     .padding(.vertical, FHKSpace.space08)
                 }
                 
                 HStack {
                     Spacer()
                     Button(action: {
-                        // Acción para recuperar contraseña
+                        // Action to recover password
                     }, label: {
                         Text(viewModel.model.youForgotYourPassword)
                             .font(.PangramSans.bold(FHKSize.size16))

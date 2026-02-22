@@ -6,65 +6,76 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 import Supabase
 import FHKCore
 import FHKAuth
 import FHKStorage
 import FHKUtils
-import Observation
+import FHKInjections
 
 @Observable
 final class AddMemberScreenVM: FHKCore.ViewModel {
     var model: AddMemberModel = .init()
     
+    // Properties injected
+    var supabaseTableMembers = inject.supabaseTableMembersManager
+    
     enum Action: Equatable {
-        case onAppear
+        case newMember
         case clearInfomember
-        case addNewMember
+        case registerMembers
         case removeMember(member: FamilyMember)
     }
     
     func action(_ action: Action) async {
         switch action {
-        case .onAppear:
-            break
             
+        case .newMember:
+            await newMember()
+
         case .clearInfomember:
-            clearInfomember()
+            await clearInfomember()
             
-        case .addNewMember:
-            await addNewMember()
+        case .registerMembers:
+            await registerMembers()
             
         case .removeMember(let member):
             await removeMember(member)
         }
     }
     
-    func removeMember(_ member: FamilyMember) async {
-        model.familyMembers.removeAll(where: { $0.id == member.id })
+    @MainActor
+    func newMember() async {
+        guard let emailParent = await model.getParentMail() else {
+            model.addMemberState = .error(FHKSecurityError.readUserMailKeychainFailed)
+            return
+        }
+        
+        let newMember = FamilyMember(email: emailParent,
+                                     memberName: model.memberNewName,
+                                     avatarImage: model.selectedAvatarName)
+        
+        model.familyMembers.append(newMember)
     }
     
-    func clearInfomember() {
+    @MainActor
+    func clearInfomember() async {
         model.clearInfoNewmember()
     }
     
     @MainActor
-    func addNewMember() async {
-        let client: SupabaseClient? = SupabaseAuth.getSecureSupabaseClient()
-        
-        guard let clientSupabase = client else {
-            return
-        }
-        
-        let FamilyMember = SupabaseFamilyMembers(supabaseClient: clientSupabase)
-        
+    func registerMembers() async {
         do {
-            try await FamilyMember.addMember(name: "pepito", email: model.emailFamily)
-            
-            Logger.info("pepito addes success")
+            try await supabaseTableMembers.addMembers(members: model.familyMembers)
+            model.addMemberState = .finish(nil)
         } catch {
-            Logger.error(error.localizedDescription)
+            model.addMemberState = .error(FHKAppError.addMembersFailed)
         }
+    }
+    
+    @MainActor
+    func removeMember(_ member: FamilyMember) async {
+        model.familyMembers.removeAll(where: { $0.id == member.id })
     }
 }

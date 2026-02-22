@@ -18,7 +18,6 @@ final class HomeScreenVM: FHKCore.ViewModel {
     
     enum Action: Equatable {
         case familyInfo
-        
     }
     
     @MainActor
@@ -29,7 +28,5 @@ final class HomeScreenVM: FHKCore.ViewModel {
         }
     }
     
-    func getFamilyInfo() async {
-        
-    }
+    func getFamilyInfo() async {}
 }

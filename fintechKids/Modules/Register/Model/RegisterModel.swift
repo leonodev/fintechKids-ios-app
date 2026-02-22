@@ -13,13 +13,8 @@ import FHKAuth
 import FHKUtils
 import FHKCore
 import FHKDesignSystem
-
-public struct FamilyMember: Identifiable, Hashable {
-    public let id = UUID()
-    public let name: String
-    public let avatarImage: String
-    public let iconName: String = "trash"
-}
+import FHKInjections
+import FHKObservability
 
 @Observable
 public class RegisterModel {
@@ -36,6 +31,13 @@ public class RegisterModel {
     public var msnRegisterConfirmation = "msn_register_user_success".localized().capitalizingFirstLetter()
     public var titleButtonContinue = "continue".localized().uppercased()
     
+    public var stateRegisterOperation: FHKInformationView.ResultType {
+        registerState.isError ? .error : .success
+    }
+    
+    // Injections Dependency
+    private let analitycsManager = inject.analitycsManager
+    
     private var _registerState: FHKCore.State<Never> = .loaded
     var registerState: FHKCore.State<Never> {
         get { _registerState }
@@ -49,7 +51,7 @@ public class RegisterModel {
                 break
                 
             case .error(let error):
-                sendCrashlyticsError(error)
+                informateError(error)
                 
             case .finish:
                 informateFinishState()
@@ -58,7 +60,9 @@ public class RegisterModel {
     }
     
     var isBtnContinueEnable: FHKButtonComponent.State {
-        return !emailFamily.isEmpty && !password.isEmpty ? .enabled : .disabled
+        !emailFamily.isEmpty && !password.isEmpty && emailFamily.isValidEmail
+        ? .enabled
+        : .disabled
     }
 }
 
@@ -67,13 +71,18 @@ extension RegisterModel {
         msnLoading = "title_loading_registering_user".localized().capitalizingFirstLetter()
     }
 
-    private func sendCrashlyticsError(_ error: Log) {
+    private func informateError(_ error: any FHKError) {
         msnRegisterConfirmation = "msn_register_user_error".localized().capitalizingFirstLetter()
-        CrashlyticsError.send(log: error)
+        
+        if error.isShouldTrack {
+            analitycsManager.track(.error(.init(from: error)))
+        }
+        
+        Logger.error(error.logMessage)
     }
     
     private func informateFinishState() {
         msnRegisterConfirmation = "msn_register_user_success".localized().capitalizingFirstLetter()
-        Logger.info("User Registered Success")
+        Logger.info("REGISTER USER SUCCESS")
     }
 }

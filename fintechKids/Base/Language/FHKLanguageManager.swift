@@ -1,0 +1,69 @@
+//
+//  LanguageManager.swift
+//  fintechKids
+//
+//  Created by Fredy Leon on 29/12/25.
+//
+
+import SwiftUI
+import Observation
+import FHKUtils
+import FHKConfig
+import FHKInjections
+import FHKStorage
+
+public protocol FHKLanguageManagerProtocol: FHKInjectableProtocol {
+    var selectedLanguage: String { get set }
+    var currentBundle: Bundle { get }
+    func changeLanguage(to language: String)
+    func languageTypeFromCode(_ string: String) -> LanguageType
+}
+
+@Observable
+@MainActor
+public final class FHKLanguageManager: FHKLanguageManagerProtocol {
+    public var selectedLanguage: String = LanguageType.es.code()
+    public var currentBundle: Bundle = .main
+    
+    // Properties inject
+    var storageManager = inject.storageManager
+    
+    init() {
+        loadLanguageSync()
+    }
+    
+    public func changeLanguage(to language: String) {
+       updateBundle(for: language)
+       selectedLanguage = language
+       Task {
+           try await storageManager.saveUserDefaults(language, forKey: UserDefaultsKeys.languageKey)
+       }
+   }
+
+    public func languageTypeFromCode(_ string: String) -> LanguageType {
+        LanguageType(rawValue: string) ?? .es
+    }  
+}
+
+// Private methods
+private extension FHKLanguageManager {
+    
+    private func loadLanguageSync() {
+        Task {
+            let savedLanguage = try await storageManager.readUserDefaults(String.self,
+                                                                          forKey: UserDefaultsKeys.languageKey)
+            updateBundle(for: savedLanguage ?? LanguageType.es.code())
+        }
+    }
+    
+     
+    
+    func updateBundle(for language: String) {
+        if let path = Bundle.main.path(forResource: language, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            self.currentBundle = bundle
+        } else {
+            self.currentBundle = .main
+        }
+    }
+}

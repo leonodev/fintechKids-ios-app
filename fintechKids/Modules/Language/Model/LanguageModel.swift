@@ -6,14 +6,18 @@
 //
 
 import SwiftUI
-import Combine
+import Observation
 import FHKAuth
 import FHKUtils
 import FHKCore
 import FHKConfig
-import Observation
+import FHKObservability
+import FHKInjections
 
 public struct LanguageModel {
+    
+    // Injections Dependency
+    private let analitycsManager = inject.analitycsManager
     
     // Properties Screen View
     public var selectLanguageNow: String {
@@ -32,15 +36,6 @@ public struct LanguageModel {
         "loading".localized().capitalizingFirstLetter()
     }
     
-    // Properties Logs Error
-    public let attributesLanguagesError = ["platform": "firebase",
-                                           "paramater": "enabled_languages"]
-    
-    public let messageSaveLanguagesError = "Save Languages"
-    public let attributesSaveLanguagesError = ["platform": "app",
-                                               "key": "language_user",
-                                               "storage": "user_default"]
-    
     // Properties Accessibility
     public var menuLanguageIdentifier: String = "menu_language"
     
@@ -53,8 +48,8 @@ public struct LanguageModel {
                 case .loaded:
                     informateLoadedState()
                     
-                case .error(let log):
-                    sendCrashlyticsError(log)
+                case .error(let error):
+                    informateError(error)
                     
                 default:
                     break
@@ -66,7 +61,11 @@ public struct LanguageModel {
         Logger.info("LanguagesScreen loaded correctly with Languages downloaded")
     }
     
-    private func sendCrashlyticsError(_ error: Log) {
-        CrashlyticsError.send(log: error)
+    private func informateError(_ error: any FHKError) {
+        if error.isShouldTrack {
+            analitycsManager.track(.error(.init(from: error)))
+        }
+        
+        Logger.error(error.logMessage)
     }
 }

@@ -156,7 +156,6 @@ extension LanguageScreen {
 
                                 await viewModel.action(.changeImageFlag(codeLanguage))
                                 await viewModel.action(.changeLanguageApp(codeLanguage))
-                                await viewModel.action(.saveLanguage(codeLanguage))
                                 await viewModel.action(.sendAnalitycSelectLanguage(btn: btnAnatilycs))
                             }
                             isExpanded = false

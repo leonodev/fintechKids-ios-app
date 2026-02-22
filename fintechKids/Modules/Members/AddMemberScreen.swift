@@ -9,6 +9,8 @@ import SwiftUI
 import FHKDesignSystem
 import FHKInjections
 import FHKCore
+import FHKUtils
+import FHKStorage
 
 struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     @State var viewModel: VM
@@ -16,7 +18,7 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     @Inject(\.modalManager) var modalManager: FHKModalProtocol
     
     var body: some View {
-        ScreenContainer {
+        ScreenContainer(title: Routes.members.title) {
             switch viewModel.model.addMemberState {
     
             default:
@@ -24,12 +26,29 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
             }
         }
         .onChange(of: viewModel.model.addMemberState) { _, state in
-            
+            switch state {
+            case .error:
+                modalManager.show {
+                    modalInformativeError
+                }
+            case .finish:
+                modalManager.show {
+                    modalInformativeSuccess
+                }
+                
+            default:
+                break
+            }
         }
     }
     
     var contentView: some View {
         VStack {
+            Spacer()
+            
+            // informative text
+            informativeText
+            
             // field name family
             nameFamilyField
             
@@ -38,8 +57,20 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
             
             // list of members added
             familyMembersList
+            
+            Spacer()
+            registerMembersButton
+            Spacer()
         }
         .padding()
+    }
+    
+    var informativeText: some View {
+        Text(viewModel.model.familyMemberDescription)
+            .lineSpacing(4)
+            .font(.PangramSans.bold(FHKSize.size16))
+            .foregroundColor(FHKColor.lunarSand.opacity(0.5))
+            .padding(.vertical)
     }
     
     var nameFamilyField: some View {
@@ -104,14 +135,14 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
             LazyVStack(alignment: .leading, spacing: 10) {
                 
                 ForEach(viewModel.model.familyMembers) { member in
-                    FHKListItem(name: member.name,
-                                avatarName: member.avatarImage,
+                    FHKListItem(name: member.member_name,
+                                avatarName: member.avatarImage ?? AvatarType.boy_9.name,
                                 iconName: member.iconName,
                                 action: {
                         modalManager.show {
                             VStack(alignment: .leading, spacing: FHKSpace.space08) {
                                 FHKConfirmationView(title: viewModel.model.titleRemoveMember,
-                                                    message: viewModel.model.msnRemoveMember(name: member.name),
+                                                    message: viewModel.model.msnRemoveMember(name: member.member_name),
                                                     confirmButtonText: viewModel.model.titleBtnConfirm,
                                                     cancelButtonText: viewModel.model.titleBtnCancel,
                                                     confirmAction: {
@@ -128,6 +159,45 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
                     })
                 }
             }
+            .padding(.top)
+        }
+    }
+    
+    var registerMembersButton: some View {
+        FHKButtonPrimary(title: viewModel.model.titleBtnRegisterMember,
+                         state: viewModel.model.stateBtnRegisterMember,
+                         mode: .solid,
+                         action: {
+            Task {
+                await viewModel.action(.registerMembers)
+            }
+        })
+        .padding(.horizontal)
+    }
+    
+    var modalInformativeError: some View {
+        VStack(alignment: .leading, spacing: FHKSpace.space08) {
+            FHKInformationView(title: viewModel.model.titleUserError,
+                               message: viewModel.model.msnUserError,
+                               type: .error,
+                               confirmButtonText: viewModel.model.btnUserError,
+                                confirmAction: {
+                modalManager.dismiss()
+                router.pop()
+            })
+        }
+    }
+    
+    var modalInformativeSuccess: some View {
+        VStack(alignment: .leading, spacing: FHKSpace.space08) {
+            FHKInformationView(title: viewModel.model.titleMembersAddedSuccess,
+                               message: viewModel.model.msnMembersAddedSuccess,
+                               type: .success,
+                               confirmButtonText: viewModel.model.titleModalMembersAddedSuccess,
+                                confirmAction: {
+                modalManager.dismiss()
+                router.pop()
+            })
         }
     }
 }
@@ -163,14 +233,13 @@ internal struct NewMemberContentView: View {
             }
             
             FHKButtonPrimary(title: viewModel.model.titleBtnAddMember,
-                             state: viewModel.model.stateButtonCreateMember,
+                             state: viewModel.model.stateBtnAddMember,
                              action: {
-                let name = viewModel.model.memberNewName
-                let avatarMember = selectedAvatarName ?? "boy_9"
-                let newMember = FamilyMember(name: name, avatarImage: avatarMember)
-                
-                viewModel.model.familyMembers.append(newMember)
-                modalManager.dismiss()
+                Task {
+                    await viewModel.action(.newMember)
+                    await viewModel.action(.clearInfomember)
+                    modalManager.dismiss()
+                }  
             })
             .padding(.top, FHKSize.size20)
         }
