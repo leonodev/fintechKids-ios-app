@@ -26,8 +26,8 @@ class AppDelegate: ServicesApplicationDelegate {
     override func application(_ application: UIApplication,
                               didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        Dependencies.mainDependencies()
-        Dependencies.otherDependencies()
+        Dependencies.registerAll()
+        Logger.info("All dependencies registered successfully")
         
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         Logger.info("All Services Registered => \(servicesResult)")

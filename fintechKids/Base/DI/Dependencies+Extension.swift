@@ -18,12 +18,12 @@ import Supabase
 
 public class Dependencies {
     
-    static func mainDependencies() {
+    static func registerAll() {
         let deps = DependenciesInjection.shared
         let storageManager = FHKStorageManager(userDefault: FHKUserDefault(),
                                                keychain: FHKKeychainStorage())
-        // implementatios to inject here
-     
+        //------MAIN INJECTIONS------
+        
         /// Storage
         deps.set(storageManager, for: FHKStorageManagerProtocol.self)
         
@@ -47,17 +47,12 @@ public class Dependencies {
         
         // Supabase
         deps.set(FHKSupabase(), for: (any FHKSupabaseProtocol).self)
-        let currentSupabase = deps.supabaseManager
         
-        Task {
-            let client = try await currentSupabase.getClient()
-            deps.set(FHKSupabaseMembers(supabaseClient: client), for: (any FHKSupabaseMembersProtocol).self)
-        }
-        Logger.info("Main dependencies registered successfully")
-    }
-    
-    static func otherDependencies() {
-        let deps = DependenciesInjection.shared
+        // Supabase Tables
+        let client = deps.supabaseManager.getClient()
+        deps.set(FHKSupabaseMembers(supabaseClient: client), for: (any FHKSupabaseMembersProtocol).self)
+        
+        //------OTHERS INJECTIONS------
         
         /// Camera Permission
         deps.set(CameraPermissionService(), for: PermissionProtocol.self)
@@ -67,7 +62,5 @@ public class Dependencies {
         
         /// Modal
         deps.set(FHKModal(), for: FHKModalProtocol.self)
-        
-        Logger.info("Other dependencies registered successfully")
     }
 }

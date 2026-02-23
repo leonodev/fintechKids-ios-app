@@ -14,7 +14,6 @@ import FHKStorage
 import FHKCore
 
 @Observable
-@MainActor
 public final class FHKLanguageManager: FHKLanguageManagerProtocol {
     public var selectedLanguage: String = LanguageType.es.code()
     public var currentBundle: Bundle = .main
