@@ -23,9 +23,17 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
     var selectedFlag: Image = .noneFlag
     
     // Injections Dependency
-    private let languageManager = inject.languageManager
-    private let remoteConfigManager = inject.remoteConfigManager
-    private let analitycsManager = inject.analitycsManager
+    private var analitycsManager: any FHKAnalyticsProtocol {
+        inject.analitycsManager
+    }
+    
+    private var languageManager: any FHKLanguageManagerProtocol {
+        inject.languageManager
+    }
+    
+    private var remoteConfigManager: any FHKConfigManagerProtocol {
+        inject.remoteConfigManager
+    }
     
     public let allFlags: [Image] = [
         .spainCircleFlag,

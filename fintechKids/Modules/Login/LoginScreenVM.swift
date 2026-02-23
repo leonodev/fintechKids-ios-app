@@ -20,8 +20,13 @@ final class LoginScreenVM: FHKCore.ViewModel {
     var model: LoginModel = .init()
     
     // Properties injected
-    var securityManager = inject.securityManager
-    var storageManager = inject.storageManager
+    private var securityManager: any FHKSecurityProtocol {
+        inject.securityManager
+    }
+    
+    private var storageManager: any FHKStorageManagerProtocol {
+        inject.storageManager
+    }
     
     var hasSavedAuthToken: Bool {
         storageManager.exists(key: KeychainKey.authToken.rawValue)

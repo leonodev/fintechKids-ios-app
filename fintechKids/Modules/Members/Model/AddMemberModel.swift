@@ -26,8 +26,13 @@ public class AddMemberModel {
     public var familyName = ""
     
     // Injections Dependency
-    private let config = inject.configManager
-    private let analitycsManager = inject.analitycsManager
+    private var configManager: any FHKConfigurationProtocol {
+        inject.configManager
+    }
+    
+    private var analitycsManager: any FHKAnalyticsProtocol {
+        inject.analitycsManager
+    }
     
     // Properties View
     public var familyNamePlaceholder = "family_name".localized().capitalizingFirstLetter()
@@ -67,7 +72,7 @@ public class AddMemberModel {
     }
     
     public func getParentMail() async -> String? {
-        await config.getParentMail()
+        await configManager.getParentMail()
     }
 
     private var _addMemberState: FHKCore.State<Never> = .loaded

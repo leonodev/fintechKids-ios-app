@@ -19,7 +19,9 @@ final class SplashScreenVM: FHKCore.ViewModel {
     var model: SplashModel = .init()
     
     // Properties Injected
-    private let storagemanager = inject.storageManager
+    private var storageManager: any FHKStorageManagerProtocol {
+        inject.storageManager
+    }
     
     public enum Action: Equatable {
         case readLanguageCurrent
@@ -39,7 +41,7 @@ final class SplashScreenVM: FHKCore.ViewModel {
         
         do {
             let isLanguageSelected =
-            try await storagemanager.readUserDefaults(String.self,
+            try await storageManager.readUserDefaults(String.self,
                                                       forKey: UserDefaultsKeys.languageKey)
             
             model.splashState = isLanguageSelected != nil

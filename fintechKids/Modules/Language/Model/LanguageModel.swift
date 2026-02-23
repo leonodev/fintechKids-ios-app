@@ -17,7 +17,9 @@ import FHKInjections
 public struct LanguageModel {
     
     // Injections Dependency
-    private let analitycsManager = inject.analitycsManager
+    private var analitycsManager: any FHKAnalyticsProtocol {
+        inject.analitycsManager
+    }
     
     // Properties Screen View
     public var selectLanguageNow: String {

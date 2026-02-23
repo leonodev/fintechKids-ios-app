@@ -20,8 +20,13 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     var model: RegisterModel = .init()
     
     // Properties injected
-    var securityManager = inject.securityManager
-    var storageManager = inject.storageManager
+    private var securityManager: any FHKSecurityProtocol {
+        inject.securityManager
+    }
+    
+    private var storageManager: any FHKStorageManagerProtocol {
+        inject.storageManager
+    }
     
     init(loginActor: Login = Login(factory: DefaultAuthServiceFactory())) {
         self.loginActor = loginActor

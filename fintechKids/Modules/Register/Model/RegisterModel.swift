@@ -36,7 +36,9 @@ public class RegisterModel {
     }
     
     // Injections Dependency
-    private let analitycsManager = inject.analitycsManager
+    private var analitycsManager: any FHKAnalyticsProtocol {
+        inject.analitycsManager
+    }
     
     private var _registerState: FHKCore.State<Never> = .loaded
     var registerState: FHKCore.State<Never> {

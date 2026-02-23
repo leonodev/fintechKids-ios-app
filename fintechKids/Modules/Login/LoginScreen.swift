@@ -18,8 +18,13 @@ struct LoginScreen<VM: LoginScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     
     // Properties Injected
-    private let toastService = inject.toastService
-    private let modalManager = inject.modalManager
+    private var toastService: any ToastServiceProtocol {
+        inject.toastService
+    }
+    
+    private var modalManager: any FHKModalProtocol {
+        inject.modalManager
+    }
     
     var body: some View {
         ScreenContainer {

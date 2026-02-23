@@ -12,7 +12,10 @@ import FHKCore
 
 public extension String {
     func localized() -> String {
-        let bundle = inject.languageManager.currentBundle
+        
+        var bundle: Bundle {
+            inject.languageManager.currentBundle
+        }
         return bundle.localizedString(forKey: self, value: nil, table: "Localizable")
     }
 }

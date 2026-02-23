@@ -25,7 +25,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-authentication-ios",
       "state" : {
         "branch" : "main",
-        "revision" : "5162baf8027b9c35aa11149ca2130e56f6b6c80f"
+        "revision" : "4b8978339597c9d27c1bcacccf8f80c8bdc08c98"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-config-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "4978b44caa8273b81593df72002e0619f09da464"
+        "revision" : "6578303c94afe1295b3931160ad21267c4fa1014"
       }
     },
     {
@@ -79,7 +79,7 @@
       "location" : "https://github.com/leonodev/fintechKids-modulo-storage-ios.git",
       "state" : {
         "branch" : "main",
-        "revision" : "c34c0a37ee9a2b47ebb46dc10e30f7bf558832e0"
+        "revision" : "f2fb909dbc99cb87ac1975901e7cebb32ea52620"
       }
     },
     {

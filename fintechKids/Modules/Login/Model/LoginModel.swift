@@ -19,7 +19,9 @@ public struct LoginModel {
     public var password = ""
     
     // Injections Dependency
-    private let analitycsManager = inject.analitycsManager
+    private var analitycsManager: any FHKAnalyticsProtocol {
+        inject.analitycsManager
+    }
     
     // Properties Screen View
     public var emailPlaceholder: String {

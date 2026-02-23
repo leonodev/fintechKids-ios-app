@@ -12,7 +12,9 @@ import FHKCore
 public struct LanguageObserverModifier: ViewModifier {
     
     // Injections Dependency
-    private let languageManager = inject.languageManager
+    private var languageManager: any FHKLanguageManagerProtocol {
+        inject.languageManager
+    }
 
     public func body(content: Content) -> some View {
         let currentLanguage = languageManager.selectedLanguage

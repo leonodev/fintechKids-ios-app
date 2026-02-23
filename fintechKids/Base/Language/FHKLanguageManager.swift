@@ -19,7 +19,9 @@ public final class FHKLanguageManager: FHKLanguageManagerProtocol {
     public var currentBundle: Bundle = .main
     
     // Properties inject
-    var storageManager = inject.storageManager
+    private var storageManager: any FHKStorageManagerProtocol {
+        inject.storageManager
+    }
     
     init() {
         loadLanguageSync()

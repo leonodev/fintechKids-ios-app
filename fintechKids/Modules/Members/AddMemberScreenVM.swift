@@ -19,7 +19,9 @@ final class AddMemberScreenVM: FHKCore.ViewModel {
     var model: AddMemberModel = .init()
     
     // Properties injected
-    var supabaseTableMembers = inject.supabaseTableMembersManager
+    private var supabaseTableMembers: any FHKSupabaseMembersProtocol {
+        inject.supabaseTableMembersManager
+    }
     
     enum Action: Equatable {
         case newMember
