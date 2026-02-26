@@ -5,6 +5,6 @@
 //  Created by Fredy Leon on 15/2/26.
 //
 
-import FHKStorage
+import FHKDomain
 
 public extension KeychainKeys {}

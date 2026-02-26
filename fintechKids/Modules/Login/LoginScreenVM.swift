@@ -10,9 +10,9 @@ import Observation
 import Supabase
 import FHKCore
 import FHKAuth
-import FHKUtils
 import FHKInjections
 import FHKStorage
+import FHKDomain
 
 @Observable
 final class LoginScreenVM: FHKCore.ViewModel {
@@ -40,7 +40,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
         securityManager.biometryIcon
     }
     
-    init(loginActor: Login = Login(factory: DefaultAuthServiceFactory())) {
+    // Here should query country persisted
+    init(loginActor: Login = Login(factory: DefaultAuthServiceFactory(), country: .spanish)) {
         self.loginActor = loginActor
     }
     
@@ -110,7 +111,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
             ) {
                 // If FaceID accepted, we went directly into the session
                 try await loginActor.restoreSession(platform: .supabase, token: savedToken)
-                model.loginState = .finish(nil)
+                let isAuthenticated = await loginActor.isAuthenticated
+                model.loginState =  isAuthenticated ? .finish(nil) : .error(FHKBiometryError.notAvailable)
             }
         } catch {
             // If the user cancels, we do nothing; we just leave them on manual login.

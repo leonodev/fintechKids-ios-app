@@ -19,3 +19,4 @@ Gemfile.lock # Generalmente se ignora si cada dev usa su propia versión (depend
 
 # Logs de Fastlane y TestFlight (Si existen)
 fastlane/report.xml
+*.resolved

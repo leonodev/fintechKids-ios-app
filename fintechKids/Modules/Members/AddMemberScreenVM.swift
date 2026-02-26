@@ -5,14 +5,11 @@
 //  Created by Fredy Leon on 1/2/26.
 //
 
-import SwiftUI
 import Observation
 import Supabase
 import FHKCore
-import FHKAuth
-import FHKStorage
-import FHKUtils
 import FHKInjections
+import FHKDomain
 
 @Observable
 final class AddMemberScreenVM: FHKCore.ViewModel {

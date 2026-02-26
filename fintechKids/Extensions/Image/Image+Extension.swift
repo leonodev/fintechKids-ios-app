@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import FHKConfig
 import FHKDesignSystem
+import FHKDomain
 
 extension Image {
     public var imageToCode: String {

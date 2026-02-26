@@ -9,6 +9,7 @@ import SwiftUI
 import FHKCore
 import FHKInjections
 import FHKDesignSystem
+import FHKDomain
 
 @main
 struct FintechKidsApp: App {
@@ -17,8 +18,13 @@ struct FintechKidsApp: App {
     @State private var appRouter = NavigationRouter<Routes>()
     private let deepLinkProcessor: DeepLinkRouterProtocol = DeepLinkRouter()
     
-    @Inject(\.toastService) var toastService: ToastServiceProtocol
-    @Inject(\.modalManager) var modalManager: FHKModalProtocol
+    private var toastManager: any FHKToastManagerProtocol {
+        inject.toastManager
+    }
+    
+    private var modalManager: any FHKModalProtocol {
+        inject.modalManager
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -46,11 +52,11 @@ struct FintechKidsApp: App {
                 .animation(.default, value: appState.isJailbroken)
                 
                 VStack {
-                    if toastService.isVisible, let info = toastService.currentToast {
+                    if toastManager.isVisible, let info = toastManager.currentToast {
                         ToastView(
                             isVisible: Binding(
-                                get: { toastService.isVisible },
-                                set: { _ in toastService.dismiss() }
+                                get: { toastManager.isVisible },
+                                set: { _ in toastManager.dismiss() }
                             ),
                             info: info
                         )

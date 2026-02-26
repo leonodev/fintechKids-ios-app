@@ -11,6 +11,7 @@ import FHKInjections
 import FHKCore
 import FHKUtils
 import FHKStorage
+import FHKDomain
 
 struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     @State var viewModel: VM
@@ -135,10 +136,10 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
             LazyVStack(alignment: .leading, spacing: 10) {
                 
                 ForEach(viewModel.model.familyMembers) { member in
-                    FHKListItem(name: member.member_name,
-                                avatarName: member.avatarImage ?? AvatarType.boy_9.name,
-                                iconName: member.iconName,
-                                action: {
+                    FHKCreateMemberItem(name: member.member_name,
+                                        avatarName: member.avatar_name,
+                                        iconName: member.iconName,
+                                        action: {
                         modalManager.show {
                             VStack(alignment: .leading, spacing: FHKSpace.space08) {
                                 FHKConfirmationView(title: viewModel.model.titleRemoveMember,
@@ -203,9 +204,13 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
 }
 
 internal struct NewMemberContentView: View {
-    @Inject(\.modalManager) var modalManager: FHKModalProtocol
+    // Properties Injected
+    var modalManager: any FHKModalProtocol {
+        inject.modalManager
+    }
+   
     @Bindable var viewModel: AddMemberScreenVM
-    @Binding var selectedAvatarName: String?
+    @Binding var selectedAvatarName: String
     private let sizeAvatar: CGFloat = FHKSize.size120
 
     var body: some View {

@@ -5,7 +5,7 @@
 //  Created by Fredy Leon on 29/12/25.
 //
 
-import FHKStorage
+import FHKDomain
 
 public extension UserDefaultsKeys {
     static let languageKey = "language_user"

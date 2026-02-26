@@ -5,9 +5,8 @@
 //  Created by Fredy Leon on 19/2/26.
 //
 
-import Foundation
-import FHKCore
 import FHKUtils
+import FHKDomain
 
 public enum FHKSecurityError: FHKError {
 

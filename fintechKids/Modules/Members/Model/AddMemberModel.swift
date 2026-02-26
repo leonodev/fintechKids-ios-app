@@ -5,18 +5,13 @@
 //  Created by Fredy Leon on 1/2/26.
 //
 
-import SwiftUI
-import Combine
 import Observation
-import Supabase
-import FHKAuth
 import FHKUtils
 import FHKCore
 import FHKDesignSystem
 import FHKInjections
-import FHKStorage
 import FHKObservability
-import FHKConfig
+import FHKDomain
 
 @Observable
 public class AddMemberModel {
@@ -39,7 +34,7 @@ public class AddMemberModel {
     public var titleBtnAddMember = "title_add_member".localized().capitalizingFirstLetter()
     public var titleAddNewMember = "title_add_member".localized().capitalizingFirstLetter()
     public var memberNewNamePlaceholder = "title_name_new_member".localized().capitalizingFirstLetter()
-    public var selectedAvatarName: String?
+    public var selectedAvatarName: String = AvatarType.boy_9.name
     public var titleSelectAvatar = "title_select_your_avatar".localized().capitalizingFirstLetter()
     public let avatarIList = AvatarType.allCases
     public var familyMembers: [FamilyMember] = []
@@ -60,9 +55,7 @@ public class AddMemberModel {
     public var titleModalMembersAddedSuccess: String = "continue".localized().capitalizingFirstLetter()
   
     public var stateBtnAddMember: FHKButtonComponent.State {
-        (selectedAvatarName != nil && !memberNewName.isEmpty)
-        ? .enabled
-        : .disabled
+        !memberNewName.isEmpty ? .enabled : .disabled
     }
     
     public var stateBtnRegisterMember: FHKButtonComponent.State {
@@ -104,7 +97,7 @@ public class AddMemberModel {
     }
     
     public func clearInfoNewmember() {
-        selectedAvatarName = nil
+        selectedAvatarName = AvatarType.boy_9.name
         memberNewName = ""
     }
 }

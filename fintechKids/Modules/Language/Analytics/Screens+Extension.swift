@@ -6,7 +6,7 @@
 //
 
 import FHKObservability
-import FHKConfig
+import FHKDomain
 
 public extension Screens {
     

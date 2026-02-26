@@ -5,15 +5,15 @@
 //  Created by Fredy Leon on 18/2/26.
 //
 
-import Foundation
-import FHKCore
 import FHKUtils
+import FHKDomain
 
 enum FHKAppError: FHKError {
     case loginUserFailed
     case registerUserFailed
     case addMembersFailed
     case supabaseClientFailed
+    case fetchMembersFailed
  
     var logMessage: String {
         switch self {
@@ -29,6 +29,9 @@ enum FHKAppError: FHKError {
             
         case .supabaseClientFailed:
             return "Error: Supabase client not configured"
+            
+        case .fetchMembersFailed:
+            return "Error: Fetching family members failed"
         }
     }
     
@@ -46,6 +49,9 @@ enum FHKAppError: FHKError {
             
         case .supabaseClientFailed:
             return "msn_unexpected_error".localized().capitalizingFirstLetter()
+            
+        case .fetchMembersFailed:
+            return "msn_fetch_members_error".localized().capitalizingFirstLetter()
         }
     }
     

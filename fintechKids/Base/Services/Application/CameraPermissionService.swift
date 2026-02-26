@@ -8,12 +8,11 @@
 import AVFoundation
 import UIKit
 import Combine
-import FHKDesignSystem
 import FHKUtils
 import FHKCore
+import FHKDomain
 
-final class CameraPermissionService: NSObject, ApplicationService, PermissionProtocol, ObservableObject {
-    
+final class CameraPermissionService: NSObject, ApplicationService, FHKPermissionProtocol, ObservableObject {
     @Published private(set) var status: PermissionStatus = .notDetermined
     
     // Propiedades del protocolo

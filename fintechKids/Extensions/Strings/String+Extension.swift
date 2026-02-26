@@ -6,9 +6,10 @@
 //
 
 import Foundation
-import FHKConfig
+import SwiftUI
 import FHKInjections
-import FHKCore
+import FHKDesignSystem
+import FHKDomain
 
 public extension String {
     func localized() -> String {
@@ -17,5 +18,14 @@ public extension String {
             inject.languageManager.currentBundle
         }
         return bundle.localizedString(forKey: self, value: nil, table: "Localizable")
+    }
+    
+    var languageTypeToImageFlag: Image {
+        switch self {
+        case LanguageType.it.code(): return .italyCircleFlag
+        case LanguageType.en.code(): return .englandCircleFlag
+        case LanguageType.fr.code(): return .franceCircleFlag
+        default: return .spainCircleFlag
+        }
     }
 }

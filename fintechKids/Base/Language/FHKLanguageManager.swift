@@ -7,11 +7,9 @@
 
 import SwiftUI
 import Observation
-import FHKUtils
-import FHKConfig
 import FHKInjections
 import FHKStorage
-import FHKCore
+import FHKDomain
 
 @Observable
 public final class FHKLanguageManager: FHKLanguageManagerProtocol {
@@ -50,8 +48,6 @@ private extension FHKLanguageManager {
             updateBundle(for: savedLanguage ?? LanguageType.es.code())
         }
     }
-    
-     
     
     func updateBundle(for language: String) {
         if let path = Bundle.main.path(forResource: language, ofType: "lproj"),

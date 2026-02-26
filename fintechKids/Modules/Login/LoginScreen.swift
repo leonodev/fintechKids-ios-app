@@ -8,18 +8,17 @@
 import SwiftUI
 import Lottie
 import FHKDesignSystem
-import FHKUtils
 import FHKCore
 import FHKInjections
-import FHKObservability
+import FHKDomain
 
 struct LoginScreen<VM: LoginScreenVM>: View {
     @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
     
     // Properties Injected
-    private var toastService: any ToastServiceProtocol {
-        inject.toastService
+    private var toastService: any FHKToastManagerProtocol {
+        inject.toastManager
     }
     
     private var modalManager: any FHKModalProtocol {

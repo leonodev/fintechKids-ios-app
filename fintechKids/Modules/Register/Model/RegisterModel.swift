@@ -6,15 +6,14 @@
 //
 
 import SwiftUI
-import Combine
 import Observation
-import Supabase
 import FHKAuth
 import FHKUtils
 import FHKCore
 import FHKDesignSystem
 import FHKInjections
 import FHKObservability
+import FHKDomain
 
 @Observable
 public class RegisterModel {
@@ -30,6 +29,7 @@ public class RegisterModel {
     public var titleRegisterConfirmation = "title_register_user".localized().uppercased()
     public var msnRegisterConfirmation = "msn_register_user_success".localized().capitalizingFirstLetter()
     public var titleButtonContinue = "continue".localized().uppercased()
+    public var registerEmailInstruction = "register_email_instruction".localized().capitalizingFirstLetter()
     
     public var stateRegisterOperation: FHKInformationView.ResultType {
         registerState.isError ? .error : .success

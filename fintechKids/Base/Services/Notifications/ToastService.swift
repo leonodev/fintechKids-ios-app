@@ -9,18 +9,11 @@ import SwiftUI
 import Combine
 import FHKCore
 import FHKDesignSystem
-
-/// Protocolo definido para la inyección de dependencias
-public protocol ToastServiceProtocol: Sendable {
-    var currentToast: ToastInfo? { get set }
-    var isVisible: Bool { get set }
-    @MainActor func show(info: ToastInfo, duration: Double)
-    @MainActor func dismiss()
-}
+import FHKDomain
 
 @MainActor
 @Observable
-final class ToastService: NSObject, ApplicationService, ToastServiceProtocol {
+final class ToastService: NSObject, ApplicationService, FHKToastManagerProtocol {
     
     // El estado es privado para asegurar que solo se modifique vía métodos controlados
     var currentToast: ToastInfo?

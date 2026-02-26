@@ -5,29 +5,19 @@
 //  Created by Fredy Leon on 26/1/26.
 //
 
-import FHKDesignSystem
 import FHKInjections
-import FHKObservability
-import FHKConfig
-import FHKStorage
-import FHKAuth
-import FHKCore
+import FHKDomain
 
 public extension DependenciesInjection {
     
-    var remoteConfigManager: any FHKConfigManagerProtocol {
-        get { self[(any FHKConfigManagerProtocol).self] }
-        set { self[(any FHKConfigManagerProtocol).self] = newValue }
+    var remoteConfigManager: any FHKRemoteConfigManagerProtocol {
+        get { self[(any FHKRemoteConfigManagerProtocol).self] }
+        set { self[(any FHKRemoteConfigManagerProtocol).self] = newValue }
     }
     
     var configManager: any FHKConfigurationProtocol {
         get { self[(any FHKConfigurationProtocol).self] }
         set { self[(any FHKConfigurationProtocol).self] = newValue }
-    }
-    
-    var modalManager: any FHKModalProtocol {
-        get { self[(any FHKModalProtocol).self] }
-        set { self[(any FHKModalProtocol).self] = newValue }
     }
     
     var analitycsManager: any FHKAnalyticsProtocol {
@@ -58,5 +48,20 @@ public extension DependenciesInjection {
     var supabaseTableMembersManager: any FHKSupabaseMembersProtocol {
         get { self[(any FHKSupabaseMembersProtocol).self] }
         set { self[(any FHKSupabaseMembersProtocol).self] = newValue }
+    }
+    
+    var modalManager: any FHKModalProtocol {
+        get { self[(any FHKModalProtocol).self] }
+        set { self[(any FHKModalProtocol).self] = newValue }
+    }
+    
+    var toastManager: any FHKToastManagerProtocol {
+        get { self[(any FHKToastManagerProtocol).self] }
+        set { self[(any FHKToastManagerProtocol).self] = newValue }
+    }
+    
+    var camaraPermissionManager: any FHKPermissionProtocol {
+        get { self[(any FHKPermissionProtocol).self] }
+        set { self[(any FHKPermissionProtocol).self] = newValue }
     }
 }

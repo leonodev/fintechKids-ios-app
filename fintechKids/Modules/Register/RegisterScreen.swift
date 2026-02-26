@@ -9,12 +9,16 @@ import SwiftUI
 import FHKDesignSystem
 import FHKInjections
 import FHKCore
-import FHKUtils
+import FHKDomain
 
 struct RegisterScreen<VM: RegisterScreenVM>: View {
     @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
-    @Inject(\.modalManager) var modalManager: FHKModalProtocol
+    
+    // Properties Injected
+    private var modalManager: any FHKModalProtocol {
+        inject.modalManager
+    }
     
     var body: some View {
         ScreenContainer(title: Routes.register.title) {
@@ -65,7 +69,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     }
     
     var informativeText: some View {
-        Text("register_email_instruction".localized().capitalizingFirstLetter())
+        Text(viewModel.model.registerEmailInstruction)
             .lineSpacing(4)
             .font(.PangramSans.bold(FHKSize.size16))
             .foregroundColor(FHKColor.lunarSand.opacity(0.5))

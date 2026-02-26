@@ -7,12 +7,11 @@
 
 import SwiftUI
 import Observation
-import Supabase
 import FHKCore
 import FHKAuth
-import FHKStorage
 import FHKUtils
 import FHKInjections
+import FHKDomain
 
 @Observable
 final class RegisterScreenVM: FHKCore.ViewModel {
@@ -27,8 +26,8 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     private var storageManager: any FHKStorageManagerProtocol {
         inject.storageManager
     }
-    
-    init(loginActor: Login = Login(factory: DefaultAuthServiceFactory())) {
+    // Here should query country persisted
+    init(loginActor: Login = Login(factory: DefaultAuthServiceFactory(), country: .spanish)) {
         self.loginActor = loginActor
     }
     

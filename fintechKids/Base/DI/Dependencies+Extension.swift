@@ -15,6 +15,7 @@ import FHKStorage
 import FHKAuth
 import FHKCore
 import Supabase
+import FHKDomain
 
 public class Dependencies {
     
@@ -22,7 +23,7 @@ public class Dependencies {
         let deps = DependenciesInjection.shared
         let storageManager = FHKStorageManager(userDefault: FHKUserDefault(),
                                                keychain: FHKKeychainStorage())
-        //------MAIN INJECTIONS------
+        // ------MAIN INJECTIONS------
         
         /// Storage
         deps.set(storageManager, for: FHKStorageManagerProtocol.self)
@@ -31,7 +32,7 @@ public class Dependencies {
         deps.set(FHKLanguageManager(), for: (any FHKLanguageManagerProtocol).self)
         
         /// Remote Configuration
-        deps.set(FHKRemoteConfigManager(), for: (any FHKConfigManagerProtocol).self)
+        deps.set(FHKRemoteConfigManager(), for: (any FHKRemoteConfigManagerProtocol).self)
         
         /// Analytics
         deps.set(FHKAnalytics(), for: FHKAnalyticsProtocol.self)
@@ -46,19 +47,20 @@ public class Dependencies {
         deps.set(ServicesAPI(), for: (any ServicesAPIProtocol).self)
         
         // Supabase
-        deps.set(FHKSupabase(), for: (any FHKSupabaseProtocol).self)
+        // Here should query country persisted
+        deps.set(FHKSupabase(country: .spanish), for: (any FHKSupabaseProtocol).self)
         
         // Supabase Tables
         let client = deps.supabaseManager.getClient()
         deps.set(FHKSupabaseMembers(supabaseClient: client), for: (any FHKSupabaseMembersProtocol).self)
         
-        //------OTHERS INJECTIONS------
+        // ------OTHERS INJECTIONS------
         
         /// Camera Permission
-        deps.set(CameraPermissionService(), for: PermissionProtocol.self)
+        deps.set(CameraPermissionService(), for: (any FHKPermissionProtocol).self)
         
         /// Toast
-        deps.set(ToastService(), for: ToastServiceProtocol.self)
+        deps.set(ToastService(), for: (any FHKToastManagerProtocol).self)
         
         /// Modal
         deps.set(FHKModal(), for: FHKModalProtocol.self)

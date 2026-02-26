@@ -5,13 +5,13 @@
 //  Created by Fredy Leon on 7/1/26.
 //
 
-import SwiftUI
 import FHKAuth
 import FHKUtils
 import FHKCore
 import FHKDesignSystem
 import FHKInjections
 import FHKObservability
+import FHKDomain
 
 public struct LoginModel {
     // Properties Observable

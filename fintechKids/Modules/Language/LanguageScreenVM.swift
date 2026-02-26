@@ -8,13 +8,10 @@
 import SwiftUI
 import Observation
 import FHKCore
-import FHKConfig
-import FHKUtils
-import FHKAuth
-import FHKStorage
 import FHKDesignSystem
 import FHKObservability
 import FHKInjections
+import FHKDomain
 
 @Observable
 public final class LanguageScreenVM: FHKCore.ViewModel {
@@ -31,7 +28,7 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
         inject.languageManager
     }
     
-    private var remoteConfigManager: any FHKConfigManagerProtocol {
+    private var remoteConfigManager: any FHKRemoteConfigManagerProtocol {
         inject.remoteConfigManager
     }
     
@@ -88,8 +85,7 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
     
     private func setImageFlag(code: String?) {
         let languageCode = code ?? LanguageType.es.code()
-        let languageType = languageManager.languageTypeFromCode(languageCode)
-        selectedFlag =  languageType.languageTypeToImageFlag
+        selectedFlag =  languageCode.languageTypeToImageFlag
     }
     
     private func changeLanguageApp(_ language: String) async {

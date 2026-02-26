@@ -5,14 +5,11 @@
 //  Created by Fredy Leon on 20/12/25.
 //
 
-import Foundation
-import SwiftUI
 import Observation
 import FHKCore
-import FHKConfig
 import FHKStorage
-import FHKUtils
 import FHKInjections
+import FHKDomain
 
 @Observable
 final class SplashScreenVM: FHKCore.ViewModel {
@@ -49,7 +46,6 @@ final class SplashScreenVM: FHKCore.ViewModel {
                 : .finish(.goToLanguage)
         } catch {
             model.splashState = .finish(.goToLanguage)
-            Logger.error(error.localizedDescription)
         }
     }
 }

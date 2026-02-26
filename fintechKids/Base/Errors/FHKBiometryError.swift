@@ -5,14 +5,15 @@
 //  Created by Fredy Leon on 19/2/26.
 //
 
-import Foundation
-import FHKCore
+import FHKDomain
 import FHKUtils
 
 public enum FHKBiometryError: FHKError {
 
     case notAvailable
     case userCancelAuthentication
+    case authenticationFailed
+    
     
     public var logMessage: String {
         switch self {
@@ -21,6 +22,9 @@ public enum FHKBiometryError: FHKError {
             
         case .userCancelAuthentication:
             return "Biometry: user explicitly cancelled the biometric authentication"
+            
+        case .authenticationFailed:
+            return "Biometry: the biometric authentication failed"
         }
     }
     
@@ -28,6 +32,9 @@ public enum FHKBiometryError: FHKError {
         switch self {
         case .notAvailable:
             return "msn_biometry_not_available_error".localized().capitalizingFirstLetter()
+            
+        case .authenticationFailed:
+            return "msn_biometry_not_failed_error".localized().capitalizingFirstLetter()
             
         default:
             return ""

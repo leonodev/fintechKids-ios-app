@@ -5,14 +5,11 @@
 //  Created by Fredy Leon on 6/2/26.
 //
 
-import SwiftUI
-import Observation
-import FHKAuth
 import FHKUtils
 import FHKCore
-import FHKConfig
 import FHKObservability
 import FHKInjections
+import FHKDomain
 
 public struct LanguageModel {
     
