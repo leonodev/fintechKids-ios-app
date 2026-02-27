@@ -19,7 +19,7 @@ import FHKDomain
 
 public class Dependencies {
     
-    static func registerAll() {
+    static func registerAll() throws {
         let deps = DependenciesInjection.shared
         let storageManager = FHKStorageManager(userDefault: FHKUserDefault(),
                                                keychain: FHKKeychainStorage())
@@ -45,14 +45,13 @@ public class Dependencies {
         
         // API Services
         deps.set(ServicesAPI(), for: (any ServicesAPIProtocol).self)
-        
+           
         // Supabase
-        // Here should query country persisted
-        deps.set(FHKSupabase(country: .spanish), for: (any FHKSupabaseProtocol).self)
+        let supabaseClient = try makeSupabaseClient()
+        deps.set(FHKSupabase(client: supabaseClient), for: (any FHKAuthProtocol).self)
         
         // Supabase Tables
-        let client = deps.supabaseManager.getClient()
-        deps.set(FHKSupabaseMembers(supabaseClient: client), for: (any FHKSupabaseMembersProtocol).self)
+        deps.set(FHKSupabaseMembers(supabaseClient: supabaseClient), for: (any FHKSupabaseMembersProtocol).self)
         
         // ------OTHERS INJECTIONS------
         
@@ -64,5 +63,26 @@ public class Dependencies {
         
         /// Modal
         deps.set(FHKModal(), for: FHKModalProtocol.self)
+    }
+}
+
+extension Dependencies {
+    
+    static func makeSupabaseClient() throws -> SupabaseClient {
+        let deps = DependenciesInjection.shared
+
+        let urlString = try deps.servicesAPI.getURL(
+            environment: .production,
+            country: .spanish,
+            serviceKey: .supabase
+        )
+
+        guard let url = URL(string: urlString) else {
+            throw SupabaseError.invalidURL(urlString)
+        }
+
+        let anonKey = try deps.securityManager.getAnonKey()
+
+        return SupabaseClient(supabaseURL: url, supabaseKey: anonKey)
     }
 }
