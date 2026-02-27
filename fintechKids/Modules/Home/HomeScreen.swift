@@ -31,7 +31,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
               
             VStack {
                 
-                HStack(spacing: FHKSpace.space08) {
+                HStack {
                     VStack(alignment: .leading) {
                         Text("Metas asignadas a:")
                             .foregroundStyle(Color.white)
@@ -92,12 +92,12 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     
     var familyMembersList: some View {
         ScrollView {
-            LazyHStack(spacing: 10) {
-                
+            LazyHStack(spacing: FHKSpace.space16) {
                 ForEach(viewModel.model.familyMembers) { member in
-                    FHKMemberItem(member: member,
+                    FHKMemberItem(id: member.id,
+                                  avatarName: member.avatar_name,
+                                  nameMember: member.member_name,
                                   action: { member in
-                        
                     })
                 }
             }

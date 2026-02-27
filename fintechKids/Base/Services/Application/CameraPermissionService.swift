@@ -11,6 +11,7 @@ import Combine
 import FHKUtils
 import FHKCore
 import FHKDomain
+import FHKDesignSystem
 
 final class CameraPermissionService: NSObject, ApplicationService, FHKPermissionProtocol, ObservableObject {
     @Published private(set) var status: PermissionStatus = .notDetermined

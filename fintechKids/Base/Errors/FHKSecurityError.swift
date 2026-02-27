@@ -9,29 +9,12 @@ import FHKUtils
 import FHKDomain
 
 public enum FHKSecurityError: FHKError {
-
-    case readSeedFailed
-    case saveSeedFailed
-    case generateHashFailed
-    case generatePasswordHashedFailed
     case saveTokenAccessKeychainFailed
     case saveUserMailKeychainFailed
     case readUserMailKeychainFailed
     
     public var logMessage: String {
-        switch self {
-        case .readSeedFailed:
-            return "Security: seed not found or inaccessible in keychain"
-            
-        case .saveSeedFailed:
-            return "Security: failed to persist security seed"
-            
-        case .generateHashFailed:
-            return "Security: data hashing operation failed"
-            
-        case .generatePasswordHashedFailed:
-            return "Security: could not generate password hash"
-            
+        switch self {            
         case .saveTokenAccessKeychainFailed:
             return "Security: failure saving access token to keychain"
             

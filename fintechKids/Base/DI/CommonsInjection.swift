@@ -7,6 +7,7 @@
 
 import FHKInjections
 import FHKDomain
+import FHKDesignSystem
 
 public extension DependenciesInjection {
     
@@ -40,9 +41,9 @@ public extension DependenciesInjection {
         set { self[(any FHKSecurityProtocol).self] = newValue }
     }
     
-    var supabaseManager: any FHKSupabaseProtocol {
-        get { self[(any FHKSupabaseProtocol).self] }
-        set { self[(any FHKSupabaseProtocol).self] = newValue }
+    var supabaseManager: any FHKAuthProtocol {
+        get { self[(any FHKAuthProtocol).self] }
+        set { self[(any FHKAuthProtocol).self] = newValue }
     }
     
     var supabaseTableMembersManager: any FHKSupabaseMembersProtocol {

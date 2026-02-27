@@ -16,7 +16,6 @@ import FHKDomain
 
 @Observable
 final class LoginScreenVM: FHKCore.ViewModel {
-    private let loginActor: Login
     var model: LoginModel = .init()
     
     // Properties injected
@@ -26,6 +25,10 @@ final class LoginScreenVM: FHKCore.ViewModel {
     
     private var storageManager: any FHKStorageManagerProtocol {
         inject.storageManager
+    }
+    
+    private var supabase: any FHKAuthProtocol {
+        inject.supabaseManager
     }
     
     var hasSavedAuthToken: Bool {
@@ -38,11 +41,6 @@ final class LoginScreenVM: FHKCore.ViewModel {
     
     var biometryIconName: String {
         securityManager.biometryIcon
-    }
-    
-    // Here should query country persisted
-    init(loginActor: Login = Login(factory: DefaultAuthServiceFactory(), country: .spanish)) {
-        self.loginActor = loginActor
     }
     
     enum Action: Equatable {
@@ -67,26 +65,16 @@ final class LoginScreenVM: FHKCore.ViewModel {
         model.loginState = .loading
         
         do {
-            // Recover the Keychain Security Seed
-            guard let seed: Data = getSeed() else {
-                model.loginState = .error(FHKSecurityError.readSeedFailed)
-                return
-            }
-            
-            // Generate the hash using the password entered by the user and the retrieved seed
-            guard let hashedPassword = generarHash(seed: seed) else {
-                model.loginState = .error(FHKSecurityError.generateHashFailed)
-                return
-            }
-            
             // Send Login User
-            let tokenAccess = try await loginActor.loginUser(platform: .supabase,
-                                                                  email: model.email,
-                                                                  password: hashedPassword)
+            let userSession = try await supabase.login(email: model.email,
+                                                       password: model.password)
+            model.loginState = .finish(nil)
+            guard let tokenAccess = userSession.accessToken else {
+                return
+            }
             
             // We saved the Session Token PROTECTED by Face ID for the future
             saveSessionToken(tokenAccess: tokenAccess, isHasBiometry: isBiometryAvailable)
-            model.loginState = .finish(nil)
         } catch let error as FHKDomainError {
             model.loginState = .error(error)
         } catch {
@@ -110,8 +98,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
                 prompt: model.getBiometryPrompt(biometryType: securityManager.getBiometryType())
             ) {
                 // If FaceID accepted, we went directly into the session
-                try await loginActor.restoreSession(platform: .supabase, token: savedToken)
-                let isAuthenticated = await loginActor.isAuthenticated
+                try await supabase.setSession(accessToken: savedToken)
+                let isAuthenticated = await supabase.isUserAuthenticated
                 model.loginState =  isAuthenticated ? .finish(nil) : .error(FHKBiometryError.notAvailable)
             }
         } catch {
@@ -122,16 +110,6 @@ final class LoginScreenVM: FHKCore.ViewModel {
 }
 
 private extension LoginScreenVM {
-    
-    func getSeed(prompt: String? = nil) -> Data? {
-        try? storageManager.readKeychain(Data.self,
-                                        for: "securitySeed_\(model.email)",
-                                        prompt: prompt)
-    }
-    
-    func generarHash(seed: Data) -> String? {
-        securityManager.hashPassword(model.password, securitySeed: seed)
-    }
     
     func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) {
         do {
