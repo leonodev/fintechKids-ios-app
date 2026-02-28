@@ -10,7 +10,7 @@ import FHKUtils
 import FHKCore
 import FHKDesignSystem
 import FHKInjections
-import FHKObservability
+import FHKFirebase
 import FHKDomain
 
 public struct LoginModel {
@@ -20,7 +20,7 @@ public struct LoginModel {
     
     // Injections Dependency
     private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.analitycsManager
+        inject.firebaseAnalitycsManager
     }
     
     // Properties Screen View

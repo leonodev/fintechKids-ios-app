@@ -11,21 +11,21 @@ import FHKDesignSystem
 
 public extension DependenciesInjection {
     
-    var remoteConfigManager: any FHKRemoteConfigManagerProtocol {
+    var firebaseRemoteConfigManager: any FHKRemoteConfigManagerProtocol {
         get { self[(any FHKRemoteConfigManagerProtocol).self] }
         set { self[(any FHKRemoteConfigManagerProtocol).self] = newValue }
+    }
+    
+    var firebaseAnalitycsManager: any FHKAnalyticsProtocol {
+        get { self[(any FHKAnalyticsProtocol).self] }
+        set { self[(any FHKAnalyticsProtocol).self] = newValue }
     }
     
     var configManager: any FHKConfigurationProtocol {
         get { self[(any FHKConfigurationProtocol).self] }
         set { self[(any FHKConfigurationProtocol).self] = newValue }
     }
-    
-    var analitycsManager: any FHKAnalyticsProtocol {
-        get { self[(any FHKAnalyticsProtocol).self] }
-        set { self[(any FHKAnalyticsProtocol).self] = newValue }
-    }
-    
+ 
     var languageManager: any FHKLanguageManagerProtocol {
         get { self[(any FHKLanguageManagerProtocol).self] }
         set { self[(any FHKLanguageManagerProtocol).self] = newValue }
@@ -40,13 +40,13 @@ public extension DependenciesInjection {
         get { self[(any FHKSecurityProtocol).self] }
         set { self[(any FHKSecurityProtocol).self] = newValue }
     }
-    
+
     var supabaseManager: any FHKAuthProtocol {
         get { self[(any FHKAuthProtocol).self] }
         set { self[(any FHKAuthProtocol).self] = newValue }
     }
     
-    var supabaseTableMembersManager: any FHKSupabaseMembersProtocol {
+    var supabaseMembersManager: any FHKSupabaseMembersProtocol {
         get { self[(any FHKSupabaseMembersProtocol).self] }
         set { self[(any FHKSupabaseMembersProtocol).self] = newValue }
     }
@@ -64,5 +64,10 @@ public extension DependenciesInjection {
     var camaraPermissionManager: any FHKPermissionProtocol {
         get { self[(any FHKPermissionProtocol).self] }
         set { self[(any FHKPermissionProtocol).self] = newValue }
+    }
+    
+    var servicesAPIManager: any FHKServicesAPIProtocol {
+        get { self[(any FHKServicesAPIProtocol).self] }
+        set { self[(any FHKServicesAPIProtocol).self] = newValue }
     }
 }

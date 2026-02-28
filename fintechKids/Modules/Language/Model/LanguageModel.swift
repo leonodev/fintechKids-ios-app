@@ -7,7 +7,7 @@
 
 import FHKUtils
 import FHKCore
-import FHKObservability
+import FHKFirebase
 import FHKInjections
 import FHKDomain
 
@@ -15,7 +15,7 @@ public struct LanguageModel {
     
     // Injections Dependency
     private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.analitycsManager
+        inject.firebaseAnalitycsManager
     }
     
     // Properties Screen View

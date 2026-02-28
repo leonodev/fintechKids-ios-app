@@ -10,12 +10,13 @@ import FHKInjections
 import FHKUtils
 import FHKConfig
 import FHKDesignSystem
-import FHKObservability
+import FHKFirebase
 import FHKStorage
 import FHKAuth
 import FHKCore
 import Supabase
 import FHKDomain
+import FHKSupabase
 
 public class Dependencies {
     
@@ -31,11 +32,11 @@ public class Dependencies {
         /// Language ( Depend of Storage)
         deps.set(FHKLanguageManager(), for: (any FHKLanguageManagerProtocol).self)
         
-        /// Remote Configuration
-        deps.set(FHKRemoteConfigManager(), for: (any FHKRemoteConfigManagerProtocol).self)
+        /// Remote Configuration Firebase
+        deps.set(FHKRemoteConfigService(), for: (any FHKRemoteConfigManagerProtocol).self)
         
-        /// Analytics
-        deps.set(FHKAnalytics(), for: FHKAnalyticsProtocol.self)
+        /// Analytics Firebase
+        deps.set(FHKAnalyticsService(), for: FHKAnalyticsProtocol.self)
         
         /// Security
         deps.set(FHKSecurity(), for: FHKSecurityProtocol.self)
@@ -44,7 +45,7 @@ public class Dependencies {
         deps.set(FHKConfiguration(), for: (any FHKConfigurationProtocol).self)
         
         // API Services
-        deps.set(ServicesAPI(), for: (any ServicesAPIProtocol).self)
+        deps.set(FHKServicesAPI(), for: (any FHKServicesAPIProtocol).self)
            
         // Supabase
         let supabaseClient = try makeSupabaseClient()
@@ -71,7 +72,7 @@ extension Dependencies {
     static func makeSupabaseClient() throws -> SupabaseClient {
         let deps = DependenciesInjection.shared
 
-        let urlString = try deps.servicesAPI.getURL(
+        let urlString = try deps.servicesAPIManager.getURL(
             environment: .production,
             country: .spanish,
             serviceKey: .supabase

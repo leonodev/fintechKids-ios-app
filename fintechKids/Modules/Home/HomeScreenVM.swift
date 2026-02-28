@@ -15,8 +15,8 @@ final class HomeScreenVM: FHKCore.ViewModel {
     var model: HomeModel = .init()
     
     // Properties Injection
-    private var familyMembers: FHKSupabaseMembersProtocol {
-        inject.supabaseTableMembersManager
+    private var supabaseMembers: FHKSupabaseMembersProtocol {
+        inject.supabaseMembersManager
     }
     
     enum Action: Equatable {
@@ -38,7 +38,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
                 return
             }
 
-            let currentMember = try await familyMembers.fetchFamilyMembers(parentEmail: email)
+            let currentMember = try await supabaseMembers.fetchFamilyMembers(parentEmail: email)
             model.familyMembers = currentMember
         } catch {
             model.homeState = .error(FHKAppError.fetchMembersFailed)

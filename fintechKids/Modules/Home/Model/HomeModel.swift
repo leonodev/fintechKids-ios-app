@@ -19,8 +19,8 @@ public class HomeModel {
     var options: [FloatMenu.Option]
     
     // Properties Injected
-    private var configManager: FHKConfigurationProtocol {
-        inject.configManager
+    private var storageManager: FHKStorageManagerProtocol {
+        inject.storageManager
     }
     
     public var familyMembers: [FamilyMember] = []
@@ -40,6 +40,6 @@ public class HomeModel {
     }
     
     public func getParentMail() async -> String? {
-        await configManager.getParentMail()
+        try? storageManager.readKeychain(String.self, for: KeychainKeys.userKey, prompt: nil)
     }
 }

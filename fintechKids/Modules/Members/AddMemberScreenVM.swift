@@ -16,8 +16,8 @@ final class AddMemberScreenVM: FHKCore.ViewModel {
     var model: AddMemberModel = .init()
     
     // Properties injected
-    private var supabaseTableMembers: any FHKSupabaseMembersProtocol {
-        inject.supabaseTableMembersManager
+    private var supabaseMembers: any FHKSupabaseMembersProtocol {
+        inject.supabaseMembersManager
     }
     
     enum Action: Equatable {
@@ -66,7 +66,7 @@ final class AddMemberScreenVM: FHKCore.ViewModel {
     @MainActor
     func registerMembers() async {
         do {
-            try await supabaseTableMembers.addMembers(members: model.familyMembers)
+            try await supabaseMembers.addMembers(members: model.familyMembers)
             model.addMemberState = .finish(nil)
         } catch {
             model.addMemberState = .error(FHKAppError.addMembersFailed)

@@ -10,8 +10,8 @@ import FHKUtils
 import FHKCore
 import FHKDesignSystem
 import FHKInjections
-import FHKObservability
 import FHKDomain
+import FHKFirebase
 
 @Observable
 public class AddMemberModel {
@@ -21,12 +21,12 @@ public class AddMemberModel {
     public var familyName = ""
     
     // Injections Dependency
-    private var configManager: any FHKConfigurationProtocol {
-        inject.configManager
+    private var storageManager: any FHKStorageManagerProtocol {
+        inject.storageManager
     }
     
     private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.analitycsManager
+        inject.firebaseAnalitycsManager
     }
     
     // Properties View
@@ -65,7 +65,7 @@ public class AddMemberModel {
     }
     
     public func getParentMail() async -> String? {
-        await configManager.getParentMail()
+        try? storageManager.readKeychain(String.self, for: KeychainKeys.userKey, prompt: nil)
     }
 
     private var _addMemberState: FHKCore.State<Never> = .loaded

@@ -10,7 +10,7 @@ import FHKUtils
 import FHKCore
 import FHKConfig
 import FHKDesignSystem
-import FHKObservability
+import FHKFirebase
 
 struct LanguageScreen<VM: LanguageScreenVM>: View {
     private let flagAnimation = Animation.spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0.15)

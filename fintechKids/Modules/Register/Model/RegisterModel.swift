@@ -12,7 +12,7 @@ import FHKUtils
 import FHKCore
 import FHKDesignSystem
 import FHKInjections
-import FHKObservability
+import FHKFirebase
 import FHKDomain
 
 @Observable
@@ -37,7 +37,7 @@ public class RegisterModel {
     
     // Injections Dependency
     private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.analitycsManager
+        inject.firebaseAnalitycsManager
     }
     
     private var _registerState: FHKCore.State<Never> = .loaded

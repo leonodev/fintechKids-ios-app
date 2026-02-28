@@ -9,7 +9,7 @@ import SwiftUI
 import Observation
 import FHKCore
 import FHKDesignSystem
-import FHKObservability
+import FHKFirebase
 import FHKInjections
 import FHKDomain
 
@@ -21,7 +21,7 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
     
     // Injections Dependency
     private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.analitycsManager
+        inject.firebaseAnalitycsManager
     }
     
     private var languageManager: any FHKLanguageManagerProtocol {
@@ -29,7 +29,7 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
     }
     
     private var remoteConfigManager: any FHKRemoteConfigManagerProtocol {
-        inject.remoteConfigManager
+        inject.firebaseRemoteConfigManager
     }
     
     public let allFlags: [Image] = [

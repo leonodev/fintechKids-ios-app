@@ -5,8 +5,8 @@
 //  Created by Fredy Leon on 6/2/26.
 //
 
-import FHKObservability
 import FHKDomain
+import FHKFirebase
 
 public extension Screens {
     
