@@ -5,9 +5,7 @@
 //  Created by Fredy Leon on 11/12/25.
 //
 
-import SwiftUI
 import Observation
-import Supabase
 import FHKCore
 import FHKAuth
 import FHKInjections

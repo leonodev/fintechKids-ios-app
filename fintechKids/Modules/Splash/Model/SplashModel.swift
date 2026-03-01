@@ -6,13 +6,8 @@
 //
 
 import SwiftUI
-import Combine
-import Observation
-import Supabase
-import FHKAuth
 import FHKUtils
 import FHKCore
-import FHKDesignSystem
 
 public struct SplashModel {
     // Properties Screen View

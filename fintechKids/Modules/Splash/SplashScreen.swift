@@ -7,7 +7,6 @@
 
 import SwiftUI
 import FHKCore
-import FHKConfig
 import FHKDesignSystem
 import FHKUtils
 

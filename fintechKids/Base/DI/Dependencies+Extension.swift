@@ -26,43 +26,41 @@ public class Dependencies {
                                                keychain: FHKKeychainStorage())
         // ------MAIN INJECTIONS------
         
-        /// Storage
+        /// FHKStorage
         deps.set(storageManager, for: FHKStorageManagerProtocol.self)
         
-        /// Language ( Depend of Storage)
+        /// Main App ( Depend of Storage)
         deps.set(FHKLanguageManager(), for: (any FHKLanguageManagerProtocol).self)
         
-        /// Remote Configuration Firebase
+        /// FHKFirebase
         deps.set(FHKRemoteConfigService(), for: (any FHKRemoteConfigManagerProtocol).self)
         
-        /// Analytics Firebase
+        /// FHKFirebase
         deps.set(FHKAnalyticsService(), for: FHKAnalyticsProtocol.self)
         
-        /// Security
+        /// FHKAuth
         deps.set(FHKSecurity(), for: FHKSecurityProtocol.self)
         
-        /// Configuration App
+        /// FHKConfig
         deps.set(FHKConfiguration(), for: (any FHKConfigurationProtocol).self)
         
-        // API Services
+        // FHKCore
         deps.set(FHKServicesAPI(), for: (any FHKServicesAPIProtocol).self)
            
-        // Supabase
+        // FHKAuth
         let supabaseClient = try makeSupabaseClient()
         deps.set(FHKSupabase(client: supabaseClient), for: (any FHKAuthProtocol).self)
         
-        // Supabase Tables
+        // FHKSupabase
         deps.set(FHKSupabaseMembers(supabaseClient: supabaseClient), for: (any FHKSupabaseMembersProtocol).self)
         
-        // ------OTHERS INJECTIONS------
-        
-        /// Camera Permission
+        /// Main App
         deps.set(CameraPermissionService(), for: (any FHKPermissionProtocol).self)
         
-        /// Toast
+        /// Main App
         deps.set(ToastService(), for: (any FHKToastManagerProtocol).self)
         
-        /// Modal
+        /// FHKDesignSystem
         deps.set(FHKModal(), for: FHKModalProtocol.self)
     }
 }
