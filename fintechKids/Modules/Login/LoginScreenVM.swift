@@ -7,32 +7,42 @@
 
 import Observation
 import FHKCore
-import FHKAuth
 import FHKInjections
-import FHKStorage
 import FHKDomain
+import FHKFirebase
+import FHKUtils
 
 @Observable
 final class LoginScreenVM: FHKCore.ViewModel {
-    var model: LoginModel = .init()
+    var viewState: LoginViewState = .init()
     
     // Properties injected
+    private var repository: any FHKLoginRepositoryProtocol {
+        inject.loginRepository
+    }
+    
+    private var analitycsManager: any FHKAnalyticsProtocol {
+        inject.firebaseAnalitycsManager
+    }
+    
     private var securityManager: any FHKSecurityProtocol {
         inject.securityManager
     }
     
-    private var storageManager: any FHKStorageManagerProtocol {
-        inject.storageManager
+    public var toastService: any FHKToastProtocol {
+        inject.toastManager
     }
     
-    private var supabase: any FHKAuthProtocol {
-        inject.supabaseManager
+    public var modalManager: any FHKModalProtocol {
+        inject.modalManager
     }
     
+    // Other properties
     var hasSavedAuthToken: Bool {
-        storageManager.exists(key: KeychainKey.authToken.rawValue)
+        repository.hasSavedToken
     }
     
+    // Others Properties
     var isBiometryAvailable: Bool {
         securityManager.getBiometryType() != .none
     }
@@ -60,64 +70,68 @@ final class LoginScreenVM: FHKCore.ViewModel {
     
     @MainActor
     private func login() async {
-        model.loginState = .loading
+        viewState.loginState = .loading
         
         do {
-            // Send Login User
-            let userSession = try await supabase.login(email: model.email,
-                                                       password: model.password)
-            model.loginState = .finish(nil)
-            guard let tokenAccess = userSession.accessToken else {
+            let userSession = try await repository.login(email: viewState.email,
+                                                         pwd: viewState.password)
+            
+            viewState.loginState = .finish(nil)
+            guard let tokenAccess = userSession else {
                 return
             }
             
             // We saved the Session Token PROTECTED by Face ID for the future
             saveSessionToken(tokenAccess: tokenAccess, isHasBiometry: isBiometryAvailable)
         } catch let error as FHKDomainError {
-            model.loginState = .error(error)
+            viewState.loginState = .error(error)
+            informateError(error)
         } catch {
-            model.loginState = .error(FHKAppError.loginUserFailed)
+            viewState.loginState = .error(FHKAppError.loginUserFailed)
+            informateError(FHKAppError.loginUserFailed)
         }
     }
     
     @MainActor
     private func loginWithBiometrics() async {
-        // Yes, we can use Face ID
-        guard storageManager.isBiometryAvailable() else {
-            model.loginState = .error(FHKBiometryError.notAvailable)
-            return
-        }
+        let prompt = getBiometryPrompt(biometryType: securityManager.getBiometryType())
         
         do {
-            // Try reading the Keychain token
-            if let savedToken: String = try storageManager.readKeychain(
-                String.self,
-                for: KeychainKey.authToken.rawValue,
-                prompt: model.getBiometryPrompt(biometryType: securityManager.getBiometryType())
-            ) {
-                // If FaceID accepted, we went directly into the session
-                try await supabase.setSession(accessToken: savedToken)
-                let isAuthenticated = await supabase.isUserAuthenticated
-                model.loginState =  isAuthenticated ? .finish(nil) : .error(FHKBiometryError.notAvailable)
-            }
+            try await repository.loginWithBiometrics(prompt: prompt)
+            viewState.loginState = .finish(nil)
         } catch {
-            // If the user cancels, we do nothing; we just leave them on manual login.
-            model.loginState = .error(FHKBiometryError.userCancelAuthentication)
+            let fhkError = error as? any FHKError ?? FHKBiometryError.userCancelAuthentication
+            viewState.loginState = .error(fhkError)
+            informateError(fhkError)
         }
     }
-}
-
-private extension LoginScreenVM {
     
-    func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) {
-        do {
-            try storageManager.saveKeychain(
-                tokenAccess,
-                for: KeychainKey.authToken.rawValue,
-                requireBiometry: isHasBiometry
-            )
-        } catch {
-            model.loginState = .error(FHKSecurityError.saveTokenAccessKeychainFailed)
+    private func getBiometryPrompt(biometryType: BiometryType) -> String {
+        switch biometryType {
+        case .faceID:
+            return viewState.msnFaceId
+           
+        case .touchID:
+            return viewState.msnTouchId
+   
+        default:
+            return viewState.msnGenericId
         }
+    }
+
+    private func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) {
+        do {
+            try repository.saveAuthToken(tokenAccess, requiresBiometry: isHasBiometry)
+        } catch {
+            viewState.loginState = .error(FHKSecurityError.saveTokenAccessKeychainFailed)
+            informateError(FHKSecurityError.saveTokenAccessKeychainFailed)
+        }
+    }
+
+    private func informateError(_ error: any FHKError) {
+        if error.isShouldTrack {
+            analitycsManager.track(.error(.init(from: error)))
+        }
+        Logger.error(error.logMessage)
     }
 }

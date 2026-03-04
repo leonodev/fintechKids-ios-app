@@ -23,10 +23,34 @@ excluded:
   - fintechKidsTests         # Opcional: si no quieres linting en tests
 
 # Personalización de reglas específicas
-line_length: 120               # Un poco más ancho que los 100 por defecto
+line_length: 150               # Un poco más ancho que los 100 por defecto
 type_body_length:
   warning: 300
   error: 500
 
 # Formato de salida
 reporter: "xcode"              # Para que los avisos salgan integrados en Xcode
+
+
+# Guardian de Arquitectura FHK
+custom_rules:
+  fhk_layer_violation_viewmodel:
+    name: "Violation ViewModel"
+    message: "Error of Architecture: a ViewModel You should not import Infrastructure modules (Storage/Firebase/Supabase). must use a repository."
+    regex: "(?m)^import\\s+(FHKStorage|FHKSupabase|Supabase|FHKAuth|FHKConfig|FHKDesignSystem|SwiftUI)"
+    included: ".*(VM|ViewModel)\\.swift"
+    severity: error
+
+  fhk_layer_violation_view:
+    name: "Violation View"
+    message: "Error of Architecture: the Views/Screens/ViewStates They should not import logic or infrastructure modules."
+    regex: "(?m)^import\\s+(FHKInjections|FHKAuth|FHKConfig|FHKStorage|FHKFirebase|FHKSupabase|FHKDomain|Supabase)"
+    included: ".*(Screen|View|ViewState)\\.swift"
+    severity: error
+
+  fhk_injection_safety:
+    name: "Violation Injection"
+    message: "Error dof Architecture: the Views, Screens and ViewStates they should not access 'inject'."
+    regex: "inject\\."
+    included: ".*(View|Screen|ViewState)\\.swift"
+    severity: error

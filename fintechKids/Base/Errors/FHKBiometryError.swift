@@ -14,7 +14,6 @@ public enum FHKBiometryError: FHKError {
     case userCancelAuthentication
     case authenticationFailed
     
-    
     public var logMessage: String {
         switch self {
         case .notAvailable:

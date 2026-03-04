@@ -5,29 +5,28 @@
 //  Created by Fredy Leon on 23/1/26.
 //
 
-import SwiftUI
 import Observation
 import FHKCore
-import FHKAuth
 import FHKUtils
 import FHKInjections
 import FHKDomain
+import FHKFirebase
 
 @Observable
 final class RegisterScreenVM: FHKCore.ViewModel {
-    var model: RegisterModel = .init()
+    var viewState: RegisterViewState = .init()
     
-    // Properties injected
-    private var securityManager: any FHKSecurityProtocol {
-        inject.securityManager
+    // Properties Injected
+    private var analitycsManager: any FHKAnalyticsProtocol {
+        inject.firebaseAnalitycsManager
     }
     
-    private var storageManager: any FHKStorageManagerProtocol {
-        inject.storageManager
+    private var repository: any RegisterRepositoryProtocol {
+        inject.registerRepository
     }
     
-    private var supabase: any FHKAuthProtocol {
-        inject.supabaseManager
+    public var modalManager: any FHKModalProtocol {
+        inject.modalManager
     }
     
     enum Action: Equatable {
@@ -42,7 +41,7 @@ final class RegisterScreenVM: FHKCore.ViewModel {
         case .registerUser:
             
             // Make register
-            await registerUser(passwordHashed: model.password)
+            await registerUser()
 
             // save user in Keychain
             await saveUserIntoKeychain()
@@ -55,15 +54,17 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     func onAppear() async {}
     
     @MainActor
-    func registerUser(passwordHashed: String?) async {
+    func registerUser() async {
         do {
-            let _ = try await supabase.register(email: model.emailFamily,
-                                                password: model.password)
-            model.registerState = .finish(nil)
+            let response = try await repository.register(email: viewState.emailFamily, password: viewState.password)
+            viewState.registerState = .finish(nil)
+            Logger.info("USER REGISTERED SUCCESS \(response)")
         } catch let error as FHKDomainError {
-            model.registerState = .error(error)
+            viewState.registerState = .error(error)
+            informateError(error)
         } catch {
-            model.registerState = .error(FHKAppError.registerUserFailed)
+            viewState.registerState = .error(FHKAppError.registerUserFailed)
+            informateError(FHKAppError.registerUserFailed)
         }
     }
 }
@@ -72,10 +73,19 @@ private extension RegisterScreenVM {
     
     func saveUserIntoKeychain() async {
         do {
-            try storageManager.saveKeychain(model.emailFamily, for: KeychainKeys.userKey)
+            try await repository.saveUserIntoKeychain(email: viewState.emailFamily)
             Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
         } catch {
-            model.registerState = .error(FHKSecurityError.saveUserMailKeychainFailed)
+            viewState.registerState = .error(FHKSecurityError.saveUserMailKeychainFailed)
+            informateError(FHKSecurityError.saveUserMailKeychainFailed)
         }
+    }
+    
+    func informateError(_ error: any FHKError) {
+        if error.isShouldTrack {
+            analitycsManager.track(.error(.init(from: error)))
+        }
+        
+        Logger.error(error.logMessage)
     }
 }

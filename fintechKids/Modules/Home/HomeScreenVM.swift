@@ -5,6 +5,7 @@
 //  Created by Fredy Leon on 21/1/26.
 //
 
+import Foundation
 import Observation
 import FHKCore
 import FHKInjections
@@ -12,11 +13,34 @@ import FHKDomain
 
 @Observable
 final class HomeScreenVM: FHKCore.ViewModel {
-    var model: HomeModel = .init()
+    var viewState: HomeViewState = .init()
     
     // Properties Injection
-    private var supabaseMembers: FHKSupabaseMembersProtocol {
-        inject.supabaseMembersManager
+    private var homeRepository: FHKHomeRepositoryProtocol {
+        inject.homeRepository
+    }
+    
+    public var toastManager: any FHKToastProtocol {
+        inject.toastManager
+    }
+    
+    public var camaraPermissionManager: any FHKPermissionProtocol {
+        inject.camaraPermissionManager
+    }
+    
+    // Other Properties
+    public var familyMembers: [FamilyMember] = []
+    
+    public func getNameMember(member: FamilyMember) -> String {
+        member.member_name
+    }
+    
+    public func getAvatarMember(member: FamilyMember) -> String {
+        member.avatar_name
+    }
+    
+    public func getId(member: FamilyMember) -> UUID {
+        member.id
     }
     
     enum Action: Equatable {
@@ -33,15 +57,15 @@ final class HomeScreenVM: FHKCore.ViewModel {
     
     func fetchMemberFamily() async {
         do {
-            guard let email = await model.getParentMail() else {
-                model.homeState = .error(FHKSecurityError.readUserMailKeychainFailed)
+            guard let email = await homeRepository.getParentMail() else {
+                viewState.homeState = .error(FHKSecurityError.readUserMailKeychainFailed)
                 return
             }
 
-            let currentMember = try await supabaseMembers.fetchFamilyMembers(parentEmail: email)
-            model.familyMembers = currentMember
+            let currentMember = try await homeRepository.fetchMembers(email: email)
+            familyMembers = currentMember
         } catch {
-            model.homeState = .error(FHKAppError.fetchMembersFailed)
+            viewState.homeState = .error(FHKAppError.fetchMembersFailed)
         }
     }
 }

@@ -5,39 +5,26 @@
 //  Created by Fredy Leon on 10/12/25.
 //
 
-import SwiftUI
 import Observation
 import FHKCore
-import FHKDesignSystem
 import FHKFirebase
 import FHKInjections
 import FHKDomain
+import FHKUtils
 
 @Observable
 public final class LanguageScreenVM: FHKCore.ViewModel {
-    var model: LanguageModel = .init()
+    var viewState: LanguageViewState = .init()
     var languages: [String] = []
-    var selectedFlag: Image = .noneFlag
     
     // Injections Dependency
     private var analitycsManager: any FHKAnalyticsProtocol {
         inject.firebaseAnalitycsManager
     }
     
-    private var languageManager: any FHKLanguageManagerProtocol {
-        inject.languageManager
+    private var languageRepository: any FHKLanguageRepositoryProtocol {
+        inject.languageRepository
     }
-    
-    private var remoteConfigManager: any FHKRemoteConfigManagerProtocol {
-        inject.firebaseRemoteConfigManager
-    }
-    
-    public let allFlags: [Image] = [
-        .spainCircleFlag,
-        .italyCircleFlag,
-        .englandCircleFlag,
-        .franceCircleFlag
-    ]
     
     public enum Action: Equatable {
         case loadRemoteConfig
@@ -70,31 +57,42 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
         }
     }
     
+    public func getBtnLanguage(code: String) -> AnalyticsEvent.Button {
+        Screens.Language.getBtnLanguag(lng: code)
+    }
+}
+
+// Private Methods
+private extension LanguageScreenVM {
+    
     private func loadRemoteConfig() async {
-        remoteConfigManager.fetchConfig { [weak self] error in
-            guard let self = self else { return }
-            
-            if error != nil {
-                self.model.languageState = .error(FHKSystemError.remoteConfigFailed)
-            } else {
-                self.languages = self.remoteConfigManager.enabledLanguages
-                self.model.languageState = .loaded
-            }
+        let remoteLanguage = await languageRepository.fetchConfig()
+        
+        if remoteLanguage.isEmpty {
+            viewState.languageState = .error(FHKSystemError.remoteConfigFailed)
+            informateError(FHKSystemError.remoteConfigFailed)
+        } else {
+            languages = remoteLanguage
+            viewState.languageState = .loaded
         }
     }
     
     private func setImageFlag(code: String?) {
         let languageCode = code ?? LanguageType.es.code()
-        selectedFlag =  languageCode.languageTypeToImageFlag
+        viewState.selectedFlag =  languageCode.languageTypeToImageFlag
     }
     
     private func changeLanguageApp(_ language: String) async {
-        languageManager.changeLanguage(to: language)
+        await languageRepository.changeLanguageApp(language)
     }
-}
-
-// Analytics Methods
-extension LanguageScreenVM {
+    
+    private func informateError(_ error: any FHKError) {
+        if error.isShouldTrack {
+            analitycsManager.track(.error(.init(from: error)))
+        }
+        
+        Logger.error(error.logMessage)
+    }
     
     private func sendAnalitycOpenScreen() async {
         analitycsManager.track(.screenView(Screens.Language.screen))

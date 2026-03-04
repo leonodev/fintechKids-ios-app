@@ -1,5 +1,5 @@
 //
-//  HomeModel.swift
+//  HomeViewState.swift
 //  fintechKids
 //
 //  Created by Fredy Leon on 21/1/26.
@@ -7,23 +7,12 @@
 
 import SwiftUI
 import Observation
-import FHKUtils
 import FHKCore
 import FHKDesignSystem
-import FHKConfig
-import FHKInjections
-import FHKDomain
 
 @Observable
-public class HomeModel {
+public class HomeViewState {
     var options: [FloatMenu.Option]
-    
-    // Properties Injected
-    private var storageManager: FHKStorageManagerProtocol {
-        inject.storageManager
-    }
-    
-    public var familyMembers: [FamilyMember] = []
     
     private var _homeState: FHKCore.State<Never> = .loaded
     var homeState: FHKCore.State<Never> {
@@ -37,9 +26,5 @@ public class HomeModel {
             .init(image: .init(systemName: "note.text.badge.plus"), color: FHKColor.fuchsiaPink),
             .init(image: .init(systemName: "star.fill"), color: FHKColor.yellow)
         ]
-    }
-    
-    public func getParentMail() async -> String? {
-        try? storageManager.readKeychain(String.self, for: KeychainKeys.userKey, prompt: nil)
     }
 }

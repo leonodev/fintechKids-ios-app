@@ -18,7 +18,7 @@ struct FintechKidsApp: App {
     @State private var appRouter = NavigationRouter<Routes>()
     private let deepLinkProcessor: DeepLinkRouterProtocol = DeepLinkRouter()
     
-    private var toastManager: any FHKToastManagerProtocol {
+    private var toastManager: any FHKToastProtocol {
         inject.toastManager
     }
     

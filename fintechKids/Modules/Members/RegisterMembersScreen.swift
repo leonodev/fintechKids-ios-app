@@ -1,5 +1,5 @@
 //
-//  AddMemberScreen.swift
+//  RegisterMembersScreen.swift
 //  fintechKids
 //
 //  Created by Fredy Leon on 1/2/26.
@@ -7,33 +7,29 @@
 
 import SwiftUI
 import FHKDesignSystem
-import FHKInjections
 import FHKCore
 import FHKUtils
-import FHKStorage
-import FHKDomain
 
-struct AddMemberScreen<VM: AddMemberScreenVM>: View {
+struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
     @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
-    @Inject(\.modalManager) var modalManager: FHKModalProtocol
     
     var body: some View {
         ScreenContainer(title: Routes.members.title) {
-            switch viewModel.model.addMemberState {
+            switch viewModel.viewState.addMemberState {
     
             default:
                 contentView
             }
         }
-        .onChange(of: viewModel.model.addMemberState) { _, state in
+        .onChange(of: viewModel.viewState.addMemberState) { _, state in
             switch state {
             case .error:
-                modalManager.show {
+                viewModel.modalManager.show {
                     modalInformativeError
                 }
             case .finish:
-                modalManager.show {
+                viewModel.modalManager.show {
                     modalInformativeSuccess
                 }
                 
@@ -67,7 +63,7 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     }
     
     var informativeText: some View {
-        Text(viewModel.model.familyMemberDescription)
+        Text(viewModel.viewState.familyMemberDescription)
             .lineSpacing(4)
             .font(.PangramSans.bold(FHKSize.size16))
             .foregroundColor(FHKColor.lunarSand.opacity(0.5))
@@ -77,8 +73,8 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     var nameFamilyField: some View {
         VStack(alignment: .leading) {
     
-            GradientBorderField(text: $viewModel.model.familyName,
-                                placeholder: viewModel.model.familyNamePlaceholder)
+            GradientBorderField(text: $viewModel.viewState.familyName,
+                                placeholder: viewModel.viewState.familyNamePlaceholder)
             .padding(.top, FHKSize.size04)
         }
     }
@@ -87,7 +83,7 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
         HStack {
             Spacer()
         HStack {
-            Text(viewModel.model.titleBtnAddMember)
+            Text(viewModel.viewState.titleBtnAddMember)
                 .font(.PangramSans.bold(FHKSize.size16))
                 .foregroundColor(FHKColor.lunarSand)
                 .padding(.vertical)
@@ -104,12 +100,12 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
         .cornerRadius(FHKSize.size16)
         .onTapGesture {
 
-            modalManager.show {
+            viewModel.modalManager.show {
                 VStack(alignment: .leading, spacing: FHKSpace.space08) {
                     
                     HStack {
                         Spacer()
-                        Text(viewModel.model.titleAddNewMember)
+                        Text(viewModel.viewState.titleAddNewMember)
                             .font(.PangramSans.bold(FHKSize.size24))
                             .foregroundColor(FHKColor.lunarSand.opacity(0.9))
                             .padding(.top, FHKSize.size08)
@@ -117,12 +113,12 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
                         Spacer()
                     }
                         
-                    GradientBorderField(text: $viewModel.model.memberNewName,
-                                        placeholder: viewModel.model.memberNewNamePlaceholder)
+                    GradientBorderField(text: $viewModel.viewState.memberNewName,
+                                        placeholder: viewModel.viewState.memberNewNamePlaceholder)
                     .padding(.top, FHKSize.size04)
                         
                     NewMemberContentView(viewModel: viewModel,
-                                        selectedAvatarName: $viewModel.model.selectedAvatarName)
+                                        selectedAvatarName: $viewModel.viewState.selectedAvatarName)
                     }
                 }
         }
@@ -135,25 +131,27 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 10) {
                 
-                ForEach(viewModel.model.familyMembers) { member in
-                    FHKCreateMemberItem(name: member.member_name,
-                                        avatarName: member.avatar_name,
-                                        iconName: member.iconName,
+                ForEach(viewModel.familyMembers) { member in
+                    FHKCreateMemberItem(name: viewModel.getNameMember(member: member),
+                                        avatarName: viewModel.getAvatarMember(member: member),
+                                        iconName: viewModel.getIconName(member: member),
                                         action: {
-                        modalManager.show {
+                        viewModel.modalManager.show {
                             VStack(alignment: .leading, spacing: FHKSpace.space08) {
-                                FHKConfirmationView(title: viewModel.model.titleRemoveMember,
-                                                    message: viewModel.model.msnRemoveMember(name: member.member_name),
-                                                    confirmButtonText: viewModel.model.titleBtnConfirm,
-                                                    cancelButtonText: viewModel.model.titleBtnCancel,
+                                FHKConfirmationView(title: viewModel.viewState.titleRemoveMember,
+                                                    message: viewModel.viewState.msnRemoveMember(
+                                                        name: viewModel.getNameMember(member: member)
+                                                    ),
+                                                    confirmButtonText: viewModel.viewState.titleBtnConfirm,
+                                                    cancelButtonText: viewModel.viewState.titleBtnCancel,
                                                     confirmAction: {
                                     Task {
                                         await viewModel.removeMember(member)
-                                        modalManager.dismiss()
+                                        viewModel.modalManager.dismiss()
                                     }
                                 },
                                                     cancelAction: {
-                                    modalManager.dismiss()
+                                    viewModel.modalManager.dismiss()
                                 })
                             }
                         }
@@ -165,8 +163,8 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     }
     
     var registerMembersButton: some View {
-        FHKButtonPrimary(title: viewModel.model.titleBtnRegisterMember,
-                         state: viewModel.model.stateBtnRegisterMember,
+        FHKButtonPrimary(title: viewModel.viewState.titleBtnRegisterMember,
+                         state: viewModel.viewState.stateBtnRegisterMember(isEnable: viewModel.isEnableBtnRegisterMember),
                          mode: .solid,
                          action: {
             Task {
@@ -178,12 +176,12 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     
     var modalInformativeError: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.model.titleUserError,
-                               message: viewModel.model.msnUserError,
+            FHKInformationView(title: viewModel.viewState.titleUserError,
+                               message: viewModel.viewState.msnUserError,
                                type: .error,
-                               confirmButtonText: viewModel.model.btnUserError,
+                               confirmButtonText: viewModel.viewState.btnUserError,
                                 confirmAction: {
-                modalManager.dismiss()
+                viewModel.modalManager.dismiss()
                 router.pop()
             })
         }
@@ -191,12 +189,12 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
     
     var modalInformativeSuccess: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.model.titleMembersAddedSuccess,
-                               message: viewModel.model.msnMembersAddedSuccess,
+            FHKInformationView(title: viewModel.viewState.titleMembersAddedSuccess,
+                               message: viewModel.viewState.msnMembersAddedSuccess,
                                type: .success,
-                               confirmButtonText: viewModel.model.titleModalMembersAddedSuccess,
+                               confirmButtonText: viewModel.viewState.titleModalMembersAddedSuccess,
                                 confirmAction: {
-                modalManager.dismiss()
+                viewModel.modalManager.dismiss()
                 router.pop()
             })
         }
@@ -204,24 +202,19 @@ struct AddMemberScreen<VM: AddMemberScreenVM>: View {
 }
 
 internal struct NewMemberContentView: View {
-    // Properties Injected
-    var modalManager: any FHKModalProtocol {
-        inject.modalManager
-    }
-   
-    @Bindable var viewModel: AddMemberScreenVM
+    @Bindable var viewModel: RegisterMembersScreenVM
     @Binding var selectedAvatarName: String
     private let sizeAvatar: CGFloat = FHKSize.size120
 
     var body: some View {
         VStack(alignment: .leading) {
             
-            Text(viewModel.model.titleSelectAvatar)
+            Text(viewModel.viewState.titleSelectAvatar)
                 .foregroundColor(FHKColor.lunarSand)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: FHKSpace.space16) {
-                    ForEach(viewModel.model.avatarIList, id: \.self) { avatar in
+                    ForEach(viewModel.viewState.avatarIList, id: \.self) { avatar in
                         AvatarView(imageName: avatar.image, size: sizeAvatar)
                             .overlay(
                                 Circle()
@@ -237,14 +230,14 @@ internal struct NewMemberContentView: View {
                 .padding()
             }
             
-            FHKButtonPrimary(title: viewModel.model.titleBtnAddMember,
-                             state: viewModel.model.stateBtnAddMember,
+            FHKButtonPrimary(title: viewModel.viewState.titleBtnAddMember,
+                             state: viewModel.viewState.stateBtnAddMember,
                              action: {
                 Task {
                     await viewModel.action(.newMember)
-                    await viewModel.action(.clearInfomember)
-                    modalManager.dismiss()
-                }  
+                    await viewModel.action(.clearInfomember(avatarName: AvatarType.boy_9.name))
+                    viewModel.modalManager.dismiss()
+                }
             })
             .padding(.top, FHKSize.size20)
         }
@@ -253,5 +246,5 @@ internal struct NewMemberContentView: View {
 }
 
 #Preview {
-    AddMemberScreen(viewModel: AddMemberScreenVM())
+    RegisterMembersScreen(viewModel: RegisterMembersScreenVM())
 }

@@ -8,9 +8,7 @@
 import SwiftUI
 import FHKUtils
 import FHKCore
-import FHKConfig
 import FHKDesignSystem
-import FHKFirebase
 
 struct LanguageScreen<VM: LanguageScreenVM>: View {
     private let flagAnimation = Animation.spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0.15)
@@ -22,13 +20,13 @@ struct LanguageScreen<VM: LanguageScreenVM>: View {
     
     var body: some View {
         ScreenContainer(title: Routes.language.title) {
-            switch viewModel.model.languageState {
+            switch viewModel.viewState.languageState {
             
             case .loaded:
                 contentMainView
                 
             default:
-                LoadingView(msn: viewModel.model.msnLoading)
+                LoadingView(msn: viewModel.viewState.msnLoading)
             }
         }
         .onAppear {
@@ -60,7 +58,7 @@ extension LanguageScreen {
                     Spacer()
                     
                     HStack {
-                        Text(viewModel.model.selectLanguageNow)
+                        Text(viewModel.viewState.selectLanguageNow)
                             .foregroundStyle(FHKColor.basicWhite)
                             .multilineTextAlignment(.center)
                             .font(.PangramSans.bold(FHKSize.size28))
@@ -71,14 +69,14 @@ extension LanguageScreen {
                     
                     VStack {
                         menuLanguageView
-                            .accessibilityIdentifier(viewModel.model.menuLanguageIdentifier)
+                            .accessibilityIdentifier(viewModel.viewState.menuLanguageIdentifier)
                         Spacer()
                     }
                     .frame(width: FHKSize.size60)
                 }
                 .padding(.trailing, FHKSize.size08)
                 
-                FHKButtonPrimary(title: viewModel.model.continueButtom,
+                FHKButtonPrimary(title: viewModel.viewState.continueButtom,
                                  state: .enabled,
                                  mode: .solid,
                                  action: {
@@ -86,8 +84,8 @@ extension LanguageScreen {
                 })
                 .padding()
                 
-                Text(viewModel.model.version)
-                    .accessibilityLabel(viewModel.model.version)
+                Text(viewModel.viewState.version)
+                    .accessibilityLabel(viewModel.viewState.version)
                     .foregroundStyle(FHKColor.basicWhite)
                 Spacer()
             }
@@ -97,12 +95,12 @@ extension LanguageScreen {
     
     private var menuOptions: [Image] {
         // Exclude the currently selected flag from the menu
-        viewModel.allFlags.filter { flag in
+        viewModel.viewState.allFlags.filter { flag in
             // Get the language code from the flag name (ES, IT, EN, FR)"
             let code = flag.imageToCode
             
             // Only include the flag if its code is in the Remote Config list and it is not the selected flag"
-            return viewModel.languages.contains(code) && flag != viewModel.selectedFlag
+            return viewModel.languages.contains(code) && flag != viewModel.viewState.selectedFlag
         }
     }
     
@@ -125,9 +123,9 @@ extension LanguageScreen {
     }
     
     var menuClosedView: some View {
-        viewModel.selectedFlag
+        viewModel.viewState.selectedFlag
             .resizable()
-            .accessibilityLabel("Idioma actual: \(viewModel.selectedFlag.imageToCode)")
+            .accessibilityLabel("Idioma actual: \(viewModel.viewState.selectedFlag.imageToCode)")
             .accessibilityHint("Toca para cambiar el idioma")
             .accessibilityAddTraits(.isButton) // Indica que es interactivo
             .frame(width: FHKSize.size52, height: FHKSize.size52)
@@ -148,11 +146,11 @@ extension LanguageScreen {
                     .frame(width: FHKSize.size48, height: FHKSize.size48)
                     .onTapGesture {
                         withAnimation(flagAnimation) {
-                            viewModel.selectedFlag = img
+                            viewModel.viewState.selectedFlag = img
                             
                             Task {
                                 let codeLanguage = img.imageToCode
-                                let btnAnatilycs = Screens.Language.getBtnLanguag(lng: codeLanguage)
+                                let btnAnatilycs = viewModel.getBtnLanguage(code: codeLanguage)
 
                                 await viewModel.action(.changeImageFlag(codeLanguage))
                                 await viewModel.action(.changeLanguageApp(codeLanguage))

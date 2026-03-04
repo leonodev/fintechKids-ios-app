@@ -7,16 +7,12 @@
 
 import SwiftUI
 import Observation
-import FHKAuth
 import FHKUtils
 import FHKCore
 import FHKDesignSystem
-import FHKInjections
-import FHKFirebase
-import FHKDomain
 
 @Observable
-public class RegisterModel {
+public class RegisterViewState {
     // Properties Observable
     public var emailFamily = ""
     public var password = ""
@@ -34,12 +30,7 @@ public class RegisterModel {
     public var stateRegisterOperation: FHKInformationView.ResultType {
         registerState.isError ? .error : .success
     }
-    
-    // Injections Dependency
-    private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.firebaseAnalitycsManager
-    }
-    
+
     private var _registerState: FHKCore.State<Never> = .loaded
     var registerState: FHKCore.State<Never> {
         get { _registerState }
@@ -52,8 +43,8 @@ public class RegisterModel {
             case .loaded:
                 break
                 
-            case .error(let error):
-                informateError(error)
+            case .error:
+                informateError()
                 
             case .finish:
                 informateFinishState()
@@ -68,19 +59,13 @@ public class RegisterModel {
     }
 }
 
-extension RegisterModel {
+extension RegisterViewState {
     private func updateLoadingView() {
         msnLoading = "title_loading_registering_user".localized().capitalizingFirstLetter()
     }
 
-    private func informateError(_ error: any FHKError) {
+    private func informateError() {
         msnRegisterConfirmation = "msn_register_user_error".localized().capitalizingFirstLetter()
-        
-        if error.isShouldTrack {
-            analitycsManager.track(.error(.init(from: error)))
-        }
-        
-        Logger.error(error.logMessage)
     }
     
     private func informateFinishState() {

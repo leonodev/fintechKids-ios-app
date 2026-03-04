@@ -10,13 +10,14 @@ import Combine
 import FHKCore
 import FHKDesignSystem
 import FHKDomain
+import FHKUtils
 
 @MainActor
 @Observable
-final class ToastService: NSObject, ApplicationService, FHKToastManagerProtocol {
+final class ToastService: NSObject, ApplicationService, FHKToastProtocol {
     
     // El estado es privado para asegurar que solo se modifique vía métodos controlados
-    var currentToast: ToastInfo?
+    var currentToast: FHKToastInfo?
     var isVisible: Bool = false
     
     // Guardamos la referencia de la tarea para poder cancelarla si llega un nuevo Toast
@@ -25,7 +26,7 @@ final class ToastService: NSObject, ApplicationService, FHKToastManagerProtocol 
     // MARK: - ToastServiceProtocol
     
     /// Muestra un toast con una configuración y duración específica
-    func show(info: ToastInfo, duration: Double = 5.0) {
+    func show(info: FHKToastInfo, duration: Double = 5.0) {
         // 1. Cancelamos cualquier tarea de ocultado pendiente
         dismissalTask?.cancel()
         

@@ -7,23 +7,11 @@
 
 import SwiftUI
 import FHKCore
-import FHKInjections
 import FHKDesignSystem
-import FHKDomain
 
 struct HomeScreen<VM: HomeScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     @State var viewModel: VM
-    
-    // Properties injected
-    private var toastManager: any FHKToastManagerProtocol {
-        inject.toastManager
-    }
-    
-    private var camaraPermissionManager: any FHKPermissionProtocol {
-        inject.camaraPermissionManager
-    }
-    
     @State private var showPermissions = false
     
     var body: some View {
@@ -63,7 +51,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
 //                .padding()
                 Spacer()
                 
-                FloatMenu(options: viewModel.model.options, callback: { index in
+                FloatMenu(options: viewModel.viewState.options, callback: { index in
                     switch index {
                     case 0:
                         router.navigate(to: .members)
@@ -84,7 +72,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
 //                }
             }
             .fullScreenCover(isPresented: $showPermissions) {
-                PermissionRequestView(provider: camaraPermissionManager)
+                PermissionRequestView(provider: viewModel.camaraPermissionManager)
             }
         }
         .background(FHKColor.indigo)
@@ -93,10 +81,10 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     var familyMembersList: some View {
         ScrollView {
             LazyHStack(spacing: FHKSpace.space16) {
-                ForEach(viewModel.model.familyMembers) { member in
-                    FHKMemberItem(id: member.id,
-                                  avatarName: member.avatar_name,
-                                  nameMember: member.member_name,
+                ForEach(viewModel.familyMembers) { member in
+                    FHKMemberItem(id: viewModel.getId(member: member),
+                                  avatarName: viewModel.getAvatarMember(member: member),
+                                  nameMember: viewModel.getNameMember(member: member),
                                   action: { member in
                     })
                 }

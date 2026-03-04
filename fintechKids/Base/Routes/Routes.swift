@@ -86,7 +86,7 @@ extension Routes {
             HomeScreen(viewModel: HomeScreenVM())
             
         case .members:
-            AddMemberScreen(viewModel: AddMemberScreenVM())
+            RegisterMembersScreen(viewModel: RegisterMembersScreenVM())
             
         case .goal(let id):
             GoalScreen(id: id)

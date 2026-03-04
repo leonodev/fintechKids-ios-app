@@ -9,40 +9,30 @@ import SwiftUI
 import Lottie
 import FHKDesignSystem
 import FHKCore
-import FHKInjections
-import FHKDomain
+import FHKUtils
 
 struct LoginScreen<VM: LoginScreenVM>: View {
     @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
     
-    // Properties Injected
-    private var toastService: any FHKToastManagerProtocol {
-        inject.toastManager
-    }
-    
-    private var modalManager: any FHKModalProtocol {
-        inject.modalManager
-    }
-    
     var body: some View {
         ScreenContainer {
-            switch viewModel.model.loginState {
+            switch viewModel.viewState.loginState {
     
             case .loading:
-                LoadingView(msn: viewModel.model.msnLoading)
+                LoadingView(msn: viewModel.viewState.msnLoading)
                 
             default:
                 FormView
             }
         }
-        .onChange(of: viewModel.model.loginState) { _, state in
+        .onChange(of: viewModel.viewState.loginState) { _, state in
             switch state {
             case .finish:
                 router.navigate(to: .home)
                 
             case .error:
-                modalManager.show {
+                viewModel.modalManager.show {
                     modalInformationError
                 }
                 
@@ -51,8 +41,8 @@ struct LoginScreen<VM: LoginScreenVM>: View {
             }
         }
         .onAppear {
-            viewModel.model.email = "leonfrcol@gmail.com"
-            viewModel.model.password = "1234567890"
+            viewModel.viewState.email = "leonfrcol@gmail.com"
+            viewModel.viewState.password = "1234567890"
         }
     }
     
@@ -69,11 +59,11 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 // Titles
                 VStack(spacing: 4) {
                     
-                    Text(viewModel.model.wellcome)
+                    Text(viewModel.viewState.wellcome)
                         .font(.PangramSans.bold(FHKSize.size28))
                         .foregroundColor(FHKColor.lunarSand)
                     
-                    Text(viewModel.model.startSesionYourAccount)
+                    Text(viewModel.viewState.startSesionYourAccount)
                         .font(.PangramSans.bold(FHKSize.size16))
                         .foregroundColor(FHKColor.lunarSand.opacity(0.6))
                 }
@@ -81,11 +71,11 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 
                 // Fields
                 VStack(spacing: FHKSpace.space16) {
-                    GradientBorderField(text: $viewModel.model.email,
-                                        placeholder: viewModel.model.emailPlaceholder)
+                    GradientBorderField(text: $viewModel.viewState.email,
+                                        placeholder: viewModel.viewState.emailPlaceholder)
                     
-                    GradientBorderField(text: $viewModel.model.password,
-                                        placeholder: viewModel.model.passwordPlaceholder,
+                    GradientBorderField(text: $viewModel.viewState.password,
+                                        placeholder: viewModel.viewState.passwordPlaceholder,
                                         isSecure: true)
                 }
                 
@@ -107,15 +97,15 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     Button(action: {
                         // Action to recover password
                     }, label: {
-                        Text(viewModel.model.youForgotYourPassword)
+                        Text(viewModel.viewState.youForgotYourPassword)
                             .font(.PangramSans.bold(FHKSize.size16))
                             .foregroundColor(FHKColor.lunarSand)
                     })
                 }
                 .padding(.trailing, FHKSpace.space04)
                 
-                FHKButtonPrimary(title: viewModel.model.startSesion,
-                                 state: viewModel.model.isBtnContinueEnable,
+                FHKButtonPrimary(title: viewModel.viewState.startSesion,
+                                 state: viewModel.viewState.isBtnContinueEnable,
                                  mode: .solid,
                                  action: {
                     Task {
@@ -127,11 +117,11 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     router.navigate(to: .register)
                 }, label: {
                     HStack {
-                        Text(viewModel.model.youNotHaveAccount)
+                        Text(viewModel.viewState.youNotHaveAccount)
                             .font(.PangramSans.extraboldItalic(FHKSize.size16))
                             .foregroundColor(FHKColor.silver.opacity(0.8))
                         
-                        Text(viewModel.model.register)
+                        Text(viewModel.viewState.register)
                             .underline()
                             .font(.PangramSans.bold(FHKSize.size16))
                             .foregroundColor(FHKColor.pastelPink)
@@ -142,10 +132,10 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 .font(.caption)
                 
                 Button(action: {
-                    toastService.show(
-                        info: ToastInfo(type: .notification,
-                                        message: "Prueba de notificacion si incluso a doble linea o mas ...",
-                                        hasIcon: true),
+                    viewModel.toastService.show(
+                        info: FHKToastInfo(type: .notification,
+                                           message: "Prueba de notificacion si incluso a doble linea o mas ...",
+                                           hasIcon: true),
                         duration: 5.0)
                 },
                 label: {
@@ -166,12 +156,12 @@ struct LoginScreen<VM: LoginScreenVM>: View {
     
     var modalInformationError: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.model.titleError,
-                               message: viewModel.model.msnError,
+            FHKInformationView(title: viewModel.viewState.titleError,
+                               message: viewModel.viewState.msnError,
                                type: .error,
-                               confirmButtonText: viewModel.model.titleBtnError,
+                               confirmButtonText: viewModel.viewState.titleBtnError,
                                 confirmAction: {
-                modalManager.dismiss()
+                viewModel.modalManager.dismiss()
             })
         }
     }

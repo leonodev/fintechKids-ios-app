@@ -33,7 +33,6 @@ class AppDelegate: ServicesApplicationDelegate {
             Logger.error("Error: Dependencies registered failed")
         }
         
-        
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         Logger.info("All Services Registered => \(servicesResult)")
         return true

@@ -16,12 +16,12 @@ struct SplashScreen<VM: SplashScreenVM>: View {
     
     var body: some View {
         ScreenContainer {
-            switch viewModel.model.splashState {
+            switch viewModel.viewState.splashState {
             default:
                 infoSplashVew
             }
         }
-        .onChange(of: viewModel.model.splashState) { _, state in
+        .onChange(of: viewModel.viewState.splashState) { _, state in
             switch state {
             case .finish(.goToLogin):
                 router.navigate(to: .login)
@@ -39,8 +39,8 @@ struct SplashScreen<VM: SplashScreenVM>: View {
         VStack(spacing: 20) {
             Spacer()
             
-            GradientText(title: viewModel.model.titleApp,
-                         subtitle: viewModel.model.subtitleApp)
+            GradientText(title: viewModel.viewState.titleApp,
+                         subtitle: viewModel.viewState.subtitleApp)
             .padding(.vertical, FHKSize.size20)
             
             Spacer()

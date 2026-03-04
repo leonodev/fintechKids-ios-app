@@ -54,14 +54,32 @@ public class Dependencies {
         // FHKSupabase
         deps.set(FHKSupabaseMembers(supabaseClient: supabaseClient), for: (any FHKSupabaseMembersProtocol).self)
         
+        /// FHKDesignSystem
+        deps.set(FHKModal(), for: FHKModalProtocol.self)
+        
         /// Main App
         deps.set(CameraPermissionService(), for: (any FHKPermissionProtocol).self)
         
         /// Main App
-        deps.set(ToastService(), for: (any FHKToastManagerProtocol).self)
+        deps.set(ToastService(), for: (any FHKToastProtocol).self)
         
-        /// FHKDesignSystem
-        deps.set(FHKModal(), for: FHKModalProtocol.self)
+        /// Main App  / Modules / Login
+        deps.set(LoginRepository(), for: (any FHKLoginRepositoryProtocol).self)
+        
+        /// Main App  / Modules / Splash
+        deps.set(SplashRepository(), for: (any FHKSplashRepositoryProtocol).self)
+        
+        /// Main App  / Modules / Register
+        deps.set(RegisterRepository(), for: (any RegisterRepositoryProtocol).self)
+        
+        /// Main App  / Modules / Register Members
+        deps.set(RegisterMembersRepository(), for: (any FHKRegisterMembersRepositoryProtocol).self)
+
+        /// Main App  / Modules / Home
+        deps.set(HomeRepository(), for: (any FHKHomeRepositoryProtocol).self)
+        
+        /// Main App  / Modules / Language
+        deps.set(LanguageRepository(), for: (any FHKLanguageRepositoryProtocol).self) 
     }
 }
 

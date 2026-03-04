@@ -7,17 +7,16 @@
 
 import Observation
 import FHKCore
-import FHKStorage
 import FHKInjections
 import FHKDomain
 
 @Observable
 final class SplashScreenVM: FHKCore.ViewModel {
-    var model: SplashModel = .init()
+    var viewState: SplashViewState = .init()
     
     // Properties Injected
-    private var storageManager: any FHKStorageManagerProtocol {
-        inject.storageManager
+    private var splashRepository: any FHKSplashRepositoryProtocol {
+        inject.splashRepository
     }
     
     public enum Action: Equatable {
@@ -35,17 +34,14 @@ final class SplashScreenVM: FHKCore.ViewModel {
     
     @MainActor
     public func readLanguageCurrent() async {
-        
         do {
-            let isLanguageSelected =
-            try await storageManager.readUserDefaults(String.self,
-                                                      forKey: UserDefaultsKeys.languageKey)
-            
-            model.splashState = isLanguageSelected != nil
+            let isLanguageSelected = try await splashRepository.readLanguageCurrent()
+
+            viewState.splashState = isLanguageSelected != nil
                 ? .finish(.goToLogin)
                 : .finish(.goToLanguage)
         } catch {
-            model.splashState = .finish(.goToLanguage)
+            viewState.splashState = .finish(.goToLanguage)
         }
     }
 }

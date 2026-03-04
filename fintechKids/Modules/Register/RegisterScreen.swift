@@ -7,34 +7,27 @@
 
 import SwiftUI
 import FHKDesignSystem
-import FHKInjections
 import FHKCore
-import FHKDomain
 
 struct RegisterScreen<VM: RegisterScreenVM>: View {
     @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
     
-    // Properties Injected
-    private var modalManager: any FHKModalProtocol {
-        inject.modalManager
-    }
-    
     var body: some View {
         ScreenContainer(title: Routes.register.title) {
-            switch viewModel.model.registerState {
+            switch viewModel.viewState.registerState {
                 
             case .loading:
-                LoadingView(msn: viewModel.model.msnLoading)
+                LoadingView(msn: viewModel.viewState.msnLoading)
                 
             default:
                 formView
             }
         }
-        .onChange(of: viewModel.model.registerState) { _, state in
+        .onChange(of: viewModel.viewState.registerState) { _, state in
             switch state {
             case .finish(nil), .error:
-                modalManager.show {
+                viewModel.modalManager.show {
                     modalConfirmation
                 }
                 
@@ -69,7 +62,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     }
     
     var informativeText: some View {
-        Text(viewModel.model.registerEmailInstruction)
+        Text(viewModel.viewState.registerEmailInstruction)
             .lineSpacing(4)
             .font(.PangramSans.bold(FHKSize.size16))
             .foregroundColor(FHKColor.lunarSand.opacity(0.5))
@@ -81,12 +74,12 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
                       content: {
             
             VStack(alignment: .leading) {
-                GradientBorderField(text: $viewModel.model.emailFamily,
-                                    placeholder: viewModel.model.emailFamilyPlaceholder)
+                GradientBorderField(text: $viewModel.viewState.emailFamily,
+                                    placeholder: viewModel.viewState.emailFamilyPlaceholder)
                 .padding(.top, FHKSize.size04)
                 
-                GradientBorderField(text: $viewModel.model.password,
-                                    placeholder: viewModel.model.passwordPlaceholder,
+                GradientBorderField(text: $viewModel.viewState.password,
+                                    placeholder: viewModel.viewState.passwordPlaceholder,
                                     isSecure: true)
                 
                 .padding(.top, FHKSize.size12)
@@ -96,8 +89,8 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     }
     
     var registermeButton: some View {
-        FHKButtonPrimary(title: viewModel.model.titleRegisterBtn,
-                         state: viewModel.model.isBtnContinueEnable,
+        FHKButtonPrimary(title: viewModel.viewState.titleRegisterBtn,
+                         state: viewModel.viewState.isBtnContinueEnable,
                          mode: .solid,
                          action: {
             Task {
@@ -108,12 +101,12 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     
     var modalConfirmation: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.model.titleRegisterConfirmation,
-                               message: viewModel.model.msnRegisterConfirmation,
-                               type: viewModel.model.stateRegisterOperation,
-                               confirmButtonText: viewModel.model.titleButtonContinue,
+            FHKInformationView(title: viewModel.viewState.titleRegisterConfirmation,
+                               message: viewModel.viewState.msnRegisterConfirmation,
+                               type: viewModel.viewState.stateRegisterOperation,
+                               confirmButtonText: viewModel.viewState.titleButtonContinue,
                                 confirmAction: {
-                modalManager.dismiss()
+                viewModel.modalManager.dismiss()
                 router.pop()
             })
         }
