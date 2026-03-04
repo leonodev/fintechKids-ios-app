@@ -27,7 +27,8 @@ class AppDelegate: ServicesApplicationDelegate {
                               didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         do {
-            try Dependencies.registerAll()
+            try CommonsDependencies.register()
+            try ModulesDependencies.register()
             Logger.info("All dependencies registered successfully")
         } catch {
             Logger.error("Error: Dependencies registered failed")

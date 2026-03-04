@@ -48,7 +48,6 @@ public extension DependenciesInjection {
         set { self[(any FHKServicesAPIProtocol).self] = newValue }
     }
     
-    // --------- APLICATION LAYER ---------
     /// (FHKAuth)
     var securityManager: any FHKSecurityProtocol {
         get { self[(any FHKSecurityProtocol).self] }
@@ -61,18 +60,10 @@ public extension DependenciesInjection {
         set { self[(any FHKConfigurationProtocol).self] = newValue }
     }
     
-    // --------- FOUNDATIONS LAYER ---------
     /// (FHKDesignSystem)
     var modalManager: any FHKModalProtocol {
         get { self[(any FHKModalProtocol).self] }
         set { self[(any FHKModalProtocol).self] = newValue }
-    }
-    
-    // --------- COMPOSITIONS LAYER ---------
-    /// (MAIN APP)
-    var languageManager: any FHKLanguageManagerProtocol {
-        get { self[(any FHKLanguageManagerProtocol).self] }
-        set { self[(any FHKLanguageManagerProtocol).self] = newValue }
     }
     
     /// (MAIN APP)
@@ -85,41 +76,5 @@ public extension DependenciesInjection {
     var camaraPermissionManager: any FHKPermissionProtocol {
         get { self[(any FHKPermissionProtocol).self] }
         set { self[(any FHKPermissionProtocol).self] = newValue }
-    }
-    
-    /// (MAIN APP) / Modules / Login
-    var loginRepository: any FHKLoginRepositoryProtocol {
-        get { self[(any FHKLoginRepositoryProtocol).self] }
-        set { self[(any FHKLoginRepositoryProtocol).self] = newValue }
-    }
-    
-    /// (MAIN APP) / Modules / Splash
-    var splashRepository: any FHKSplashRepositoryProtocol {
-        get { self[(any FHKSplashRepositoryProtocol).self] }
-        set { self[(any FHKSplashRepositoryProtocol).self] = newValue }
-    }
-    
-    /// (MAIN APP) / Modules / Register
-    var registerRepository: any RegisterRepositoryProtocol {
-        get { self[(any RegisterRepositoryProtocol).self] }
-        set { self[(any RegisterRepositoryProtocol).self] = newValue }
-    }
-    
-    /// (MAIN APP) / Modules / RegisterMember
-    var registerMembersRepository: any FHKRegisterMembersRepositoryProtocol {
-        get { self[(any FHKRegisterMembersRepositoryProtocol).self] }
-        set { self[(any FHKRegisterMembersRepositoryProtocol).self] = newValue }
-    }
-
-    /// (MAIN APP) / Modules / Home
-    var homeRepository: any FHKHomeRepositoryProtocol {
-        get { self[(any FHKHomeRepositoryProtocol).self] }
-        set { self[(any FHKHomeRepositoryProtocol).self] = newValue }
-    }
-    
-    /// (MAIN APP) / Modules / Language
-    var languageRepository: any FHKLanguageRepositoryProtocol {
-        get { self[(any FHKLanguageRepositoryProtocol).self] }
-        set { self[(any FHKLanguageRepositoryProtocol).self] = newValue }
     }
 }
