@@ -48,9 +48,9 @@ custom_rules:
     included: ".*(Screen|View|ViewState)\\.swift"
     severity: error
 
-  fhk_injection_safety:
-    name: "Violation Injection"
-    message: "Error dof Architecture: the Views, Screens and ViewStates they should not access 'inject'."
-    regex: "inject\\."
-    included: ".*(View|Screen|ViewState)\\.swift"
+  fhk_layer_violation_repository:
+    name: "Violation Repository"
+    message: "Error of Architecture: the Repository They should not import the next modules."
+    regex: "(?m)^import\\s+(FHKAuth|FHKConfig|FHKFirebase|FHKSupabase|FHKCore|FHKUtils|Supabase)"
+    included: ".*(Repository)\\.swift"
     severity: error

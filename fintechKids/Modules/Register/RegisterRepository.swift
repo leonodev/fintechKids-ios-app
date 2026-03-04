@@ -8,7 +8,6 @@
 import FHKDomain
 import FHKInjections
 import FHKStorage
-import FHKSupabase
 
 final class RegisterRepository: RegisterRepositoryProtocol {
     
