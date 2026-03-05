@@ -22,39 +22,40 @@ public class CommonsDependencies {
     
     static func register() throws {
         let deps = DependenciesInjection.shared
-        let storageManager = FHKStorageManager(userDefault: FHKUserDefault(),
-                                               keychain: FHKKeychainStorage())
+        
+        let storage = FHKStorageManager(userDefault: FHKUserDefault(),
+                                        keychain: FHKKeychainStorage())
         
         /// FHKStorage
-        deps.set(storageManager, for: FHKStorageManagerProtocol.self)
+        deps[\.storageManager] = storage
 
         /// FHKFirebase
-        deps.set(FHKRemoteConfigService(), for: (any FHKRemoteConfigManagerProtocol).self)
+        deps[\.firebaseRemoteConfigManager] = FHKRemoteConfigService()
         
         /// FHKFirebase
-        deps.set(FHKAnalyticsService(), for: FHKAnalyticsProtocol.self)
+        deps[\.firebaseAnalitycsManager] = FHKAnalyticsService()
         
         /// FHKAuth
-        deps.set(FHKSecurity(), for: FHKSecurityProtocol.self)
+        deps[\.securityManager] = FHKSecurity()
         
         /// FHKConfig
-        deps.set(FHKConfiguration(), for: (any FHKConfigurationProtocol).self)
+        deps[\.configManager] = FHKConfiguration()
         
         // FHKCore
-        deps.set(FHKServicesAPI(), for: (any FHKServicesAPIProtocol).self)
+        deps[\.servicesAPIManager] = FHKServicesAPI()
            
         // FHKAuth
         let supabaseClient = try makeSupabaseClient()
-        deps.set(FHKSupabase(client: supabaseClient), for: (any FHKAuthProtocol).self)
+        deps[\.supabaseManager] = FHKSupabase(client: supabaseClient)
         
         // FHKSupabase
-        deps.set(FHKSupabaseMembers(supabaseClient: supabaseClient), for: (any FHKSupabaseMembersProtocol).self)
+        deps[\.supabaseMembersManager] = FHKSupabaseMembers(supabaseClient: supabaseClient)
         
         /// FHKDesignSystem
-        deps.set(FHKModal(), for: FHKModalProtocol.self)
+        deps[\.modalManager] = FHKModal()
         
         /// Main App
-        deps.set(ToastService(), for: (any FHKToastProtocol).self)
+        deps[\.toastManager] = ToastService()
     }
 }
 

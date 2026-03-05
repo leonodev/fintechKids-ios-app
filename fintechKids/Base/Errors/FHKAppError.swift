@@ -14,6 +14,7 @@ enum FHKAppError: FHKError {
     case addMembersFailed
     case supabaseClientFailed
     case fetchMembersFailed
+    case userDefaultsFailed
  
     var logMessage: String {
         switch self {
@@ -32,6 +33,9 @@ enum FHKAppError: FHKError {
             
         case .fetchMembersFailed:
             return "Error: Fetching family members failed"
+            
+        case .userDefaultsFailed:
+            return "Error: UserDefaults"
         }
     }
     
@@ -52,6 +56,9 @@ enum FHKAppError: FHKError {
             
         case .fetchMembersFailed:
             return "msn_fetch_members_error".localized().capitalizingFirstLetter()
+            
+        default:
+            return ""
         }
     }
     

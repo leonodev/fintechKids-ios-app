@@ -16,16 +16,8 @@ final class RegisterRepository: RegisterRepositoryProtocol {
         inject.supabaseManager
     }
     
-    private var storageManager: any FHKStorageManagerProtocol {
-        inject.storageManager
-    }
-    
     @discardableResult
     func register(email: String, password: String) async throws -> FHKUserSession {
         try await supabase.register(email: email, password: password)
-    }
-    
-    func saveUserIntoKeychain(email: String) async throws {
-        try storageManager.saveKeychain(email, for: KeychainKeys.userKey)
     }
 }

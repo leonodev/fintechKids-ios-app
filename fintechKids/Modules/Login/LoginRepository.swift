@@ -57,4 +57,8 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
             requireBiometry: requiresBiometry
         )
     }
+    
+    func saveUserIntoKeychain(email: String) async throws {
+        try storage.saveKeychain(email, for: KeychainKeys.userKey)
+    }
 }

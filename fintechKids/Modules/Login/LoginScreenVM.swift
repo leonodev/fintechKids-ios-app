@@ -62,6 +62,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
             
         case .doLogin:
             await login()
+            await saveUserIntoKeychain()
             
         case .doLoginWithBiometrics:
             await loginWithBiometrics()
@@ -125,6 +126,16 @@ final class LoginScreenVM: FHKCore.ViewModel {
         } catch {
             viewState.loginState = .error(FHKSecurityError.saveTokenAccessKeychainFailed)
             informateError(FHKSecurityError.saveTokenAccessKeychainFailed)
+        }
+    }
+    
+    func saveUserIntoKeychain() async {
+        do {
+            try await repository.saveUserIntoKeychain(email: viewState.email)
+            Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
+        } catch {
+            viewState.loginState = .error(FHKSecurityError.saveUserMailKeychainFailed)
+            informateError(FHKSecurityError.saveUserMailKeychainFailed)
         }
     }
 

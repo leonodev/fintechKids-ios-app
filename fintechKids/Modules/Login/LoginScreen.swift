@@ -20,7 +20,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
             switch viewModel.viewState.loginState {
     
             case .loading:
-                LoadingView(msn: viewModel.viewState.msnLoading)
+                loadingView
                 
             default:
                 FormView
@@ -44,6 +44,10 @@ struct LoginScreen<VM: LoginScreenVM>: View {
             viewModel.viewState.email = "leonfrcol@gmail.com"
             viewModel.viewState.password = "1234567890"
         }
+    }
+    
+    var loadingView: some View {
+        LoadingView(msn: viewModel.viewState.msnLoading)
     }
     
     var FormView: some View {

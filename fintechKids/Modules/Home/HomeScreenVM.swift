@@ -10,6 +10,7 @@ import Observation
 import FHKCore
 import FHKInjections
 import FHKDomain
+import FHKDesignSystem
 
 @Observable
 final class HomeScreenVM: FHKCore.ViewModel {
@@ -43,6 +44,11 @@ final class HomeScreenVM: FHKCore.ViewModel {
         member.id
     }
     
+    public func getStateItemMemberComponent(member: FamilyMember) -> ComponentState {
+        let isInfoComplete = !member.member_name.isEmpty && !member.avatar_name.isEmpty
+        return isInfoComplete ? .loaded : .error
+    }
+    
     enum Action: Equatable {
         case fetchMemberFamily
     }
@@ -64,6 +70,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
 
             let currentMember = try await homeRepository.fetchMembers(email: email)
             familyMembers = currentMember
+            viewState.homeState = .finish(nil)
         } catch {
             viewState.homeState = .error(FHKAppError.fetchMembersFailed)
         }

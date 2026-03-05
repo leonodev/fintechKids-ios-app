@@ -15,42 +15,42 @@ public extension DependenciesInjection {
     
     /// Modules / Language
     var languageManager: any FHKLanguageManagerProtocol {
-        get { self[(any FHKLanguageManagerProtocol).self] }
-        set { self[(any FHKLanguageManagerProtocol).self] = newValue }
+        get { get((any FHKLanguageManagerProtocol).self) }
+        set { set(newValue, for: (any FHKLanguageManagerProtocol).self) }
     }
     
     var languageRepository: any FHKLanguageRepositoryProtocol {
-        get { self[(any FHKLanguageRepositoryProtocol).self] }
-        set { self[(any FHKLanguageRepositoryProtocol).self] = newValue }
+        get { get((any FHKLanguageRepositoryProtocol).self) }
+        set { set(newValue, for: (any FHKLanguageRepositoryProtocol).self) }
     }
     
     /// Modules / Login
     var loginRepository: any FHKLoginRepositoryProtocol {
-        get { self[(any FHKLoginRepositoryProtocol).self] }
-        set { self[(any FHKLoginRepositoryProtocol).self] = newValue }
+        get { get((any FHKLoginRepositoryProtocol).self) }
+        set { set(newValue, for: (any FHKLoginRepositoryProtocol).self) }
     }
     
     /// Modules / Splash
     var splashRepository: any FHKSplashRepositoryProtocol {
-        get { self[(any FHKSplashRepositoryProtocol).self] }
-        set { self[(any FHKSplashRepositoryProtocol).self] = newValue }
+        get { get((any FHKSplashRepositoryProtocol).self) }
+        set { set(newValue, for: (any FHKSplashRepositoryProtocol).self) }
     }
     
     /// Modules / Register
     var registerRepository: any RegisterRepositoryProtocol {
-        get { self[(any RegisterRepositoryProtocol).self] }
-        set { self[(any RegisterRepositoryProtocol).self] = newValue }
+        get { get((any RegisterRepositoryProtocol).self) }
+        set { set(newValue, for: (any RegisterRepositoryProtocol).self) }
     }
     
     /// Modules / RegisterMember
     var registerMembersRepository: any FHKRegisterMembersRepositoryProtocol {
-        get { self[(any FHKRegisterMembersRepositoryProtocol).self] }
-        set { self[(any FHKRegisterMembersRepositoryProtocol).self] = newValue }
+        get { get((any FHKRegisterMembersRepositoryProtocol).self) }
+        set { set(newValue, for: (any FHKRegisterMembersRepositoryProtocol).self) }
     }
 
     /// Modules / Home
     var homeRepository: any FHKHomeRepositoryProtocol {
-        get { self[(any FHKHomeRepositoryProtocol).self] }
-        set { self[(any FHKHomeRepositoryProtocol).self] = newValue }
+        get { get((any FHKHomeRepositoryProtocol).self) }
+        set { set(newValue, for: (any FHKHomeRepositoryProtocol).self) }
     }
 }

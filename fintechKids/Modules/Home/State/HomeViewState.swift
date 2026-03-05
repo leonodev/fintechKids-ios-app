@@ -9,10 +9,17 @@ import SwiftUI
 import Observation
 import FHKCore
 import FHKDesignSystem
+import FHKUtils
 
 @Observable
 public class HomeViewState {
     var options: [FloatMenu.Option]
+
+    public var errorNameMember: String {
+        "error_name_member".localized().capitalizingFirstLetter()
+    }
+    
+    public var stateItemMemberComponent: ComponentState = .skeleton
     
     private var _homeState: FHKCore.State<Never> = .loaded
     var homeState: FHKCore.State<Never> {

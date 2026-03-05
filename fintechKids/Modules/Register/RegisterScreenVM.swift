@@ -42,9 +42,6 @@ final class RegisterScreenVM: FHKCore.ViewModel {
             
             // Make register
             await registerUser()
-
-            // save user in Keychain
-            await saveUserIntoKeychain()
              
         case .onAppear:
             await onAppear()
@@ -70,16 +67,6 @@ final class RegisterScreenVM: FHKCore.ViewModel {
 }
 
 private extension RegisterScreenVM {
-    
-    func saveUserIntoKeychain() async {
-        do {
-            try await repository.saveUserIntoKeychain(email: viewState.emailFamily)
-            Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
-        } catch {
-            viewState.registerState = .error(FHKSecurityError.saveUserMailKeychainFailed)
-            informateError(FHKSecurityError.saveUserMailKeychainFailed)
-        }
-    }
     
     func informateError(_ error: any FHKError) {
         if error.isShouldTrack {

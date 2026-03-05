@@ -16,23 +16,33 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     
     var body: some View {
         ScreenContainer(title: Routes.home.title) {
-              
-            VStack {
-                
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Metas asignadas a:")
-                            .foregroundStyle(Color.white)
-                            
-                        StarCoinView(text: "StarCoins", balance: "1,250")
+            contentMainView
+        }
+        .background(FHKColor.indigo)
+        .onAppear {
+            Task {
+                await viewModel.action(.fetchMemberFamily)
+            }
+        }
+    }
+
+    var contentMainView: some View {
+        VStack {
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Metas asignadas a:")
+                        .foregroundStyle(Color.white)
                         
-                        familyMembersList
-                    }
-                    .padding(.leading, 20)
+                    //StarCoinView(text: "StarCoins", textError: "Error", balance: "1,250")
                     
-                    Spacer()
+                    familyMembersList
                 }
-    
+                .padding(.leading, 20)
+                
+                Spacer()
+            }
+
 //                BasicCardView { _ in
 //                    print("Navegando al perfil del usuario: ")
 //                } content: {
@@ -41,7 +51,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
 //                        Text("Título de la Card")
 //                            .font(.headline)
 //                            .foregroundColor(.white)
-//                        
+//
 //                        // Descripción o cuerpo
 //                        Text("Este es un ejemplo de una tarjeta básica en SwiftUI con el fondo degradado que pediste.")
 //                            .font(.subheadline)
@@ -49,44 +59,48 @@ struct HomeScreen<VM: HomeScreenVM>: View {
 //                    }
 //                }
 //                .padding()
-                Spacer()
-                
-                FloatMenu(options: viewModel.viewState.options, callback: { index in
-                    switch index {
-                    case 0:
-                        router.navigate(to: .members)
-                        
-                    default:
-                        break
-                    }
-                    print(index)
-                })
-            }
-            .onAppear {
-                Task {
-                    await viewModel.action(.fetchMemberFamily)
+            Spacer()
+            
+            FloatMenu(options: viewModel.viewState.options, callback: { index in
+                switch index {
+                case 0:
+                    router.navigate(to: .members)
+                    
+                default:
+                    break
                 }
-                
+                print(index)
+            })
+        }
+//        .onAppear {
+//            Task {
+//                await viewModel.action(.fetchMemberFamily)
+//            }
+            
 //                if camaraPermissionManager.status != .authorized {
 //                    showPermissions = true
 //                }
-            }
-            .fullScreenCover(isPresented: $showPermissions) {
-                PermissionRequestView(provider: viewModel.camaraPermissionManager)
-            }
+//        }
+        .fullScreenCover(isPresented: $showPermissions) {
+            PermissionRequestView(provider: viewModel.camaraPermissionManager)
         }
-        .background(FHKColor.indigo)
     }
     
     var familyMembersList: some View {
         ScrollView {
             LazyHStack(spacing: FHKSpace.space16) {
-                ForEach(viewModel.familyMembers) { member in
-                    FHKMemberItem(id: viewModel.getId(member: member),
-                                  avatarName: viewModel.getAvatarMember(member: member),
-                                  nameMember: viewModel.getNameMember(member: member),
-                                  action: { member in
-                    })
+                if viewModel.familyMembers.isEmpty {
+                    FHKMemberItem.skeletons(count: 3)
+                } else {
+                    ForEach(viewModel.familyMembers) { member in
+                        FHKMemberItem(id: viewModel.getId(member: member),
+                                      avatarName: viewModel.getAvatarMember(member: member),
+                                      nameMember: viewModel.getNameMember(member: member),
+                                      nameMemberError: viewModel.viewState.errorNameMember,
+                                      state: viewModel.getStateItemMemberComponent(member: member),
+                                      action: { member in
+                        })
+                    }
                 }
             }
             .padding(.top)
@@ -135,6 +149,23 @@ struct BasicCardView<Content: View, T>: View {
         .cornerRadius(20)
         .onTapGesture {
             action(data)
+        }
+    }
+}
+
+
+extension FHKMemberItem {
+    /// Genera una vista con el número de esqueletos deseado.
+    @ViewBuilder
+    public static func skeletons(count: Int = 3) -> some View {
+        // Usamos un HStack o el contenedor que suelas usar en tu UI
+        HStack(spacing: FHKSpace.space16) {
+            ForEach(0..<count, id: \.self) { _ in
+                FHKMemberItem(
+                    state: .skeleton,
+                    action: { _ in } // Acción vacía para el esqueleto
+                )
+            }
         }
     }
 }

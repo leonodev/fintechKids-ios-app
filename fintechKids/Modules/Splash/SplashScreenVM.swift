@@ -33,7 +33,7 @@ final class SplashScreenVM: FHKCore.ViewModel {
     }
     
     @MainActor
-    public func readLanguageCurrent() async {
+    private func readLanguageCurrent() async {
         do {
             let isLanguageSelected = try await splashRepository.readLanguageCurrent()
 
