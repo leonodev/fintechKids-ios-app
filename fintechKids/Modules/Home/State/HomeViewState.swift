@@ -34,4 +34,9 @@ public class HomeViewState {
             .init(image: .init(systemName: "star.fill"), color: FHKColor.yellow)
         ]
     }
+    
+    public func getStateItemMemberComponent(memberName: String, avatarName: String) -> ComponentState {
+        let isInfoComplete = !memberName.isEmpty && !avatarName.isEmpty
+        return isInfoComplete ? .loaded : .error
+    }
 }

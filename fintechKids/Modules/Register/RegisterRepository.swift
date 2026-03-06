@@ -21,3 +21,4 @@ final class RegisterRepository: RegisterRepositoryProtocol {
         try await supabase.register(email: email, password: password)
     }
 }
+

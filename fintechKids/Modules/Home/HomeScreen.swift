@@ -23,6 +23,10 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             Task {
                 await viewModel.action(.fetchMemberFamily)
             }
+            
+            //                if camaraPermissionManager.status != .authorized {
+            //                    showPermissions = true
+            //                }
         }
     }
 
@@ -43,22 +47,8 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 Spacer()
             }
 
-//                BasicCardView { _ in
-//                    print("Navegando al perfil del usuario: ")
-//                } content: {
-//                    VStack(alignment: .leading, spacing: 15) {
-//                        // Título de la tarjeta
-//                        Text("Título de la Card")
-//                            .font(.headline)
-//                            .foregroundColor(.white)
-//
-//                        // Descripción o cuerpo
-//                        Text("Este es un ejemplo de una tarjeta básica en SwiftUI con el fondo degradado que pediste.")
-//                            .font(.subheadline)
-//                            .foregroundColor(.white.opacity(0.8))
-//                    }
-//                }
-//                .padding()
+            cardViewExample
+
             Spacer()
             
             FloatMenu(options: viewModel.viewState.options, callback: { index in
@@ -72,15 +62,6 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 print(index)
             })
         }
-//        .onAppear {
-//            Task {
-//                await viewModel.action(.fetchMemberFamily)
-//            }
-            
-//                if camaraPermissionManager.status != .authorized {
-//                    showPermissions = true
-//                }
-//        }
         .fullScreenCover(isPresented: $showPermissions) {
             PermissionRequestView(provider: viewModel.camaraPermissionManager)
         }
@@ -97,7 +78,8 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                                       avatarName: viewModel.getAvatarMember(member: member),
                                       nameMember: viewModel.getNameMember(member: member),
                                       nameMemberError: viewModel.viewState.errorNameMember,
-                                      state: viewModel.getStateItemMemberComponent(member: member),
+                                      state: viewModel.viewState.getStateItemMemberComponent(memberName: viewModel.getNameMember(member: member),
+                                                                                             avatarName: viewModel.getAvatarMember(member: member)),
                                       action: { member in
                         })
                     }
@@ -105,6 +87,25 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             }
             .padding(.top)
         }
+    }
+    
+    var cardViewExample: some View {
+        BasicCardView { _ in
+            print("Navegando al perfil del usuario: ")
+        } content: {
+            VStack(alignment: .leading, spacing: 15) {
+                // Título de la tarjeta
+                Text("Título de la Card")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                
+                // Descripción o cuerpo
+                Text("Este es un ejemplo de una tarjeta básica en SwiftUI con el fondo degradado que pediste.")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+            }
+        }
+        .padding()
     }
 }
 

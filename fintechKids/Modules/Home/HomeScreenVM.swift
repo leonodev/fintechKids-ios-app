@@ -10,8 +10,7 @@ import Observation
 import FHKCore
 import FHKInjections
 import FHKDomain
-import FHKDesignSystem
-
+ 
 @Observable
 final class HomeScreenVM: FHKCore.ViewModel {
     var viewState: HomeViewState = .init()
@@ -30,24 +29,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
     }
     
     // Other Properties
-    public var familyMembers: [FamilyMember] = []
-    
-    public func getNameMember(member: FamilyMember) -> String {
-        member.member_name
-    }
-    
-    public func getAvatarMember(member: FamilyMember) -> String {
-        member.avatar_name
-    }
-    
-    public func getId(member: FamilyMember) -> UUID {
-        member.id
-    }
-    
-    public func getStateItemMemberComponent(member: FamilyMember) -> ComponentState {
-        let isInfoComplete = !member.member_name.isEmpty && !member.avatar_name.isEmpty
-        return isInfoComplete ? .loaded : .error
-    }
+    public var familyMembers: [MemberEntity] = []
     
     enum Action: Equatable {
         case fetchMemberFamily
@@ -74,5 +56,17 @@ final class HomeScreenVM: FHKCore.ViewModel {
         } catch {
             viewState.homeState = .error(FHKAppError.fetchMembersFailed)
         }
+    }
+    
+    func getNameMember(member: MemberEntity) -> String {
+        member.memberName
+    }
+    
+    func getAvatarMember(member: MemberEntity) -> String {
+        member.avatarName
+    }
+    
+    func getId(member: MemberEntity) -> UUID {
+        member.id
     }
 }

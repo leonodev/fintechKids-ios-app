@@ -30,7 +30,7 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     }
     
     // Other Properties
-    public var familyMembers: [FamilyMember] = []
+    public var familyMembers: [MemberEntity] = []
     public var isEnableBtnRegisterMember: Bool {
         !viewState.familyName.isEmpty && !familyMembers.isEmpty
     }
@@ -39,7 +39,7 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
         case newMember
         case clearInfomember(avatarName: String)
         case registerMembers
-        case removeMember(member: FamilyMember)
+        case removeMember(member: MemberEntity)
     }
     
     func action(_ action: Action) async {
@@ -66,10 +66,10 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
             return
         }
         
-        let newMember = FamilyMember(email: emailParent,
+       
+        let newMember = MemberEntity(emailParent: emailParent,
                                      memberName: viewState.memberNewName,
-                                     avatarImage: viewState.selectedAvatarName)
-        
+                                     avatarName: viewState.selectedAvatarName)
         familyMembers.append(newMember)
     }
     
@@ -90,19 +90,19 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     }
     
     @MainActor
-    func removeMember(_ member: FamilyMember) async {
+    func removeMember(_ member: MemberEntity) async {
         familyMembers.removeAll(where: { $0.id == member.id })
     }
     
-    func getNameMember(member: FamilyMember) -> String {
-        member.member_name
+    func getNameMember(member: MemberEntity) -> String {
+        member.memberName
     }
     
-    func getAvatarMember(member: FamilyMember) -> String {
-        member.avatar_name
+    func getAvatarMember(member: MemberEntity) -> String {
+        member.avatarName
     }
     
-    func getIconName(member: FamilyMember) -> String {
+    func getIconName(member: MemberEntity) -> String {
         member.iconName
     }
     

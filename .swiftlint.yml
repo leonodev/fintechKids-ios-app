@@ -36,7 +36,7 @@ reporter: "xcode"              # Para que los avisos salgan integrados en Xcode
 custom_rules:
   fhk_layer_violation_viewmodel:
     name: "Violation ViewModel"
-    message: "Error of Architecture: a ViewModel You should not import Infrastructure modules (Storage/Firebase/Supabase). must use a repository."
+    message: "Error of Architecture: a ViewModel You should not import Infrastructure modules or DesignSystem (Storage/Firebase/Supabase). must use a repository."
     regex: "(?m)^import\\s+(FHKStorage|FHKSupabase|Supabase|FHKAuth|FHKConfig|FHKDesignSystem|SwiftUI)"
     included: ".*(VM|ViewModel)\\.swift"
     severity: error

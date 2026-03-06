@@ -20,7 +20,7 @@ final class RegisterMembersRepository: FHKRegisterMembersRepositoryProtocol {
         inject.supabaseMembersManager
     }
     
-    func registerMembers(members: [FamilyMember]) async throws {
+    func registerMembers(members: [MemberEntity]) async throws {
         try await supabaseMembers.addMembers(members: members)
     }
     

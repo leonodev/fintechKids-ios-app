@@ -20,7 +20,7 @@ final class HomeRepository: FHKHomeRepositoryProtocol {
         inject.storageManager
     }
     
-    func fetchMembers(email: String) async throws -> [FamilyMember] {
+    func fetchMembers(email: String) async throws -> [MemberEntity] {
         try await supabaseMembers.fetchFamilyMembers(parentEmail: email)
     }
     
