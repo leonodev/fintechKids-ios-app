@@ -586,6 +586,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "fintechKids/Configuration/Info-Dev.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = FintechKids;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to the camera so you can scan your receipts and documents.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Necesitamos tu FaceID para que inicies sesión de forma segura y rápida.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -625,6 +626,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "fintechKids/Configuration/Info-Pro.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = FintechKids;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to the camera so you can scan your receipts and documents.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Necesitamos tu FaceID para que inicies sesión de forma segura y rápida.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
