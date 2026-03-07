@@ -1,10 +1,9 @@
 //
-//  RegisterFeaturesDependencies.swift
+//  ModulesRegisterDependencies.swift
 //  fintechKids
 //
 //  Created by Fredy Leon on 4/3/26.
 //
-
 
 import Foundation
 import FHKInjections
@@ -22,30 +21,26 @@ import FHKSupabase
 public class ModulesDependencies {
     
     static func register() throws {
-        let deps = DependenciesInjection.shared
-        
-        /// Main App (Depend of Storage)
-        deps[\.languageManager] = FHKLanguageManager()
-        
-        /// Main App
-        deps[\.camaraPermissionManager] = CameraPermissionService()
+        /// Main App (fhkLanguage Depend of Storage)
+        inject.fhkLanguage = FHKLanguageManager()
+        inject.fhkCameraPermission = CameraPermissionService()
         
         /// Main App / Modules / Login
-        deps[\.loginRepository] = LoginRepository()
+        inject.fhkLoginRepository = LoginRepository()
         
         /// Main App / Modules / Splash
-        deps[\.splashRepository] = SplashRepository()
+        inject.fhkSplashRepository = SplashRepository()
         
         /// Main App / Modules / Register
-        deps[\.registerRepository] = RegisterRepository()
+        inject.fhkRegisterRepository = RegisterRepository()
         
         /// Main App / Modules / Register Members
-        deps[\.registerMembersRepository] = RegisterMembersRepository()
+        inject.fhkRegisterMembersRepository = RegisterMembersRepository()
 
         /// Main App / Modules / Home
-        deps[\.homeRepository] = HomeRepository()
+        inject.fhkHomeRepository = HomeRepository()
         
         /// Main App / Modules / Language
-        deps[\.languageRepository] = LanguageRepository()
+        inject.fhkLanguageRepository = LanguageRepository()
     }
 }

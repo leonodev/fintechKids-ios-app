@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Observation
-import FHKCore
+import FHKDomain
 import FHKUtils
 
 @Observable

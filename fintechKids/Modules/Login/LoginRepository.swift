@@ -11,30 +11,34 @@ import FHKStorage
 
 final class LoginRepository: FHKLoginRepositoryProtocol {
     
-    private var supabase: any FHKAuthProtocol {
-        inject.supabaseManager
+    private var fhkSupabase: any FHKAuthProtocol {
+        inject.fhkSupabase
     }
     
-    private var storage: any FHKStorageManagerProtocol {
-        inject.storageManager
+    private var fhkStorage: any FHKStorageManagerProtocol {
+        inject.fhkStorage
+    }
+    
+    private var fhkConfiguration: any FHKConfigurationProtocol {
+        inject.fhkConfiguration
     }
     
     var hasSavedToken: Bool {
-        storage.exists(key: KeychainKey.authToken.rawValue)
+        fhkStorage.exists(key: KeychainKey.authToken.rawValue)
     }
 
     func login(email: String, pwd: String) async throws -> String? {
-        let userSession = try await supabase.login(email: email, password: pwd)
+        let userSession = try await fhkSupabase.login(email: email, password: pwd)
         return userSession.accessToken
     }
     
     func loginWithBiometrics(prompt: String) async throws {
-        guard storage.isBiometryAvailable() else {
+        guard fhkStorage.isBiometryAvailable() else {
             throw FHKBiometryError.notAvailable
         }
         
         // Try reading the Keychain token
-        guard let savedToken = try storage.readKeychain(
+        guard let savedToken = try fhkStorage.readKeychain(
                     String.self,
                     for: KeychainKey.authToken.rawValue,
                     prompt: prompt
@@ -43,15 +47,15 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
         }
         
         // If FaceID accepted, we went directly into the session
-        try await supabase.setSession(accessToken: savedToken)
-        let isAuthenticated = await supabase.isUserAuthenticated
+        try await fhkSupabase.setSession(accessToken: savedToken)
+        let isAuthenticated = await fhkSupabase.isUserAuthenticated
         if !isAuthenticated {
             throw FHKBiometryError.notAvailable
         }
     }
     
     func saveAuthToken(_ token: String, requiresBiometry: Bool) throws {
-        try storage.saveKeychain(
+        try fhkStorage.saveKeychain(
             token,
             for: KeychainKey.authToken.rawValue,
             requireBiometry: requiresBiometry
@@ -59,6 +63,11 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
     }
     
     func saveUserIntoKeychain(email: String) async throws {
-        try storage.saveKeychain(email, for: KeychainKeys.userKey)
+        try fhkStorage.saveKeychain(email, for: KeychainKeys.userKey)
+        refreshParentMail()
+    }
+    
+    func refreshParentMail() {
+        fhkConfiguration.updateParentMail()
     }
 }

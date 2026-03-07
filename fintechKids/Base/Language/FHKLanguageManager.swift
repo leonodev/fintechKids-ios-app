@@ -18,7 +18,7 @@ public final class FHKLanguageManager: FHKLanguageManagerProtocol {
     
     // Properties inject
     private var storageManager: any FHKStorageManagerProtocol {
-        inject.storageManager
+        inject.fhkStorage
     }
     
     init() {

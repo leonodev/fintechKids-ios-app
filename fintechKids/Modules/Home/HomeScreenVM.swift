@@ -16,20 +16,24 @@ final class HomeScreenVM: FHKCore.ViewModel {
     var viewState: HomeViewState = .init()
     
     // Properties Injection
-    private var homeRepository: FHKHomeRepositoryProtocol {
-        inject.homeRepository
+    private var fhkHomeRepository: FHKHomeRepositoryProtocol {
+        inject.fhkHomeRepository
     }
     
-    public var toastManager: any FHKToastProtocol {
-        inject.toastManager
+    public var fhkToast: any FHKToastProtocol {
+        inject.fhkToast
     }
     
-    public var camaraPermissionManager: any FHKPermissionProtocol {
-        inject.camaraPermissionManager
+    public var fhkCameraPermission: any FHKPermissionProtocol {
+        inject.fhkCameraPermission
     }
     
     // Other Properties
     public var familyMembers: [MemberEntity] = []
+    
+    public var parentMail: String? {
+        fhkHomeRepository.getParentMail()
+    }
     
     enum Action: Equatable {
         case fetchMemberFamily
@@ -45,16 +49,15 @@ final class HomeScreenVM: FHKCore.ViewModel {
     
     func fetchMemberFamily() async {
         do {
-            guard let email = await homeRepository.getParentMail() else {
-                viewState.homeState = .error(FHKSecurityError.readUserMailKeychainFailed)
+            guard let email = parentMail else {
+                showNotificationError(msn: viewState.errorRecoveryInfoUser)
                 return
             }
 
-            let currentMember = try await homeRepository.fetchMembers(email: email)
+            let currentMember = try await fhkHomeRepository.fetchMembers(email: email)
             familyMembers = currentMember
-            viewState.homeState = .finish(nil)
         } catch {
-            viewState.homeState = .error(FHKAppError.fetchMembersFailed)
+            showNotificationError(msn: viewState.errorFetchMembers)
         }
     }
     
@@ -68,5 +71,15 @@ final class HomeScreenVM: FHKCore.ViewModel {
     
     func getId(member: MemberEntity) -> UUID {
         member.id
+    }
+}
+
+private extension HomeScreenVM {
+    func showNotificationError(msn: String) {
+        fhkToast.show(info: FHKToastInfo(
+            type: .error,
+            message: msn,
+            hasIcon: true)
+        )
     }
 }

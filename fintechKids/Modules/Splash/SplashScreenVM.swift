@@ -15,8 +15,8 @@ final class SplashScreenVM: FHKCore.ViewModel {
     var viewState: SplashViewState = .init()
     
     // Properties Injected
-    private var splashRepository: any FHKSplashRepositoryProtocol {
-        inject.splashRepository
+    private var fhkSplashRepository: any FHKSplashRepositoryProtocol {
+        inject.fhkSplashRepository
     }
     
     public enum Action: Equatable {
@@ -35,13 +35,13 @@ final class SplashScreenVM: FHKCore.ViewModel {
     @MainActor
     private func readLanguageCurrent() async {
         do {
-            let isLanguageSelected = try await splashRepository.readLanguageCurrent()
+            let isLanguageSelected = try await fhkSplashRepository.readLanguageCurrent()
 
             viewState.splashState = isLanguageSelected != nil
-                ? .finish(.goToLogin)
-                : .finish(.goToLanguage)
+            ? .loaded(nav: .goToLogin)
+            : .loaded(nav: .goToLanguage)
         } catch {
-            viewState.splashState = .finish(.goToLanguage)
+            viewState.splashState = .loaded(nav: .goToLanguage)
         }
     }
 }

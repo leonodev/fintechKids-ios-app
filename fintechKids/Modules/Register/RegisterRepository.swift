@@ -12,13 +12,13 @@ import FHKStorage
 final class RegisterRepository: RegisterRepositoryProtocol {
     
     // Properties Injected
-    private var supabase: any FHKAuthProtocol {
-        inject.supabaseManager
+    private var fhkSupabase: any FHKAuthProtocol {
+        inject.fhkSupabase
     }
     
     @discardableResult
     func register(email: String, password: String) async throws -> FHKUserSession {
-        try await supabase.register(email: email, password: password)
+        try await fhkSupabase.register(email: email, password: password)
     }
 }
 

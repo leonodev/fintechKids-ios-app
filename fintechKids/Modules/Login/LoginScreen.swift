@@ -9,6 +9,7 @@ import SwiftUI
 import Lottie
 import FHKDesignSystem
 import FHKCore
+import FHKDomain
 import FHKUtils
 
 struct LoginScreen<VM: LoginScreenVM>: View {
@@ -22,20 +23,27 @@ struct LoginScreen<VM: LoginScreenVM>: View {
             case .loading:
                 loadingView
                 
-            default:
-                FormView
+            case .error:
+                errorView
+              
+            case .finish, .loaded:
+                loadedView
             }
         }
         .onChange(of: viewModel.viewState.loginState) { _, state in
             switch state {
-            case .finish:
-                router.navigate(to: .home)
+            case .finish(let result):
                 
-            case .error:
-                viewModel.modalManager.show {
-                    modalInformationError
+                switch result {
+                case .success:
+                    router.navigate(to: .home)
+                    
+                case .error:
+                    viewModel.fhkModal.show {
+                        modalInformationError
+                    }
                 }
-                
+
             default:
                 break
             }
@@ -50,7 +58,16 @@ struct LoginScreen<VM: LoginScreenVM>: View {
         LoadingView(msn: viewModel.viewState.msnLoading)
     }
     
-    var FormView: some View {
+    var errorView: some View {
+        ErrorView(title: viewModel.viewState.titleError,
+                  msnError: viewModel.viewState.msnError,
+                  titleBtn: viewModel.viewState.titleBtnError,
+                  onActionPressed: {
+            viewModel.viewState.loginState = .loaded
+        })
+    }
+    
+    var loadedView: some View {
         ZStack {
             
             VStack(spacing: 20) {
@@ -136,7 +153,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 .font(.caption)
                 
                 Button(action: {
-                    viewModel.toastService.show(
+                    viewModel.fhkToast.show(
                         info: FHKToastInfo(type: .notification,
                                            message: "Prueba de notificacion si incluso a doble linea o mas ...",
                                            hasIcon: true),
@@ -165,7 +182,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                                type: .error,
                                confirmButtonText: viewModel.viewState.titleBtnError,
                                 confirmAction: {
-                viewModel.modalManager.dismiss()
+                viewModel.fhkModal.dismiss()
             })
         }
     }

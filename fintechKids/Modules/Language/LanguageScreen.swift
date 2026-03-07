@@ -23,10 +23,10 @@ struct LanguageScreen<VM: LanguageScreenVM>: View {
             switch viewModel.viewState.languageState {
             
             case .loaded:
-                contentMainView
+                loadedView
                 
-            default:
-                LoadingView(msn: viewModel.viewState.msnLoading)
+            case .loading:
+                loadingView
             }
         }
         .onAppear {
@@ -36,12 +36,16 @@ struct LanguageScreen<VM: LanguageScreenVM>: View {
             }
         }
     }
+    
+    var loadingView: some View {
+        LoadingView(msn: viewModel.viewState.msnLoading)
+    }
 }
 
 // MARK: config view language
 extension LanguageScreen {
     
-    private var contentMainView: some View {
+    private var loadedView: some View {
         ZStack {
             LottieView(animationName: Lotties.language,
                        loopMode: .loop,

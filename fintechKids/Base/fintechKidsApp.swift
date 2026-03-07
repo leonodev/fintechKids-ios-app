@@ -18,12 +18,12 @@ struct FintechKidsApp: App {
     @State private var appRouter = NavigationRouter<Routes>()
     private let deepLinkProcessor: DeepLinkRouterProtocol = DeepLinkRouter()
     
-    private var toastManager: any FHKToastProtocol {
-        inject.toastManager
+    private var fhkToast: any FHKToastProtocol {
+        inject.fhkToast
     }
     
-    private var modalManager: any FHKModalProtocol {
-        inject.modalManager
+    private var fhkModal: any FHKModalProtocol {
+        inject.fhkModal
     }
     
     var body: some Scene {
@@ -46,17 +46,17 @@ struct FintechKidsApp: App {
                         .onOpenURL { url in
                             deepLinkProcessor.handle(url: url)
                         }
-                        .modifier(FHKModalPresenter(manager: modalManager)) // draw overlay by modal blur
+                        .modifier(FHKModalPresenter(manager: fhkModal)) // draw overlay by modal blur
                     }
                 }
                 .animation(.default, value: appState.isJailbroken)
                 
                 VStack {
-                    if toastManager.isVisible, let info = toastManager.currentToast {
+                    if fhkToast.isVisible, let info = fhkToast.currentToast {
                         ToastView(
                             isVisible: Binding(
-                                get: { toastManager.isVisible },
-                                set: { _ in toastManager.dismiss() }
+                                get: { fhkToast.isVisible },
+                                set: { _ in fhkToast.dismiss() }
                             ),
                             info: info
                         )

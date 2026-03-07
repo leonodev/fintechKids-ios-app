@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FHKDesignSystem
+import FHKDomain
 import FHKCore
 import FHKUtils
 
@@ -16,30 +17,40 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
     
     var body: some View {
         ScreenContainer(title: Routes.members.title) {
-            switch viewModel.viewState.addMemberState {
-    
-            default:
-                contentView
+            switch viewModel.viewState.registerMembersState {
+                
+            case .loading:
+                loadingView
+                
+            case .finish, .loaded:
+                loadedView
             }
         }
-        .onChange(of: viewModel.viewState.addMemberState) { _, state in
+        .onChange(of: viewModel.viewState.registerMembersState) { _, state in
             switch state {
-            case .error:
-                viewModel.modalManager.show {
-                    modalInformativeError
-                }
-            case .finish:
-                viewModel.modalManager.show {
-                    modalInformativeSuccess
-                }
+            case .finish(let result):
                 
+                switch result {
+                case .success:
+                    viewModel.fhkModal.show {
+                        modalInformativeSuccess
+                    }
+                case .error:
+                    viewModel.fhkModal.show {
+                        modalInformativeError
+                    }
+                }
             default:
                 break
             }
         }
     }
     
-    var contentView: some View {
+    var loadingView: some View {
+        LoadingView(msn: viewModel.viewState.msnLoading)
+    }
+    
+    var loadedView: some View {
         VStack {
             Spacer()
             
@@ -72,7 +83,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
     
     var nameFamilyField: some View {
         VStack(alignment: .leading) {
-    
+            
             GradientBorderField(text: $viewModel.viewState.familyName,
                                 placeholder: viewModel.viewState.familyNamePlaceholder)
             .padding(.top, FHKSize.size04)
@@ -82,48 +93,48 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
     var addMembers: some View {
         HStack {
             Spacer()
-        HStack {
-            Text(viewModel.viewState.titleBtnAddMember)
-                .font(.PangramSans.bold(FHKSize.size16))
-                .foregroundColor(FHKColor.lunarSand)
-                .padding(.vertical)
-                .padding(.leading)
-            
-            Image(systemName: "person")
-                .resizable()
-                .scaledToFit()
-                .frame(width: FHKSize.size20, height: FHKSize.size20)
-                .foregroundColor(FHKColor.lunarSand)
-                .padding(.trailing)
-        }
-        .background(FHKColor.lunarSand.opacity(0.2))
-        .cornerRadius(FHKSize.size16)
-        .onTapGesture {
-
-            viewModel.modalManager.show {
-                VStack(alignment: .leading, spacing: FHKSpace.space08) {
-                    
-                    HStack {
-                        Spacer()
-                        Text(viewModel.viewState.titleAddNewMember)
-                            .font(.PangramSans.bold(FHKSize.size24))
-                            .foregroundColor(FHKColor.lunarSand.opacity(0.9))
-                            .padding(.top, FHKSize.size08)
-                            .padding(.bottom, FHKSize.size24)
-                        Spacer()
-                    }
+            HStack {
+                Text(viewModel.viewState.titleBtnAddMember)
+                    .font(.PangramSans.bold(FHKSize.size16))
+                    .foregroundColor(FHKColor.lunarSand)
+                    .padding(.vertical)
+                    .padding(.leading)
+                
+                Image(systemName: "person")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: FHKSize.size20, height: FHKSize.size20)
+                    .foregroundColor(FHKColor.lunarSand)
+                    .padding(.trailing)
+            }
+            .background(FHKColor.lunarSand.opacity(0.2))
+            .cornerRadius(FHKSize.size16)
+            .onTapGesture {
+                
+                viewModel.fhkModal.show {
+                    VStack(alignment: .leading, spacing: FHKSpace.space08) {
                         
-                    GradientBorderField(text: $viewModel.viewState.memberNewName,
-                                        placeholder: viewModel.viewState.memberNewNamePlaceholder)
-                    .padding(.top, FHKSize.size04)
+                        HStack {
+                            Spacer()
+                            Text(viewModel.viewState.titleAddNewMember)
+                                .font(.PangramSans.bold(FHKSize.size24))
+                                .foregroundColor(FHKColor.lunarSand.opacity(0.9))
+                                .padding(.top, FHKSize.size08)
+                                .padding(.bottom, FHKSize.size24)
+                            Spacer()
+                        }
                         
-                    NewMemberContentView(viewModel: viewModel,
-                                        selectedAvatarName: $viewModel.viewState.selectedAvatarName)
+                        GradientBorderField(text: $viewModel.viewState.memberNewName,
+                                            placeholder: viewModel.viewState.memberNewNamePlaceholder)
+                        .padding(.top, FHKSize.size04)
+                        
+                        NewMemberContentView(viewModel: viewModel,
+                                             selectedAvatarName: $viewModel.viewState.selectedAvatarName)
                     }
                 }
+            }
+            .padding(.top, FHKSize.size08)
         }
-        .padding(.top, FHKSize.size08)
-    }
         .frame(maxWidth: .infinity)
     }
     
@@ -136,7 +147,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                                         avatarName: viewModel.getAvatarMember(member: member),
                                         iconName: viewModel.getIconName(member: member),
                                         action: {
-                        viewModel.modalManager.show {
+                        viewModel.fhkModal.show {
                             VStack(alignment: .leading, spacing: FHKSpace.space08) {
                                 FHKConfirmationView(title: viewModel.viewState.titleRemoveMember,
                                                     message: viewModel.viewState.msnRemoveMember(
@@ -147,11 +158,11 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                                                     confirmAction: {
                                     Task {
                                         await viewModel.removeMember(member)
-                                        viewModel.modalManager.dismiss()
+                                        viewModel.fhkModal.dismiss()
                                     }
                                 },
                                                     cancelAction: {
-                                    viewModel.modalManager.dismiss()
+                                    viewModel.fhkModal.dismiss()
                                 })
                             }
                         }
@@ -180,8 +191,8 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                                message: viewModel.viewState.msnUserError,
                                type: .error,
                                confirmButtonText: viewModel.viewState.btnUserError,
-                                confirmAction: {
-                viewModel.modalManager.dismiss()
+                               confirmAction: {
+                viewModel.fhkModal.dismiss()
                 router.pop()
             })
         }
@@ -193,8 +204,8 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                                message: viewModel.viewState.msnMembersAddedSuccess,
                                type: .success,
                                confirmButtonText: viewModel.viewState.titleModalMembersAddedSuccess,
-                                confirmAction: {
-                viewModel.modalManager.dismiss()
+                               confirmAction: {
+                viewModel.fhkModal.dismiss()
                 router.pop()
             })
         }
@@ -205,7 +216,7 @@ internal struct NewMemberContentView: View {
     @Bindable var viewModel: RegisterMembersScreenVM
     @Binding var selectedAvatarName: String
     private let sizeAvatar: CGFloat = FHKSize.size120
-
+    
     var body: some View {
         VStack(alignment: .leading) {
             
@@ -215,7 +226,7 @@ internal struct NewMemberContentView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: FHKSpace.space16) {
                     ForEach(viewModel.viewState.avatarIList, id: \.self) { avatar in
-                        AvatarView(imageName: avatar.image, size: sizeAvatar)
+                        AvatarView(image: avatar.image, size: sizeAvatar)
                             .overlay(
                                 Circle()
                                     .stroke(selectedAvatarName == avatar.name
@@ -236,7 +247,7 @@ internal struct NewMemberContentView: View {
                 Task {
                     await viewModel.action(.newMember)
                     await viewModel.action(.clearInfomember(avatarName: AvatarType.boy_9.name))
-                    viewModel.modalManager.dismiss()
+                    viewModel.fhkModal.dismiss()
                 }
             })
             .padding(.top, FHKSize.size20)

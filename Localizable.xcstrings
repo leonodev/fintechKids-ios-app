@@ -746,6 +746,35 @@
         }
       }
     },
+    "msn_recovery_info_user_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "we couldn't retrieve your information from your device."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "no hemos podido recuperar tu información desde tu dispositivo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nous n'avons pas pu récupérer vos informations depuis votre appareil."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non siamo riusciti a recuperare le tue informazioni dal tuo dispositivo."
+          }
+        }
+      }
+    },
     "msn_register_user_error" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -44,13 +44,13 @@ custom_rules:
   fhk_layer_violation_view:
     name: "Violation View"
     message: "Error of Architecture: the Views/Screens/ViewStates They should not import logic or infrastructure modules."
-    regex: "(?m)^import\\s+(FHKInjections|FHKAuth|FHKConfig|FHKStorage|FHKFirebase|FHKSupabase|FHKDomain|Supabase)"
+    regex: "(?m)^import\\s+(FHKInjections|FHKAuth|FHKConfig|FHKStorage|FHKFirebase|FHKSupabase|Supabase)"
     included: ".*(Screen|View|ViewState)\\.swift"
     severity: error
 
   fhk_layer_violation_repository:
     name: "Violation Repository"
     message: "Error of Architecture: the Repository They should not import the next modules."
-    regex: "(?m)^import\\s+(FHKAuth|FHKConfig|FHKFirebase|FHKSupabase|FHKCore|FHKUtils|Supabase)"
+    regex: "(?m)^import\\s+(FHKAuth|FHKFirebase|FHKSupabase|FHKCore|FHKUtils|Supabase)"
     included: ".*(Repository)\\.swift"
     severity: error

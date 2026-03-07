@@ -17,16 +17,16 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     var viewState: RegisterMembersViewState = .init()
     
     // Properties injected
-    private var registerMembersRepository: any FHKRegisterMembersRepositoryProtocol {
-        inject.registerMembersRepository
+    private var fhkRegisterMembersRepository: any FHKRegisterMembersRepositoryProtocol {
+        inject.fhkRegisterMembersRepository
     }
     
-    public var modalManager: any FHKModalProtocol {
-        inject.modalManager
+    public var fhkModal: any FHKModalProtocol {
+        inject.fhkModal
     }
     
-    private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.firebaseAnalitycsManager
+    private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
+        inject.fhkFirebaseAnalitycs
     }
     
     // Other Properties
@@ -61,12 +61,11 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     
     @MainActor
     func newMember() async {
-        guard let emailParent = await registerMembersRepository.getParentMail() else {
-            viewState.addMemberState = .error(FHKSecurityError.readUserMailKeychainFailed)
+        guard let emailParent = await fhkRegisterMembersRepository.getParentMail() else {
+            viewState.registerMembersState = .finish(result: .error)
             return
         }
-        
-       
+           
         let newMember = MemberEntity(emailParent: emailParent,
                                      memberName: viewState.memberNewName,
                                      avatarName: viewState.selectedAvatarName)
@@ -80,12 +79,14 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     
     @MainActor
     func registerMembers() async {
+        viewState.registerMembersState = .loading
+        
         do {
-            try await registerMembersRepository.registerMembers(members: familyMembers)
-            viewState.addMemberState = .finish(nil)
+            try await fhkRegisterMembersRepository.registerMembers(members: familyMembers)
+            viewState.registerMembersState = .finish(result: .success)
         } catch {
-            viewState.addMemberState = .error(FHKAppError.addMembersFailed)
             informateError(FHKAppError.addMembersFailed)
+            viewState.registerMembersState = .finish(result: .error)
         }
     }
     
@@ -116,7 +117,7 @@ private extension RegisterMembersScreenVM {
     
     func informateError(_ error: any FHKError) {
         if error.isShouldTrack {
-            analitycsManager.track(.error(.init(from: error)))
+            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
         viewState.titleUserError = error.titleUI

@@ -60,3 +60,9 @@ final class ToastService: NSObject, ApplicationService, FHKToastProtocol {
         }
     }
 }
+
+public extension FHKToastProtocol {
+    func show(info: FHKToastInfo, duration: Double = 5.0) {
+        self.show(info: info, duration: duration)
+    }
+}

@@ -12,12 +12,12 @@ import FHKStorage
 final class SplashRepository: FHKSplashRepositoryProtocol {
     
     // Properties Injected
-    private var storageManager: any FHKStorageManagerProtocol {
-        inject.storageManager
+    private var fhkStorage: any FHKStorageManagerProtocol {
+        inject.fhkStorage
     }
     
     func readLanguageCurrent() async throws -> String? {
-        try await storageManager.readUserDefaults(String.self,
-                                                  forKey: UserDefaultsKeys.languageKey)
+        try await fhkStorage.readUserDefaults(String.self,
+                                              forKey: UserDefaultsKeys.languageKey)
     }
 }

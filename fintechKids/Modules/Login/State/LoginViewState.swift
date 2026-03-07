@@ -6,7 +6,6 @@
 //
 
 import FHKUtils
-import FHKCore
 import FHKDesignSystem
 
 public struct LoginViewState {
@@ -54,11 +53,11 @@ public struct LoginViewState {
     
     // errors screen
     public var titleError: String {
-        "title_error".localized().capitalizingFirstLetter()
+        "start_sesion".localized().capitalizingFirstLetter()
     }
     
     public var msnError: String {
-        "invalid_credentials_error".localized().capitalizingFirstLetter()
+        "msn_operation_error".localized().capitalizingFirstLetter()
     }
 
     public var titleBtnError: String {
@@ -78,11 +77,14 @@ public struct LoginViewState {
     }
  
     // States screen
-    private var _loginState: FHKCore.State<Never> = .loaded
-    var loginState: FHKCore.State<Never> {
-        get { _loginState }
-        set {_loginState = newValue }
+    public enum State: Equatable {
+        case loading
+        case loaded
+        case finish(result: ActionResult)
+        case error
     }
+    
+    public var loginState: State = .loaded
     
     // Other properties
     var isBtnContinueEnable: FHKButtonComponent.State {

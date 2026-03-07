@@ -8,6 +8,7 @@
 import SwiftUI
 import FHKDesignSystem
 import FHKCore
+import FHKDomain
 
 struct RegisterScreen<VM: RegisterScreenVM>: View {
     @State var viewModel: VM
@@ -18,26 +19,33 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
             switch viewModel.viewState.registerState {
                 
             case .loading:
-                LoadingView(msn: viewModel.viewState.msnLoading)
+                loadingView
                 
-            default:
-                formView
+            case .loaded, .finish:
+                loadedView
             }
         }
         .onChange(of: viewModel.viewState.registerState) { _, state in
             switch state {
-            case .finish(nil), .error:
-                viewModel.modalManager.show {
-                    modalConfirmation
+            case .finish(.success):
+                viewModel.fhkModal.show {
+                    resultModalSuccess
                 }
-                
+            case .finish(result: .error):
+                viewModel.fhkModal.show {
+                    resultModalError
+                }
             default:
                 break
             }
         }
     }
     
-    var formView: some View {
+    var loadingView: some View {
+        LoadingView(msn: viewModel.viewState.msnLoading)
+    }
+    
+    var loadedView: some View {
         VStack(alignment: .leading) {
             Spacer()
             
@@ -99,15 +107,27 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
         })
     }
     
-    var modalConfirmation: some View {
+    var resultModalSuccess: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.viewState.titleRegisterConfirmation,
-                               message: viewModel.viewState.msnRegisterConfirmation,
-                               type: viewModel.viewState.stateRegisterOperation,
+            FHKInformationView(title: viewModel.viewState.titleUserRegister,
+                               message: viewModel.viewState.msnRegisterSuccess,
+                               type: .success,
                                confirmButtonText: viewModel.viewState.titleButtonContinue,
                                 confirmAction: {
-                viewModel.modalManager.dismiss()
+                viewModel.fhkModal.dismiss()
                 router.pop()
+            })
+        }
+    }
+    
+    var resultModalError: some View {
+        VStack(alignment: .leading, spacing: FHKSpace.space08) {
+            FHKInformationView(title: viewModel.viewState.titleUserRegister,
+                               message: viewModel.viewState.msnRegisterFail,
+                               type: .error,
+                               confirmButtonText: viewModel.viewState.titleBtnOperationError,
+                                confirmAction: {
+                viewModel.fhkModal.dismiss()
             })
         }
     }

@@ -12,24 +12,24 @@ import FHKStorage
 final class LanguageRepository: FHKLanguageRepositoryProtocol {
     
     // Properties Injected
-    private var languageManager: any FHKLanguageManagerProtocol {
-        inject.languageManager
+    private var fhkLanguage: any FHKLanguageManagerProtocol {
+        inject.fhkLanguage
     }
     
-    private var remoteConfigManager: any FHKRemoteConfigManagerProtocol {
-        inject.firebaseRemoteConfigManager
+    private var fhkFirebaseRemoteConfig: any FHKRemoteConfigManagerProtocol {
+        inject.fhkFirebaseRemoteConfig
     }
     
     func fetchConfig() async -> [String] {
         do {
-            try await remoteConfigManager.fetchConfig()
-            return await remoteConfigManager.enabledLanguages
+            try await fhkFirebaseRemoteConfig.fetchConfig()
+            return await fhkFirebaseRemoteConfig.enabledLanguages
         } catch {
             return []
         }
     }
 
     func changeLanguageApp(_ language: String) async {
-        languageManager.changeLanguage(to: language)
+        fhkLanguage.changeLanguage(to: language)
     }
 }

@@ -15,7 +15,7 @@ public extension String {
     func localized() -> String {
         
         var bundle: Bundle {
-            inject.languageManager.currentBundle
+            inject.fhkLanguage.currentBundle
         }
         return bundle.localizedString(forKey: self, value: nil, table: "Localizable")
     }

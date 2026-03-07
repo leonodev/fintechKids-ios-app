@@ -12,19 +12,19 @@ import FHKStorage
 final class HomeRepository: FHKHomeRepositoryProtocol {
     
     // Properties Injection
-    private var supabaseMembers: FHKSupabaseMembersProtocol {
-        inject.supabaseMembersManager
+    private var fhkSupabaseMembers: FHKSupabaseMembersProtocol {
+        inject.fhkSupabaseMembers
     }
     
-    private var storageManager: FHKStorageManagerProtocol {
-        inject.storageManager
+    private var fhkConfiguration: any FHKConfigurationProtocol {
+        inject.fhkConfiguration
     }
     
     func fetchMembers(email: String) async throws -> [MemberEntity] {
-        try await supabaseMembers.fetchFamilyMembers(parentEmail: email)
+        try await fhkSupabaseMembers.fetchFamilyMembers(parentEmail: email)
     }
     
-    public func getParentMail() async -> String? {
-        try? storageManager.readKeychain(String.self, for: KeychainKeys.userKey, prompt: nil)
+    public func getParentMail() -> String? {
+        fhkConfiguration.parentMail
     }
 }

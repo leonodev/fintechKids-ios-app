@@ -1,70 +1,62 @@
 //
-//  CommonsDependencies+Extension.swift
+//  MainRegisterDependencies.swift
 //  fintechKids
 //
 //  Created by Fredy Leon on 29/12/25.
 //
 
 import Foundation
+import Supabase
 import FHKInjections
-import FHKUtils
 import FHKConfig
-import FHKDesignSystem
 import FHKFirebase
 import FHKStorage
 import FHKAuth
 import FHKCore
-import Supabase
 import FHKDomain
 import FHKSupabase
 
 public class CommonsDependencies {
     
     static func register() throws {
-        let deps = DependenciesInjection.shared
-        
         let storage = FHKStorageManager(userDefault: FHKUserDefault(),
                                         keychain: FHKKeychainStorage())
         
         /// FHKStorage
-        deps[\.storageManager] = storage
+        inject.fhkStorage = storage
 
         /// FHKFirebase
-        deps[\.firebaseRemoteConfigManager] = FHKRemoteConfigService()
-        
-        /// FHKFirebase
-        deps[\.firebaseAnalitycsManager] = FHKAnalyticsService()
+        inject.fhkFirebaseRemoteConfig = FHKRemoteConfigService()
+        inject.fhkFirebaseAnalitycs = FHKAnalyticsService()
         
         /// FHKAuth
-        deps[\.securityManager] = FHKSecurity()
+        inject.fhkSecurity = FHKSecurity()
         
         /// FHKConfig
-        deps[\.configManager] = FHKConfiguration()
+        inject.fhkConfiguration = FHKConfiguration()
         
         // FHKCore
-        deps[\.servicesAPIManager] = FHKServicesAPI()
+        inject.fhkServicesAPI = FHKServicesAPI()
            
         // FHKAuth
         let supabaseClient = try makeSupabaseClient()
-        deps[\.supabaseManager] = FHKSupabase(client: supabaseClient)
+        inject.fhkSupabase = FHKSupabase(client: supabaseClient)
         
         // FHKSupabase
-        deps[\.supabaseMembersManager] = FHKSupabaseMembers(supabaseClient: supabaseClient)
+        inject.fhkSupabaseMembers = FHKSupabaseMembers(supabaseClient: supabaseClient)
         
         /// FHKDesignSystem
-        deps[\.modalManager] = FHKModal()
+        inject.fhkModal = FHKModal()
         
         /// Main App
-        deps[\.toastManager] = ToastService()
+        inject.fhkToast = ToastService()
     }
 }
 
 extension CommonsDependencies {
     
     static func makeSupabaseClient() throws -> SupabaseClient {
-        let deps = DependenciesInjection.shared
-
-        let urlString = try deps.servicesAPIManager.getURL(
+        let urlString = try inject.fhkServicesAPI.getURL(
             environment: .production,
             country: .spanish,
             serviceKey: .supabase
@@ -74,8 +66,7 @@ extension CommonsDependencies {
             throw SupabaseError.invalidURL(urlString)
         }
 
-        let anonKey = try deps.securityManager.getAnonKey()
-
+        let anonKey = try inject.fhkSecurity.getAnonKey()
         return SupabaseClient(supabaseURL: url, supabaseKey: anonKey)
     }
 }

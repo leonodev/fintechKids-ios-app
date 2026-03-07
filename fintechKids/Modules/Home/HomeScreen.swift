@@ -16,7 +16,12 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     
     var body: some View {
         ScreenContainer(title: Routes.home.title) {
-            contentMainView
+            
+            switch viewModel.viewState.homeState {
+                
+            case .loaded:
+                loadedView
+            }
         }
         .background(FHKColor.indigo)
         .onAppear {
@@ -30,45 +35,40 @@ struct HomeScreen<VM: HomeScreenVM>: View {
         }
     }
 
-    var contentMainView: some View {
+    var loadedView: some View {
         VStack {
+    
+            headerView
             
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Metas asignadas a:")
-                        .foregroundStyle(Color.white)
-                        
-                    //StarCoinView(text: "StarCoins", textError: "Error", balance: "1,250")
-                    
-                    familyMembersList
-                }
-                .padding(.leading, 20)
-                
-                Spacer()
-            }
-
-            cardViewExample
-
+            //StarCoinView(text: "StarCoins", textError: "Error", balance: "1,250")
+            
+            membersView
+            
             Spacer()
             
-            FloatMenu(options: viewModel.viewState.options, callback: { index in
-                switch index {
-                case 0:
-                    router.navigate(to: .members)
-                    
-                default:
-                    break
-                }
-                print(index)
-            })
+            cardViewExampleView
+            
+            floatMenuView
         }
         .fullScreenCover(isPresented: $showPermissions) {
-            PermissionRequestView(provider: viewModel.camaraPermissionManager)
+            PermissionRequestView(provider: viewModel.fhkCameraPermission)
         }
     }
     
-    var familyMembersList: some View {
-        ScrollView {
+    var headerView: some View {
+        HStack {
+            Text("Metas asignadas a:")
+                .foregroundStyle(Color.white)
+            
+            Spacer()
+            
+            AvatarView(name: viewModel.parentMail ?? "--", size: FHKSize.size52)
+        }
+        .padding()
+    }
+    
+    var membersView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: FHKSpace.space16) {
                 if viewModel.familyMembers.isEmpty {
                     FHKMemberItem.skeletons(count: 3)
@@ -78,18 +78,21 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                                       avatarName: viewModel.getAvatarMember(member: member),
                                       nameMember: viewModel.getNameMember(member: member),
                                       nameMemberError: viewModel.viewState.errorNameMember,
-                                      state: viewModel.viewState.getStateItemMemberComponent(memberName: viewModel.getNameMember(member: member),
-                                                                                             avatarName: viewModel.getAvatarMember(member: member)),
+                                      state: viewModel.viewState.getStateItemMemberComponent(
+                                        memberName: viewModel.getNameMember(member: member),
+                                        avatarName: viewModel.getAvatarMember(member: member)
+                                      ),
                                       action: { member in
                         })
                     }
                 }
             }
-            .padding(.top)
+            .fixedSize(horizontal: false, vertical: true)
         }
+        .padding()
     }
     
-    var cardViewExample: some View {
+    var cardViewExampleView: some View {
         BasicCardView { _ in
             print("Navegando al perfil del usuario: ")
         } content: {
@@ -106,6 +109,20 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             }
         }
         .padding()
+    }
+    
+    var floatMenuView: some View {
+        FloatMenu(options: viewModel.viewState.options,
+                  callback: { index in
+            switch index {
+            case 0:
+                router.navigate(to: .members)
+                
+            default:
+                break
+            }
+            print(index)
+        })
     }
 }
 
@@ -154,7 +171,6 @@ struct BasicCardView<Content: View, T>: View {
     }
 }
 
-
 extension FHKMemberItem {
     /// Genera una vista con el número de esqueletos deseado.
     @ViewBuilder
@@ -164,7 +180,7 @@ extension FHKMemberItem {
             ForEach(0..<count, id: \.self) { _ in
                 FHKMemberItem(
                     state: .skeleton,
-                    action: { _ in } // Acción vacía para el esqueleto
+                    action: { _ in }
                 )
             }
         }

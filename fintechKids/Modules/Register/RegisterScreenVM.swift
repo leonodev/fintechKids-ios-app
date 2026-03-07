@@ -17,16 +17,16 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     var viewState: RegisterViewState = .init()
     
     // Properties Injected
-    private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.firebaseAnalitycsManager
+    private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
+        inject.fhkFirebaseAnalitycs
     }
     
-    private var repository: any RegisterRepositoryProtocol {
-        inject.registerRepository
+    private var fhkRegisterRepository: any RegisterRepositoryProtocol {
+        inject.fhkRegisterRepository
     }
     
-    public var modalManager: any FHKModalProtocol {
-        inject.modalManager
+    public var fhkModal: any FHKModalProtocol {
+        inject.fhkModal
     }
     
     enum Action: Equatable {
@@ -39,8 +39,6 @@ final class RegisterScreenVM: FHKCore.ViewModel {
         switch action {
             
         case .registerUser:
-            
-            // Make register
             await registerUser()
              
         case .onAppear:
@@ -52,15 +50,17 @@ final class RegisterScreenVM: FHKCore.ViewModel {
     
     @MainActor
     func registerUser() async {
+        viewState.registerState = .loading
+        
         do {
-            let response = try await repository.register(email: viewState.emailFamily, password: viewState.password)
-            viewState.registerState = .finish(nil)
+            let response = try await fhkRegisterRepository.register(email: viewState.emailFamily, password: viewState.password)
+            viewState.registerState = .finish(result: .success)
             Logger.info("USER REGISTERED SUCCESS \(response)")
         } catch let error as FHKDomainError {
-            viewState.registerState = .error(error)
+            viewState.registerState = .finish(result: .error)
             informateError(error)
         } catch {
-            viewState.registerState = .error(FHKAppError.registerUserFailed)
+            viewState.registerState = .finish(result: .error)
             informateError(FHKAppError.registerUserFailed)
         }
     }
@@ -70,7 +70,7 @@ private extension RegisterScreenVM {
     
     func informateError(_ error: any FHKError) {
         if error.isShouldTrack {
-            analitycsManager.track(.error(.init(from: error)))
+            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
         Logger.error(error.logMessage)

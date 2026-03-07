@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import FHKCore
+import FHKDomain
 
 public struct FHKModalPresenter: ViewModifier {
     var manager: FHKModalProtocol

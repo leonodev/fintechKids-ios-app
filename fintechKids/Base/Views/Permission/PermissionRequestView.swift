@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import FHKCore
+import FHKDomain
 import FHKDesignSystem
 
 public struct PermissionRequestView: View {

@@ -7,7 +7,6 @@
 
 import SwiftUI
 import FHKUtils
-import FHKCore
 import FHKDesignSystem
 
 public struct LanguageViewState {
@@ -40,10 +39,11 @@ public struct LanguageViewState {
     
     // Properties Accessibility
     public var menuLanguageIdentifier: String = "menu_language"
-    
-    private var _languageState: FHKCore.State<Never> = .loading
-    var languageState: FHKCore.State<Never> {
-        get { _languageState }
-        set { _languageState = newValue }
+
+    public enum State: Equatable {
+        case loading
+        case loaded
     }
+    
+    public var languageState: State = .loading
 }

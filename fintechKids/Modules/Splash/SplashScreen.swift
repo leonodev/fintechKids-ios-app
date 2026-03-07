@@ -17,25 +17,26 @@ struct SplashScreen<VM: SplashScreenVM>: View {
     var body: some View {
         ScreenContainer {
             switch viewModel.viewState.splashState {
+                 
             default:
-                infoSplashVew
+                loadedView
             }
         }
         .onChange(of: viewModel.viewState.splashState) { _, state in
             switch state {
-            case .finish(.goToLogin):
+            case .loaded(nav: .goToLogin):
                 router.navigate(to: .login)
                 
-            case .finish(.goToLanguage):
+            case .loaded(nav: .goToLanguage):
                 router.navigate(to: .language)
                 
-            default:
+            case .loaded(nav: .none):
                 break
             }
         }
     }
     
-    var infoSplashVew: some View {
+    var loadedView: some View {
         VStack(spacing: 20) {
             Spacer()
             

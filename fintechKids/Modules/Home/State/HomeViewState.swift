@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Observation
-import FHKCore
 import FHKDesignSystem
 import FHKUtils
 
@@ -19,13 +18,21 @@ public class HomeViewState {
         "error_name_member".localized().capitalizingFirstLetter()
     }
     
+    public var errorRecoveryInfoUser: String {
+        "msn_recovery_info_user_error".localized().capitalizingFirstLetter()
+    }
+    
+    public var errorFetchMembers: String {
+        "msn_fetch_members_error".localized().capitalizingFirstLetter()
+    }
+    
     public var stateItemMemberComponent: ComponentState = .skeleton
     
-    private var _homeState: FHKCore.State<Never> = .loaded
-    var homeState: FHKCore.State<Never> {
-        get { _homeState }
-        set {_homeState = newValue}
+    public enum State: Equatable {
+        case loaded
     }
+    
+    public var homeState: State = .loaded
 
     init() {
         options = [

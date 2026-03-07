@@ -6,21 +6,26 @@
 //
 
 import FHKUtils
-import FHKCore
+
+public enum ActionResult {
+    case success
+    case error
+}
 
 public struct SplashViewState {
     // Properties Screen View
     public let titleApp: String = "title_name_app".localized()
     public let subtitleApp: String = "title_kids".localized()
     
-    public enum Navigation: Equatable {
+    public enum StateAction: Equatable {
         case goToLanguage
         case goToLogin
+        case none
     }
     
-    private var _splashState: FHKCore.State<Navigation> = .loaded
-    var splashState: FHKCore.State<Navigation> {
-        get { _splashState }
-        set { _splashState = newValue }
+    public enum State: Equatable {
+        case loaded(nav: StateAction)
     }
+    
+    public var splashState: State = .loaded(nav: .none)
 }

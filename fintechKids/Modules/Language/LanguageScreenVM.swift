@@ -18,12 +18,12 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
     var languages: [String] = []
     
     // Injections Dependency
-    private var analitycsManager: any FHKAnalyticsProtocol {
-        inject.firebaseAnalitycsManager
+    private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
+        inject.fhkFirebaseAnalitycs
     }
     
-    private var languageRepository: any FHKLanguageRepositoryProtocol {
-        inject.languageRepository
+    private var fhkLanguageRepository: any FHKLanguageRepositoryProtocol {
+        inject.fhkLanguageRepository
     }
     
     public enum Action: Equatable {
@@ -66,11 +66,12 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
 private extension LanguageScreenVM {
     
     private func loadRemoteConfig() async {
-        let remoteLanguage = await languageRepository.fetchConfig()
+        let remoteLanguage = await fhkLanguageRepository.fetchConfig()
         
         if remoteLanguage.isEmpty {
-            viewState.languageState = .error(FHKSystemError.remoteConfigFailed)
             informateError(FHKSystemError.remoteConfigFailed)
+            // display screen loaded for selection language
+            viewState.languageState = .loaded
         } else {
             languages = remoteLanguage
             viewState.languageState = .loaded
@@ -83,22 +84,22 @@ private extension LanguageScreenVM {
     }
     
     private func changeLanguageApp(_ language: String) async {
-        await languageRepository.changeLanguageApp(language)
+        await fhkLanguageRepository.changeLanguageApp(language)
     }
     
     private func informateError(_ error: any FHKError) {
         if error.isShouldTrack {
-            analitycsManager.track(.error(.init(from: error)))
+            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
         Logger.error(error.logMessage)
     }
     
     private func sendAnalitycOpenScreen() async {
-        analitycsManager.track(.screenView(Screens.Language.screen))
+        fhkFirebaseAnalitycs.track(.screenView(Screens.Language.screen))
     }
     
     private func sendAnalitycSelectLanguage(btn: AnalyticsEvent.Button) async {
-        analitycsManager.track(.tapButton(btn))
+        fhkFirebaseAnalitycs.track(.tapButton(btn))
     }
 }
