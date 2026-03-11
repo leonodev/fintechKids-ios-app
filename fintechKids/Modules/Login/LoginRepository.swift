@@ -68,6 +68,6 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
     }
     
     func refreshParentMail() {
-        fhkConfiguration.updateParentMail()
+        fhkConfiguration.refreshParentMail()
     }
 }

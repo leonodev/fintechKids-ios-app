@@ -79,7 +79,7 @@ private extension LanguageScreenVM {
     }
     
     private func setImageFlag(code: String?) {
-        let languageCode = code ?? LanguageType.es.code()
+        let languageCode = code ?? LanguageType.es.code
         viewState.selectedFlag =  languageCode.languageTypeToImageFlag
     }
     

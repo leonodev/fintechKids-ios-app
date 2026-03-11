@@ -37,10 +37,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
 
     var loadedView: some View {
         VStack {
-    
             headerView
-            
-            //StarCoinView(text: "StarCoins", textError: "Error", balance: "1,250")
             
             membersView
             
@@ -57,14 +54,17 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     
     var headerView: some View {
         HStack {
-            Text("Metas asignadas a:")
+            Text(viewModel.viewState.titleMemberFamily)
                 .foregroundStyle(Color.white)
             
             Spacer()
             
             AvatarView(name: viewModel.parentMail ?? "--", size: FHKSize.size52)
+                .onTapGesture {
+                    router.navigate(to: .profile)
+                }
         }
-        .padding()
+        .padding(.horizontal)
     }
     
     var membersView: some View {
@@ -82,7 +82,8 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                                         memberName: viewModel.getNameMember(member: member),
                                         avatarName: viewModel.getAvatarMember(member: member)
                                       ),
-                                      action: { member in
+                                      action: { uuid in
+                            router.navigate(to: .memberDetail(member))
                         })
                     }
                 }
@@ -118,6 +119,9 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             case 0:
                 router.navigate(to: .members)
                 
+            case 1:
+                router.navigate(to: .goal(id: "asda"))
+                
             default:
                 break
             }
@@ -137,20 +141,25 @@ struct BasicCardView<Content: View, T>: View {
     let content: Content
     let data: T?
     let action: (T?) -> Void
+    let isSelected: Bool
 
     init(data: T,
+         isSelected: Bool = false,
          action: @escaping (T?) -> Void,
          @ViewBuilder content: () -> Content
     ) {
         self.data = data
+        self.isSelected = isSelected
         self.action = action
         self.content = content()
     }
 
-    init(action: @escaping (T?) -> Void,
+    init(isSelected: Bool = false,
+         action: @escaping (T?) -> Void,
          @ViewBuilder content: () -> Content
     ) where T == Any {
         self.data = nil
+        self.isSelected = isSelected
         self.action = action
         self.content = content()
     }
@@ -165,6 +174,10 @@ struct BasicCardView<Content: View, T>: View {
             FHKColor.lunarSand.opacity(0.08)
         )
         .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(isSelected ? Color.purple : Color.clear, lineWidth: 2)
+        )
         .onTapGesture {
             action(data)
         }

@@ -54,6 +54,9 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
                        contentMode: .scaleAspectFit)
             .frame(height: 200)
             
+            // field name family
+            nameFamilyField
+            
             // text informative
             informativeText
 
@@ -67,6 +70,15 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
             Spacer()
         }
         .padding()
+    }
+    
+    var nameFamilyField: some View {
+        VStack(alignment: .leading) {
+            
+            GradientBorderField(text: $viewModel.viewState.familyName,
+                                placeholder: viewModel.viewState.familyNamePlaceholder)
+            .padding(.top, FHKSize.size04)
+        }
     }
     
     var informativeText: some View {
@@ -109,8 +121,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     
     var resultModalSuccess: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.viewState.titleUserRegister,
-                               message: viewModel.viewState.msnRegisterSuccess,
+            FHKInformationView(message: viewModel.viewState.msnRegisterSuccess,
                                type: .success,
                                confirmButtonText: viewModel.viewState.titleButtonContinue,
                                 confirmAction: {
@@ -122,8 +133,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     
     var resultModalError: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.viewState.titleUserRegister,
-                               message: viewModel.viewState.msnRegisterFail,
+            FHKInformationView(message: viewModel.viewState.msnRegisterFail,
                                type: .error,
                                confirmButtonText: viewModel.viewState.titleBtnOperationError,
                                 confirmAction: {

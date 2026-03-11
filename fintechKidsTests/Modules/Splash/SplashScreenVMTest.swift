@@ -18,14 +18,14 @@ final class SplashScreenVMTest: XCTestCase {
         let mock = SplashRepositoryMock()
         
         await inject.withOverrides {
-            inject[\.splashRepository] = mock
+            inject.fhkSplashRepository = mock
             
             let sut = SplashScreenVM()
             await sut.action(.readLanguageCurrent)
             
             let state = sut.viewState.splashState
             
-            XCTAssertTrue(state == .finish(.goToLanguage))
+            XCTAssertTrue(state == .loaded(nav: .goToLanguage))
             XCTAssertTrue(mock.isCalledReadLanguageCurrent)
             XCTAssertTrue(mock.readLanguageCurrentCallCount == 1) 
         }
@@ -36,14 +36,14 @@ final class SplashScreenVMTest: XCTestCase {
         mock.mockLanguageResponse = "es"
         
         await inject.withOverrides {
-            inject[\.splashRepository] = mock
+            inject.fhkSplashRepository = mock
             
             let sut = SplashScreenVM()
             await sut.action(.readLanguageCurrent)
             
             let state = sut.viewState.splashState
             
-            XCTAssertTrue(state == .finish(.goToLogin))
+            XCTAssertTrue(state == .loaded(nav: .goToLogin))
             XCTAssertTrue(mock.isCalledReadLanguageCurrent)
             XCTAssertTrue(mock.readLanguageCurrentCallCount == 1)
         }
@@ -54,14 +54,14 @@ final class SplashScreenVMTest: XCTestCase {
         mock.mockError = FHKAppError.userDefaultsFailed
         
         await inject.withOverrides {
-            inject[\.splashRepository] = mock
+            inject.fhkSplashRepository = mock
             
             let sut = SplashScreenVM()
             await sut.action(.readLanguageCurrent)
             
             let state = sut.viewState.splashState
             
-            XCTAssertTrue(state == .finish(.goToLanguage))
+            XCTAssertTrue(state == .loaded(nav: .goToLanguage))
             XCTAssertTrue(mock.isCalledReadLanguageCurrent)
             XCTAssertTrue(mock.readLanguageCurrentCallCount == 1)
         }

@@ -57,9 +57,6 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
             // informative text
             informativeText
             
-            // field name family
-            nameFamilyField
-            
             // add new members
             addMembers
             
@@ -79,15 +76,6 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
             .font(.PangramSans.bold(FHKSize.size16))
             .foregroundColor(FHKColor.lunarSand.opacity(0.5))
             .padding(.vertical)
-    }
-    
-    var nameFamilyField: some View {
-        VStack(alignment: .leading) {
-            
-            GradientBorderField(text: $viewModel.viewState.familyName,
-                                placeholder: viewModel.viewState.familyNamePlaceholder)
-            .padding(.top, FHKSize.size04)
-        }
     }
     
     var addMembers: some View {
@@ -149,8 +137,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                                         action: {
                         viewModel.fhkModal.show {
                             VStack(alignment: .leading, spacing: FHKSpace.space08) {
-                                FHKConfirmationView(title: viewModel.viewState.titleRemoveMember,
-                                                    message: viewModel.viewState.msnRemoveMember(
+                                FHKConfirmationView(message: viewModel.viewState.msnRemoveMember(
                                                         name: viewModel.getNameMember(member: member)
                                                     ),
                                                     confirmButtonText: viewModel.viewState.titleBtnConfirm,
@@ -187,8 +174,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
     
     var modalInformativeError: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.viewState.titleUserError,
-                               message: viewModel.viewState.msnUserError,
+            FHKInformationView(message: viewModel.viewState.msnUserError,
                                type: .error,
                                confirmButtonText: viewModel.viewState.btnUserError,
                                confirmAction: {
@@ -200,8 +186,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
     
     var modalInformativeSuccess: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.viewState.titleMembersAddedSuccess,
-                               message: viewModel.viewState.msnMembersAddedSuccess,
+            FHKInformationView(message: viewModel.viewState.msnMembersAddedSuccess,
                                type: .success,
                                confirmButtonText: viewModel.viewState.titleModalMembersAddedSuccess,
                                confirmAction: {

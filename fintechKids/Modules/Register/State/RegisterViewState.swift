@@ -13,15 +13,16 @@ import FHKDesignSystem
 @Observable
 public class RegisterViewState {
     // Properties Observable
+    public var familyName = ""
     public var emailFamily = ""
     public var password = ""
     
     // Properties View
+    public var familyNamePlaceholder = "family_name".localized().capitalizingFirstLetter()
     public var emailFamilyPlaceholder = "email".localized().capitalizingFirstLetter()
     public var passwordPlaceholder = "password".localized().capitalizingFirstLetter()
     public var titleRegisterBtn = "register".localized().uppercased()
     public var msnLoading = ""
-    public var titleUserRegister = ""
     public var msnRegisterSuccess = "msn_register_user_success".localized().capitalizingFirstLetter()
     public var titleButtonContinue = "continue".localized().uppercased()
     public var registerEmailInstruction = "register_email_instruction".localized().capitalizingFirstLetter()
@@ -53,7 +54,7 @@ public class RegisterViewState {
     }
     
     var isBtnContinueEnable: FHKButtonComponent.State {
-        !emailFamily.isEmpty && !password.isEmpty && emailFamily.isValidEmail
+        !familyName.isEmpty && !emailFamily.isEmpty && !password.isEmpty && emailFamily.isValidEmail
         ? .enabled
         : .disabled
     }

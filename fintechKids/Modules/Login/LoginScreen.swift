@@ -177,8 +177,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
     
     var modalInformationError: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(title: viewModel.viewState.titleError,
-                               message: viewModel.viewState.msnError,
+            FHKInformationView(message: viewModel.viewState.msnError,
                                type: .error,
                                confirmButtonText: viewModel.viewState.titleBtnError,
                                 confirmAction: {

@@ -7,11 +7,6 @@
 
 import FHKUtils
 
-public enum ActionResult {
-    case success
-    case error
-}
-
 public struct SplashViewState {
     // Properties Screen View
     public let titleApp: String = "title_name_app".localized()

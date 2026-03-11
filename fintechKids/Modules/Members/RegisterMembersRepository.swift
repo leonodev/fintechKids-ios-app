@@ -27,4 +27,9 @@ final class RegisterMembersRepository: FHKRegisterMembersRepositoryProtocol {
     public func getParentMail() async -> String? {
         fhkConfiguration.parentMail
     }
+    
+    public func getFamilyName() async -> String? {
+        fhkConfiguration.refreshFamilyName()
+        return fhkConfiguration.familyName
+    }
 }

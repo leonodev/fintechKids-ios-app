@@ -10,6 +10,7 @@ import FHKDomain
 
 enum FHKAppError: FHKError {
     case loginUserFailed
+    case logoutUserFailed
     case registerUserFailed
     case addMembersFailed
     case supabaseClientFailed
@@ -21,6 +22,9 @@ enum FHKAppError: FHKError {
   
         case .loginUserFailed:
             return "Error: User login process failed"
+            
+        case .logoutUserFailed:
+            return "Error: User logout process failed"
  
         case .registerUserFailed:
             return "Error: User registration failed"
@@ -44,6 +48,9 @@ enum FHKAppError: FHKError {
             
         case .loginUserFailed:
             return "invalid_credentials_error".localized().capitalizingFirstLetter()
+            
+        case .logoutUserFailed:
+            return "msn_error_logout".localized().capitalizingFirstLetter()
             
         case .registerUserFailed:
             return "msn_register_user_error".localized().capitalizingFirstLetter()

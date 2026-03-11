@@ -22,9 +22,9 @@ public extension String {
     
     var languageTypeToImageFlag: Image {
         switch self {
-        case LanguageType.it.code(): return .italyCircleFlag
-        case LanguageType.en.code(): return .englandCircleFlag
-        case LanguageType.fr.code(): return .franceCircleFlag
+        case LanguageType.it.code: return .italyCircleFlag
+        case LanguageType.en.code: return .englandCircleFlag
+        case LanguageType.fr.code: return .franceCircleFlag
         default: return .spainCircleFlag
         }
     }

@@ -8,6 +8,7 @@
 import SwiftUI
 import FHKCore
 import FHKUtils
+import FHKDomain
 
 // Define each case for a navigation route
 public enum Routes: NavigationDestination {
@@ -16,7 +17,9 @@ public enum Routes: NavigationDestination {
     case register
     case home
     case members
+    case memberDetail(MemberEntity)
     case goal(id: String)
+    case profile
     
     public var hidesNavigationBar: Bool {
         switch self {
@@ -34,7 +37,9 @@ public enum Routes: NavigationDestination {
         case .register: return "register"
         case .home: return "home"
         case .members: return "members"
+        case .memberDetail: return "members_detail"
         case .goal(let id): return "goal_\(id)"
+        case .profile: return "profile"
         }
     }
 }
@@ -60,8 +65,14 @@ extension Routes {
         case .members:
             return "title_add_member".localized().capitalizingFirstLetter()
             
+        case .memberDetail:
+            return nil
+            
         case .goal:
             return "goal".localized().capitalizingFirstLetter()
+            
+        case .profile:
+            return "profile".localized().capitalizingFirstLetter()
         }
     }
 }
@@ -88,8 +99,14 @@ extension Routes {
         case .members:
             RegisterMembersScreen(viewModel: RegisterMembersScreenVM())
             
+        case .memberDetail(let memberEntity):
+            MemberDetailScreen(viewModel: MemberDetailScreenVM(), member: memberEntity)
+            
         case .goal(let id):
             GoalScreen(id: id)
+            
+        case .profile:
+            ProfileScreen(viewModel: ProfileScreenVM())
         }
     }
 }

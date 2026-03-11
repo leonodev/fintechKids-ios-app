@@ -40,7 +40,7 @@ public class ModulesDependencies {
         /// Main App / Modules / Home
         inject.fhkHomeRepository = HomeRepository()
         
-        /// Main App / Modules / Language
-        inject.fhkLanguageRepository = LanguageRepository()
+        /// Main App / Modules / Profile
+        inject.fhkProfileRepository = ProfileRepository()
     }
 }

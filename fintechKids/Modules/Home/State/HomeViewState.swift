@@ -26,6 +26,10 @@ public class HomeViewState {
         "msn_fetch_members_error".localized().capitalizingFirstLetter()
     }
     
+    public var titleMemberFamily: String {
+        "title_members_family".localized().capitalizingFirstLetter()
+    }
+    
     public var stateItemMemberComponent: ComponentState = .skeleton
     
     public enum State: Equatable {

@@ -53,7 +53,14 @@ final class RegisterScreenVM: FHKCore.ViewModel {
         viewState.registerState = .loading
         
         do {
-            let response = try await fhkRegisterRepository.register(email: viewState.emailFamily, password: viewState.password)
+            let response = try await fhkRegisterRepository.register(
+                email: viewState.emailFamily,
+                password: viewState.password,
+                familyName: viewState.familyName
+            )
+            
+            try fhkRegisterRepository.saveFamilyInfoKeychain(familyName: viewState.familyName)
+            
             viewState.registerState = .finish(result: .success)
             Logger.info("USER REGISTERED SUCCESS \(response)")
         } catch let error as FHKDomainError {

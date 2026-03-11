@@ -32,7 +32,7 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     // Other Properties
     public var familyMembers: [MemberEntity] = []
     public var isEnableBtnRegisterMember: Bool {
-        !viewState.familyName.isEmpty && !familyMembers.isEmpty
+        !familyMembers.isEmpty
     }
     
     enum Action: Equatable {
@@ -65,10 +65,17 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
             viewState.registerMembersState = .finish(result: .error)
             return
         }
+        
+        guard let familyName = await fhkRegisterMembersRepository.getFamilyName() else {
+            viewState.registerMembersState = .finish(result: .error)
+            return
+        }
            
         let newMember = MemberEntity(emailParent: emailParent,
                                      memberName: viewState.memberNewName,
-                                     avatarName: viewState.selectedAvatarName)
+                                     familyName: familyName,
+                                     avatarName: viewState.selectedAvatarName
+        )
         familyMembers.append(newMember)
     }
     
@@ -120,7 +127,6 @@ private extension RegisterMembersScreenVM {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
-        viewState.titleUserError = error.titleUI
         viewState.msnUserError = error.messageUI
         Logger.error(error.logMessage)
     }

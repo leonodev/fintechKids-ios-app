@@ -13,7 +13,7 @@ import FHKDomain
 
 @Observable
 public final class FHKLanguageManager: FHKLanguageManagerProtocol {
-    public var selectedLanguage: String = LanguageType.es.code()
+    public var selectedLanguage: String = LanguageType.es.code
     public var currentBundle: Bundle = .main
     
     // Properties inject
@@ -45,7 +45,7 @@ private extension FHKLanguageManager {
         Task {
             let savedLanguage = try await storageManager.readUserDefaults(String.self,
                                                                           forKey: UserDefaultsKeys.languageKey)
-            updateBundle(for: savedLanguage ?? LanguageType.es.code())
+            updateBundle(for: savedLanguage ?? LanguageType.es.code)
         }
     }
     
