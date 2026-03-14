@@ -94,7 +94,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     }
     
     var cardViewExampleView: some View {
-        BasicCardView { _ in
+        FHKCardView { _ in
             print("Navegando al perfil del usuario: ")
         } content: {
             VStack(alignment: .leading, spacing: 15) {
@@ -114,12 +114,15 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     
     var floatMenuView: some View {
         FloatMenu(options: viewModel.viewState.options,
-                  callback: { index in
-            switch index {
-            case 0:
+                  callback: { menu in
+            switch menu {
+            case .members:
                 router.navigate(to: .members)
                 
-            case 1:
+            case .tasks:
+                router.navigate(to: .tasks)
+                
+            case .goals:
                 router.navigate(to: .goal(id: "asda"))
                 
             default:
@@ -137,52 +140,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     .background(FHKColor.indigo)
 }
 
-struct BasicCardView<Content: View, T>: View {
-    let content: Content
-    let data: T?
-    let action: (T?) -> Void
-    let isSelected: Bool
 
-    init(data: T,
-         isSelected: Bool = false,
-         action: @escaping (T?) -> Void,
-         @ViewBuilder content: () -> Content
-    ) {
-        self.data = data
-        self.isSelected = isSelected
-        self.action = action
-        self.content = content()
-    }
-
-    init(isSelected: Bool = false,
-         action: @escaping (T?) -> Void,
-         @ViewBuilder content: () -> Content
-    ) where T == Any {
-        self.data = nil
-        self.isSelected = isSelected
-        self.action = action
-        self.content = content()
-    }
-
-    var body: some View {
-        VStack {
-            content
-        }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            FHKColor.lunarSand.opacity(0.08)
-        )
-        .cornerRadius(20)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(isSelected ? Color.purple : Color.clear, lineWidth: 2)
-        )
-        .onTapGesture {
-            action(data)
-        }
-    }
-}
 
 extension FHKMemberItem {
     /// Genera una vista con el número de esqueletos deseado.

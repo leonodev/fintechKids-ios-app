@@ -61,7 +61,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
     var errorView: some View {
         ErrorView(title: viewModel.viewState.titleError,
                   msnError: viewModel.viewState.msnError,
-                  titleBtn: viewModel.viewState.titleBtnError,
+                  titleBtn: viewModel.viewState.titleBtnUnderstood,
                   onActionPressed: {
             viewModel.viewState.loginState = .loaded
         })
@@ -92,12 +92,12 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 
                 // Fields
                 VStack(spacing: FHKSpace.space16) {
-                    GradientBorderField(text: $viewModel.viewState.email,
-                                        placeholder: viewModel.viewState.emailPlaceholder)
+                    FHKTextField(text: $viewModel.viewState.email,
+                                 placeholder: viewModel.viewState.emailPlaceholder)
                     
-                    GradientBorderField(text: $viewModel.viewState.password,
-                                        placeholder: viewModel.viewState.passwordPlaceholder,
-                                        isSecure: true)
+                    FHKTextField(text: $viewModel.viewState.password,
+                                 placeholder: viewModel.viewState.passwordPlaceholder,
+                                 isSecure: true)
                 }
                 
                 // We only show the Face ID button if a previous token exists.
@@ -179,7 +179,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
             FHKInformationView(message: viewModel.viewState.msnError,
                                type: .error,
-                               confirmButtonText: viewModel.viewState.titleBtnError,
+                               confirmButtonText: viewModel.viewState.titleBtnUnderstood,
                                 confirmAction: {
                 viewModel.fhkModal.dismiss()
             })

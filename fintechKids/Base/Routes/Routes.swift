@@ -20,6 +20,8 @@ public enum Routes: NavigationDestination {
     case memberDetail(MemberEntity)
     case goal(id: String)
     case profile
+    case tasks
+    case createTask
     
     public var hidesNavigationBar: Bool {
         switch self {
@@ -40,6 +42,8 @@ public enum Routes: NavigationDestination {
         case .memberDetail: return "members_detail"
         case .goal(let id): return "goal_\(id)"
         case .profile: return "profile"
+        case .tasks: return "tasks"
+        case .createTask: return "create_task"
         }
     }
 }
@@ -73,6 +77,9 @@ extension Routes {
             
         case .profile:
             return "profile".localized().capitalizingFirstLetter()
+            
+        case .tasks, .createTask:
+            return "tasks".localized().capitalizingFirstLetter()
         }
     }
 }
@@ -107,6 +114,12 @@ extension Routes {
             
         case .profile:
             ProfileScreen(viewModel: ProfileScreenVM())
+            
+        case .tasks:
+            TasksScreen(viewModel: TasksScreenVM())
+            
+        case .createTask:
+            TaskCreateScreen(viewModel: TaskCreateScreenVM())
         }
     }
 }

@@ -16,6 +16,7 @@ enum FHKAppError: FHKError {
     case supabaseClientFailed
     case fetchMembersFailed
     case userDefaultsFailed
+    case createTaskFailed
  
     var logMessage: String {
         switch self {
@@ -40,6 +41,9 @@ enum FHKAppError: FHKError {
             
         case .userDefaultsFailed:
             return "Error: UserDefaults"
+            
+        case .createTaskFailed:
+            return "Error: creating new task"
         }
     }
     
@@ -63,6 +67,9 @@ enum FHKAppError: FHKError {
             
         case .fetchMembersFailed:
             return "msn_fetch_members_error".localized().capitalizingFirstLetter()
+            
+        case .createTaskFailed:
+            return "msn_error_create_task".localized().capitalizingFirstLetter()
             
         default:
             return ""

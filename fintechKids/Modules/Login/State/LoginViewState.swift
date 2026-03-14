@@ -60,8 +60,8 @@ public struct LoginViewState {
         "msn_operation_error".localized().capitalizingFirstLetter()
     }
 
-    public var titleBtnError: String {
-        "title_btn_error".localized().capitalizingFirstLetter()
+    public var titleBtnUnderstood: String {
+        "title_btn_understood".localized().capitalizingFirstLetter()
     }
     
     public var msnFaceId: String {

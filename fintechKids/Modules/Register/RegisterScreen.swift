@@ -75,8 +75,8 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     var nameFamilyField: some View {
         VStack(alignment: .leading) {
             
-            GradientBorderField(text: $viewModel.viewState.familyName,
-                                placeholder: viewModel.viewState.familyNamePlaceholder)
+            FHKTextField(text: $viewModel.viewState.familyName,
+                         placeholder: viewModel.viewState.familyNamePlaceholder)
             .padding(.top, FHKSize.size04)
         }
     }
@@ -90,17 +90,17 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     }
     
     var credentialsField: some View {
-        BasicCardView(action: {_ in },
+        FHKCardView(action: {_ in },
                       content: {
             
             VStack(alignment: .leading) {
-                GradientBorderField(text: $viewModel.viewState.emailFamily,
-                                    placeholder: viewModel.viewState.emailFamilyPlaceholder)
+                FHKTextField(text: $viewModel.viewState.emailFamily,
+                             placeholder: viewModel.viewState.emailFamilyPlaceholder)
                 .padding(.top, FHKSize.size04)
                 
-                GradientBorderField(text: $viewModel.viewState.password,
-                                    placeholder: viewModel.viewState.passwordPlaceholder,
-                                    isSecure: true)
+                FHKTextField(text: $viewModel.viewState.password,
+                             placeholder: viewModel.viewState.passwordPlaceholder,
+                             isSecure: true)
                 
                 .padding(.top, FHKSize.size12)
             }

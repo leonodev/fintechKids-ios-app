@@ -112,8 +112,8 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                             Spacer()
                         }
                         
-                        GradientBorderField(text: $viewModel.viewState.memberNewName,
-                                            placeholder: viewModel.viewState.memberNewNamePlaceholder)
+                        FHKTextField(text: $viewModel.viewState.memberNewName,
+                                     placeholder: viewModel.viewState.memberNewNamePlaceholder)
                         .padding(.top, FHKSize.size04)
                         
                         NewMemberContentView(viewModel: viewModel,

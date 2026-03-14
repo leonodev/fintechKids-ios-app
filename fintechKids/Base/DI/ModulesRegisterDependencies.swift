@@ -18,9 +18,10 @@ import Supabase
 import FHKDomain
 import FHKSupabase
 
-public class ModulesDependencies {
+public class ModulesDependencies: FHKDependencies {
     
     static func register() throws {
+        
         /// Main App (fhkLanguage Depend of Storage)
         inject.fhkLanguage = FHKLanguageManager()
         inject.fhkCameraPermission = CameraPermissionService()
@@ -42,5 +43,13 @@ public class ModulesDependencies {
         
         /// Main App / Modules / Profile
         inject.fhkProfileRepository = ProfileRepository()
+        
+        /// Main App / Modules / Members
+        let supabaseClient = try makeSupabaseClient()
+        inject.fhkSupabaseMembers = FHKSupabaseMembers(supabaseClient: supabaseClient)
+        
+        // Main App / Modules / Task
+        inject.fhkSupabaseTask = FHKSupabaseTask(supabaseClient: supabaseClient)
+        inject.fhkTasksRepository = TasksRepository()
     }
 }

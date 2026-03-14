@@ -40,9 +40,25 @@ public class HomeViewState {
 
     init() {
         options = [
-            .init(image: .init(systemName: "person.crop.circle.badge.plus"), color: FHKColor.ultraPurple),
-            .init(image: .init(systemName: "note.text.badge.plus"), color: FHKColor.fuchsiaPink),
-            .init(image: .init(systemName: "star.fill"), color: FHKColor.yellow)
+            .init(title: "title_menu_members".localized().capitalizingFirstLetter(),
+                  image: .init(systemName: "person.crop.circle.badge.plus"),
+                  color: FHKColor.ultraPurple,
+                  menuType: .members),
+            
+            .init(title: "title_menu_tasks".localized().capitalizingFirstLetter(),
+                  image: .init(systemName: "house"),
+                  color: FHKColor.indigo,
+                  menuType: .tasks),
+            
+            .init(title: "title_menu_goals".localized().capitalizingFirstLetter(),
+                  image: .init(systemName: "note.text.badge.plus"),
+                  color: FHKColor.fuchsiaPink,
+                  menuType: .goals),
+            
+            .init(title: "title_menu_rewards".localized().capitalizingFirstLetter(),
+                  image: .init(systemName: "gamecontroller"),
+                  color: FHKColor.ultraPurple,
+                  menuType: .rewards)
         ]
     }
     

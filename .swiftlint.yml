@@ -51,6 +51,6 @@ custom_rules:
   fhk_layer_violation_repository:
     name: "Violation Repository"
     message: "Error of Architecture: the Repository They should not import the next modules."
-    regex: "(?m)^import\\s+(FHKAuth|FHKFirebase|FHKSupabase|FHKCore|FHKUtils|Supabase)"
+    regex: "(?m)^import\\s+(FHKAuth|FHKFirebase|FHKSupabase|Supabase)"
     included: ".*(Repository)\\.swift"
     severity: error

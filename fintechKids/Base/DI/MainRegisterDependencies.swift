@@ -16,12 +16,12 @@ import FHKCore
 import FHKDomain
 import FHKSupabase
 
-public class CommonsDependencies {
+public class CommonsDependencies: FHKDependencies {
     
     static func register() throws {
         let storage = FHKStorageManager(userDefault: FHKUserDefault(),
                                         keychain: FHKKeychainStorage())
-        
+
         /// FHKStorage
         inject.fhkStorage = storage
 
@@ -42,9 +42,6 @@ public class CommonsDependencies {
         let supabaseClient = try makeSupabaseClient()
         inject.fhkSupabase = FHKSupabase(client: supabaseClient)
         
-        // FHKSupabase
-        inject.fhkSupabaseMembers = FHKSupabaseMembers(supabaseClient: supabaseClient)
-        
         /// FHKDesignSystem
         inject.fhkModal = FHKModal()
         
@@ -53,19 +50,18 @@ public class CommonsDependencies {
     }
 }
 
-extension CommonsDependencies {
-    
+public class FHKDependencies {
     static func makeSupabaseClient() throws -> SupabaseClient {
         let urlString = try inject.fhkServicesAPI.getURL(
             environment: .production,
             country: .spanish,
             serviceKey: .supabase
         )
-
+        
         guard let url = URL(string: urlString) else {
             throw SupabaseError.invalidURL(urlString)
         }
-
+        
         let anonKey = try inject.fhkSecurity.getAnonKey()
         return SupabaseClient(supabaseURL: url, supabaseKey: anonKey)
     }
