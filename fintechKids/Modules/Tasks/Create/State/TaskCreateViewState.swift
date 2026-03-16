@@ -7,7 +7,6 @@
 
 import Observation
 import FHKUtils
-import FHKDomain
 import FHKDesignSystem
 
 @Observable
@@ -80,16 +79,16 @@ public class TaskCreateViewState {
     public var msnUserError: String = ""
     
     let durationOptions = [
-        FHKRadioOption(value: "title_hours".localized().uppercased(),
+        FHKRadioOption(value: "title_hours".localized().capitalizingFirstLetter(),
                        label: "title_hours".localized().capitalizingFirstLetter()),
         
-        FHKRadioOption(value: "title_days".localized().uppercased(),
+        FHKRadioOption(value: "title_days".localized().capitalizingFirstLetter(),
                        label: "title_days".localized().capitalizingFirstLetter()),
         
-        FHKRadioOption(value: "title_weeks".localized().uppercased(),
+        FHKRadioOption(value: "title_weeks".localized().capitalizingFirstLetter(),
                        label: "title_weeks".localized().capitalizingFirstLetter()),
         
-        FHKRadioOption(value: "title_month".localized().uppercased(),
+        FHKRadioOption(value: "title_month".localized().capitalizingFirstLetter(),
                        label: "title_month".localized().capitalizingFirstLetter())
     ]
 }

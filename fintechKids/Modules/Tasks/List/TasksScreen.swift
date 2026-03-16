@@ -8,7 +8,6 @@
 import SwiftUI
 import FHKCore
 import FHKDesignSystem
-import FHKUtils
 import FHKDomain
 
 struct TasksScreen<VM: TasksScreenVM>: View {
@@ -41,27 +40,47 @@ struct TasksScreen<VM: TasksScreenVM>: View {
     var loadedView: some View {
         ZStack(alignment: .bottomTrailing) {
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 10) {
+                LazyVStack(alignment: .center, spacing: 10) {
                     ForEach(viewModel.viewState.taskList) { task in
                         FHKCardView { _ in
                             print("Navegando al perfil del usuario: ")
                         } content: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 15) {
-                                    FHKDescriptionCardView(title: task.name, description: task.description)
-                                }
+                            VStack(alignment: .leading, spacing: 0) {
+                                FHKDescriptionCardView(title: task.name, description: task.description)
                                 
-                                Spacer()
-                                
-                                VStack(alignment: .trailing, spacing: 15) {
-                                    FHKRewardTypeView(value: task.timeGranted, type: .time)
-                                    FHKRewardTypeView(value: "\(task.coinsGranted)", type: .coins)
+                                HStack(spacing: -30) {
+                                    VStack {
+                                        LottieView(animationName: Lotties.coin,
+                                                   loopMode: .loop,
+                                                   contentMode: .scaleAspectFit)
+                                            .frame(height: 150)
+                                           
+                                        Text("\(task.coinsGranted)")
+                                            .font(.PangramSans.bold(FHKSize.size24))
+                                            .foregroundColor(FHKColor.warning.opacity(0.7))
+                                            .padding(.horizontal, FHKSpace.space08)
+                                            .padding(.top, -40)
+                                    }
+                                    .padding(.top, -30)
+                                    
+                                    VStack {
+                                        LottieView(animationName: Lotties.hours,
+                                                   loopMode: .loop,
+                                                   contentMode: .scaleAspectFit)
+                                            .frame(height: 100)
+                                            .padding(.top, -15)
+                                            
+                                        Text("\(task.timeGranted)")
+                                            .font(.PangramSans.bold(FHKSize.size24))
+                                            .foregroundColor(FHKColor.stone.opacity(0.7))
+                                            .padding(.horizontal, FHKSpace.space08)
+                                            .padding(.top, -20)
+                                    }
                                 }
                             }
                         }
-                        .padding(.horizontal)
+                        .padding()
                     }
-                    Color.clear.frame(height: 80)
                 }
                 .padding(.top)
             }
@@ -89,8 +108,21 @@ struct TasksScreen<VM: TasksScreenVM>: View {
 }
 
 #Preview {
-    TasksScreen(viewModel: TasksScreenVM())
+    let vm = TasksScreenVM()
+    
+    vm.viewState.taskList = [
+        TaskEntity(
+            createdAt: "2026-03-13 05:16:12.976+00",
+            name: "Limpiar los sabados...",
+            description: "Limpiar cuarto completamente bien, con todo ordenado y la ropa sucia en su lugar",
+            timeGranted: "2 horas",
+            coinsGranted: 100,
+            emailParent: "email@gmail.com"
+        )
+    ]
+    
+    // 2. Devolvemos la vista dentro de tu contenedor
+    return PreviewContainer {
+        TasksScreen(viewModel: vm)
+    }
 }
-
-
-

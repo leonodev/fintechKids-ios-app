@@ -51,5 +51,9 @@ public class ModulesDependencies: FHKDependencies {
         // Main App / Modules / Task
         inject.fhkSupabaseTask = FHKSupabaseTask(supabaseClient: supabaseClient)
         inject.fhkTasksRepository = TasksRepository()
+        
+        // Main App / Modules / Goal
+        inject.fhkSupabaseGoal = FHKSupabaseGoals(supabaseClient: supabaseClient)
+        inject.fhkGoalsRepository = GoalRepository()
     }
 }

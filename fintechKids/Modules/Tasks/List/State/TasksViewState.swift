@@ -8,18 +8,15 @@
 import Observation
 import FHKUtils
 import FHKDomain
-import FHKDesignSystem
 
 @Observable
 public class TasksViewState {
-    
     // Properties Observable
    
     public var msnLoading: String {
         "loading".localized().capitalizingFirstLetter()
     }
     
-
     public var msnUserError: String = ""
     
     public enum State: Equatable {
@@ -30,5 +27,4 @@ public class TasksViewState {
     
     public var taskState: State = .loaded
     public var taskList: [TaskEntity] = []
-    
 }

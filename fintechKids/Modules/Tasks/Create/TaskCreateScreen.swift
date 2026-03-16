@@ -13,7 +13,6 @@ import FHKDomain
 
 struct TaskCreateScreen<VM: TaskCreateScreenVM>: View {
     @State var viewModel: VM
-    //@State var selectedDuration: String?
     @NavigationRouterWrapper<Routes> private var router
     
     var body: some View {
