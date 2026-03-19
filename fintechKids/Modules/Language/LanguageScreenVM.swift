@@ -69,7 +69,7 @@ private extension LanguageScreenVM {
         let remoteLanguage = await fhkLanguageRepository.fetchConfig()
         
         if remoteLanguage.isEmpty {
-            informateError(FHKSystemError.remoteConfigFailed)
+            informateError(FHKAppError.remoteConfigFailed)
             // display screen loaded for selection language
             viewState.languageState = .loaded
         } else {

@@ -24,8 +24,9 @@ public class ModulesDependencies: FHKDependencies {
         
         /// Main App (fhkLanguage Depend of Storage)
         inject.fhkLanguage = FHKLanguageManager()
+        inject.fhkLanguageRepository = LanguageRepository()
         inject.fhkCameraPermission = CameraPermissionService()
-        
+    
         /// Main App / Modules / Login
         inject.fhkLoginRepository = LoginRepository()
         

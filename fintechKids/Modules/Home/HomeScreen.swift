@@ -123,7 +123,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 router.navigate(to: .tasks)
                 
             case .goals:
-                router.navigate(to: .goal(id: "asda"))
+                router.navigate(to: .goal)
                 
             default:
                 break

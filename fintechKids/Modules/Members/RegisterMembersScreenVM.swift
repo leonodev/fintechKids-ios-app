@@ -91,8 +91,11 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
         do {
             try await fhkRegisterMembersRepository.registerMembers(members: familyMembers)
             viewState.registerMembersState = .finish(result: .success)
+        } catch let error as FHKSupabaseError {
+            viewState.registerMembersState = .finish(result: .error)
+            informateError(error)
         } catch {
-            informateError(FHKAppError.addMembersFailed)
+            informateError(FHKMembersError.addMembersFailed)
             viewState.registerMembersState = .finish(result: .error)
         }
     }
@@ -127,7 +130,7 @@ private extension RegisterMembersScreenVM {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
-        viewState.msnUserError = error.messageUI
+        viewState.msnUserError = error.messageLocalized
         Logger.error(error.logMessage)
     }
 }

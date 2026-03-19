@@ -84,12 +84,12 @@ final class LoginScreenVM: FHKCore.ViewModel {
             
             // We saved the Session Token PROTECTED by Face ID for the future
             saveSessionToken(tokenAccess: tokenAccess, isHasBiometry: isBiometryAvailable)
-        } catch let error as FHKDomainError {
-            viewState.loginState = .error
+        } catch let error as FHKSupabaseError {
+            viewState.loginState = .finish(result: .error)
             informateError(error)
         } catch {
-            viewState.loginState = .error
-            informateError(FHKAppError.loginUserFailed)
+            viewState.loginState = .finish(result: .error)
+            informateError(FHKLoginError.loginUserFailed)
         }
     }
     
@@ -100,9 +100,12 @@ final class LoginScreenVM: FHKCore.ViewModel {
         do {
             try await fhkLoginRepository.loginWithBiometrics(prompt: prompt)
             viewState.loginState = .finish(result: .success)
+        } catch let error as FHKSupabaseError {
+            viewState.loginState = .finish(result: .error)
+            informateError(error)
         } catch {
-            let fhkError = error as? any FHKError ?? FHKBiometryError.userCancelAuthentication
-            viewState.loginState = .error
+            let fhkError = error as? any FHKError ?? FHKAppError.biometryCancelAuthentication
+            viewState.loginState = .finish(result: .error)
             informateError(fhkError)
         }
     }
@@ -124,8 +127,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
         do {
             try fhkLoginRepository.saveAuthToken(tokenAccess, requiresBiometry: isHasBiometry)
         } catch {
-            viewState.loginState = .error
-            informateError(FHKSecurityError.saveTokenAccessKeychainFailed)
+            viewState.loginState = .finish(result: .error)
+            informateError(FHKAppError.saveTokenAccessKeychainFailed)
         }
     }
     
@@ -134,8 +137,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
             try await fhkLoginRepository.saveUserIntoKeychain(email: viewState.email)
             Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
         } catch {
-            viewState.loginState = .error
-            informateError(FHKSecurityError.saveUserMailKeychainFailed)
+            viewState.loginState = .finish(result: .error)
+            informateError(FHKAppError.saveUserMailKeychainFailed)
         }
     }
 
@@ -143,6 +146,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
+        
+        viewState.msnLoginFail = error.messageLocalized
         Logger.error(error.logMessage)
     }
 }

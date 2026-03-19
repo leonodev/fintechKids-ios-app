@@ -9,74 +9,76 @@ import FHKUtils
 import FHKDomain
 
 enum FHKAppError: FHKError {
-    case loginUserFailed
-    case logoutUserFailed
-    case registerUserFailed
-    case addMembersFailed
-    case supabaseClientFailed
-    case fetchMembersFailed
+    case readUserMailKeychainFailed
+    case saveTokenAccessKeychainFailed
+    case saveUserMailKeychainFailed
     case userDefaultsFailed
-    case createTaskFailed
- 
+    case remoteConfigFailed
+    case biometryNotAvailable
+    case biometryCancelAuthentication
+    case biometryAuthenticationFailed
+    case invalidURL(String)
+    
     var logMessage: String {
         switch self {
-  
-        case .loginUserFailed:
-            return "Error: User login process failed"
-            
-        case .logoutUserFailed:
-            return "Error: User logout process failed"
- 
-        case .registerUserFailed:
-            return "Error: User registration failed"
-            
-        case .addMembersFailed:
-            return "Error: Adding family members failed"
-            
-        case .supabaseClientFailed:
-            return "Error: Supabase client not configured"
-            
-        case .fetchMembersFailed:
-            return "Error: Fetching family members failed"
+    
+        case .readUserMailKeychainFailed:
+            return "Security: failed to read user email from secure keychain storage"
+        
+        case .saveTokenAccessKeychainFailed:
+            return "Security: failure saving access token to keychain"
+        
+        case .saveUserMailKeychainFailed:
+            return "Security: failed to save user email in secure keychain storage"
             
         case .userDefaultsFailed:
             return "Error: UserDefaults"
             
-        case .createTaskFailed:
-            return "Error: creating new task"
+        case .remoteConfigFailed:
+            return "System: error getting remote configuration from server"
+            
+        case .biometryNotAvailable:
+            return "Biometry: hardware or permissions are not available on this device"
+            
+        case .biometryCancelAuthentication:
+            return "Biometry: user explicitly cancelled the biometric authentication"
+            
+        case .biometryAuthenticationFailed:
+            return "Biometry: the biometric authentication failed"
+            
+        case .invalidURL(let url):
+            return "Invalid Supabase URL: \(url)"
+
         }
     }
     
-    var messageUI: String {
+    var msnLocalizedKey: String {
         switch self {
             
-        case .loginUserFailed:
-            return "invalid_credentials_error".localized().capitalizingFirstLetter()
+        case .saveTokenAccessKeychainFailed, .readUserMailKeychainFailed:
+            return "msn_proccessing_information_secure"
+        
+        case .remoteConfigFailed:
+            return ""
+        
+        case .biometryNotAvailable:
+            return "msn_biometry_not_available_error"
             
-        case .logoutUserFailed:
-            return "msn_error_logout".localized().capitalizingFirstLetter()
-            
-        case .registerUserFailed:
-            return "msn_register_user_error".localized().capitalizingFirstLetter()
-            
-        case .addMembersFailed:
-            return "msn_add_new_member_error".localized().capitalizingFirstLetter()
-            
-        case .supabaseClientFailed:
-            return "msn_unexpected_error".localized().capitalizingFirstLetter()
-            
-        case .fetchMembersFailed:
-            return "msn_fetch_members_error".localized().capitalizingFirstLetter()
-            
-        case .createTaskFailed:
-            return "msn_error_create_task".localized().capitalizingFirstLetter()
-            
+        case .biometryAuthenticationFailed:
+            return "msn_biometry_not_failed_error"
+ 
         default:
             return ""
         }
     }
     
     public var isShouldTrack: Bool {
-        true
+        switch self {
+        case .biometryNotAvailable, .biometryAuthenticationFailed:
+            return false
+            
+        default:
+            return true
+        }
     }
 }

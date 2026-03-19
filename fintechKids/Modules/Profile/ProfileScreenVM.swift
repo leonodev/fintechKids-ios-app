@@ -83,7 +83,7 @@ private extension ProfileScreenVM {
             viewState.profileState = .finish(result: .success)
         } catch {
             viewState.profileState = .finish(result: .error)
-            informateError(FHKAppError.logoutUserFailed)
+            informateError(FHKProfileError.logoutUserFailed)
         }
     }
     
@@ -91,7 +91,7 @@ private extension ProfileScreenVM {
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
-        viewState.msnLogoutResult = error.messageUI
+        viewState.msnLogoutResult = error.messageLocalized
         Logger.error(error.logMessage)
     }
     

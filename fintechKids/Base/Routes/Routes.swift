@@ -18,7 +18,7 @@ public enum Routes: NavigationDestination {
     case home
     case members
     case memberDetail(MemberEntity)
-    case goal(id: String)
+    case goal
     case profile
     case tasks
     case createTask
@@ -40,7 +40,7 @@ public enum Routes: NavigationDestination {
         case .home: return "home"
         case .members: return "members"
         case .memberDetail: return "members_detail"
-        case .goal(let id): return "goal_\(id)"
+        case .goal: return "goal"
         case .profile: return "profile"
         case .tasks: return "tasks"
         case .createTask: return "create_task"
@@ -109,8 +109,8 @@ extension Routes {
         case .memberDetail(let memberEntity):
             MemberDetailScreen(viewModel: MemberDetailScreenVM(), member: memberEntity)
             
-        case .goal(let id):
-            GoalScreen(id: id)
+        case .goal:
+            GoalScreen(viewModel: GoalScreenVM())
             
         case .profile:
             ProfileScreen(viewModel: ProfileScreenVM())

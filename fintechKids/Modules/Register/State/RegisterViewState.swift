@@ -26,7 +26,7 @@ public class RegisterViewState {
     public var msnRegisterSuccess = "msn_register_user_success".localized().capitalizingFirstLetter()
     public var titleButtonContinue = "continue".localized().uppercased()
     public var registerEmailInstruction = "register_email_instruction".localized().capitalizingFirstLetter()
-    public var msnRegisterFail = "msn_register_user_error".localized().capitalizingFirstLetter()
+    public var msnRegisterFail = ""
     public var titleBtnOperationError = "title_btn_operation_error".localized().capitalizingFirstLetter()
 
     public enum State: Equatable {

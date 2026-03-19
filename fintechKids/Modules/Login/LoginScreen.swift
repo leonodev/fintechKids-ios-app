@@ -22,9 +22,6 @@ struct LoginScreen<VM: LoginScreenVM>: View {
     
             case .loading:
                 loadingView
-                
-            case .error:
-                errorView
               
             case .finish, .loaded:
                 loadedView
@@ -56,15 +53,6 @@ struct LoginScreen<VM: LoginScreenVM>: View {
     
     var loadingView: some View {
         LoadingView(msn: viewModel.viewState.msnLoading)
-    }
-    
-    var errorView: some View {
-        ErrorView(title: viewModel.viewState.titleError,
-                  msnError: viewModel.viewState.msnError,
-                  titleBtn: viewModel.viewState.titleBtnUnderstood,
-                  onActionPressed: {
-            viewModel.viewState.loginState = .loaded
-        })
     }
     
     var loadedView: some View {
@@ -177,7 +165,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
     
     var modalInformationError: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(message: viewModel.viewState.msnError,
+            FHKInformationView(message: viewModel.viewState.msnLoginFail,
                                type: .error,
                                confirmButtonText: viewModel.viewState.titleBtnUnderstood,
                                 confirmAction: {

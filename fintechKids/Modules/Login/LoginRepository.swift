@@ -34,7 +34,7 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
     
     func loginWithBiometrics(prompt: String) async throws {
         guard fhkStorage.isBiometryAvailable() else {
-            throw FHKBiometryError.notAvailable
+            throw FHKAppError.biometryNotAvailable
         }
         
         // Try reading the Keychain token
@@ -43,14 +43,14 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
                     for: KeychainKey.authToken.rawValue,
                     prompt: prompt
         ) else {
-            throw FHKBiometryError.notAvailable
+            throw FHKAppError.biometryNotAvailable
         }
         
         // If FaceID accepted, we went directly into the session
         try await fhkSupabase.setSession(accessToken: savedToken)
         let isAuthenticated = await fhkSupabase.isUserAuthenticated
         if !isAuthenticated {
-            throw FHKBiometryError.notAvailable
+            throw FHKAppError.biometryNotAvailable
         }
     }
     

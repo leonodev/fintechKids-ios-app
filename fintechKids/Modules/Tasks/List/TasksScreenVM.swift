@@ -69,8 +69,11 @@ private extension TasksScreenVM {
             try await fhkTasksRepository.createTask(task: task)
             await fetchTasksList(force: true)
             viewState.taskState = .finish(result: .success)
+        } catch let error as FHKSupabaseError {
+            viewState.taskState = .finish(result: .error)
+            informateError(error)
         } catch {
-            informateError(FHKAppError.addMembersFailed)
+            informateError(FHKTaskError.createTaskFailed)
             viewState.taskState = .finish(result: .error)
         }
     }
@@ -88,7 +91,7 @@ private extension TasksScreenVM {
             viewState.taskList = taskList
             viewState.taskState = .finish(result: .success)
         } catch {
-            informateError(FHKAppError.addMembersFailed)
+            informateError(FHKTaskError.fetchTaskFailed)
             viewState.taskState = .finish(result: .error)
         }
     }
@@ -98,7 +101,7 @@ private extension TasksScreenVM {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
-        viewState.msnUserError = error.messageUI
+        viewState.msnUserError = error.messageLocalized
         Logger.error(error.logMessage)
     }
 }

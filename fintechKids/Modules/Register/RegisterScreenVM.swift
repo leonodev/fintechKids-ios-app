@@ -63,12 +63,12 @@ final class RegisterScreenVM: FHKCore.ViewModel {
             
             viewState.registerState = .finish(result: .success)
             Logger.info("USER REGISTERED SUCCESS \(response)")
-        } catch let error as FHKDomainError {
+        } catch let error as FHKSupabaseError {
             viewState.registerState = .finish(result: .error)
             informateError(error)
         } catch {
             viewState.registerState = .finish(result: .error)
-            informateError(FHKAppError.registerUserFailed)
+            informateError(FHKRegisterError.registerUserFailed)
         }
     }
 }
@@ -80,6 +80,7 @@ private extension RegisterScreenVM {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
+        viewState.msnRegisterFail = error.messageLocalized
         Logger.error(error.logMessage)
     }
 }

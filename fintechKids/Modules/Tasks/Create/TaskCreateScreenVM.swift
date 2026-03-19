@@ -55,7 +55,7 @@ private extension TaskCreateScreenVM {
         
         do {
             guard let emailParent = fhkConfiguration.parentMail else {
-                informateError(FHKSecurityError.readUserMailKeychainFailed)
+                informateError(FHKAppError.readUserMailKeychainFailed)
                 viewState.taskCreateState = .finish(result: .error)
                 return
             }
@@ -73,8 +73,11 @@ private extension TaskCreateScreenVM {
             
             try await fhkTasksRepository.createTask(task: task)
             viewState.taskCreateState = .finish(result: .success)
+        } catch let error as FHKSupabaseError {
+            viewState.taskCreateState = .finish(result: .error)
+            informateError(error)
         } catch {
-            informateError(FHKAppError.createTaskFailed)
+            informateError(FHKTaskError.createTaskFailed)
             viewState.taskCreateState = .finish(result: .error)
         }
     }
@@ -84,7 +87,7 @@ private extension TaskCreateScreenVM {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
-        viewState.msnUserError = error.messageUI
+        viewState.msnUserError = error.messageLocalized
         Logger.error(error.logMessage)
     }
 }

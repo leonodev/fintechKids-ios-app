@@ -52,14 +52,7 @@ public struct LoginViewState {
     }
     
     // errors screen
-    public var titleError: String {
-        "start_sesion".localized().capitalizingFirstLetter()
-    }
-    
-    public var msnError: String {
-        "msn_operation_error".localized().capitalizingFirstLetter()
-    }
-
+    public var msnLoginFail: String = ""
     public var titleBtnUnderstood: String {
         "title_btn_understood".localized().capitalizingFirstLetter()
     }
@@ -81,7 +74,6 @@ public struct LoginViewState {
         case loading
         case loaded
         case finish(result: ActionResult)
-        case error
     }
     
     public var loginState: State = .loaded

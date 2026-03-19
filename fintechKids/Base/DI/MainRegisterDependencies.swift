@@ -59,7 +59,7 @@ public class FHKDependencies {
         )
         
         guard let url = URL(string: urlString) else {
-            throw SupabaseError.invalidURL(urlString)
+            throw FHKAppError.invalidURL(urlString)
         }
         
         let anonKey = try inject.fhkSecurity.getAnonKey()
