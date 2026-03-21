@@ -123,7 +123,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 router.navigate(to: .tasks)
                 
             case .goals:
-                router.navigate(to: .goal)
+                router.navigate(to: .goals)
                 
             default:
                 break
@@ -139,8 +139,6 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     }
     .background(FHKColor.indigo)
 }
-
-
 
 extension FHKMemberItem {
     /// Genera una vista con el número de esqueletos deseado.

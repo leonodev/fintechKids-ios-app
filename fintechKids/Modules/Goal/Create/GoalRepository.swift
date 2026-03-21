@@ -24,7 +24,7 @@ final actor GoalRepository: FHKGoalRepositoryProtocol {
         try await fhkSupabaseGoal.createGoal(goal: goal)
     }
     
-    func getGoal(emailParent: String, forceRefresh: Bool) async throws -> [GoalEntity] {
+    func getGoals(emailParent: String, forceRefresh: Bool) async throws -> [GoalEntity] {
         if !forceRefresh, let cache = goalsCache, await !cache.isExpired() {
             Logger.info("📦 Return goal list cached")
             return cache.content

@@ -18,10 +18,11 @@ public enum Routes: NavigationDestination {
     case home
     case members
     case memberDetail(MemberEntity)
-    case goal
-    case profile
+    case goals
+    case createGoal
     case tasks
     case createTask
+    case profile
     
     public var hidesNavigationBar: Bool {
         switch self {
@@ -40,7 +41,8 @@ public enum Routes: NavigationDestination {
         case .home: return "home"
         case .members: return "members"
         case .memberDetail: return "members_detail"
-        case .goal: return "goal"
+        case .createGoal: return "goalCreate"
+        case .goals: return "goals"
         case .profile: return "profile"
         case .tasks: return "tasks"
         case .createTask: return "create_task"
@@ -72,8 +74,11 @@ extension Routes {
         case .memberDetail:
             return nil
             
-        case .goal:
+        case .createGoal:
             return "goal".localized().capitalizingFirstLetter()
+            
+        case .goals:
+            return "goal_list".localized().capitalizingFirstLetter()
             
         case .profile:
             return "profile".localized().capitalizingFirstLetter()
@@ -109,8 +114,11 @@ extension Routes {
         case .memberDetail(let memberEntity):
             MemberDetailScreen(viewModel: MemberDetailScreenVM(), member: memberEntity)
             
-        case .goal:
+        case .createGoal:
             GoalScreen(viewModel: GoalScreenVM())
+            
+        case .goals:
+            GoalListScreen(viewModel: GoalListScreenVM())
             
         case .profile:
             ProfileScreen(viewModel: ProfileScreenVM())

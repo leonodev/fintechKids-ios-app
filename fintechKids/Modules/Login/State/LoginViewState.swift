@@ -23,7 +23,7 @@ public struct LoginViewState {
     }
     
     public var wellcome: String {
-        "wellcome".localized().capitalizingFirstLetter()
+        "welcome".localized().capitalizingFirstLetter()
     }
     
     public var startSesionYourAccount: String {

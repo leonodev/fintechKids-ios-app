@@ -28,11 +28,11 @@ final class DeepLinkRouter: DeepLinkRouterProtocol {
         print("🚀 Procesando Deep Link: \(url.absoluteString)")
         guard url.scheme == "fhkApp" else { return }
         
-        // Example parsing: fhkApp://goal/123
-        // xcrun simctl openurl booted fhkApp://goal/123
-        if url.host == "goal" {
+        // Example parsing: fhkApp://createGoal/123
+        // xcrun simctl openurl booted fhkApp://createGoal/123
+        if url.host == "createGoal" {
             //let id = url.lastPathComponent
-            appRouter?.navigate(to: .goal)
+            appRouter?.navigate(to: .createGoal)
             //appRouter?.navigate(to: .goal(id: id))
         }
     }

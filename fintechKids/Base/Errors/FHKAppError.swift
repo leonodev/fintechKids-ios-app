@@ -48,7 +48,6 @@ enum FHKAppError: FHKError {
             
         case .invalidURL(let url):
             return "Invalid Supabase URL: \(url)"
-
         }
     }
     
@@ -57,9 +56,6 @@ enum FHKAppError: FHKError {
             
         case .saveTokenAccessKeychainFailed, .readUserMailKeychainFailed:
             return "msn_proccessing_information_secure"
-        
-        case .remoteConfigFailed:
-            return ""
         
         case .biometryNotAvailable:
             return "msn_biometry_not_available_error"
@@ -72,9 +68,35 @@ enum FHKAppError: FHKError {
         }
     }
     
+    // They cannot exceed 100 characters.
+    var analyticsIdentifier: String? {
+        switch self {
+        case .readUserMailKeychainFailed:
+            return "read_user_mail_keychain_failed"
+            
+        case .saveTokenAccessKeychainFailed:
+            return "save_token_access_keychain_failed"
+            
+        case .saveUserMailKeychainFailed:
+            return "save_user_mail_keychain_failed"
+            
+        case .userDefaultsFailed:
+            return "user_defaults_failed"
+            
+        case .remoteConfigFailed:
+            return "remote_config_failed"
+            
+        case .invalidURL:
+            return "invalid_url"
+            
+        default:
+            return ""
+        }
+    }
+    
     public var isShouldTrack: Bool {
         switch self {
-        case .biometryNotAvailable, .biometryAuthenticationFailed:
+        case .biometryNotAvailable, .biometryAuthenticationFailed, .biometryCancelAuthentication:
             return false
             
         default:

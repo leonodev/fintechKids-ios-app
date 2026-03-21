@@ -25,6 +25,14 @@ enum FHKRegisterError: FHKError {
         }
     }
     
+    // They cannot exceed 100 characters.
+    var analyticsIdentifier: String? {
+        switch self {
+        case .registerUserFailed:
+            return "register_user_failed"
+        }
+    }
+    
     public var isShouldTrack: Bool {
         true
     }

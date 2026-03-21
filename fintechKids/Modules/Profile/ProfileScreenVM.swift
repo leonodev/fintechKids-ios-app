@@ -88,10 +88,15 @@ private extension ProfileScreenVM {
     }
     
     func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
+        
+        // We show the user the localized message (UX)
         viewState.msnLogoutResult = error.messageLocalized
+        
+        // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
     }
     

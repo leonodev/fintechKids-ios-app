@@ -56,17 +56,31 @@ public class GoalViewState {
         "msn_create_goal_error".localized().capitalizingFirstLetter()
     }
     
+    public var msnWarningMissingGoalType: String {
+        "goal_type_missing".localized().capitalizingFirstLetter()
+    }
+    
+    public var msnWarningMissingEmail: String {
+        "email_error".localized().capitalizingFirstLetter()
+    }
+    
+    public var msnWarningMissingValue: String {
+        "value_missing".localized().capitalizingFirstLetter()
+    }
+    
+    public var msnWarningMissingDuration: String {
+        "duration_missing".localized().capitalizingFirstLetter()
+    }
+    
+    public func toastInfo(msn: String, type: ToastType) -> FHKToastInfo {
+        return FHKToastInfo(type: type, message: msn, hasIcon: true)
+    }
+    
     public func valueReal(value: String) -> String {
         let euroValue: Double = (Double(value) ?? 0) / 2
         let valueFormatted = euroValue.formattedValue(showDecimals: true)
         
         return "msn_value_real_goal".localized(valueFormatted)
-    }
-    
-    public var createGoalButtonState: FHKButtonComponent.State {
-        !goalName.isEmpty && !rewardsValue.isEmpty
-        ? .enabled
-        : .disabled
     }
     
     public var isShowRewardOptions: Bool {

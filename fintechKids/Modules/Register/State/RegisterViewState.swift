@@ -16,11 +16,13 @@ public class RegisterViewState {
     public var familyName = ""
     public var emailFamily = ""
     public var password = ""
+    public var confirmPassword = ""
     
     // Properties View
     public var familyNamePlaceholder = "family_name".localized().capitalizingFirstLetter()
     public var emailFamilyPlaceholder = "email".localized().capitalizingFirstLetter()
     public var passwordPlaceholder = "password".localized().capitalizingFirstLetter()
+    public var confirmPasswordPlaceholder = "confirm_password".localized().capitalizingFirstLetter()
     public var titleRegisterBtn = "register".localized().uppercased()
     public var msnLoading = ""
     public var msnRegisterSuccess = "msn_register_user_success".localized().capitalizingFirstLetter()
@@ -53,8 +55,22 @@ public class RegisterViewState {
         }
     }
     
+    var isPasswordValid: Bool {
+        !password.isEmpty &&
+        !confirmPassword.isEmpty &&
+        password.count > 6 &&
+        password == confirmPassword
+    }
+    
+    var isEmailValid: Bool {
+        !emailFamily.isEmpty &&
+        emailFamily.isValidEmail
+    }
+    
     var isBtnContinueEnable: FHKButtonComponent.State {
-        !familyName.isEmpty && !emailFamily.isEmpty && !password.isEmpty && emailFamily.isValidEmail
+        !familyName.isEmpty &&
+        isEmailValid &&
+        isPasswordValid
         ? .enabled
         : .disabled
     }

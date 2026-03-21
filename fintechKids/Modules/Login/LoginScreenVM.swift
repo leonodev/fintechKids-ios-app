@@ -74,8 +74,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
         viewState.loginState = .loading
         
         do {
-            let userSession = try await fhkLoginRepository.login(email: viewState.email,
-                                                         pwd: viewState.password)
+            let loginEntity = LoginEntity(email: viewState.email, password: viewState.password)
+            let userSession = try await fhkLoginRepository.login(loginEntity: loginEntity)
             
             viewState.loginState = .finish(result: .success)
             guard let tokenAccess = userSession else {
@@ -143,11 +143,15 @@ final class LoginScreenVM: FHKCore.ViewModel {
     }
 
     private func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
+        // We show the user the localized message (UX)
         viewState.msnLoginFail = error.messageLocalized
+        
+        // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
     }
 }

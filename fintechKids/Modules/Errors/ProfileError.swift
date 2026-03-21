@@ -25,6 +25,14 @@ enum FHKProfileError: FHKError {
         }
     }
     
+    // They cannot exceed 100 characters.
+    var analyticsIdentifier: String? {
+        switch self {
+        case .logoutUserFailed:
+            return "user_logout_failed"
+        }
+    }
+    
     public var isShouldTrack: Bool {
         true
     }

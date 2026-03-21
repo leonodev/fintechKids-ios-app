@@ -15,35 +15,22 @@ import FHKUtils
 @MainActor
 @Observable
 final class ToastService: NSObject, ApplicationService, FHKToastProtocol {
-    
-    // El estado es privado para asegurar que solo se modifique vía métodos controlados
     var currentToast: FHKToastInfo?
     var isVisible: Bool = false
-    
-    // Guardamos la referencia de la tarea para poder cancelarla si llega un nuevo Toast
     private var dismissalTask: Task<Void, Never>?
 
-    // MARK: - ToastServiceProtocol
-    
-    /// Muestra un toast con una configuración y duración específica
+    /// Displays a slice of toast with a specific setting and duration.
     func show(info: FHKToastInfo, duration: Double = 5.0) {
-        // 1. Cancelamos cualquier tarea de ocultado pendiente
         dismissalTask?.cancel()
-        
-        // 2. Actualizamos el contenido
+
         self.currentToast = info
-        
-        // 3. Animamos la aparición
         withAnimation(.snappy) {
             self.isVisible = true
         }
         
-        // 4. Creamos una nueva tarea asíncrona para el auto-ocultado (Swift 6 Way)
         dismissalTask = Task {
-            // Convertimos segundos a nanosegundos para ContinuousClock (iOS 16+)
             try? await Task.sleep(for: .seconds(duration))
             
-            // Verificamos si la tarea no ha sido cancelada antes de ocultar
             if !Task.isCancelled {
                 self.dismiss()
             }

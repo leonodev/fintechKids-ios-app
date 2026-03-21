@@ -34,6 +34,10 @@ final class GoalScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
+    public var fhkToast: any FHKToastProtocol {
+        inject.fhkToast
+    }
+    
     public enum Action: Equatable {
         case createGoalWithTime
         case createGoalWithCoin
@@ -54,8 +58,7 @@ final class GoalScreenVM: FHKCore.ViewModel {
     
     func getWorkType() -> WorkType? {
         guard let rewardsType = viewState.selectedGoalType else {
-            informateError(FHKGoalError.rewardsTypeInvalid)
-            viewState.goalState = .finish(result: .error)
+            displayNotification(message: viewState.msnWarningMissingGoalType)
             return nil
         }
         
@@ -66,13 +69,12 @@ final class GoalScreenVM: FHKCore.ViewModel {
 private extension GoalScreenVM {
     
     func createNewGoalTime() async {
-        viewState.goalState = .loading
-        
         do {
             guard let emailParent = getParentMail(), let goalValue = getGoalValue(), let durationType = getDurationType() else {
                 return
             }
             
+            viewState.goalState = .loading
             let goal = GoalEntity(expirationDate: goalValue.futureDateString(unit: durationType),
                                   name: viewState.goalName.capitalizingFirstLetter(),
                                   emailParent: emailParent,
@@ -89,14 +91,13 @@ private extension GoalScreenVM {
     }
     
     func createNewGoalCoin() async {
-        viewState.goalState = .loading
-        
         do {
             guard let emailParent = getParentMail(), let goalValue = getGoalValue() else {
                 return
             }
-
-            let goal = GoalEntity(expirationDate: "",
+            
+            viewState.goalState = .loading
+            let goal = GoalEntity(expirationDate: Date().ISO8601Format(),
                                   name: viewState.goalName.capitalizingFirstLetter(),
                                   emailParent: emailParent,
                                   value: goalValue,
@@ -116,8 +117,7 @@ private extension GoalScreenVM {
     
     func getParentMail() -> String? {
         guard let emailParent = fhkConfiguration.parentMail else {
-            informateError(FHKAppError.readUserMailKeychainFailed)
-            viewState.goalState = .finish(result: .error)
+            displayNotification(message: viewState.msnWarningMissingEmail, type: .error)
             return nil
         }
         
@@ -126,8 +126,7 @@ private extension GoalScreenVM {
     
     func getGoalValue() -> Int? {
         guard let goalValue = Int(viewState.rewardsValue), goalValue > 0 else {
-            informateError(FHKGoalError.createGoalFailed)
-            viewState.goalState = .finish(result: .error)
+            displayNotification(message: viewState.msnWarningMissingValue)
             return nil
         }
         
@@ -136,20 +135,27 @@ private extension GoalScreenVM {
     
     func getDurationType() -> DurationType? {
         guard let durationType = viewState.selectedDurationType else {
-            informateError(FHKGoalError.durationTypeInvalid)
-            viewState.goalState = .finish(result: .error)
+            displayNotification(message: viewState.msnWarningMissingDuration)
             return nil
         }
         
         return durationType
     }
     
+    func displayNotification(message: String, type: ToastType = .warning) {
+        fhkToast.show(info: viewState.toastInfo(msn: message, type: type))
+    }
+    
     func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
+        // We show the user the localized message (UX)
         viewState.msnUserError = error.messageLocalized
+        
+        // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
     }
 }

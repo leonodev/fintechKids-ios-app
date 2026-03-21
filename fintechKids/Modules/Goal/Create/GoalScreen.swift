@@ -16,7 +16,7 @@ struct GoalScreen<VM: GoalScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     
     var body: some View {
-        ScreenContainer(title: Routes.goal.title) {
+        ScreenContainer(title: Routes.createGoal.title) {
             switch viewModel.viewState.goalState {
                 
             case .loading:
@@ -100,7 +100,7 @@ struct GoalScreen<VM: GoalScreenVM>: View {
                 Spacer()
                 
                 FHKButtonPrimary(title: viewModel.viewState.titleBtnCreateGoal,
-                                 state: viewModel.viewState.createGoalButtonState,
+                                 state: .enabled,
                                  mode: .solid,
                                  action: {
                     Task {

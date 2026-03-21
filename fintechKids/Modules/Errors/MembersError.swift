@@ -25,6 +25,14 @@ enum FHKMembersError: FHKError {
         }
     }
     
+    // They cannot exceed 100 characters.
+    var analyticsIdentifier: String? {
+        switch self {
+        case .addMembersFailed:
+            return "add_family_member_failed"
+        }
+    }
+    
     public var isShouldTrack: Bool {
         true
     }

@@ -32,6 +32,17 @@ enum FHKTaskError: FHKError {
         }
     }
     
+    // They cannot exceed 100 characters.
+    var analyticsIdentifier: String? {
+        switch self {
+        case .createTaskFailed:
+            return "create_task_failed"
+            
+        case .fetchTaskFailed:
+            return "fetch_task_list_failed"
+        }
+    }
+    
     var isShouldTrack: Bool {
         true
     }

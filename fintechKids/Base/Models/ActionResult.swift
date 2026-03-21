@@ -5,7 +5,7 @@
 //  Created by Fredy Leon on 8/3/26.
 //
 
-public enum ActionResult {
+public enum ActionResult: Equatable {
     case success
     case error
 }

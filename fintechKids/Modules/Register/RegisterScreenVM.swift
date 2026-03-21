@@ -53,11 +53,10 @@ final class RegisterScreenVM: FHKCore.ViewModel {
         viewState.registerState = .loading
         
         do {
-            let response = try await fhkRegisterRepository.register(
-                email: viewState.emailFamily,
-                password: viewState.password,
-                familyName: viewState.familyName
-            )
+            let registerUserEntity = RegisterUserEntity(email: viewState.emailFamily,
+                                                        password: viewState.password,
+                                                        familyName: viewState.familyName)
+            let response = try await fhkRegisterRepository.register(registerEntity: registerUserEntity)
             
             try fhkRegisterRepository.saveFamilyInfoKeychain(familyName: viewState.familyName)
             
@@ -76,11 +75,15 @@ final class RegisterScreenVM: FHKCore.ViewModel {
 private extension RegisterScreenVM {
     
     func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
+        // We show the user the localized message (UX)
         viewState.msnRegisterFail = error.messageLocalized
+        
+        // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
     }
 }

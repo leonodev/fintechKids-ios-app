@@ -10,6 +10,7 @@ import FHKDomain
 
 enum FHKGoalError: FHKError {
     case createGoalFailed
+    case fetchListGoalFailed
     case goalValueInvalid
     case rewardsTypeInvalid
     case durationTypeInvalid
@@ -19,6 +20,9 @@ enum FHKGoalError: FHKError {
             
         case .createGoalFailed:
             return "Error: creating new goal"
+            
+        case .fetchListGoalFailed:
+            return "Error: fetching list of goals"
             
         case .goalValueInvalid:
             return "Error: value of goal is invalid"
@@ -35,22 +39,45 @@ enum FHKGoalError: FHKError {
         switch self {
             
         case .createGoalFailed:
-            return "msn_error_create_goal".localized().capitalizingFirstLetter()
+            return "msn_error_create_goal"
+            
+        case .fetchListGoalFailed:
+            return "msn_error_fetch_goal_list"
             
         case .goalValueInvalid:
-            return "msn_error_value_goal".localized().capitalizingFirstLetter()
+            return "msn_error_value_goal"
             
         case .rewardsTypeInvalid:
-            return "msn_error_reward_type_goal".localized().capitalizingFirstLetter()
+            return "msn_error_reward_type_goal"
             
         case .durationTypeInvalid:
-            return "msn_error_duration_type_goal".localized().capitalizingFirstLetter()
+            return "msn_error_duration_type_goal"
+        }
+    }
+    
+    // They cannot exceed 100 characters.
+    var analyticsIdentifier: String? {
+        switch self {
+        case .createGoalFailed:
+            return "create_goal_failed"
+            
+        case .fetchListGoalFailed:
+            return "fetch_goal_failed"
+            
+        case .goalValueInvalid:
+            return "value_goal_invalid"
+            
+        case .rewardsTypeInvalid:
+            return "type_reward_invalid"
+            
+        case .durationTypeInvalid:
+            return "type_duration_invalid"
         }
     }
     
     public var isShouldTrack: Bool {
         switch self {
-        case .createGoalFailed:
+        case .createGoalFailed, .fetchListGoalFailed:
             return true
             
         default:

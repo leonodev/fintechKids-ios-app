@@ -9,6 +9,7 @@ import SwiftUI
 import FHKDesignSystem
 import FHKCore
 import FHKDomain
+import FHKUtils
 
 struct RegisterScreen<VM: RegisterScreenVM>: View {
     @State var viewModel: VM
@@ -46,30 +47,32 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     }
     
     var loadedView: some View {
-        VStack(alignment: .leading) {
-            Spacer()
-            
-            LottieView(animationName: Lotties.register,
-                       loopMode: .loop,
-                       contentMode: .scaleAspectFit)
-            .frame(height: 200)
-            
-            // field name family
-            nameFamilyField
-            
-            // text informative
-            informativeText
+        ScrollView {
+            VStack(alignment: .leading) {
+                Spacer()
+                
+                LottieView(animationName: Lotties.register,
+                           loopMode: .loop,
+                           contentMode: .scaleAspectFit)
+                .frame(height: 200)
+                
+                // field name family
+                nameFamilyField
+                
+                // text informative
+                informativeText
 
-            // cardview with credentials
-            credentialsField
-            
-            Spacer()
-            // button register
-            registermeButton
-            
-            Spacer()
+                // cardview with credentials
+                credentialsField
+                
+                Spacer()
+                // button register
+                registermeButton
+                
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
     }
     
     var nameFamilyField: some View {
@@ -84,6 +87,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     var informativeText: some View {
         Text(viewModel.viewState.registerEmailInstruction)
             .lineSpacing(4)
+            .multilineTextAlignment(.leading)
             .font(.PangramSans.bold(FHKSize.size16))
             .foregroundColor(FHKColor.lunarSand.opacity(0.5))
             .padding()
@@ -101,7 +105,11 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
                 FHKTextField(text: $viewModel.viewState.password,
                              placeholder: viewModel.viewState.passwordPlaceholder,
                              isSecure: true)
+                .padding(.top, FHKSize.size12)
                 
+                FHKTextField(text: $viewModel.viewState.confirmPassword,
+                             placeholder: viewModel.viewState.confirmPasswordPlaceholder,
+                             isSecure: true)
                 .padding(.top, FHKSize.size12)
             }
         })
@@ -133,7 +141,7 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
     
     var resultModalError: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
-            FHKInformationView(message: viewModel.viewState.msnRegisterFail,
+            FHKInformationView(message: viewModel.viewState.msnRegisterFail.capitalizingFirstLetter(),
                                type: .error,
                                confirmButtonText: viewModel.viewState.titleBtnOperationError,
                                 confirmAction: {

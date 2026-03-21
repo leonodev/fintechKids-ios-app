@@ -88,10 +88,12 @@ private extension LanguageScreenVM {
     }
     
     private func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
         }
         
+        // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
     }
     

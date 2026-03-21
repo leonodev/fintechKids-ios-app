@@ -27,8 +27,8 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
         fhkStorage.exists(key: KeychainKey.authToken.rawValue)
     }
 
-    func login(email: String, pwd: String) async throws -> String? {
-        let userSession = try await fhkSupabase.login(email: email, password: pwd)
+    func login(loginEntity: LoginEntity) async throws -> String? {
+        let userSession = try await fhkSupabase.login(loginEntity: loginEntity)
         return userSession.accessToken
     }
     

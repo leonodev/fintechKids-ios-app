@@ -254,6 +254,35 @@
         }
       }
     },
+    "confirm_password" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "confirm your password"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "confirma tu contraseña"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "confirmez votre mot de passe"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "conferma la tua password"
+          }
+        }
+      }
+    },
     "continue" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -279,6 +308,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "continuare"
+          }
+        }
+      }
+    },
+    "duration_missing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "you must enter the maximum time to complete this goal."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "debes ingresar el tiempo máximo para realizar esta meta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vous devez saisir le temps maximum pour réaliser cet objectif."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "devi inserire il tempo massimo per completare questo obiettivo."
           }
         }
       }
@@ -312,31 +370,60 @@
         }
       }
     },
+    "email_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "we couldn't get the email to associate your goal."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no hemos podido obtener el email para asociar tu meta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nous n'avons pas pu obtenir l'email pour associer votre objectif."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non siamo riusciti a ottenere l'email per associare il tuo obiettivo."
+          }
+        }
+      }
+    },
     "email_not_confirmed_error" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "email not confirmed."
+            "value" : "your account has not been confirmed yet, please check your email."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "email no confirmado"
+            "value" : "tu cuenta aún no ha sido confirmada, revisa tu correo electrónico."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "email non confirmé"
+            "value" : "votre compte n'a pas encore été confirmé, veuillez vérifier vos e-mails."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "e-mail non confermata."
+            "value" : "il tuo account non è ancora stato confermato, controlla la tua email."
           }
         }
       }
@@ -420,14 +507,43 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "nouvel objectif"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "nuovo obiettivo"
+          }
+        }
+      }
+    },
+    "goal_list" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "goals list"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lista de metas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "liste des objectifs"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "elenco obiettivi"
           }
         }
       }
@@ -461,6 +577,35 @@
         }
       }
     },
+    "goal_type_missing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "you must select the goal type."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "debes seleccionar el tipo de meta,"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vous devez sélectionner le type d'objectif."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "devi selezionare il tipo di obiettivo."
+          }
+        }
+      }
+    },
     "Idioma actual: %@" : {
       "comment" : "A flag representing the currently selected language.",
       "isCommentAutoGenerated" : true
@@ -471,25 +616,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "user y/o password wrong."
+            "value" : "incorrect username and/or password, please check them and try again."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "usuario y/o contraseña incorrecta."
+            "value" : "usuario y/o contraseña incorrecta, compruébalos e inténtalo de nuevo."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "utilisateur y/o mot de passe incorrect."
+            "value" : "nom d'utilisateur et/ou mot de passe incorrect, veuillez les vérifier et réessayer."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "password utente y/o errata."
+            "value" : "nome utente e/o password errati, controllali e riprova."
           }
         }
       }
@@ -567,7 +712,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "OTP expirada, debes solicitar una nueva e intentarlo de nuevo"
           }
         },
@@ -683,7 +828,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "¿realmente quieres cerrar sesión?"
           }
         },
@@ -726,6 +871,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "chiusura sessione in corso"
+          }
+        }
+      }
+    },
+    "msn_connection_network_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "it looks like you're not connected to the internet, please check your connection and try again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "parece que no estás conectado a internet, revisa tu conexión e inténtalo de nuevo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "il semble que vous ne soyez pas connecté à internet, veuillez vérifier votre connexion et réessayer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sembra che tu non sia connesso a internet, controlla la tua connessione e riprova"
           }
         }
       }
@@ -784,35 +958,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "il tuo obiettivo è stato creato con successo, puoi consultarlo nell'elenco degli obiettivi"
-          }
-        }
-      }
-    },
-    "msn_error" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "something went wrong, please try again later."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "algo ha ido mal, inténtalo más tarde."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "une erreur s'est produite, veuillez réessayer plus tard."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "qualcosa è andato storto, riprova più tardi."
           }
         }
       }
@@ -904,6 +1049,35 @@
         }
       }
     },
+    "msn_error_fetch_goal_list" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "error fetching your goals list, please try again later."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "error obteniendo tu lista de metas, por favor inténtalo más tarde."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "erreur lors de la récupération de vos objectifs, veuillez réessayer plus tard."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "errore durante il recupero del tuo elenco di obiettivi, riprova più tardi."
+          }
+        }
+      }
+    },
     "msn_error_fetch_task_list" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -915,7 +1089,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "error obteniendo tu lista de tareas, por favor inténtalo más tarde"
           }
         },
@@ -1049,6 +1223,35 @@
         }
       }
     },
+    "msn_generic_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "something went wrong, please try again later."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "algo salió mal, por favor inténtalo de nuevo más tarde."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un problema est survenu, veuillez réessayer plus tard."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "qualcosa è andato storto, per favore riprova più tardi."
+          }
+        }
+      }
+    },
     "msn_members_added_success" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1171,25 +1374,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "we could not register the user, please check that the email account is correct and try again"
+            "value" : "the registration data is invalid, please check it."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "no hemos podido registrar el usuario, revisa que la cuenta de correo esté correcta e inténtalo de nuevo"
+            "value" : "los datos de registro no son válidos, por favor revísalos."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "nous n'avons pas pu enregistrer l'utilisateur, vérifiez que le compte e-mail est correct et réessayez"
+            "value" : "les données d'inscription ne sont pas valides, veuillez les vérifier."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "non è stato possibile registrare l'utente, controlla che l'indirizzo e-mail sia corretto e riprova"
+            "value" : "i dati di registrazione non sono validi, si prega di verificarli."
           }
         }
       }
@@ -1277,6 +1480,64 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "il tuo compito è stato creato correttamente, d'ora in poi sarà disponibile nella tua lista dei compiti"
+          }
+        }
+      }
+    },
+    "msn_too_many_requests_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "too many attempts, please wait a moment."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "demasiados intentos, espera un momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "trop de tentatives, veuillez patienter un instant."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "troppi tentativi, attendi un momento."
+          }
+        }
+      }
+    },
+    "msn_type_data_invalid_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the data format is incorrect."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "el formato de los datos es incorrecto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "le format des données est incorrect."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "il formato dei dati è errato."
           }
         }
       }
@@ -1396,6 +1657,9 @@
           }
         }
       }
+    },
+    "Para alcanzar esta meta deberas completarla" : {
+
     },
     "password" : {
       "extractionState" : "manual",
@@ -1654,35 +1918,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "seleziona la lingua adesso"
-          }
-        }
-      }
-    },
-    "spb_error_type_data_invalid" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "the data sent is incorrect"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "los datos enviados son incorrectos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "les données envoyées sont incorrectes"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "i dati inviati non sono corretti"
           }
         }
       }
@@ -1959,7 +2194,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "cerrar sesión"
           }
         },
@@ -2133,7 +2368,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "familia"
           }
         },
@@ -2336,7 +2571,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "miembros de mi familia"
           }
         },
@@ -2452,19 +2687,19 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "tareas"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "corvées"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "faccende"
           }
         }
@@ -2858,7 +3093,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "configuración de idioma"
           }
         },
@@ -3058,6 +3293,35 @@
         }
       }
     },
+    "value_missing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "you must enter the amount to reach this goal."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "debes ingresar el monto para alcanzar esta meta."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vous devez saisir le montant pour atteindre cet objectif."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "devi inserire l'importo per raggiungere questo obiettivo."
+          }
+        }
+      }
+    },
     "version" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3087,30 +3351,30 @@
         }
       }
     },
-    "wellcome" : {
+    "welcome" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "wellcome"
+            "value" : "welcome"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "bienvenido"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "bienvenue"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "benvenuto"
           }
         }
