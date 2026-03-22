@@ -47,17 +47,16 @@ final class GoalListScreenVM: FHKCore.ViewModel {
 private extension GoalListScreenVM {
     
     func fetchGoalList(force: Bool) async {
-        viewState.goalListState = .loading
-        
         do {
             guard let emailParent = fhkConfiguration.parentMail else {
                 viewState.goalListState = .finish(result: .error)
                 return
             }
             
+            viewState.goalListState = .loading
             let goalList = try await fhkGoalsRepository.getGoals(emailParent: emailParent, forceRefresh: force)
             viewState.goalList = goalList
-            viewState.goalListState = .finish(result: .success)
+            viewState.goalListState =  !viewState.goalList.isEmpty ? .finish(result: .success) : .empty
         } catch {
             informateError(FHKGoalError.fetchListGoalFailed)
             viewState.goalListState = .finish(result: .error)

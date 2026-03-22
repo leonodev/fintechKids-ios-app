@@ -76,10 +76,10 @@ private extension GoalScreenVM {
             
             viewState.goalState = .loading
             let goal = GoalEntity(expirationDate: goalValue.futureDateString(unit: durationType),
-                                  name: viewState.goalName.capitalizingFirstLetter(),
+                                  name: viewState.goalName.uppercased(),
                                   emailParent: emailParent,
                                   value: goalValue,
-                                  measureType: WorkType.time.value,
+                                  measureType: durationType.value,
                                   status: .inCurse)
             
             try await fhkGoalsRepository.createGoal(goal: goal)

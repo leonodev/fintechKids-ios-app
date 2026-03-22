@@ -43,7 +43,7 @@ struct TasksScreen<VM: TasksScreenVM>: View {
                 LazyVStack(alignment: .center, spacing: 10) {
                     ForEach(viewModel.viewState.taskList) { task in
                         FHKCardView { _ in
-                            print("Navegando al perfil del usuario: ")
+                            router.navigate(to: .startTask(task))
                         } content: {
                             VStack(alignment: .leading, spacing: 0) {
                                 FHKDescriptionCardView(title: task.name, description: task.description)
