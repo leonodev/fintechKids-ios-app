@@ -15,17 +15,23 @@ public final class FHKModal: FHKModalProtocol {
     public var isPresented: Bool = false
     public var content: AnyView?
     public var config: FHKPopupConfig?
+    private var onDismissAction: (() -> Void)?
 
     public init() {}
 
-    public func show<V: View>(@ViewBuilder _ content: () -> V) {
+    public func show<V: View>(onDismiss: (() -> Void)? = nil, @ViewBuilder content: () -> V) {
+        self.onDismissAction = onDismiss
         self.content = AnyView(content())
+        
         withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
             self.isPresented = true
         }
     }
 
     public func dismiss() {
+        onDismissAction?()
+        onDismissAction = nil
+        
         withAnimation(.easeIn(duration: 0.2)) {
             self.isPresented = false
         }

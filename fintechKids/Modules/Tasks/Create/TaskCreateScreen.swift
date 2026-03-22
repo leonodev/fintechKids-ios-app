@@ -32,14 +32,22 @@ struct TaskCreateScreen<VM: TaskCreateScreenVM>: View {
                 
                 switch result {
                 case .success:
-                    viewModel.fhkModal.show {
-                        resultModalSuccess
-                    }
+                    viewModel.fhkModal.show(
+                        onDismiss: {
+                            print("El usuario cerró el modal")
+                        }, content: {
+                            resultModalSuccess
+                        }
+                    )
    
                 case .error:
-                    viewModel.fhkModal.show {
-                        modalInformationError
-                    }
+                    viewModel.fhkModal.show(
+                        onDismiss: {
+                            print("El usuario cerró el modal")
+                        }, content: {
+                            modalInformationError
+                        }
+                    )
                 }
 
             default:

@@ -32,13 +32,21 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                 
                 switch result {
                 case .success:
-                    viewModel.fhkModal.show {
-                        modalInformativeSuccess
-                    }
+                    viewModel.fhkModal.show(
+                        onDismiss: {
+                            print("El usuario cerró el modal")
+                        }, content: {
+                            modalInformativeSuccess
+                        }
+                    )
                 case .error:
-                    viewModel.fhkModal.show {
-                        modalInformativeError
-                    }
+                    viewModel.fhkModal.show(
+                        onDismiss: {
+                            print("El usuario cerró el modal")
+                        }, content: {
+                            modalInformativeError
+                        }
+                    )
                 }
             default:
                 break
@@ -99,27 +107,31 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
             .cornerRadius(FHKSize.size16)
             .onTapGesture {
                 
-                viewModel.fhkModal.show {
-                    VStack(alignment: .leading, spacing: FHKSpace.space08) {
-                        
-                        HStack {
-                            Spacer()
-                            Text(viewModel.viewState.titleAddNewMember)
-                                .font(.PangramSans.bold(FHKSize.size24))
-                                .foregroundColor(FHKColor.lunarSand.opacity(0.9))
-                                .padding(.top, FHKSize.size08)
-                                .padding(.bottom, FHKSize.size24)
-                            Spacer()
+                viewModel.fhkModal.show(
+                    onDismiss: {
+                        print("El usuario cerró el modal")
+                    }, content: {
+                        VStack(alignment: .leading, spacing: FHKSpace.space08) {
+                            
+                            HStack {
+                                Spacer()
+                                Text(viewModel.viewState.titleAddNewMember)
+                                    .font(.PangramSans.bold(FHKSize.size24))
+                                    .foregroundColor(FHKColor.lunarSand.opacity(0.9))
+                                    .padding(.top, FHKSize.size08)
+                                    .padding(.bottom, FHKSize.size24)
+                                Spacer()
+                            }
+                            
+                            FHKTextField(text: $viewModel.viewState.memberNewName,
+                                         placeholder: viewModel.viewState.memberNewNamePlaceholder)
+                            .padding(.top, FHKSize.size04)
+                            
+                            NewMemberContentView(viewModel: viewModel,
+                                                 selectedAvatarName: $viewModel.viewState.selectedAvatarName)
                         }
-                        
-                        FHKTextField(text: $viewModel.viewState.memberNewName,
-                                     placeholder: viewModel.viewState.memberNewNamePlaceholder)
-                        .padding(.top, FHKSize.size04)
-                        
-                        NewMemberContentView(viewModel: viewModel,
-                                             selectedAvatarName: $viewModel.viewState.selectedAvatarName)
                     }
-                }
+                )
             }
             .padding(.top, FHKSize.size08)
         }
@@ -135,24 +147,29 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                                         avatarName: viewModel.getAvatarMember(member: member),
                                         iconName: viewModel.getIconName(member: member),
                                         action: {
-                        viewModel.fhkModal.show {
-                            VStack(alignment: .leading, spacing: FHKSpace.space08) {
-                                FHKConfirmationView(message: viewModel.viewState.msnRemoveMember(
-                                                        name: viewModel.getNameMember(member: member)
-                                                    ),
-                                                    confirmButtonText: viewModel.viewState.titleBtnConfirm,
-                                                    cancelButtonText: viewModel.viewState.titleBtnCancel,
-                                                    confirmAction: {
-                                    Task {
-                                        await viewModel.removeMember(member)
+                        
+                        viewModel.fhkModal.show(
+                            onDismiss: {
+                                print("El usuario cerró el modal")
+                            }, content: {
+                                VStack(alignment: .leading, spacing: FHKSpace.space08) {
+                                    FHKConfirmationView(message: viewModel.viewState.msnRemoveMember(
+                                        name: viewModel.getNameMember(member: member)
+                                    ),
+                                                        confirmButtonText: viewModel.viewState.titleBtnConfirm,
+                                                        cancelButtonText: viewModel.viewState.titleBtnCancel,
+                                                        confirmAction: {
+                                        Task {
+                                            await viewModel.removeMember(member)
+                                            viewModel.fhkModal.dismiss()
+                                        }
+                                    },
+                                                        cancelAction: {
                                         viewModel.fhkModal.dismiss()
-                                    }
-                                },
-                                                    cancelAction: {
-                                    viewModel.fhkModal.dismiss()
-                                })
+                                    })
+                                }
                             }
-                        }
+                        )
                     })
                 }
             }

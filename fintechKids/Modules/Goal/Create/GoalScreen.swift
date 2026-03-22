@@ -29,13 +29,21 @@ struct GoalScreen<VM: GoalScreenVM>: View {
         .onChange(of: viewModel.viewState.goalState) { _, state in
             switch state {
             case .finish(.success):
-                viewModel.fhkModal.show {
-                    resultModalSuccess
-                }
+                viewModel.fhkModal.show(
+                    onDismiss: {
+                        print("El usuario cerró el modal")
+                    }, content: {
+                        resultModalSuccess
+                    }
+                )
             case .finish(result: .error):
-                viewModel.fhkModal.show {
-                    resultModalError
-                }
+                viewModel.fhkModal.show(
+                    onDismiss: {
+                        print("El usuario cerró el modal")
+                    }, content: {
+                        resultModalError
+                    }
+                )
             default:
                 break
             }

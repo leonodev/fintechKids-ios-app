@@ -31,9 +31,9 @@ final class DeepLinkRouter: DeepLinkRouterProtocol {
         // Example parsing: fhkApp://createGoal/123
         // xcrun simctl openurl booted fhkApp://createGoal/123
         if url.host == "createGoal" {
-            //let id = url.lastPathComponent
+            // let id = url.lastPathComponent
             appRouter?.navigate(to: .createGoal)
-            //appRouter?.navigate(to: .goal(id: id))
+            // appRouter?.navigate(to: .goal(id: id))
         }
     }
 }

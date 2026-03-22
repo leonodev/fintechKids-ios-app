@@ -17,6 +17,10 @@ import FHKUtils
 final class TaskStartScreenVM: FHKCore.ViewModel {
     var viewState: TaskStartViewState = .init()
     
+    public var fhkModal: any FHKModalProtocol {
+        inject.fhkModal
+    }
+    
     public enum Action: Equatable {
         case startTask
         case stopTask

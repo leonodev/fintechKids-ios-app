@@ -11,6 +11,4 @@ import FHKDesignSystem
 import FHKDomain
 
 public struct MemberDetailState {
-    
-    
 }

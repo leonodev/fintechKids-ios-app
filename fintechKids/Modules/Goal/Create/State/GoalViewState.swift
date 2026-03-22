@@ -73,7 +73,7 @@ public class GoalViewState {
     }
     
     public func toastInfo(msn: String, type: ToastType) -> FHKToastInfo {
-        return FHKToastInfo(type: type, message: msn, hasIcon: true)
+        FHKToastInfo(type: type, message: msn, hasIcon: true)
     }
     
     public func valueReal(value: String) -> String {

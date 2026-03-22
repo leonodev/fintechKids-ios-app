@@ -17,18 +17,46 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
     
     var body: some View {
         ScreenContainer(title: Routes.tasks.title) {
-            VStack(alignment: .leading) {
-                descriptionView
-                Spacer()
+            switch viewModel.viewState.startTaskState {
+            case .loaded, .confirmation:
+                loadedView
                 
-                buttonTimerView
-                Spacer()
-                
-                buttonsView
-                .padding()
+            case .loading:
+                loadingView
             }
-            .padding(.horizontal, 24)
         }
+        .onChange(of: viewModel.viewState.startTaskState) { _, state in
+            switch state {
+            case .confirmation:
+                viewModel.fhkModal.show(
+                    onDismiss: {
+                        viewModel.viewState.startTaskState = .loaded
+                    }, content: {
+                        proccessRewardModal
+                    }
+                )
+            default:
+                break
+            }
+        }
+    }
+    
+    var loadedView: some View {
+        VStack(alignment: .leading) {
+            descriptionView
+            Spacer()
+            
+            buttonTimerView
+            Spacer()
+            
+            buttonsView
+            .padding()
+        }
+        .padding(.horizontal, 24)
+    }
+    
+    var loadingView: some View {
+        LoadingView(msn: viewModel.viewState.msnLoading)
     }
     
     var descriptionView: some View {
@@ -88,11 +116,42 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
                              state: .enabled,
                              mode: .solid,
                              action: {
-                Task {
-                    
-                    //                            await viewModel.action(.registerUser)
-                }
+                viewModel.viewState.startTaskState = .confirmation
             })
+        }
+    }
+    
+    var proccessRewardModal: some View {
+        VStack(alignment: .leading, spacing: FHKSpace.space08) {
+            
+            FHKRadioGroupField(
+                title: "",
+                options: viewModel.viewState.rewardsOptions,
+                selection: $viewModel.viewState.selectedRewardType,
+                onSelectionChanged: { value in
+                    print("Se seleccionó: \(value)")
+                }
+            )
+            
+            HStack {
+                FHKButtonPrimary(title: "Uno",
+                                 state: .enabled,
+                                 mode: .glass(.clearWithInteractive),
+                                 action: {
+                })
+                
+                FHKButtonPrimary(title: "Dos",
+                                 state: .enabled,
+                                 mode: .glass(.clearWithInteractive),
+                                 action: {
+                })
+                
+                FHKButtonPrimary(title: "Tres",
+                                 state: .enabled,
+                                 mode: .glass(.clearWithInteractive),
+                                 action: {
+                })
+            }
         }
     }
 }

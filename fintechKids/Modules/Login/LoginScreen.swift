@@ -36,9 +36,13 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                     router.navigate(to: .home)
                     
                 case .error:
-                    viewModel.fhkModal.show {
-                        modalInformationError
-                    }
+                    viewModel.fhkModal.show(
+                        onDismiss: {
+                            print("El usuario cerró el modal")
+                        }, content: {
+                            modalInformationError
+                        }
+                    )
                 }
 
             default:

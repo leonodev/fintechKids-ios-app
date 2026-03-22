@@ -82,7 +82,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                                         memberName: viewModel.getNameMember(member: member),
                                         avatarName: viewModel.getAvatarMember(member: member)
                                       ),
-                                      action: { uuid in
+                                      action: { _ in
                             router.navigate(to: .memberDetail(member))
                         })
                     }

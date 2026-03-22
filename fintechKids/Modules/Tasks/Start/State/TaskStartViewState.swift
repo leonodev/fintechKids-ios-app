@@ -8,9 +8,12 @@
 import Observation
 import FHKUtils
 import FHKDomain
+import FHKDesignSystem
 
 @Observable
 public class TaskStartViewState {
+    public var selectedRewardType: WorkType?
+    
     // Properties Observable
     public var titleDescription: String {
         "title_task_description".localized().capitalizingFirstLetter()
@@ -39,4 +42,24 @@ public class TaskStartViewState {
     public var titleCancel: String {
         "cancel".localized().capitalizingFirstLetter()
     }
+    
+    public var msnLoading: String {
+        "loading".localized().capitalizingFirstLetter()
+    }
+    
+    public enum State: Equatable {
+        case loading
+        case loaded
+        case confirmation
+    }
+    
+    public var startTaskState: State = .loaded
+    
+    let rewardsOptions = [
+        FHKRadioOption(value: WorkType.time,
+                       label: "title_in_time".localized().capitalizingFirstLetter()),
+        
+        FHKRadioOption(value: WorkType.coins,
+                       label: "title_in_coins".localized().capitalizingFirstLetter())
+    ]
 }

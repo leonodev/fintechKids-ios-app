@@ -53,27 +53,35 @@ struct ProfileScreen<VM: ProfileScreenVM>: View {
                     router.popTo(.login)
                     
                 case .error:
-                    viewModel.fhkModal.show {
+                    viewModel.fhkModal.show(
+                        onDismiss: {
+                        print("El usuario cerró el modal")
+                    }, content: {
                         modalErrorView
                     }
+                    )
                 }
 
             case .confirmation:
-                viewModel.fhkModal.show {
-                    FHKConfirmationView(message: viewModel.viewState.msnCloseSession,
-                                        confirmButtonText: viewModel.viewState.btnContinue,
-                                        cancelButtonText: viewModel.viewState.btnCancel,
-                                        confirmAction: {
-                        Task {
-                            await viewModel.action(.logout)
+                viewModel.fhkModal.show(
+                    onDismiss: {
+                        print("El usuario cerró el modal")
+                    }, content: {
+                        FHKConfirmationView(message: viewModel.viewState.msnCloseSession,
+                                            confirmButtonText: viewModel.viewState.btnContinue,
+                                            cancelButtonText: viewModel.viewState.btnCancel,
+                                            confirmAction: {
+                            Task {
+                                await viewModel.action(.logout)
+                                viewModel.fhkModal.dismiss()
+                            }
+                        },
+                                            cancelAction: {
+                            viewModel.viewState.profileState = .loaded
                             viewModel.fhkModal.dismiss()
-                        }
-                    },
-                                        cancelAction: {
-                        viewModel.viewState.profileState = .loaded
-                        viewModel.fhkModal.dismiss()
-                    })
-                }
+                        })
+                    }
+                )
                 
             default:
                 break
