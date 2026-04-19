@@ -56,5 +56,13 @@ public class ModulesDependencies: FHKDependencies {
         // Main App / Modules / Goal
         inject.fhkSupabaseGoal = FHKSupabaseGoals(supabaseClient: supabaseClient)
         inject.fhkGoalsRepository = GoalRepository()
+        
+        // Main App / Modules / Balance
+        inject.fhkSupabaseBalance = FHKSupabaseBalance(supabaseClient: supabaseClient)
+        inject.fhkBalanceRepository = BalanceRepository()
+        
+        // Main App / Modules / Rewards
+        inject.fhkSupabaseRewards = FHKSupabaseRewards(supabaseClient: supabaseClient)
+        inject.fhkRewardsRepository = RewardCollectRepository()
     }
 }

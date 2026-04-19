@@ -13,9 +13,11 @@ import FHKDomain
 struct TasksScreen<VM: TasksScreenVM>: View {
     @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
+    var member: MemberEntity?
+    var isFromChildSelection: Bool = false
     
     var body: some View {
-        ScreenContainer(title: Routes.tasks.title) {
+        ScreenContainer(title: Routes.Titles.tasks) {
             switch viewModel.viewState.taskState {
                 
             case .loading:
@@ -43,38 +45,30 @@ struct TasksScreen<VM: TasksScreenVM>: View {
                 LazyVStack(alignment: .center, spacing: 10) {
                     ForEach(viewModel.viewState.taskList) { task in
                         FHKCardView { _ in
-                            router.navigate(to: .startTask(task))
+                            guard let member = self.member, isFromChildSelection else {
+                                return
+                            }
+                            
+                            router.navigate(to: .startTask(task, member))
                         } content: {
                             VStack(alignment: .leading, spacing: 0) {
-                                FHKDescriptionCardView(title: task.name, description: task.description)
-                                
-                                HStack(spacing: -30) {
-                                    VStack {
-                                        LottieView(animationName: Lotties.coin,
-                                                   loopMode: .loop,
-                                                   contentMode: .scaleAspectFit)
-                                            .frame(height: 150)
-                                           
-                                        Text("\(task.coinsGranted)")
-                                            .font(.PangramSans.bold(FHKSize.size24))
-                                            .foregroundColor(FHKColor.warning.opacity(0.7))
-                                            .padding(.horizontal, FHKSpace.space08)
-                                            .padding(.top, -40)
-                                    }
-                                    .padding(.top, -30)
+ 
+                                // only display lotties if entry from member profile
+                                if isFromChildSelection {
+                                    FHKDescriptionCardView(title: task.name,
+                                                           description: task.description)
                                     
-                                    VStack {
-                                        LottieView(animationName: Lotties.hours,
-                                                   loopMode: .loop,
-                                                   contentMode: .scaleAspectFit)
-                                            .frame(height: 100)
-                                            .padding(.top, -15)
-                                            
-                                        Text("\(task.timeGranted)")
-                                            .font(.PangramSans.bold(FHKSize.size24))
-                                            .foregroundColor(FHKColor.stone.opacity(0.7))
-                                            .padding(.horizontal, FHKSpace.space08)
-                                            .padding(.top, -20)
+                                    makeLottiesView(task: task)
+                                } else {
+                                    HStack {
+                                        Image(systemName: "paperclip")
+                                            .resizable()
+                                            .frame(width: FHKSize.size32, height: FHKSize.size32)
+                                            .foregroundStyle(FHKColor.yellow)
+                                            .padding(.trailing, FHKSpace.space08)
+                                        
+                                        FHKDescriptionCardView(title: task.name,
+                                                               description: task.description)
                                     }
                                 }
                             }
@@ -82,27 +76,53 @@ struct TasksScreen<VM: TasksScreenVM>: View {
                         .padding()
                     }
                 }
-                .padding(.top)
             }
             .refreshable {
                 await viewModel.action(.fetchTasks(force: true))
             }
 
-            Button {
-                router.navigate(to: .createTask)
-            } label: {
-                ZStack {
-                    Circle()
-                        .foregroundColor(.indigo)
-                        .frame(width: 70, height: 70)
-                        .shadow(radius: 5)
-                    
-                    Image(systemName: "plus")
-                        .foregroundColor(.white)
-                        .font(.title)
+            // only display lotties if entry from member profile
+            if !isFromChildSelection {
+                Button {
+                    router.navigate(to: .createTask)
+                } label: {
+                    FHKButtomPlus()
                 }
+                .padding(25)
             }
-            .padding(25)
+        }
+    }
+    
+    @ViewBuilder
+    private func makeLottiesView(task: TaskEntity) -> some View {
+        HStack(spacing: -30) {
+            VStack {
+                LottieView(animationName: Lotties.coin,
+                           loopMode: .loop,
+                           contentMode: .scaleAspectFit)
+                    .frame(height: 150)
+                   
+                Text("\(task.coinsGranted)")
+                    .font(.PangramSans.bold(FHKSize.size24))
+                    .foregroundColor(FHKColor.warning.opacity(0.7))
+                    .padding(.horizontal, FHKSpace.space08)
+                    .padding(.top, -40)
+            }
+            .padding(.top, -30)
+            
+            VStack {
+                LottieView(animationName: Lotties.hours,
+                           loopMode: .loop,
+                           contentMode: .scaleAspectFit)
+                    .frame(height: 100)
+                    .padding(.top, -15)
+                    
+                Text("\(task.timeGranted)")
+                    .font(.PangramSans.bold(FHKSize.size24))
+                    .foregroundColor(FHKColor.stone.opacity(0.7))
+                    .padding(.horizontal, FHKSpace.space08)
+                    .padding(.top, -20)
+            }
         }
     }
 }

@@ -11,4 +11,19 @@ import FHKDesignSystem
 import FHKDomain
 
 public struct MemberDetailState {
+    
+    public enum State: Equatable {
+        case loading
+        case loaded
+        case finish(result: ActionResult)
+    }
+    
+    public var memberState: State = .loading
+    
+    public var balance: BalanceEntity?
+    public var msnUserError: String = ""
+    
+    public var msnLoading: String {
+        "loading".localized().capitalizingFirstLetter()
+    }
 }

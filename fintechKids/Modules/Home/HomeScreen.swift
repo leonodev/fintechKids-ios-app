@@ -15,7 +15,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     @State private var showPermissions = false
     
     var body: some View {
-        ScreenContainer(title: Routes.home.title) {
+        ScreenContainer(title: Routes.Titles.home) {
             
             switch viewModel.viewState.homeState {
                 
@@ -120,7 +120,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 router.navigate(to: .members)
                 
             case .tasks:
-                router.navigate(to: .tasks)
+                router.navigate(to: .tasks(isFromChildSelection: false, nil))
                 
             case .goals:
                 router.navigate(to: .goals)

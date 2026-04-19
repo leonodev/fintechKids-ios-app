@@ -123,16 +123,7 @@ struct GoalListScreen<VM: GoalListScreenVM>: View {
         Button {
             router.navigate(to: .createGoal)
         } label: {
-            ZStack {
-                Circle()
-                    .foregroundColor(.indigo)
-                    .frame(width: 70, height: 70)
-                    .shadow(radius: 5)
-                
-                Image(systemName: "plus")
-                    .foregroundColor(.white)
-                    .font(.title)
-            }
+            FHKButtomPlus()
         }
     }
 }

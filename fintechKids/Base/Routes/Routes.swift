@@ -20,9 +20,10 @@ public enum Routes: NavigationDestination {
     case memberDetail(MemberEntity)
     case goals
     case createGoal
-    case tasks
+    case tasks(isFromChildSelection: Bool, MemberEntity?)
     case createTask
-    case startTask(TaskEntity)
+    case startTask(TaskEntity, MemberEntity)
+    case collectReward(CollectRewardModel, MemberEntity)
     case profile
     
     public var hidesNavigationBar: Bool {
@@ -48,6 +49,7 @@ public enum Routes: NavigationDestination {
         case .tasks: return "tasks"
         case .createTask: return "create_task"
         case .startTask: return "start_task"
+        case .collectReward: return "collect_reward"
         }
     }
 }
@@ -55,39 +57,17 @@ public enum Routes: NavigationDestination {
 // Define each title by navigation bar
 extension Routes {
     
-    public var title: String? {
-        switch self {
-            
-        case .language:
-            return "language".localized().capitalizingFirstLetter()
-            
-        case .login:
-            return nil
-            
-        case .register:
-            return "register".localized().capitalizingFirstLetter()
-            
-        case .home:
-            return nil
-            
-        case .members:
-            return "title_add_member".localized().capitalizingFirstLetter()
-            
-        case .memberDetail:
-            return nil
-            
-        case .createGoal:
-            return "goal".localized().capitalizingFirstLetter()
-            
-        case .goals:
-            return "goal_list".localized().capitalizingFirstLetter()
-            
-        case .profile:
-            return "profile".localized().capitalizingFirstLetter()
-            
-        case .tasks, .createTask, .startTask:
-            return "tasks".localized().capitalizingFirstLetter()
-        }
+    public struct Titles {
+        public static let language = "language".localized().capitalizingFirstLetter()
+        public static let login = "login".localized().capitalizingFirstLetter()
+        public static let register = "register".localized().capitalizingFirstLetter()
+        public static let home = "home".localized().capitalizingFirstLetter()
+        public static let members = "title_add_member".localized().capitalizingFirstLetter()
+        public static let createGoal = "goal".localized().capitalizingFirstLetter()
+        public static let goals = "goal_list".localized().capitalizingFirstLetter()
+        public static let profile = "profile".localized().capitalizingFirstLetter()
+        public static let tasks = "tasks".localized().capitalizingFirstLetter()
+        public static let collectReward = "collect_reward".localized().capitalizingFirstLetter()
     }
 }
 
@@ -125,14 +105,20 @@ extension Routes {
         case .profile:
             ProfileScreen(viewModel: ProfileScreenVM())
             
-        case .tasks:
-            TasksScreen(viewModel: TasksScreenVM())
-            
+        case .tasks(let isFromChildSelection, let member):
+            TasksScreen(viewModel: TasksScreenVM(),
+                        member: member,
+                        isFromChildSelection: isFromChildSelection)
         case .createTask:
             TaskCreateScreen(viewModel: TaskCreateScreenVM())
             
-        case .startTask(let task):
-            TaskStartScreen(viewModel: TaskStartScreenVM(), task: task)
+        case .startTask(let task, let member):
+            TaskStartScreen(viewModel: TaskStartScreenVM(), task: task, member: member)
+            
+        case .collectReward(let collectRewardModel, let member):
+            RewardCollectScreen(viewModel: RewardCollectScreenVM(),
+                                collectModel: collectRewardModel,
+                                member: member)
         }
     }
 }

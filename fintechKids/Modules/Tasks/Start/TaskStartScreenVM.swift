@@ -21,6 +21,10 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
+    public var fhkToast: any FHKToastProtocol {
+        inject.fhkToast
+    }
+    
     public enum Action: Equatable {
         case startTask
         case stopTask
@@ -36,5 +40,9 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
         case .stopTask:
             break
         }
+    }
+    
+    func displayNotification(message: String, type: ToastType = .warning) {
+        fhkToast.show(info: viewState.toastInfo(msn: message, type: type))
     }
 }

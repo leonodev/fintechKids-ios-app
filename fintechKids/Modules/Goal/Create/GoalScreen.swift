@@ -16,7 +16,7 @@ struct GoalScreen<VM: GoalScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     
     var body: some View {
-        ScreenContainer(title: Routes.createGoal.title) {
+        ScreenContainer(title: Routes.Titles.createGoal) {
             switch viewModel.viewState.goalState {
                 
             case .loading:

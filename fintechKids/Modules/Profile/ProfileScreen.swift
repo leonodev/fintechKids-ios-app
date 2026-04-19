@@ -19,7 +19,7 @@ struct ProfileScreen<VM: ProfileScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     
     var body: some View {
-        ScreenContainer(title: Routes.profile.title) {
+        ScreenContainer(title: Routes.Titles.profile) {
             switch viewModel.viewState.profileState {
                 
             case .loading:

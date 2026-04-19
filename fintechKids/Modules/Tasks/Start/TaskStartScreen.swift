@@ -14,9 +14,10 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
     @State var viewModel: VM
     @NavigationRouterWrapper<Routes> private var router
     var task: TaskEntity
+    var member: MemberEntity
     
     var body: some View {
-        ScreenContainer(title: Routes.tasks.title) {
+        ScreenContainer(title: Routes.Titles.tasks) {
             switch viewModel.viewState.startTaskState {
             case .loaded, .confirmation:
                 loadedView
@@ -49,7 +50,7 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
             buttonTimerView
             Spacer()
             
-            buttonsView
+            buttonsControlView
             .padding()
         }
         .padding(.horizontal, 24)
@@ -95,25 +96,26 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
             
             FHKWatchButton(startTitle: viewModel.viewState.titleStart,
                            stopTitle: viewModel.viewState.titleStop,
-                           resetTitle: viewModel.viewState.titleReset)
+                           resetTitle: viewModel.viewState.titleReset,
+                           onStop: { dedicatedTime in
+                viewModel.viewState.dedicatedTimeTask = dedicatedTime
+            })
             
             Spacer()
         }
     }
     
-    var buttonsView: some View {
+    var buttonsControlView: some View {
         HStack {
             FHKButtonPrimary(title: viewModel.viewState.titleCancel,
                              state: .enabled,
                              mode: .glass(.clearWithInteractive),
                              action: {
-                Task {
-                    //                            await viewModel.action(.registerUser)
-                }
+                router.pop()
             })
             
             FHKButtonPrimary(title: viewModel.viewState.titleApproved,
-                             state: .enabled,
+                             state: viewModel.viewState.buttonAprovalState,
                              mode: .solid,
                              action: {
                 viewModel.viewState.startTaskState = .confirmation
@@ -124,35 +126,66 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
     var proccessRewardModal: some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
             
+            Text(viewModel.viewState.titleHowReceiveReward)
+                .font(.PangramSans.bold(FHKSize.size20))
+                .foregroundColor(FHKColor.lunarSand)
+                .padding(.top)
+            
+            HStack(spacing: FHKSize.size08) {
+                FHKRewardTypeView(value: "\(task.timeGranted)",
+                                  type: .time)
+                Text("/")
+                    .font(.PangramSans.bold(FHKSize.size24))
+                    .foregroundColor(FHKColor.gray)
+                
+                FHKRewardTypeView(value: "\(task.coinsGranted)",
+                                  type: .coins)
+            }
+            
             FHKRadioGroupField(
                 title: "",
                 options: viewModel.viewState.rewardsOptions,
                 selection: $viewModel.viewState.selectedRewardType,
-                onSelectionChanged: { value in
-                    print("Se seleccionó: \(value)")
-                }
+                onSelectionChanged: { _ in }
             )
+            .padding(.bottom)
             
-            HStack {
-                FHKButtonPrimary(title: "Uno",
+            VStack {
+                FHKButtonPrimary(title: viewModel.viewState.titleSendSavings,
                                  state: .enabled,
                                  mode: .glass(.clearWithInteractive),
                                  action: {
+                    goToCollectReward(type: .sendToSavings)
                 })
                 
-                FHKButtonPrimary(title: "Dos",
+                FHKButtonPrimary(title: viewModel.viewState.titleChangeRewards,
                                  state: .enabled,
                                  mode: .glass(.clearWithInteractive),
                                  action: {
+                    goToCollectReward(type: .changeByRewards)
                 })
                 
-                FHKButtonPrimary(title: "Tres",
+                FHKButtonPrimary(title: viewModel.viewState.titleAssignMyGoals,
                                  state: .enabled,
                                  mode: .glass(.clearWithInteractive),
                                  action: {
+                    goToCollectReward(type: .assignToGoal)
                 })
             }
         }
+    }
+    
+    private func goToCollectReward(type: ReceiveFormType) {
+        guard let selectedRewardType = viewModel.viewState.selectedRewardType else {
+            viewModel.displayNotification(message: viewModel.viewState.collectTypeError,
+                                          type: .error)
+            return
+        }
+        let collectReward = CollectRewardModel(task: task,
+                                               receiveRewardType: type,
+                                               rewardType: selectedRewardType)
+        viewModel.fhkModal.dismiss()
+        router.navigate(to: .collectReward(collectReward, member))
     }
 }
 
@@ -166,6 +199,10 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
             timeGranted: "2 horas",
             coinsGranted: 100,
             emailParent: "email@gmail.com"
-        ))
+                        ), member: MemberEntity(id: UUID(),
+                                                emailParent: "email@gmail.com",
+                                                memberName: "Isaac",
+                                                familyName: "Leon's",
+                                                avatarName: "boy_6"))
     }
 }

@@ -19,7 +19,7 @@ struct LanguageScreen<VM: LanguageScreenVM>: View {
     @State private var isExpanded = false
     
     var body: some View {
-        ScreenContainer(title: Routes.language.title) {
+        ScreenContainer(title: Routes.Titles.language) {
             switch viewModel.viewState.languageState {
             
             case .loaded:

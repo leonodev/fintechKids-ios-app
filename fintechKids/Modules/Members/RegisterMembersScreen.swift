@@ -16,7 +16,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     
     var body: some View {
-        ScreenContainer(title: Routes.members.title) {
+        ScreenContainer(title: Routes.Titles.members) {
             switch viewModel.viewState.registerMembersState {
                 
             case .loading:
