@@ -119,6 +119,10 @@ struct RegisterScreen<VM: RegisterScreenVM>: View {
                              placeholder: viewModel.viewState.confirmPasswordPlaceholder,
                              isSecure: true)
                 .padding(.top, FHKSize.size12)
+                
+                FHKTextField(text: $viewModel.viewState.pinApproveTask,
+                             placeholder: viewModel.viewState.pinApproveTaskPlaceholder)
+                .padding(.top, FHKSize.size12)
             }
         })
         .padding(.top, FHKSize.size24)

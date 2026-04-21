@@ -25,9 +25,14 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
         inject.fhkToast
     }
     
+    private var fhkConfiguration: any FHKConfigurationProtocol {
+        inject.fhkConfiguration
+    }
+    
     public enum Action: Equatable {
         case startTask
         case stopTask
+        case validatePin
     }
     
     @MainActor
@@ -39,10 +44,29 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
             
         case .stopTask:
             break
+            
+        case .validatePin:
+            validateTasK()
         }
     }
     
     func displayNotification(message: String, type: ToastType = .warning) {
         fhkToast.show(info: viewState.toastInfo(msn: message, type: type))
+    }
+}
+
+private extension TaskStartScreenVM {
+    
+    func validateTasK() {
+        let pinParent = fhkConfiguration.approvePin ?? ""
+        let pinEntered = viewState.approvePIN
+        
+        if pinEntered == pinParent {
+            fhkToast.dismiss()
+            viewState.startTaskState = .confirmation
+        } else {
+            displayNotification(message: viewState.msnPinApproveWrong,
+                                type: .error)
+        }
     }
 }

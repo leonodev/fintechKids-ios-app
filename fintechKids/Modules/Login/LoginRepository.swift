@@ -27,9 +27,9 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
         fhkStorage.exists(key: KeychainKey.authToken.rawValue)
     }
 
-    func login(loginEntity: LoginEntity) async throws -> String? {
+    func login(loginEntity: LoginEntity) async throws -> FHKUserSession? {
         let userSession = try await fhkSupabase.login(loginEntity: loginEntity)
-        return userSession.accessToken
+        return userSession
     }
     
     func loginWithBiometrics(prompt: String) async throws {
@@ -60,6 +60,10 @@ final class LoginRepository: FHKLoginRepositoryProtocol {
             for: KeychainKey.authToken.rawValue,
             requireBiometry: requiresBiometry
         )
+    }
+    
+    func savePinApproveTask(pin: String) async throws {
+        try fhkStorage.saveKeychain(pin, for: KeychainKeys.approvePinKey)
     }
     
     func saveUserIntoKeychain(email: String) async throws {

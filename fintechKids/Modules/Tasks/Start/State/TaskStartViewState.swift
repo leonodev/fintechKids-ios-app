@@ -13,7 +13,8 @@ import FHKDesignSystem
 
 @Observable
 public class TaskStartViewState {
-    public var selectedRewardType: WorkType?
+    var approvePIN = ""
+    var selectedRewardType: WorkType?
     // Propiedad computada
     
     // Properties Observable
@@ -69,6 +70,26 @@ public class TaskStartViewState {
         "msn_reward_type_missing".localized().capitalizingFirstLetter()
     }
     
+    public var titleButtonContinue: String {
+        "continue".localized().uppercased()
+    }
+    
+    public var titleValidatePinApprove: String {
+        "title_validate_pin_approve".localized().uppercased()
+    }
+    
+    public var msnPinApproveWrong: String {
+        "msn_pin_approve_wrong".localized().capitalizingFirstLetter()
+    }
+    
+    public var pinApproveTaskPlaceholder = "title_pin_approve_task_placeholder".localized().capitalizingFirstLetter()
+    
+    public var isBtnContinueEnable: FHKButtonComponent.State {
+        !approvePIN.isEmpty
+        ? .enabled
+        : .disabled
+    }
+    
     public func toastInfo(msn: String, type: ToastType) -> FHKToastInfo {
         FHKToastInfo(type: type, message: msn, hasIcon: true)
     }
@@ -87,6 +108,7 @@ public class TaskStartViewState {
         case loading
         case loaded
         case confirmation
+        case validation
     }
     
     public var startTaskState: State = .loaded

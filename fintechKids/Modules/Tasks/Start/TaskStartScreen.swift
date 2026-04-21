@@ -19,7 +19,7 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
     var body: some View {
         ScreenContainer(title: Routes.Titles.tasks) {
             switch viewModel.viewState.startTaskState {
-            case .loaded, .confirmation:
+            case .loaded, .confirmation, .validation:
                 loadedView
                 
             case .loading:
@@ -28,6 +28,15 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
         }
         .onChange(of: viewModel.viewState.startTaskState) { _, state in
             switch state {
+            case .validation:
+                viewModel.fhkModal.show(
+                    onDismiss: {
+                        viewModel.viewState.startTaskState = .loaded
+                    }, content: {
+                        ValidatePinModalView(viewModel: viewModel)
+                    }
+                )
+                
             case .confirmation:
                 viewModel.fhkModal.show(
                     onDismiss: {
@@ -118,7 +127,7 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
                              state: viewModel.viewState.buttonAprovalState,
                              mode: .solid,
                              action: {
-                viewModel.viewState.startTaskState = .confirmation
+                viewModel.viewState.startTaskState = .validation
             })
         }
     }

@@ -17,12 +17,14 @@ public class RegisterViewState {
     public var emailFamily = ""
     public var password = ""
     public var confirmPassword = ""
+    public var pinApproveTask = ""
     
     // Properties View
     public var familyNamePlaceholder = "family_name".localized().capitalizingFirstLetter()
     public var emailFamilyPlaceholder = "email".localized().capitalizingFirstLetter()
     public var passwordPlaceholder = "password".localized().capitalizingFirstLetter()
     public var confirmPasswordPlaceholder = "confirm_password".localized().capitalizingFirstLetter()
+    public var pinApproveTaskPlaceholder = "title_pin_approve_task_placeholder".localized().capitalizingFirstLetter()
     public var titleRegisterBtn = "register".localized().uppercased()
     public var msnLoading = ""
     public var msnRegisterSuccess = "msn_register_user_success".localized().capitalizingFirstLetter()
@@ -70,7 +72,8 @@ public class RegisterViewState {
     var isBtnContinueEnable: FHKButtonComponent.State {
         !familyName.isEmpty &&
         isEmailValid &&
-        isPasswordValid
+        isPasswordValid &&
+        pinApproveTask.isEmpty
         ? .enabled
         : .disabled
     }

@@ -1120,6 +1120,64 @@
         }
       }
     },
+    "msn_collect_reward_success" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "all set! your reward has been successfully processed. here is your golden ticket, enjoy it!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Todo listo! tu recompensa se ha gestionado con éxito. aquí tienes tu golden ticket, ¡disfrútalo!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tout est prêt ! ta récompense a été gérée avec succès. voici ton golden ticket, profites-en !"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tutto pronto! la tua ricompensa è stata gestita con successo. ecco il tuo golden ticket, divertiti!"
+          }
+        }
+      }
+    },
+    "msn_congratulations_reward_golden_ticket" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "congratulations! with this golden ticket you can now claim your reward. your supervisor has also received a copy to stay informed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Felicidades! con este golden ticket ya puedes reclamar tu recompensa. tu responsable también ha recibido una copia para estar al tanto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "félicitations ! avec ce golden ticket, tu peux maintenant réclamer tu récompense. ton responsable a également reçu une copie pour être tenu au courant."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "congratulazioni! con questo golden ticket ora puoi richiedere il tuo premio. il tuo responsabile ha ricevuto anche una copia per essere informato."
+          }
+        }
+      }
+    },
     "msn_connection_network_error" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1638,6 +1696,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "non è stato possibile eseguire l'operazione, riprova più tardi"
+          }
+        }
+      }
+    },
+    "msn_pin_approve_wrong" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the pin entered to approve tasks is not valid"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "el pin ingresado para aprobar tareas no es válido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "le code pin saisi pour approuver les tâches n'est pas valide"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "il pin inserito per approvare i compiti non è valido"
           }
         }
       }
@@ -3501,6 +3588,35 @@
         }
       }
     },
+    "title_pin_approve_task_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIN to approve tasks"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIN para aprobar tareas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code PIN pour approuver les tâches"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIN per approvare i compiti"
+          }
+        }
+      }
+    },
     "title_placeholder_name_goal" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3990,6 +4106,64 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "errore inaspettato"
+          }
+        }
+      }
+    },
+    "title_validate_pin_approve" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "enter your task approval pin"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ingresa tu pin de aprobación de tareas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "entrez votre code pin d'approbation des tâches"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inserisci il tuo pin di approvazione compiti"
+          }
+        }
+      }
+    },
+    "title_view_ticket_golden" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "view my ticket"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ver mi ticket"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "voir mon ticket"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vedi il mio ticket"
           }
         }
       }

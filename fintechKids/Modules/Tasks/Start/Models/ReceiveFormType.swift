@@ -7,7 +7,7 @@
 
 import FHKDomain
 
-enum ReceiveFormType {
+public enum ReceiveFormType {
     case sendToSavings
     case changeByRewards
     case assignToGoal

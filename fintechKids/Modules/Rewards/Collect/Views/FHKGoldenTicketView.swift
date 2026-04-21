@@ -15,7 +15,6 @@ import FHKDesignSystem // Asumimos que aquí están tus fuentes y colores base
             recipientName: "MARIA GARCIA",
             taskDescription: "HACER LOS DEBERES DEL SABADO",
             reward: "1050 KIDCOINS",
-            validUntil: "ENERO 2027",
             ticketCode: "FHK-GTR-789012"
         )
     }

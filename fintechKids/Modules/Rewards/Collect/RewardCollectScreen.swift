@@ -32,7 +32,6 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
             switch state {
             case .finish(let result):
                 let isSuccess = (result == .success)
-                
                 viewModel.fhkModal.show(onDismiss: {},
                                         content: {
                     modalInformationView(isSuccess: isSuccess)
@@ -96,7 +95,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     }
     
     private var continueButtonView: some View {
-        FHKButtonPrimary(title: viewModel.viewState.titleBtnContinue,
+        FHKButtonPrimary(title: viewModel.viewState.titleButtonColletTask(collectType: collectModel.receiveRewardType),
                          textColor: FHKColor.lunarSand,
                          style: .outlined,
                          state: isAcceptConditions ? .enabled : .disabled,
@@ -327,7 +326,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                             memberId: member.id.uuidString,
                             claimedValue: collectValue
                         )
-                        
+                        viewModel.fhkModal.dismiss()
                         await viewModel.action(.collectSendTicketGold(ticket: ticketData))
                     }
                 },
@@ -342,12 +341,18 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     private func modalInformationView(isSuccess: Bool) -> some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
             FHKInformationView(message: isSuccess
-                               ? viewModel.viewState.msnUpdateBalanceSuccess
+                               ? viewModel.viewState.msnColletTaskSuccess(collectType: collectModel.receiveRewardType)
                                : viewModel.viewState.msnUpdateBalanceFail,
                                type: isSuccess ? .success : .error,
-                               confirmButtonText: viewModel.viewState.titleBtnContinue,
+                               confirmButtonText: viewModel.viewState.titleButtonColletTask(collectType: collectModel.receiveRewardType),
                                 confirmAction: {
                 viewModel.fhkModal.dismiss()
+                router.popTo(.home)
+                
+                if case .changeByRewards = collectModel.receiveRewardType,
+                   let info = viewModel.viewState.goldenTicket {
+                    router.navigate(to: .presentGoldenTicket(info), style: .fullScreenCover)
+                }
             })
         }
     }

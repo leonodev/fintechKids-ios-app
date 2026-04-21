@@ -25,10 +25,11 @@ public enum Routes: NavigationDestination {
     case startTask(TaskEntity, MemberEntity)
     case collectReward(CollectRewardModel, MemberEntity)
     case profile
+    case presentGoldenTicket(GoldenTicketEntity)
     
     public var hidesNavigationBar: Bool {
         switch self {
-        case .language, .login, .home:
+        case .language, .login, .home, .presentGoldenTicket:
             return true
         default:
             return false
@@ -50,6 +51,7 @@ public enum Routes: NavigationDestination {
         case .createTask: return "create_task"
         case .startTask: return "start_task"
         case .collectReward: return "collect_reward"
+        case .presentGoldenTicket: return "golden_ticket"
         }
     }
 }
@@ -119,6 +121,9 @@ extension Routes {
             RewardCollectScreen(viewModel: RewardCollectScreenVM(),
                                 collectModel: collectRewardModel,
                                 member: member)
+            
+        case .presentGoldenTicket(let info):
+            RewardGoldenTicketScreen(ticketEntity: info)
         }
     }
 }

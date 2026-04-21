@@ -43,7 +43,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
     }
     
     public var parentMail: String? {
-        return fhkConfiguration.parentMail
+        fhkConfiguration.parentMail
     }
     
     public enum Action: Equatable {
@@ -189,6 +189,10 @@ private extension RewardCollectScreenVM {
         viewState.collectState = .loading
         do {
             try await fhkBalanceRepository.sendGoldenTicket(data: ticketData)
+            viewState.goldenTicket = GoldenTicketEntity(recipientName: ticketData.recipientName,
+                                                        taskDescription: ticketData.taskDescription,
+                                                        reward: ticketData.reward,
+                                                        ticketCode: Utils.numberBarCode)
             viewState.collectState = .finish(result: .success)
         } catch {
             handleBalanceError(error)

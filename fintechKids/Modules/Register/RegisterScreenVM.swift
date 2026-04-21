@@ -55,7 +55,8 @@ final class RegisterScreenVM: FHKCore.ViewModel {
         do {
             let registerUserEntity = RegisterUserEntity(email: viewState.emailFamily,
                                                         password: viewState.password,
-                                                        familyName: viewState.familyName)
+                                                        familyName: viewState.familyName,
+                                                        approvePIN: viewState.pinApproveTask)
             let response = try await fhkRegisterRepository.register(registerEntity: registerUserEntity)
             
             try fhkRegisterRepository.saveFamilyInfoKeychain(familyName: viewState.familyName)

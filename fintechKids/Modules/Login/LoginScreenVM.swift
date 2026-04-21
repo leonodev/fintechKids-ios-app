@@ -37,6 +37,10 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
+    private var fhkStorage: any FHKStorageManagerProtocol {
+        inject.fhkStorage
+    }
+    
     // Other properties
     var hasSavedAuthToken: Bool {
         fhkLoginRepository.hasSavedToken
@@ -78,12 +82,18 @@ final class LoginScreenVM: FHKCore.ViewModel {
             let userSession = try await fhkLoginRepository.login(loginEntity: loginEntity)
             
             viewState.loginState = .finish(result: .success)
-            guard let tokenAccess = userSession else {
+            guard let tokenAccess = userSession?.accessToken else {
                 return
             }
             
             // We saved the Session Token PROTECTED by Face ID for the future
             saveSessionToken(tokenAccess: tokenAccess, isHasBiometry: isBiometryAvailable)
+            
+            guard let pinToApprovedTask = userSession?.pinApproved else {
+                return
+            }
+            
+            try await fhkLoginRepository.savePinApproveTask(pin: pinToApprovedTask)
         } catch let error as FHKSupabaseError {
             viewState.loginState = .finish(result: .error)
             informateError(error)

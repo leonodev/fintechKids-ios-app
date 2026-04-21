@@ -81,12 +81,30 @@ public class RewardCollectViewState {
         "msn_check_accept_collect".localized().capitalizingFirstLetter()
     }
     
-    public var titleBtnContinue: String {
-        "continue".localized().uppercased()
+    public func titleButtonColletTask(collectType: ReceiveFormType) -> String {
+        switch collectType {
+        case .sendToSavings:
+            return "continue".localized().uppercased()
+            
+        case .changeByRewards:
+            return "title_view_ticket_golden".localized().uppercased()
+            
+        default:
+            return ""
+        }
     }
     
-    public var msnUpdateBalanceSuccess: String {
-        "msn_update_balance_success".localized().uppercased()
+    public func msnColletTaskSuccess(collectType: ReceiveFormType) -> String {
+        switch collectType {
+        case .sendToSavings:
+            return "msn_update_balance_success".localized().capitalizingFirstLetter()
+            
+        case .changeByRewards:
+            return "msn_collect_reward_success".localized().capitalizingFirstLetter()
+            
+        default:
+            return ""
+        }
     }
     
     public var msnUpdateBalanceFail: String {
@@ -140,4 +158,5 @@ public class RewardCollectViewState {
     public var balance: BalanceEntity?
     public var goalList: [GoalEntity] = []
     public var rewardList: [RewardEntity] = []
+    public var goldenTicket: GoldenTicketEntity?
 }
