@@ -37,10 +37,6 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
-    private var fhkStorage: any FHKStorageManagerProtocol {
-        inject.fhkStorage
-    }
-    
     // Other properties
     var hasSavedAuthToken: Bool {
         fhkLoginRepository.hasSavedToken

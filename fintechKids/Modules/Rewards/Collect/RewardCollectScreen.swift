@@ -323,7 +323,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                             taskDescription: collectModel.task.name,
                             reward: item.name,
                             emailTo: viewModel.parentMail ?? "",
-                            memberId: member.id.uuidString,
+                            memberId: member.id,
                             claimedValue: collectValue
                         )
                         viewModel.fhkModal.dismiss()

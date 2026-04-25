@@ -51,13 +51,19 @@ public class CommonsDependencies: FHKDependencies {
 }
 
 public class FHKDependencies {
-    static func makeSupabaseClient() throws -> SupabaseClient {
-        let urlString = try inject.fhkServicesAPI.getURL(
-            environment: .production,
-            country: .spanish,
-            serviceKey: .supabase
-        )
+    static func makeSupabaseClient(_ environment: EnvironmentType = .production) throws -> SupabaseClient {
+        let urlString: String
         
+        if environment == .localhost {
+            urlString = "http://localhost:3001"
+        } else {
+            urlString = try inject.fhkServicesAPI.getURL(
+                environment: environment,
+                country: .spanish,
+                serviceKey: .supabase
+            )
+        }
+ 
         guard let url = URL(string: urlString) else {
             throw FHKAppError.invalidURL(urlString)
         }

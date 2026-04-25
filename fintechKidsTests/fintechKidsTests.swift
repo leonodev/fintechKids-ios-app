@@ -9,7 +9,6 @@ import XCTest
 import ViewInspector
 import SnapshotTesting
 import FHKInjections
-@testable import fintechKids
 
 final class fintechKidsTests: XCTestCase {
 

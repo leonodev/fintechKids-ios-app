@@ -8,6 +8,7 @@
 import SwiftUI
 import FHKCore
 import FHKDesignSystem
+import FHKDomain
 
 struct HomeScreen<VM: HomeScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
@@ -17,16 +18,28 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     var body: some View {
         ScreenContainer(title: Routes.Titles.home) {
             
-            switch viewModel.viewState.homeState {
+            VStack(alignment: .leading, spacing: 0) {
+                headerView
                 
-            case .loaded:
-                loadedView
+                membersView
+                
+                rewardsCollectedView
+                
+                Spacer()
+                
+                floatMenuView
+            }
+            .fullScreenCover(isPresented: $showPermissions) {
+                PermissionRequestView(provider: viewModel.fhkCameraPermission)
             }
         }
         .background(FHKColor.indigo)
         .onAppear {
             Task {
-                await viewModel.action(.fetchMemberFamily)
+                await viewModel.getParentMail()
+                async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: false))
+                async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: false))
+                await _ = (fetchMembers, fetchRewards)
             }
             
             //                if camaraPermissionManager.status != .authorized {
@@ -35,31 +48,15 @@ struct HomeScreen<VM: HomeScreenVM>: View {
         }
     }
 
-    var loadedView: some View {
-        VStack {
-            headerView
-            
-            membersView
-            
-            Spacer()
-            
-            cardViewExampleView
-            
-            floatMenuView
-        }
-        .fullScreenCover(isPresented: $showPermissions) {
-            PermissionRequestView(provider: viewModel.fhkCameraPermission)
-        }
-    }
-    
     var headerView: some View {
         HStack {
             Text(viewModel.viewState.titleMemberFamily)
-                .foregroundStyle(Color.white)
+                .font(.PangramSans.bold(FHKSize.size16))
+                .foregroundColor(FHKColor.lunarSand)
             
             Spacer()
             
-            AvatarView(name: viewModel.parentMail ?? "--", size: FHKSize.size52)
+            AvatarView(name: viewModel.viewState.parentEmail ?? "--", size: FHKSize.size52)
                 .onTapGesture {
                     router.navigate(to: .profile)
                 }
@@ -70,66 +67,106 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     var membersView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: FHKSpace.space16) {
-                if viewModel.familyMembers.isEmpty {
+                switch viewModel.viewState.familyState {
+                case .skeleton:
                     FHKMemberItem.skeletons(count: 3)
-                } else {
+                    
+                case .loaded:
                     ForEach(viewModel.familyMembers) { member in
-                        FHKMemberItem(id: viewModel.getId(member: member),
-                                      avatarName: viewModel.getAvatarMember(member: member),
-                                      nameMember: viewModel.getNameMember(member: member),
-                                      nameMemberError: viewModel.viewState.errorNameMember,
-                                      state: viewModel.viewState.getStateItemMemberComponent(
-                                        memberName: viewModel.getNameMember(member: member),
-                                        avatarName: viewModel.getAvatarMember(member: member)
-                                      ),
-                                      action: { _ in
-                            router.navigate(to: .memberDetail(member))
-                        })
+                        getMemberLoaded(member: member)
                     }
+                    
+                case .error:
+                    FHKMemberItem(state: .defaultDataError)
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
         }
-        .padding()
+        .padding(.horizontal)
     }
     
-    var cardViewExampleView: some View {
-        FHKCardView { _ in
-            print("Navegando al perfil del usuario: ")
-        } content: {
-            VStack(alignment: .leading, spacing: 15) {
-                // Título de la tarjeta
-                Text("Título de la Card")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                
-                // Descripción o cuerpo
-                Text("Este es un ejemplo de una tarjeta básica en SwiftUI con el fondo degradado que pediste.")
-                    .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.8))
+    var rewardsCollectedView: some View {
+        VStack(alignment: .leading) {
+            Text(viewModel.viewState.titleRewardsCollected)
+                .font(.PangramSans.bold(FHKSize.size16))
+                .foregroundColor(FHKColor.lunarSand)
+                .padding(.leading, FHKSpace.space08)
+                .padding(.top, FHKSpace.space16)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: FHKSpace.space16) {
+                    switch viewModel.viewState.rewardsState {
+                        
+                    case .skeleton:
+                        FHKRewardCollectCard.skeletons(count: 3, style: .glass)
+                        
+                    case .loaded:
+                        ForEach(viewModel.rewardsCollected) { ticket in
+                            getRewardCollectCardLoaded(ticket: ticket)
+                        }
+                        
+                    case .error:
+                        FHKRewardCollectCard(state: .defaultDataError, style: .glass)
+                    }
+                }
             }
+            .frame(height: FHKSize.size132)
+            .padding(.horizontal, FHKSpace.space08)
         }
-        .padding()
+        .padding(.top, FHKSpace.space16)
     }
     
     var floatMenuView: some View {
-        FloatMenu(options: viewModel.viewState.options,
-                  callback: { menu in
-            switch menu {
-            case .members:
-                router.navigate(to: .members)
-                
-            case .tasks:
-                router.navigate(to: .tasks(isFromChildSelection: false, nil))
-                
-            case .goals:
-                router.navigate(to: .goals)
-                
-            default:
-                break
-            }
-            print(index)
+        HStack {
+           Spacer()
+            
+            FloatMenu(options: viewModel.viewState.options,
+                      callback: { menu in
+                switch menu {
+                case .members:
+                    router.navigate(to: .members)
+                    
+                case .tasks:
+                    router.navigate(to: .tasks(isFromChildSelection: false, nil))
+                    
+                case .goals:
+                    router.navigate(to: .goals)
+                    
+                default:
+                    break
+                }
+                print(index)
+            })
+            
+            Spacer()
+        }
+    }
+}
+
+private extension HomeScreen {
+    
+    func getMemberLoaded(member: MemberEntity) -> FHKMemberItem {
+        FHKMemberItem(id: viewModel.getId(member: member),
+                      avatarName: viewModel.getAvatarMember(member: member),
+                      nameMember: viewModel.getNameMember(member: member),
+                      state: viewModel.viewState.getStateItemMemberComponent(
+                        memberName: viewModel.getNameMember(member: member),
+                        avatarName: viewModel.getAvatarMember(member: member)
+                      ),
+                      action: { _ in
+            router.navigate(to: .memberDetail(member))
         })
+    }
+    
+    func getRewardCollectCardLoaded(ticket: RewardCollectedEntity) -> FHKRewardCollectCard {
+        FHKRewardCollectCard(state: .loaded,
+                             style: .punched,
+                             id: ticket.id,
+                             memberName: ticket.member.memberName,
+                             avatarName: ticket.member.avatarName,
+                             taskName: ticket.nameTask,
+                             rewardName: ticket.nameReward,
+                             titleBtnPay: viewModel.viewState.titleBtnPay)
     }
 }
 
@@ -138,20 +175,4 @@ struct HomeScreen<VM: HomeScreenVM>: View {
         HomeScreen(viewModel: HomeScreenVM())
     }
     .background(FHKColor.indigo)
-}
-
-extension FHKMemberItem {
-    /// Genera una vista con el número de esqueletos deseado.
-    @ViewBuilder
-    public static func skeletons(count: Int = 3) -> some View {
-        // Usamos un HStack o el contenedor que suelas usar en tu UI
-        HStack(spacing: FHKSpace.space16) {
-            ForEach(0..<count, id: \.self) { _ in
-                FHKMemberItem(
-                    state: .skeleton,
-                    action: { _ in }
-                )
-            }
-        }
-    }
 }

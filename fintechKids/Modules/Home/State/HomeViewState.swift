@@ -13,6 +13,7 @@ import FHKUtils
 @Observable
 public class HomeViewState {
     var options: [FloatMenu.Option]
+    var parentEmail: String?
 
     public var errorNameMember: String {
         "error_name_member".localized().capitalizingFirstLetter()
@@ -26,17 +27,27 @@ public class HomeViewState {
         "msn_fetch_members_error".localized().capitalizingFirstLetter()
     }
     
+    public var errorRewardCollect: String {
+        "msn_fetch_rewards_collect_error".localized().capitalizingFirstLetter()
+    }
+    
     public var titleMemberFamily: String {
-        "title_members_family".localized().capitalizingFirstLetter()
+        "title_members_family".localized().uppercased()
+    }
+    
+    public var titleRewardsCollected: String {
+        "title_rewards_collected".localized().uppercased()
+    }
+ 
+    public var titleBtnPay: String {
+        "title_pay".localized().uppercased()
     }
     
     public var stateItemMemberComponent: ComponentState = .skeleton
     
-    public enum State: Equatable {
-        case loaded
-    }
-    
-    public var homeState: State = .loaded
+    // Independent states by component
+    public var familyState: ComponentStateType = .skeleton
+    public var rewardsState: ComponentStateType = .skeleton
 
     init() {
         options = [
@@ -62,8 +73,8 @@ public class HomeViewState {
         ]
     }
     
-    public func getStateItemMemberComponent(memberName: String, avatarName: String) -> ComponentState {
+    public func getStateItemMemberComponent(memberName: String, avatarName: String) -> ComponentStateType {
         let isInfoComplete = !memberName.isEmpty && !avatarName.isEmpty
-        return isInfoComplete ? .loaded : .error
+        return isInfoComplete ? .loaded : .error(errorNameMember)
     }
 }

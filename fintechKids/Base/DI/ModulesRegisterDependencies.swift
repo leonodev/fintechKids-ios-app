@@ -46,23 +46,27 @@ public class ModulesDependencies: FHKDependencies {
         inject.fhkProfileRepository = ProfileRepository()
         
         /// Main App / Modules / Members
-        let supabaseClient = try makeSupabaseClient()
-        inject.fhkSupabaseMembers = FHKSupabaseMembers(supabaseClient: supabaseClient)
+        let supabaseClientMembers = try makeSupabaseClient(.localhost)
+        inject.fhkSupabaseMembers = FHKSupabaseMembers(supabaseClient: supabaseClientMembers)
         
         // Main App / Modules / Task
+        let supabaseClient = try makeSupabaseClient()
         inject.fhkSupabaseTask = FHKSupabaseTask(supabaseClient: supabaseClient)
         inject.fhkTasksRepository = TasksRepository()
         
         // Main App / Modules / Goal
-        inject.fhkSupabaseGoal = FHKSupabaseGoals(supabaseClient: supabaseClient)
+        let supabaseClientGoal = try makeSupabaseClient()
+        inject.fhkSupabaseGoal = FHKSupabaseGoals(supabaseClient: supabaseClientGoal)
         inject.fhkGoalsRepository = GoalRepository()
         
         // Main App / Modules / Balance
-        inject.fhkSupabaseBalance = FHKSupabaseBalance(supabaseClient: supabaseClient)
+        let supabaseClientBalance = try makeSupabaseClient()
+        inject.fhkSupabaseBalance = FHKSupabaseBalance(supabaseClient: supabaseClientBalance)
         inject.fhkBalanceRepository = BalanceRepository()
         
         // Main App / Modules / Rewards
-        inject.fhkSupabaseRewards = FHKSupabaseRewards(supabaseClient: supabaseClient)
+        let supabaseClientRewards = try makeSupabaseClient(.localhost)
+        inject.fhkSupabaseRewards = FHKSupabaseRewards(supabaseClient: supabaseClientRewards)
         inject.fhkRewardsRepository = RewardCollectRepository()
     }
 }

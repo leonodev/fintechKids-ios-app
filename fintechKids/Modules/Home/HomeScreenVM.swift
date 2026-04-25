@@ -10,7 +10,8 @@ import Observation
 import FHKCore
 import FHKInjections
 import FHKDomain
- 
+import FHKDesignSystem
+
 @Observable
 final class HomeScreenVM: FHKCore.ViewModel {
     var viewState: HomeViewState = .init()
@@ -30,34 +31,64 @@ final class HomeScreenVM: FHKCore.ViewModel {
     
     // Other Properties
     public var familyMembers: [MemberEntity] = []
-    
-    public var parentMail: String? {
-        fhkHomeRepository.getParentMail()
-    }
+    public var rewardsCollected: [RewardCollectedEntity] = []
     
     enum Action: Equatable {
-        case fetchMemberFamily
+        case fetchMemberFamily(force: Bool = false)
+        case fetchRewardsCollected(force: Bool = false)
+    }
+    
+    func getParentMail() async {
+        let email = await fhkHomeRepository.getParentMail()
+        viewState.parentEmail = email
     }
     
     @MainActor
     func action(_ action: Action) async {
         switch action {
-        case .fetchMemberFamily:
-            await fetchMemberFamily()
+        case .fetchMemberFamily(let force):
+            await fetchMemberFamily(force: force)
+            
+        case .fetchRewardsCollected(let force):
+            await fetchRewardsCollected(force: force)
         }
     }
     
-    func fetchMemberFamily() async {
+    private func fetchMemberFamily(force: Bool) async {
+        viewState.familyState = .skeleton
+        
         do {
-            guard let email = parentMail else {
+            guard let email = viewState.parentEmail else {
                 showNotificationError(msn: viewState.errorRecoveryInfoUser)
+                viewState.familyState = .defaultDataError
                 return
             }
 
-            let currentMember = try await fhkHomeRepository.fetchMembers(email: email)
+            let currentMember = try await fhkHomeRepository.fetchMembers(email: email, forceRefresh: force)
             familyMembers = currentMember
+            viewState.familyState = .loaded
         } catch {
+            viewState.familyState = .defaultDataError
             showNotificationError(msn: viewState.errorFetchMembers)
+        }
+    }
+    
+    private func fetchRewardsCollected(force: Bool) async {
+        viewState.rewardsState = .skeleton
+        do {
+            guard let email = viewState.parentEmail else {
+                showNotificationError(msn: viewState.errorRecoveryInfoUser)
+                viewState.rewardsState = .defaultDataError
+                return
+            }
+
+            let rewardsCollectedList = try await fhkHomeRepository.fetchRewardCollected(parentEmail: email,
+                                                                                        forceRefresh: force)
+            rewardsCollected = rewardsCollectedList
+            viewState.rewardsState = .loaded
+        } catch {
+            viewState.rewardsState = .defaultDataError
+            showNotificationError(msn: viewState.errorRewardCollect)
         }
     }
     

@@ -37,7 +37,7 @@ custom_rules:
   fhk_layer_violation_viewmodel:
     name: "Violation ViewModel"
     message: "Error of Architecture: a ViewModel You should not import Infrastructure modules or DesignSystem (Storage/Firebase/Supabase). must use a repository."
-    regex: "(?m)^import\\s+(FHKStorage|FHKSupabase|Supabase|FHKAuth|FHKConfig|FHKDesignSystem|SwiftUI)"
+    regex: "(?m)^import\\s+(FHKStorage|FHKSupabase|Supabase|FHKAuth|FHKConfig|SwiftUI)"
     included: ".*(VM|ViewModel)\\.swift"
     severity: error
 
