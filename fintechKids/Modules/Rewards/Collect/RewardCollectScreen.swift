@@ -14,6 +14,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     @State private var isAcceptConditions: Bool = false
     @State var viewModel: VM
+    @State private var selectedGoalID: UUID?
     var collectModel: CollectRewardModel
     var member: MemberEntity
     
@@ -136,7 +137,13 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.goalList) { goal in
-                        FHKCardView { _ in } content: {
+                        FHKCardView(data: goal,
+                                    isSelected: selectedGoalID == goal.id,
+                                    action: { item in
+                            self.selectedGoalID = goal.id
+                            print(item?.name ?? "-")
+                        },
+                                    content: {
                             VStack(alignment: .leading) {
                                 FHKDescriptionCardView(title: goal.name.uppercased(),
                                                        description: "")
@@ -173,7 +180,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                                 }
                                 .padding(.top, -50)
                             }
-                        }
+                        })
                     }
                 }
                 .padding()
@@ -222,7 +229,12 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.rewardList) { reward in
-                        FHKCardView { _ in } content: {
+                        FHKCardView(data: reward,
+                                    isSelected: true,
+                                    action: { item in
+                                        print(item?.name ?? "-")
+                                    },
+                                    content: {
                             VStack(alignment: .leading) {
                                 FHKDescriptionCardView(title: reward.name.uppercased(),
                                                        description: "")
@@ -232,7 +244,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                                                    type: .time,
                                                    isRewardValid: isValid)
                             }
-                        }
+                        })
                         .padding()
                     }
                 }

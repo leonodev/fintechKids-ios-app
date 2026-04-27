@@ -96,7 +96,7 @@ private extension RewardCollectScreenVM {
             viewState.collectState = .loading
             let goalList = try await fhkGoalsRepository.getGoals(emailParent: emailParent, forceRefresh: force)
             viewState.goalList = goalList
-            viewState.collectState =  !viewState.goalList.isEmpty ? .finish(result: .success) : .loaded
+            viewState.collectState = .loaded
         } catch {
             informateError(FHKGoalError.fetchListGoalFailed)
             viewState.collectState = .finish(result: .error)
