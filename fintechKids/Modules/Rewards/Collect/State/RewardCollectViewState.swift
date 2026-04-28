@@ -34,12 +34,10 @@ public class RewardCollectViewState {
             return "\(collectModel.task.timeGranted) \(msn)"
             
         case .assignToGoal where collectModel.rewardType == .coins:
-            let msn = "msn_change_goals_by_coins".localized()
-            return "\(msn) \(collectModel.task.coinsGranted) KidsCoins"
+            return "msn_change_goals_by_coins".localized("\(collectModel.task.coinsGranted) KidsCoins").capitalizingFirstLetter()
             
         case .assignToGoal where collectModel.rewardType == .time:
-            let msn = "msn_change_goals_by_time".localized()
-            return "\(msn) \(collectModel.task.timeGranted)"
+            return "msn_change_goals_by_time".localized(collectModel.task.timeGranted).capitalizingFirstLetter()
             
         default:
             return "-"
@@ -81,6 +79,11 @@ public class RewardCollectViewState {
         "msn_check_accept_collect".localized().capitalizingFirstLetter()
     }
     
+    public func msnAssigCollectTaskToGoal(collectModel: CollectRewardModel) -> String {
+        let value = collectModel.rewardType == .coins ? "\(collectModel.task.coinsGranted) KidsCoins" : collectModel.task.timeGranted
+        return "msn_assign_collect_task_goal".localized(value).capitalizingFirstLetter()
+    }
+    
     public func titleButtonColletTask(collectType: ReceiveFormType) -> String {
         switch collectType {
         case .sendToSavings:
@@ -109,6 +112,14 @@ public class RewardCollectViewState {
     
     public var msnUpdateBalanceFail: String {
         "msn_update_balance_fail".localized().uppercased()
+    }
+    
+    public var titleBtnCancel: String {
+        "cancel".localized().capitalizingFirstLetter()
+    }
+    
+    public var titleBtnOk: String {
+        "title_btn_yes".localized().capitalizingFirstLetter()
     }
     
     public func imageBanner(type: WorkType) -> Image {

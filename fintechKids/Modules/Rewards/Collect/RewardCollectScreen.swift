@@ -141,7 +141,21 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                                     isSelected: selectedGoalID == goal.id,
                                     action: { item in
                             self.selectedGoalID = goal.id
-                            print(item?.name ?? "-")
+                            viewModel.fhkModal.show(onDismiss: {},
+                                                    content: {
+                                FHKConfirmationView(message: viewModel.viewState.msnAssigCollectTaskToGoal(collectModel: collectModel),
+                                                    confirmButtonText: viewModel.viewState.titleBtnOk,
+                                                    cancelButtonText: viewModel.viewState.titleBtnCancel,
+                                                    confirmAction: {
+                                    Task { 
+                                        viewModel.fhkModal.dismiss()
+                                        //await viewModel.action(.collectSendTicketGold(ticket: ticketData))
+                                    }
+                                },
+                                                    cancelAction: {
+                                    viewModel.fhkModal.dismiss()
+                                })
+                            })
                         },
                                     content: {
                             VStack(alignment: .leading) {
@@ -181,9 +195,9 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                                 .padding(.top, -50)
                             }
                         })
+                        .padding()
                     }
                 }
-                .padding()
             }
             .refreshable {
                 await viewModel.action(.fetchGoals(force: true))
