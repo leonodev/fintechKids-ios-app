@@ -14,9 +14,9 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     @State private var isAcceptConditions: Bool = false
     @State var viewModel: VM
-    @State private var selectedGoalID: UUID?
-    var collectModel: CollectRewardModel
-    var member: MemberEntity
+    @State private var selectedGoalID: Int?
+    var collectEntity: CollectRewardEntity
+    var memberEntity: MemberEntity
     
     var body: some View {
         ScreenContainer(title: Routes.Titles.collectReward) {
@@ -43,7 +43,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
         }
         .onAppear {
             Task {
-                await viewModel.action(.fetchBalance(memberId: member.id))
+                await viewModel.action(.fetchBalance(memberId: memberEntity.id))
                 await viewModel.action(.fetchGoals(force: true))
                 await viewModel.action(.fetchRewards(force: true))
             }
@@ -56,7 +56,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     
     var loadedView: some View {
         VStack {
-            switch (collectModel.receiveRewardType, collectModel.rewardType) {
+            switch (collectEntity.receiveRewardType, collectEntity.rewardType) {
                 
             case (.sendToSavings, .time):
                 FHKTimeBadge(amount: "\(viewModel.viewState.balance?.timeObtained ?? "0")", size: FHKSize.size24)
@@ -89,27 +89,27 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
             case (.assignToGoal, _):
                 checkEmpty(viewModel.viewState.goalList, msn: viewModel.viewState.msnGoalEmpty) {
                     makeGoalsView()
-                        .task { await viewModel.action(.filterGoals(model: collectModel)) }
+                        .task { await viewModel.action(.filterGoals(model: collectEntity)) }
                 }
             }
         }
     }
     
     private var continueButtonView: some View {
-        FHKButtonPrimary(title: viewModel.viewState.titleButtonColletTask(collectType: collectModel.receiveRewardType),
+        FHKButtonPrimary(title: viewModel.viewState.titleButtonColletTask(collectType: collectEntity.receiveRewardType),
                          textColor: FHKColor.lunarSand,
                          style: .outlined,
                          state: isAcceptConditions ? .enabled : .disabled,
                          mode: .glass(.clear),
                          action: {
             Task {
-                switch collectModel.rewardType {
+                switch collectEntity.rewardType {
                 case .coins:
-                    let balanceWithKidsCoins = BalanceKidsCoinsEntity(memberId: member.id, coinsObtained: collectModel.task.coinsGranted)
+                    let balanceWithKidsCoins = BalanceKidsCoinsEntity(memberId: memberEntity.id, coinsObtained: collectEntity.task.coinsGranted)
                     await viewModel.action(.updateCoinsBalance(balance: balanceWithKidsCoins))
                     
                 case .time:
-                    let balanceWithTime = BalanceTimeEntity(memberId: member.id, timeObtained: collectModel.task.timeGranted)
+                    let balanceWithTime = BalanceTimeEntity(memberId: memberEntity.id, timeObtained: collectEntity.task.timeGranted)
                     await viewModel.action(.updateTimeBalance(balance: balanceWithTime))
                 }
             }
@@ -139,17 +139,30 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                     ForEach(viewModel.viewState.goalList) { goal in
                         FHKCardView(data: goal,
                                     isSelected: selectedGoalID == goal.id,
-                                    action: { item in
+                                    action: { _ in
                             self.selectedGoalID = goal.id
                             viewModel.fhkModal.show(onDismiss: {},
                                                     content: {
-                                FHKConfirmationView(message: viewModel.viewState.msnAssigCollectTaskToGoal(collectModel: collectModel),
+                                FHKConfirmationView(message: viewModel.viewState.msnAssigCollectTaskToGoal(collectModel: collectEntity,
+                                                                                                           goal: goal),
                                                     confirmButtonText: viewModel.viewState.titleBtnOk,
                                                     cancelButtonText: viewModel.viewState.titleBtnCancel,
                                                     confirmAction: {
-                                    Task { 
+                                    Task {
                                         viewModel.fhkModal.dismiss()
-                                        //await viewModel.action(.collectSendTicketGold(ticket: ticketData))
+                                        guard let goalID = goal.id else { return }
+                                        let goalMember = GoalMemberEntity(goalId: goalID,
+                                                                          memberId: memberEntity.id,
+                                                                          taskWinnedValue: viewModel.getAccumulatedValue(goal: goal,
+                                                                                                                         collectReward: collectEntity),
+                                                                          rewardsSystemType: goal.measureType,
+                                                                          rewardsSystemValue: goal.value)
+                                        await viewModel.action(.upsertMemberGoal(goalMember: goalMember))
+                                        
+                                        let remainingBalance = BalanceRemainingEntity(memberId: memberEntity.id,
+                                                                                      collectReward: collectEntity,
+                                                                                      goal: goal)
+                                        await viewModel.action(.proccessRemainingBalance(remainingBalance))
                                     }
                                 },
                                                     cancelAction: {
@@ -180,7 +193,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                                         .font(.PangramSans.bold(FHKSize.size24))
                                         .foregroundColor(FHKColor.warning)
                                     
-                                    Text(collectModel.rewardType == .time
+                                    Text(collectEntity.rewardType == .time
                                          ? "\(goal.measureType.capitalized)"
                                          : "Kids\(goal.measureType.capitalized)"
                                     )
@@ -222,7 +235,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                 }
             }
             .refreshable {
-                switch collectModel.receiveRewardType {
+                switch collectEntity.receiveRewardType {
                 case .sendToSavings:
                     break
                     
@@ -252,7 +265,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                             VStack(alignment: .leading) {
                                 FHKDescriptionCardView(title: reward.name.uppercased(),
                                                        description: "")
-                                let taskHours = collectModel.task.timeGranted.asHours
+                                let taskHours = collectEntity.task.timeGranted.asHours
                                 let isValid = taskHours >= reward.requiredHours
                                 makeRewardItemView(item: reward,
                                                    type: .time,
@@ -280,7 +293,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                             VStack(alignment: .leading) {
                                 FHKDescriptionCardView(title: reward.name.uppercased(),
                                                        description: "")
-                                let taskCoins = collectModel.task.coinsGranted
+                                let taskCoins = collectEntity.task.coinsGranted
                                 let isValid = taskCoins >= reward.coinsRequiered
                                 makeRewardItemView(item: reward,
                                                    type: .coins,
@@ -345,11 +358,11 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                                     confirmAction: {
                     Task {
                         let ticketData = GoldenTicketParamsEntity(
-                            recipientName: member.memberName,
-                            taskDescription: collectModel.task.name,
+                            recipientName: memberEntity.memberName,
+                            taskDescription: collectEntity.task.name,
                             reward: item.name,
                             emailTo: viewModel.parentMail ?? "",
-                            memberId: member.id,
+                            memberId: memberEntity.id,
                             claimedValue: collectValue
                         )
                         viewModel.fhkModal.dismiss()
@@ -367,15 +380,15 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     private func modalInformationView(isSuccess: Bool) -> some View {
         VStack(alignment: .leading, spacing: FHKSpace.space08) {
             FHKInformationView(message: isSuccess
-                               ? viewModel.viewState.msnColletTaskSuccess(collectType: collectModel.receiveRewardType)
+                               ? viewModel.viewState.msnColletTaskSuccess(collectType: collectEntity.receiveRewardType)
                                : viewModel.viewState.msnUpdateBalanceFail,
                                type: isSuccess ? .success : .error,
-                               confirmButtonText: viewModel.viewState.titleButtonColletTask(collectType: collectModel.receiveRewardType),
+                               confirmButtonText: viewModel.viewState.titleButtonColletTask(collectType: collectEntity.receiveRewardType),
                                 confirmAction: {
                 viewModel.fhkModal.dismiss()
                 router.popTo(.home)
                 
-                if case .changeByRewards = collectModel.receiveRewardType,
+                if case .changeByRewards = collectEntity.receiveRewardType,
                    let info = viewModel.viewState.goldenTicket {
                     router.navigate(to: .presentGoldenTicket(info), style: .fullScreenCover)
                 }
@@ -386,7 +399,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     private var bannerPathView: some View {
         VStack {
             FHKCardView { _ in } content: {
-                viewModel.viewState.imageBanner(type: collectModel.rewardType)
+                viewModel.viewState.imageBanner(type: collectEntity.rewardType)
                     .scaledToFit()
             }
             .padding()
@@ -402,7 +415,7 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     }
     
     private var msnInformativeView: some View {
-        msnInformative(msn: viewModel.viewState.getTitleTypeReceive(collectModel: collectModel))
+        msnInformative(msn: viewModel.viewState.getTitleTypeReceive(collectModel: collectEntity))
     }
     
     @ViewBuilder

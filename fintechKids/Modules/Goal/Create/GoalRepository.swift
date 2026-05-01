@@ -19,8 +19,9 @@ final actor GoalRepository: FHKGoalRepositoryProtocol {
     }
     
     private var goalsCache: CachedData<[GoalEntity]>?
+    private var goalsMemberCache: CachedData<[GoalMemberEntity]>?
     
-    func createGoal(goal: FHKDomain.GoalEntity) async throws {
+    func createGoal(goal: GoalEntity) async throws {
         try await fhkSupabaseGoal.createGoal(goal: goal)
     }
     
@@ -35,6 +36,23 @@ final actor GoalRepository: FHKGoalRepositoryProtocol {
         
         self.goalsCache = CachedData(content: goalList)
         return goalList
+    }
+    
+    func createGoalMember(goal: GoalMemberEntity) async throws {
+        try await fhkSupabaseGoal.createGoalMember(goal: goal)
+    }
+    
+    func fetchGoalMember(member: MemberEntity, forceRefresh: Bool) async throws -> [GoalMemberEntity] {
+        if !forceRefresh, let cache = goalsMemberCache, await !cache.isExpired() {
+            Logger.info("📦 Return goals member list cached")
+            return cache.content
+        }
+        
+        Logger.info("🌐 Getting goal member list from backend")
+        let goalMemberList = try await fhkSupabaseGoal.fetchGoalMember(member: member)
+        
+        self.goalsMemberCache = CachedData(content: goalMemberList)
+        return goalMemberList
     }
     
     func clearCache() async {

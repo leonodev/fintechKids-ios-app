@@ -795,25 +795,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "do you want to allocate your %@ to this goal to get closer to achieving it?"
+            "value": "do you want to allocate %@ ?"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "deseas asignar tus %@ a esta meta para estar mas cerca de conseguirla?"
+            "value": "deseas asignar %@ ?"
           }
         },
         "fr": {
           "stringUnit": {
-            "state": "translated",
-            "value": "souhaitez-vous répartir vos %@ à cet objectif pour vous en rapprocher?"
+            "state": "needs_review",
+            "value": "souhaitez-vous répartir  %@ ?"
           }
         },
         "it": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Desideri destinare le tue %@ a questo obiettivo per avvicinarti al suo raggiungimento?"
+            "state": "needs_review",
+            "value": "Desideri destinare  %@ ?"
           }
         }
       }
@@ -1075,6 +1075,35 @@
           "stringUnit": {
             "state": "translated",
             "value": "sono d'accordo e desidero continuare."
+          }
+        }
+      }
+    },
+    "msn_close_reaching_goal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to complete this goal"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "para completar esta meta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "pour atteindre cet objectif"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "per completare questo obiettivo"
           }
         }
       }
@@ -1746,6 +1775,35 @@
         }
       }
     },
+    "msn_of_your": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of your"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de tus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de vos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dei tuoi"
+          }
+        }
+      }
+    },
     "msn_operation_error": {
       "extractionState": "manual",
       "localizations": {
@@ -1771,6 +1829,35 @@
           "stringUnit": {
             "state": "translated",
             "value": "non è stato possibile eseguire l'operazione, riprova più tardi"
+          }
+        }
+      }
+    },
+    "msn_part_one_reach_goal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to achieve this goal?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "para lograr este meta?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "pour atteindre cet objectif?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "per raggiungere questo obiettivo?"
           }
         }
       }
@@ -1974,6 +2061,35 @@
           "stringUnit": {
             "state": "translated",
             "value": "utente registrato correttamente, devi confermare l'e-mail che abbiamo inviato all'indirizzo che hai appena registrato. controlla anche la tua cartella spam"
+          }
+        }
+      }
+    },
+    "msn_remaining_time": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "your %@ leftovers will be deposited to your balance"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tus %@ sobrantes seran depositados a tu saldo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tes %@ restes seront déposés sur ton solde"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "i tuoi %@ avanzi saranno depositati sul tuo saldo"
           }
         }
       }
@@ -2351,6 +2467,35 @@
           "stringUnit": {
             "state": "translated",
             "value": "vuoi eliminare il membro (%@)?"
+          }
+        }
+      }
+    },
+    "msn_your": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "your"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "tus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "vos"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "tuoi"
           }
         }
       }
@@ -2960,6 +3105,35 @@
           "stringUnit": {
             "state": "translated",
             "value": "inteso"
+          }
+        }
+      }
+    },
+    "title_btn_yes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yes"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "si"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "oui"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sì"
           }
         }
       }
@@ -4624,31 +4798,31 @@
         }
       }
     },
-    "title_btn_yes": {
+    "msn_collect_goal_success": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "yes"
+            "value": "your goal has been updated correctly"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "si"
+            "value": "tu meta a sido actualizada correctamente"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "oui"
+            "value": "votre objectif a été mis à jour correctement"
           }
         },
         "it": {
           "stringUnit": {
             "state": "translated",
-            "value": "sì"
+            "value": "il tuo obiettivo è stato aggiornato correttamente"
           }
         }
       }

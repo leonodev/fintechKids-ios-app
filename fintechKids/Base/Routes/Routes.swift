@@ -23,7 +23,7 @@ public enum Routes: NavigationDestination {
     case tasks(isFromChildSelection: Bool, MemberEntity?)
     case createTask
     case startTask(TaskEntity, MemberEntity)
-    case collectReward(CollectRewardModel, MemberEntity)
+    case collectReward(CollectRewardEntity, MemberEntity)
     case profile
     case presentGoldenTicket(GoldenTicketEntity)
     
@@ -117,10 +117,10 @@ extension Routes {
         case .startTask(let task, let member):
             TaskStartScreen(viewModel: TaskStartScreenVM(), task: task, member: member)
             
-        case .collectReward(let collectRewardModel, let member):
+        case .collectReward(let collectRewardEntity, let memberEntity):
             RewardCollectScreen(viewModel: RewardCollectScreenVM(),
-                                collectModel: collectRewardModel,
-                                member: member)
+                                collectEntity: collectRewardEntity,
+                                memberEntity: memberEntity)
             
         case .presentGoldenTicket(let info):
             RewardGoldenTicketScreen(ticketEntity: info)

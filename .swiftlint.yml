@@ -23,10 +23,10 @@ excluded:
   - fintechKidsTests         # Opcional: si no quieres linting en tests
 
 # Personalización de reglas específicas
-line_length: 150               # Un poco más ancho que los 100 por defecto
+line_length: 180               # Un poco más ancho que los 180 por defecto
 type_body_length:
-  warning: 600
-  error: 500
+  warning: 500
+  error: 600
 
 # Formato de salida
 reporter: "xcode"              # Para que los avisos salgan integrados en Xcode

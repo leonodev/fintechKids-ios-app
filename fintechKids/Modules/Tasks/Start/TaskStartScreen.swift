@@ -190,9 +190,9 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
                                           type: .error)
             return
         }
-        let collectReward = CollectRewardModel(task: task,
-                                               receiveRewardType: type,
-                                               rewardType: selectedRewardType)
+        let collectReward = CollectRewardEntity(task: task,
+                                                receiveRewardType: type,
+                                                rewardType: selectedRewardType)
         viewModel.fhkModal.dismiss()
         router.navigate(to: .collectReward(collectReward, member))
     }

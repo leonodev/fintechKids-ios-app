@@ -50,10 +50,12 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         case fetchGoals(force: Bool = false)
         case fetchBalance(memberId: UUID)
         case fetchRewards(force: Bool = false)
-        case filterGoals(model: CollectRewardModel)
+        case filterGoals(model: CollectRewardEntity)
         case updateCoinsBalance(balance: BalanceKidsCoinsEntity)
         case updateTimeBalance(balance: BalanceTimeEntity)
         case collectSendTicketGold(ticket: GoldenTicketParamsEntity)
+        case upsertMemberGoal(goalMember: GoalMemberEntity)
+        case proccessRemainingBalance(BalanceRemainingEntity)
     }
     
     @MainActor
@@ -80,6 +82,23 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
             
         case .collectSendTicketGold(let ticket):
             await collectSendTicketGolden(ticketData: ticket)
+            
+        case .upsertMemberGoal(let goalMember):
+            await upsertMemberGoal(goalMember: goalMember)
+            
+        case .proccessRemainingBalance(let remainingBalance):
+            await proccessRemainingBalance(balanceRemaining: remainingBalance)
+        }
+    }
+    
+    // get value by send to member goal
+    func getAccumulatedValue(goal: GoalEntity, collectReward: CollectRewardEntity) -> Int {
+        let valueTask = viewState.getValueTask(type: collectReward.rewardType, task: collectReward.task)
+        
+        if valueTask >= goal.value {
+            return goal.value
+        } else {
+            return valueTask
         }
     }
 }
@@ -149,7 +168,7 @@ private extension RewardCollectScreenVM {
 
 private extension RewardCollectScreenVM {
     
-    func filterGoals(model: CollectRewardModel) async {
+    func filterGoals(model: CollectRewardEntity) async {
         var goalFiltered: [GoalEntity] = []
         viewState.goalList = viewState.goalList
         
@@ -196,6 +215,41 @@ private extension RewardCollectScreenVM {
             viewState.collectState = .finish(result: .success)
         } catch {
             handleBalanceError(error)
+        }
+    }
+    
+    func upsertMemberGoal(goalMember: GoalMemberEntity) async {
+        viewState.collectState = .loading
+        
+        do {
+            try await fhkGoalsRepository.createGoalMember(goal: goalMember)
+            viewState.collectState = .finish(result: .success)
+        } catch {
+            handleBalanceError(error)
+        }
+    }
+    
+    func proccessRemainingBalance(balanceRemaining: BalanceRemainingEntity) async {
+        let valueTask = viewState.getValueTask(type: balanceRemaining.collectReward.rewardType, task: balanceRemaining.collectReward.task)
+        
+        // if has reward remaining
+        if valueTask > balanceRemaining.goal.value {
+            switch balanceRemaining.collectReward.rewardType {
+            case .coins:
+                let balanceKidsCoins = BalanceKidsCoinsEntity(memberId: balanceRemaining.memberId,
+                                                              coinsObtained: balanceRemaining.collectReward.task.coinsGranted)
+                await updateBalanceCoinsMember(balance: balanceKidsCoins)
+                
+            case .time:
+                let timeValueGranted = balanceRemaining.collectReward.task.timeGranted.asHours - balanceRemaining.goal.value
+                let timeMeasureGranted = viewState.getDescriptionType(type: balanceRemaining.collectReward.rewardType)
+                let valueToUpdate = "\(timeValueGranted) \(timeMeasureGranted)"
+                
+                let balanceTime = BalanceTimeEntity(memberId: balanceRemaining.memberId, timeObtained: valueToUpdate)
+                await updateBalanceTimeMember(balance: balanceTime)
+            }
+        } else {
+            Logger.info("unnecessary Update Remaining Balance")
         }
     }
     

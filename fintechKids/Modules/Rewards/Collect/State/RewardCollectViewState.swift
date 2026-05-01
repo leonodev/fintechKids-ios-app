@@ -15,7 +15,7 @@ import FHKDomain
 @Observable
 public class RewardCollectViewState {
     
-    public func getTitleTypeReceive(collectModel: CollectRewardModel) -> String {
+    public func getTitleTypeReceive(collectModel: CollectRewardEntity) -> String {
         switch collectModel.receiveRewardType {
         case .sendToSavings where collectModel.rewardType == .coins:
             let msn = "msn_saving_coins".localized()
@@ -79,21 +79,43 @@ public class RewardCollectViewState {
         "msn_check_accept_collect".localized().capitalizingFirstLetter()
     }
     
-    public func msnAssigCollectTaskToGoal(collectModel: CollectRewardModel) -> String {
-        let value = collectModel.rewardType == .coins ? "\(collectModel.task.coinsGranted) KidsCoins" : collectModel.task.timeGranted
-        return "msn_assign_collect_task_goal".localized(value).capitalizingFirstLetter()
+    public func msnAssigCollectTaskToGoal(collectModel: CollectRewardEntity, goal: GoalEntity) -> String {
+        let valueGoal: Int = goal.value
+        let valueTask: Int = getValueTask(type: collectModel.rewardType, task: collectModel.task)
+        let type: String = getDescriptionType(type: collectModel.rewardType)
+        var valueCalculated: String = ""
+        
+        if valueGoal >= valueTask {
+            let msnAllYour = "msn_your".localized()
+            let msnPartOneReachGoal = "msn_part_one_reach_goal".localized()
+            valueCalculated = "\(msnAllYour) \(valueTask) \(type) \(msnPartOneReachGoal)"
+        } else {
+            let msnOfYour = "msn_of_your".localized()
+            let msnCloseReachingGoal = "msn_close_reaching_goal".localized()
+            
+            let valueRemaining = "\(valueTask - valueGoal) \(type)"
+            let msnRemainingTime = "msn_remaining_time".localized(valueRemaining).capitalizingFirstLetter()
+            valueCalculated = "(\(goal.value)) \(msnOfYour) (\(valueTask)) \(type) \(msnCloseReachingGoal)? \n \(msnRemainingTime)"
+        }
+        
+        return "msn_assign_collect_task_goal".localized(valueCalculated).capitalizingFirstLetter()
+    }
+    
+    public func getValueTask(type: WorkType, task: TaskEntity) -> Int {
+        type == .coins ? task.coinsGranted : task.timeGranted.asHours
+    }
+    
+    public func getDescriptionType(type: WorkType) -> String {
+        type == .coins ? "KidsCoins" : "title_hours".localized().capitalizingFirstLetter()
     }
     
     public func titleButtonColletTask(collectType: ReceiveFormType) -> String {
         switch collectType {
-        case .sendToSavings:
+        case .sendToSavings, .assignToGoal:
             return "continue".localized().uppercased()
             
         case .changeByRewards:
             return "title_view_ticket_golden".localized().uppercased()
-            
-        default:
-            return ""
         }
     }
     
@@ -105,8 +127,8 @@ public class RewardCollectViewState {
         case .changeByRewards:
             return "msn_collect_reward_success".localized().capitalizingFirstLetter()
             
-        default:
-            return ""
+        case .assignToGoal:
+            return "msn_collect_goal_success".localized().capitalizingFirstLetter()
         }
     }
     
