@@ -80,22 +80,38 @@ public class RewardCollectViewState {
     }
     
     public func msnAssigCollectTaskToGoal(collectModel: CollectRewardEntity, goal: GoalEntity) -> String {
-        let valueGoal: Int = goal.value
-        let valueTask: Int = getValueTask(type: collectModel.rewardType, task: collectModel.task)
-        let type: String = getDescriptionType(type: collectModel.rewardType)
-        var valueCalculated: String = ""
+        //We obtain what the child has already accumulated in this goal
+        let currentMemberGoal = goalMemberList.first(where: { $0.goalId == goal.id })
+        let accumulated = currentMemberGoal?.accumulatedValue ?? 0
         
-        if valueGoal >= valueTask {
-            let msnAllYour = "msn_your".localized()
-            let msnPartOneReachGoal = "msn_part_one_reach_goal".localized()
-            valueCalculated = "\(msnAllYour) \(valueTask) \(type) \(msnPartOneReachGoal)"
-        } else {
-            let msnOfYour = "msn_of_your".localized()
-            let msnCloseReachingGoal = "msn_close_reaching_goal".localized()
+        // We calculate how much it REALLY needs to reach the top
+        let spaceAvailable = goal.value - accumulated
+        
+        // We obtain the total value of the earned task
+        let valueTask = getValueTask(type: collectModel.rewardType, task: collectModel.task)
+        let type = getDescriptionType(type: collectModel.rewardType)
+        
+        var valueCalculated: String = ""
+
+        // SCENARIO A: The entire task fits in the goal (or there is extra space in the goal)
+        if valueTask <= spaceAvailable {
+            let msnAllYour = "msn_your".localized() // "tus"
+            let msnPartOneReachGoal = "msn_part_one_reach_goal".localized() // "ganadas para alcanzar esta meta"
             
-            let valueRemaining = "\(valueTask - valueGoal) \(type)"
-            let msnRemainingTime = "msn_remaining_time".localized(valueRemaining).capitalizingFirstLetter()
-            valueCalculated = "(\(goal.value)) \(msnOfYour) (\(valueTask)) \(type) \(msnCloseReachingGoal)? \n \(msnRemainingTime)"
+            valueCalculated = "\(msnAllYour) \(valueTask) \(type) \(msnPartOneReachGoal)"
+        }
+        // SCENARIO B: The task is worth MORE than what is needed to reach the goal (There is a surplus)
+        else {
+            // What we will take from the task to complete the goal
+            let valueToUse = spaceAvailable
+            // The excess goes to the balance (savings/coins)
+            let surplus = valueTask - spaceAvailable
+ 
+            let msnOfYour = "msn_of_your".localized() // "de tus"
+            let msnCloseReachingGoal = "msn_close_reaching_goal".localized() // "para alcanzar esta meta"
+            let msnRemainingTime = "msn_remaining_time".localized("\(surplus) \(type)").capitalizingFirstLetter() // "tus X restantes serán depositadas..."
+        
+            valueCalculated = "\(valueToUse) \(msnOfYour) \(valueTask) \(type) \(msnCloseReachingGoal)? \n \(msnRemainingTime)"
         }
         
         return "msn_assign_collect_task_goal".localized(valueCalculated).capitalizingFirstLetter()
@@ -144,6 +160,10 @@ public class RewardCollectViewState {
         "title_btn_yes".localized().capitalizingFirstLetter()
     }
     
+    public var msnCreateGoalMemberDataUncompleted: String {
+        "msn_create_goal_member_data_uncompleted".localized().capitalizingFirstLetter()
+    }
+    
     public func imageBanner(type: WorkType) -> Image {
         if type == .coins {
             return .fintechkidsCoins
@@ -178,6 +198,10 @@ public class RewardCollectViewState {
         }
     }
     
+    public func toastInfo(msn: String, type: ToastType) -> FHKToastInfo {
+        FHKToastInfo(type: type, message: msn, hasIcon: true)
+    }
+    
     public var msnUserError: String = ""
     
     public enum State: Equatable {
@@ -190,6 +214,19 @@ public class RewardCollectViewState {
     
     public var balance: BalanceEntity?
     public var goalList: [GoalEntity] = []
+    public var goalMemberList: [GoalMemberEntity] = []
     public var rewardList: [RewardEntity] = []
     public var goldenTicket: GoldenTicketEntity?
+    
+    func getProgress(for goalId: Int) -> GoalMemberEntity? {
+        goalMemberList.first(where: { $0.goalId == goalId })
+    }
+    
+    func isGoalCompleted(goalId: Int?) -> Bool {
+        guard let id = goalId, let progress = goalMemberList.first(where: { $0.goalId == id }) else {
+            return false // If you haven't started it, it's not completed.
+        }
+        // We compare the accumulated data with the total target.
+        return progress.accumulatedValue >= progress.rewardsSystemValue
+    }
 }

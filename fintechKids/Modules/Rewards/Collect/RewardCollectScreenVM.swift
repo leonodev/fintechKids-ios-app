@@ -42,12 +42,17 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
+    public var fhkToast: any FHKToastProtocol {
+        inject.fhkToast
+    }
+    
     public var parentMail: String? {
         fhkConfiguration.parentMail
     }
     
     public enum Action: Equatable {
         case fetchGoals(force: Bool = false)
+        case fetchMemberGoals(memberId: UUID, force: Bool = false)
         case fetchBalance(memberId: UUID)
         case fetchRewards(force: Bool = false)
         case filterGoals(model: CollectRewardEntity)
@@ -64,6 +69,9 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
             
         case .fetchGoals(let force):
             await fetchGoalList(force: force)
+            
+        case .fetchMemberGoals(let memberId, let force):
+            await fetchGoalMember(memberId: memberId, force: force)
             
         case .fetchBalance(let memberId):
             await fetchBalance(memberId: memberId)
@@ -91,6 +99,23 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         }
     }
     
+    func getGoalMemberEntity(goal: GoalEntity, member: MemberEntity, collect: CollectRewardEntity) -> GoalMemberEntity? {
+        guard let emailParent = fhkConfiguration.parentMail, let goalID = goal.id else {
+            displayNotification(message: viewState.msnCreateGoalMemberDataUncompleted)
+            return nil
+        }
+        
+        return GoalMemberEntity(goalId: goalID,
+                                memberId: member.id,
+                                taskWinnedValue: getAccumulatedValue(goal: goal, collectReward: collect),
+                                rewardsSystemType: goal.measureType,
+                                rewardsSystemValue: goal.value,
+                                parentEmail: emailParent)
+    }
+}
+
+private extension RewardCollectScreenVM {
+    
     // get value by send to member goal
     func getAccumulatedValue(goal: GoalEntity, collectReward: CollectRewardEntity) -> Int {
         let valueTask = viewState.getValueTask(type: collectReward.rewardType, task: collectReward.task)
@@ -101,9 +126,6 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
             return valueTask
         }
     }
-}
-
-private extension RewardCollectScreenVM {
     
     func fetchGoalList(force: Bool) async {
         do {
@@ -118,6 +140,18 @@ private extension RewardCollectScreenVM {
             viewState.collectState = .loaded
         } catch {
             informateError(FHKGoalError.fetchListGoalFailed)
+            viewState.collectState = .finish(result: .error)
+        }
+    }
+    
+    func fetchGoalMember(memberId: UUID, force: Bool) async {
+        do {
+            viewState.collectState = .loading
+            let goalMemberList = try await fhkGoalsRepository.fetchGoalMember(memberId: memberId, forceRefresh: force)
+            viewState.goalMemberList = goalMemberList
+            viewState.collectState = .loaded
+        } catch {
+            informateError(FHKGoalError.fetchListMemberGoalFailed)
             viewState.collectState = .finish(result: .error)
         }
     }
@@ -251,6 +285,10 @@ private extension RewardCollectScreenVM {
         } else {
             Logger.info("unnecessary Update Remaining Balance")
         }
+    }
+    
+    func displayNotification(message: String, type: ToastType = .warning) {
+        fhkToast.show(info: viewState.toastInfo(msn: message, type: type))
     }
     
     private func handleBalanceError(_ error: Error) {

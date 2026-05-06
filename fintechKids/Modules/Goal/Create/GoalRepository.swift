@@ -5,6 +5,7 @@
 //  Created by Fredy Leon on 15/3/26.
 //
 
+import Foundation
 import FHKDomain
 import FHKInjections
 import FHKStorage
@@ -42,14 +43,14 @@ final actor GoalRepository: FHKGoalRepositoryProtocol {
         try await fhkSupabaseGoal.createGoalMember(goal: goal)
     }
     
-    func fetchGoalMember(member: MemberEntity, forceRefresh: Bool) async throws -> [GoalMemberEntity] {
+    func fetchGoalMember(memberId: UUID, forceRefresh: Bool) async throws -> [GoalMemberEntity] {
         if !forceRefresh, let cache = goalsMemberCache, await !cache.isExpired() {
             Logger.info("📦 Return goals member list cached")
             return cache.content
         }
         
         Logger.info("🌐 Getting goal member list from backend")
-        let goalMemberList = try await fhkSupabaseGoal.fetchGoalMember(member: member)
+        let goalMemberList = try await fhkSupabaseGoal.fetchGoalMember(memberId: memberId)
         
         self.goalsMemberCache = CachedData(content: goalMemberList)
         return goalMemberList

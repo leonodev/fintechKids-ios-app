@@ -63,7 +63,7 @@ public class TaskStartViewState {
     }
     
     public var titleAssignMyGoals: String {
-        "title_assign_to_my_goals".localized().capitalizingFirstLetter()
+        "title_assign_to_goal".localized().capitalizingFirstLetter()
     }
     
     public var collectTypeError: String {

@@ -71,7 +71,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 case .skeleton:
                     FHKMemberItem.skeletons(count: 3)
                     
-                case .loaded:
+                case .loaded, .disabled:
                     ForEach(viewModel.familyMembers) { member in
                         getMemberLoaded(member: member)
                     }
@@ -100,7 +100,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                     case .skeleton:
                         FHKRewardCollectCard.skeletons(count: 3, style: .glass)
                         
-                    case .loaded:
+                    case .loaded, .disabled:
                         ForEach(viewModel.rewardsCollected) { ticket in
                             getRewardCollectCardLoaded(ticket: ticket)
                         }

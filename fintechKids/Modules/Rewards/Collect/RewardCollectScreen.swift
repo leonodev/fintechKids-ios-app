@@ -43,9 +43,11 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
         }
         .onAppear {
             Task {
-                await viewModel.action(.fetchBalance(memberId: memberEntity.id))
-                await viewModel.action(.fetchGoals(force: true))
-                await viewModel.action(.fetchRewards(force: true))
+                async let fetchBalance: () = viewModel.action(.fetchBalance(memberId: memberEntity.id))
+                async let fetchGoals: () = viewModel.action(.fetchGoals(force: false))
+                async let fetchGoalsMember: () = viewModel.action(.fetchMemberGoals(memberId: memberEntity.id, force: false))
+                async let fetchRewards: () = viewModel.action(.fetchRewards(force: false))
+                await _ = (fetchBalance, fetchGoals, fetchGoalsMember, fetchRewards)
             }
         }
     }
@@ -140,73 +142,39 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
                         FHKCardView(data: goal,
                                     isSelected: selectedGoalID == goal.id,
                                     action: { _ in
-                            self.selectedGoalID = goal.id
-                            viewModel.fhkModal.show(onDismiss: {},
-                                                    content: {
-                                FHKConfirmationView(message: viewModel.viewState.msnAssigCollectTaskToGoal(collectModel: collectEntity,
-                                                                                                           goal: goal),
-                                                    confirmButtonText: viewModel.viewState.titleBtnOk,
-                                                    cancelButtonText: viewModel.viewState.titleBtnCancel,
-                                                    confirmAction: {
-                                    Task {
+                            if !viewModel.viewState.isGoalCompleted(goalId: goal.id) {
+                                self.selectedGoalID = goal.id
+                                viewModel.fhkModal.show(onDismiss: {},
+                                                        content: {
+                                    FHKConfirmationView(message: viewModel.viewState.msnAssigCollectTaskToGoal(
+                                        collectModel: collectEntity,
+                                        goal: goal),
+                                                        confirmButtonText: viewModel.viewState.titleBtnOk,
+                                                        cancelButtonText: viewModel.viewState.titleBtnCancel,
+                                                        confirmAction: {
+                                        Task {
+                                            viewModel.fhkModal.dismiss()
+                                            
+                                            guard let goalMember = viewModel.getGoalMemberEntity(goal: goal,
+                                                                                                 member: memberEntity,
+                                                                                                 collect: collectEntity) else { return }
+                                            await viewModel.action(.upsertMemberGoal(goalMember: goalMember))
+                                            
+                                            let remainingBalance = BalanceRemainingEntity(memberId: memberEntity.id,
+                                                                                          collectReward: collectEntity,
+                                                                                          goal: goal)
+                                            await viewModel.action(.proccessRemainingBalance(remainingBalance))
+                                        }
+                                    },
+                                                        cancelAction: {
                                         viewModel.fhkModal.dismiss()
-                                        guard let goalID = goal.id else { return }
-                                        let goalMember = GoalMemberEntity(goalId: goalID,
-                                                                          memberId: memberEntity.id,
-                                                                          taskWinnedValue: viewModel.getAccumulatedValue(goal: goal,
-                                                                                                                         collectReward: collectEntity),
-                                                                          rewardsSystemType: goal.measureType,
-                                                                          rewardsSystemValue: goal.value)
-                                        await viewModel.action(.upsertMemberGoal(goalMember: goalMember))
-                                        
-                                        let remainingBalance = BalanceRemainingEntity(memberId: memberEntity.id,
-                                                                                      collectReward: collectEntity,
-                                                                                      goal: goal)
-                                        await viewModel.action(.proccessRemainingBalance(remainingBalance))
-                                    }
-                                },
-                                                    cancelAction: {
-                                    viewModel.fhkModal.dismiss()
+                                    })
                                 })
-                            })
+                            }
                         },
                                     content: {
-                            VStack(alignment: .leading) {
-                                FHKDescriptionCardView(title: goal.name.uppercased(),
-                                                       description: "")
-                                
-                                ZStack(alignment: .topTrailing) {
-                                    HStack(spacing: 0) {
-                                        Spacer()
-                                        LottieView(animationName: viewModel.viewState.getLottieAnimation(measureType: goal.measureType),
-                                                   loopMode: .playOnce,
-                                                   contentMode: .topLeft)
-                                        .frame(width: 200,
-                                               height: viewModel.viewState.getHeightImageCard(measureType: goal.measureType))
-                                    }
-                                    .padding(.top, -100)
-                                    .padding(.trailing, -100)
-                                }
-                                
-                                VStack(alignment: .leading) {
-                                    Text("\(goal.value)")
-                                        .font(.PangramSans.bold(FHKSize.size24))
-                                        .foregroundColor(FHKColor.warning)
-                                    
-                                    Text(collectEntity.rewardType == .time
-                                         ? "\(goal.measureType.capitalized)"
-                                         : "Kids\(goal.measureType.capitalized)"
-                                    )
-                                    .font(.PangramSans.bold(FHKSize.size24))
-                                    .foregroundColor(FHKColor.lunarSand.opacity(0.7))
-                                    
-                                    Text(viewModel.viewState.getMassageGoalCard(measureType: goal.measureType))
-                                        .font(.PangramSans.bold(FHKSize.size16))
-                                        .foregroundColor(FHKColor.gray)
-                                        .padding(.top, 8)
-                                }
-                                .padding(.top, -50)
-                            }
+                            goalContentCardView(goal: goal,
+                                                isContentDisabled: viewModel.viewState.isGoalCompleted(goalId: goal.id))
                         })
                         .padding()
                     }
@@ -215,6 +183,64 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
             .refreshable {
                 await viewModel.action(.fetchGoals(force: true))
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func goalContentCardView(goal: GoalEntity, isContentDisabled: Bool) -> some View {
+        VStack(alignment: .leading) {
+            FHKDescriptionCardView(title: goal.name.uppercased(),
+                                   description: "",
+                                   isEnable: !isContentDisabled)
+            
+            ZStack(alignment: .topTrailing) {
+                HStack(spacing: 0) {
+                    Spacer()
+                    LottieView(animationName: viewModel.viewState.getLottieAnimation(measureType: goal.measureType),
+                               loopMode: .playOnce,
+                               contentMode: .topLeft)
+                    .frame(width: 200,
+                           height: viewModel.viewState.getHeightImageCard(measureType: goal.measureType))
+                }
+                .padding(.top, -100)
+                .padding(.trailing, -100)
+            }
+            
+            VStack(alignment: .leading) {
+                Text("\(goal.value)")
+                    .font(.PangramSans.bold(FHKSize.size24))
+                    .foregroundColor(isContentDisabled
+                                     ? FHKColor.gray.opacity(0.5)
+                                     : FHKColor.warning)
+                
+                if let progress = viewModel.viewState.getProgress(for: goal.id ?? 0) {
+                    FHKProgressBarView(
+                        current: Double(progress.accumulatedValue),
+                        total: Double(progress.rewardsSystemValue),
+                        workType: goal.measureType,
+                        color: FHKColor.lunarSand.opacity(0.7),
+                        isDisabled: isContentDisabled
+                    )
+                    .padding(.vertical, 8)
+                }
+                
+                Text(collectEntity.rewardType == .time
+                     ? "\(goal.measureType.capitalized)"
+                     : "Kids\(goal.measureType.capitalized)"
+                )
+                .font(.PangramSans.bold(FHKSize.size24))
+                .foregroundColor(isContentDisabled
+                                 ? FHKColor.gray.opacity(0.5)
+                                 : FHKColor.lunarSand.opacity(0.7))
+                
+                Text(viewModel.viewState.getMassageGoalCard(measureType: goal.measureType))
+                    .font(.PangramSans.bold(FHKSize.size16))
+                    .foregroundColor(isContentDisabled
+                                     ? FHKColor.gray.opacity(0.5)
+                                     : FHKColor.gray)
+                    .padding(.top, 8)
+            }
+            .padding(.top, -50)
         }
     }
     

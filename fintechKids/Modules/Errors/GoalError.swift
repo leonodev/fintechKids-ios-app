@@ -11,6 +11,7 @@ import FHKDomain
 enum FHKGoalError: FHKError {
     case createGoalFailed
     case fetchListGoalFailed
+    case fetchListMemberGoalFailed
     case goalValueInvalid
     case rewardsTypeInvalid
     case durationTypeInvalid
@@ -32,6 +33,9 @@ enum FHKGoalError: FHKError {
             
         case .durationTypeInvalid:
             return "Error: duration type is invalid"
+            
+        case .fetchListMemberGoalFailed:
+            return "Error: fetching list of goals of members"
         }
     }
     
@@ -52,6 +56,9 @@ enum FHKGoalError: FHKError {
             
         case .durationTypeInvalid:
             return "msn_error_duration_type_goal"
+            
+        case .fetchListMemberGoalFailed:
+            return "msn_error_fetch_goal_list"
         }
     }
     
@@ -72,12 +79,15 @@ enum FHKGoalError: FHKError {
             
         case .durationTypeInvalid:
             return "type_duration_invalid"
+            
+        case .fetchListMemberGoalFailed:
+            return "fetch_goal_members_failed"
         }
     }
     
     public var isShouldTrack: Bool {
         switch self {
-        case .createGoalFailed, .fetchListGoalFailed:
+        case .createGoalFailed, .fetchListGoalFailed, .fetchListMemberGoalFailed:
             return true
             
         default:
