@@ -25,8 +25,9 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 
                 rewardsCollectedView
                 
-                Spacer()
+                goalMemberFamilyView
                 
+                Spacer()
                 floatMenuView
             }
             .fullScreenCover(isPresented: $showPermissions) {
@@ -39,7 +40,8 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 await viewModel.getParentMail()
                 async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: false))
                 async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: false))
-                await _ = (fetchMembers, fetchRewards)
+                async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: false))
+                await _ = (fetchMembers, fetchRewards, fetchGoalMembers)
             }
             
             //                if camaraPermissionManager.status != .authorized {
@@ -51,8 +53,9 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     var headerView: some View {
         HStack {
             Text(viewModel.viewState.titleMemberFamily)
-                .font(.PangramSans.bold(FHKSize.size16))
-                .foregroundColor(FHKColor.lunarSand)
+                .font(.PangramSans.bold(FHKSize.size12))
+                .colorDegradeStyle(startColor: FHKColor.pastelPink,
+                                   endColor: .gray.opacity(0.8))
             
             Spacer()
             
@@ -72,7 +75,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                     FHKMemberItem.skeletons(count: 3)
                     
                 case .loaded, .disabled:
-                    ForEach(viewModel.familyMembers) { member in
+                    ForEach(viewModel.familyMembersList) { member in
                         getMemberLoaded(member: member)
                     }
                     
@@ -87,11 +90,14 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     
     var rewardsCollectedView: some View {
         VStack(alignment: .leading) {
+            GradientDivider()
+            
             Text(viewModel.viewState.titleRewardsCollected)
-                .font(.PangramSans.bold(FHKSize.size16))
-                .foregroundColor(FHKColor.lunarSand)
+                .font(.PangramSans.bold(FHKSize.size12))
                 .padding(.leading, FHKSpace.space08)
                 .padding(.top, FHKSpace.space16)
+                .colorDegradeStyle(startColor: FHKColor.pastelPink,
+                                   endColor: .gray.opacity(0.8))
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: FHKSpace.space16) {
@@ -101,7 +107,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                         FHKRewardCollectCard.skeletons(count: 3, style: .glass)
                         
                     case .loaded, .disabled:
-                        ForEach(viewModel.rewardsCollected) { ticket in
+                        ForEach(viewModel.rewardsCollectedList) { ticket in
                             getRewardCollectCardLoaded(ticket: ticket)
                         }
                         
@@ -112,6 +118,49 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             }
             .frame(height: FHKSize.size132)
             .padding(.horizontal, FHKSpace.space08)
+        }
+        .padding(.top, FHKSpace.space16)
+    }
+    
+    var goalMemberFamilyView: some View {
+        VStack(alignment: .leading) {
+            GradientDivider()
+            
+            Text(viewModel.viewState.msnGoalsInCurse)
+                .font(.PangramSans.bold(FHKSize.size16))
+                .padding(.leading, FHKSpace.space08)
+                .padding(.top, FHKSpace.space16)
+                .colorDegradeStyle(startColor: FHKColor.pastelPink,
+                                   endColor: .gray.opacity(0.8))
+                     
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: FHKSpace.space16) {
+                    switch viewModel.viewState.goalMemberState {
+                        
+                    case .skeleton:
+                        FHKGoalCardView.skeletons(count: 3)
+                        
+                    case .loaded, .disabled:
+                        ForEach(viewModel.goalMemberList) { goal in
+                            FHKGoalCardView(id: goal.goalId,
+                                            state: viewModel.viewState.goalMemberState,
+                                            current: Double(goal.accumulatedValue),
+                                            total: Double(goal.rewardsSystemValue),
+                                            title: goal.nameGoal.uppercased(),
+                                            workType: goal.rewardsSystemType,
+                                            action: { id in
+                            })
+                        }
+                        
+                    case .error:
+                        FHKGoalCardView.error(msn: viewModel.viewState.titleDataUnavailable)
+                    }
+                }
+            }
+            .frame(height: FHKSize.size132)
+            .padding(.horizontal, FHKSpace.space08)
+            
+            GradientDivider()
         }
         .padding(.top, FHKSpace.space16)
     }
@@ -160,7 +209,7 @@ private extension HomeScreen {
     
     func getRewardCollectCardLoaded(ticket: RewardCollectedEntity) -> FHKRewardCollectCard {
         FHKRewardCollectCard(state: .loaded,
-                             style: .punched,
+                             style: .glass,
                              id: ticket.id,
                              memberName: ticket.member.memberName,
                              avatarName: ticket.member.avatarName,
@@ -175,4 +224,20 @@ private extension HomeScreen {
         HomeScreen(viewModel: HomeScreenVM())
     }
     .background(FHKColor.indigo)
+}
+
+
+struct GradientDivider: View {
+    var body: some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    colors: [.gray, .purple, .gray],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .frame(height: 3.5)
+            .padding(.horizontal)
+    }
 }

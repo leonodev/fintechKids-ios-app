@@ -107,6 +107,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         
         return GoalMemberEntity(goalId: goalID,
                                 memberId: member.id,
+                                nameGoal: goal.name,
                                 taskWinnedValue: getAccumulatedValue(goal: goal, collectReward: collect),
                                 rewardsSystemType: goal.measureType,
                                 rewardsSystemValue: goal.value,

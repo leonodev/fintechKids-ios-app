@@ -9,6 +9,7 @@ import SwiftUI
 import Observation
 import FHKDesignSystem
 import FHKUtils
+import FHKDomain
 
 @Observable
 public class HomeViewState {
@@ -31,6 +32,10 @@ public class HomeViewState {
         "msn_fetch_rewards_collect_error".localized().capitalizingFirstLetter()
     }
     
+    public var msnErrorFetchGoalList: String {
+        "msn_error_fetch_goal_list".localized().capitalizingFirstLetter()
+    }
+    
     public var titleMemberFamily: String {
         "title_members_family".localized().uppercased()
     }
@@ -43,11 +48,20 @@ public class HomeViewState {
         "title_pay".localized().uppercased()
     }
     
+    public var titleDataUnavailable: String {
+        "title_data_unavailable".localized().capitalizingFirstLetter()
+    }
+    
+    public var msnGoalsInCurse: String {
+        "msn_goals_in_curse".localized().uppercased()
+    }
+    
     public var stateItemMemberComponent: ComponentState = .skeleton
     
     // Independent states by component
     public var familyState: ComponentStateType = .skeleton
     public var rewardsState: ComponentStateType = .skeleton
+    public var goalMemberState: ComponentStateType = .skeleton
 
     init() {
         options = [
