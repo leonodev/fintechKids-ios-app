@@ -48,7 +48,7 @@ public struct LoginViewState {
     
     // msn loading
     public var msnLoading: String {
-        "loading".localized().capitalizingFirstLetter()
+        "key_msn_auth_user_loading".localized().capitalizingFirstLetter()
     }
     
     // errors screen
