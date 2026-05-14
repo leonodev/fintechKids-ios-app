@@ -1,6 +1,7 @@
 ---
 name: design-system
 description: Manages and creates design components for the FHKDesignSystem. Guides the user in selecting existing components and generates SwiftUI code for new components, ensuring the correct use of Typography, Colors, and Spacing.
+model: gemini-3-flash
 ---
 
 1. **Guidelines**:
@@ -22,14 +23,9 @@ description: Manages and creates design components for the FHKDesignSystem. Guid
 * **Behavior:** Be interactive and communicate in **Spanish**. Before generating code, analyze if the functional description suggests the use of animated icons or avatars. Ask explicitly: "¿Este componente requiere un Lottie o un Avatar?" Only if the answer is affirmative, proceed with questions regarding file names. If the answer is "no", execute the code directly following the design rules.
 
 
-5. **Commit Changes**:
+5. **Commit Changes and push to FHKDesignSystem Repository**:
+- Use the agent `GitAgent`  to get the repository path and then commit all these changes and push them to the FHKDesignSystem Repository.
 - commit the staged changes using [conventional commit messages](/skills/commit-changes/conventional-commits.md) guidelines.
-
-6. **Path DesignSystem Module:** `../fintechKids-modulo-designsystem-ios` -> FHKDesignSystem Repository
-- Path Github Repository [FHKDesignSystem repository](https://github.com/fintech-kiddies/FHKDesignSystem).
-
-7. **Push Change to FHKDesignSystem Repository**
-- Check if there have been any changes to the FHKDesignSystem Repository module mentioned in step 6. If there have been any changes, then ask me to confirm the push to the correct repository on GitHub.
 
 
 * **Checklist:** 
