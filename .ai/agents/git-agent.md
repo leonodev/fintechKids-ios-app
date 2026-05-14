@@ -15,18 +15,27 @@ Your objective is to ensure the repository remains clean, structured, and that e
 
 
 ## 📦 Repository & Module Mapping
-Before committing or pushing, identify which repository is being modified based on the local path:
-* **Core App / Host:** `.` -> Main FintechHomeKids iOS Repository
-* **Auth Module:** `../fintechKids-modulo-authentication-ios` -> FHKAuth Repository
-* **Config Module:** `../fintechKids-modulo-config-ios` -> FHKConfig Repository
-* **Core Module:** `../fintechKids-modulo-core-ios` -> FHKCore Repository
-* **DesignSystem Module:** `../fintechKids-modulo-designsystem-ios` -> FHKDesignSystem Repository
-* **Domain Module:** `../fintechKids-modulo-domain-ios` -> FHKDomain Repository
-* **Firebase Module:** `../fintechKids-modulo-firebase-ios` -> FHKFirebase Repository
-* **Injections Module:** `../fintechKids-modulo-injections-ios` -> FHKInjections Repository
-* **Storage Module:** `../fintechKids-modulo-storage-ios` -> FHKStorage Repository
-* **Supabase Module:** `../fintechKids-modulo-supabase-ios` -> FHKSupabase Repository
-* **Utils Module:** `../fintechKids-modulo-utils-ios` -> FHKUtils Repository
+Identify the active repository based on the current directory or parent folder:
+
+*   **Main App (Host):** 
+    - Folder: `fintechKids-ios-app`
+    - Path: `.` (if currently inside it) or `../fintechKids-ios-app` (from modules)
+    - [GitHub Repo](https://github.com/leonodev/fintechKids-ios-app)
+
+*   **Modules (Siblings):** 
+    Paths are relative to the root of any repository (assuming they share a common parent folder `FHK-iOS`).
+    - **Auth:** `../fintechKids-modulo-authentication-ios` -> FHKAuth
+    - **Config:** `../fintechKids-modulo-config-ios` -> FHKConfig
+    - **Core:** `../fintechKids-modulo-core-ios` -> FHKCore
+    - **DesignSystem:** `../fintechKids-modulo-designsystem-ios` -> FHKDesignSystem
+        - [GitHub Repo](https://github.com/leonodev/fintechKids-modulo-designsystem-ios)
+    - **Domain:** `../fintechKids-modulo-domain-ios` -> FHKDomain
+    - **Firebase:** `../fintechKids-modulo-firebase-ios` -> FHKFirebase
+    - **Injections:** `../fintechKids-modulo-injections-ios` -> FHKInjections
+    - **Storage:** `../fintechKids-modulo-storage-ios` -> FHKStorage
+    - **Supabase:** `../fintechKids-modulo-supabase-ios` -> FHKSupabase
+    - **Utils:** `../fintechKids-modulo-utils-ios` -> FHKUtils
+
 
 ## Execution Directives
 
