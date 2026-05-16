@@ -73,7 +73,7 @@ public class RegisterViewState {
         !familyName.isEmpty &&
         isEmailValid &&
         isPasswordValid &&
-        pinApproveTask.isEmpty
+        !pinApproveTask.isEmpty
         ? .enabled
         : .disabled
     }

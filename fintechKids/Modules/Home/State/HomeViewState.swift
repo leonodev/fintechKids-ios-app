@@ -88,19 +88,19 @@ public class HomeViewState {
         ]
         
         menuTabBarItems = [
-            .init(title: "Payments",
+            .init(title: "key_payments_title".localized().capitalizingFirstLetter(),
                   activeIcon: .menuLoansEnable,
                   lockedIcon: .menuLoansDisabled),
             
-            .init(title: "Transfer",
+            .init(title: "key_transfer_title".localized().capitalizingFirstLetter(),
                   activeIcon: .menuTransferEnable,
                   lockedIcon: .menuTransferDisabled),
             
-            .init(title: "Loans",
+            .init(title: "key_loans_title".localized().capitalizingFirstLetter(),
                   activeIcon: .menuLoansEnable,
                   lockedIcon: .menuLoansDisabled),
             
-            .init(title: "Saving",
+            .init(title: "key_saving_title".localized().capitalizingFirstLetter(),
                   activeIcon: .menuSavingsEnable,
                   lockedIcon: .menuSavingsDisabled,
                   isDisabled: true)

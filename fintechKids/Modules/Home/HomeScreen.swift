@@ -19,18 +19,19 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     
     var body: some View {
         ScreenContainer(title: Routes.Titles.home) {
-            
-            VStack(alignment: .leading, spacing: 0) {
-                headerView
-                
-                membersView
-                
-                rewardsCollectedView
-                
-                goalMemberFamilyView
-                
-                Spacer()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    headerView
+                    membersView
+                    rewardsCollectedView
+                    goalMemberFamilyView
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
                 botomBarView
+            }
+            .refreshable {
+                loadAllInformation(isForce: true)
             }
             .fullScreenCover(isPresented: $showPermissions) {
                 PermissionRequestView(provider: viewModel.fhkCameraPermission)
@@ -38,17 +39,21 @@ struct HomeScreen<VM: HomeScreenVM>: View {
         }
         .background(FHKColor.indigo)
         .onAppear {
-            Task {
-                await viewModel.getParentMail()
-                async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: false))
-                async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: false))
-                async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: false))
-                await _ = (fetchMembers, fetchRewards, fetchGoalMembers)
-            }
+            loadAllInformation(isForce: false)
             
             //                if camaraPermissionManager.status != .authorized {
             //                    showPermissions = true
             //                }
+        }
+    }
+    
+    private func loadAllInformation(isForce: Bool) {
+        Task {
+            await viewModel.getParentMail()
+            async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: isForce))
+            async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: isForce))
+            async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: isForce))
+            await _ = (fetchMembers, fetchRewards, fetchGoalMembers)
         }
     }
 
@@ -197,6 +202,9 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                     
                 case .goals:
                     router.navigate(to: .goals)
+                    
+                case .rewards:
+                    break
                     
                 default:
                     break
