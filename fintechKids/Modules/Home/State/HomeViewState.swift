@@ -68,17 +68,17 @@ public class HomeViewState {
         options = [
             .init(title: "title_menu_members".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "person.crop.circle.badge.plus"),
-                  color: FHKColor.ultraPurple,
+                  color: FHKColor.wine,
                   menuType: .members),
             
             .init(title: "title_menu_tasks".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "house"),
-                  color: FHKColor.indigo,
+                  color: FHKColor.wine.opacity(0.8),
                   menuType: .tasks),
             
             .init(title: "title_menu_goals".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "note.text.badge.plus"),
-                  color: FHKColor.fuchsiaPink,
+                  color: FHKColor.ultraPurple.opacity(0.8),
                   menuType: .goals),
             
             .init(title: "title_menu_rewards".localized().capitalizingFirstLetter(),
@@ -88,10 +88,22 @@ public class HomeViewState {
         ]
         
         menuTabBarItems = [
-            .init(title: "Remes", icon: Image(systemName: "house.fill")),
-            .init(title: "Bonus", icon: Image(systemName: "gift.fill")),
-            .init(title: "Agitet", icon: Image(systemName: "plus.circle.fill")),
-            .init(title: "Disabled", icon: Image(systemName: "lock.fill"), isDisabled: true)
+            .init(title: "Payments",
+                  activeIcon: .menuLoansEnable,
+                  lockedIcon: .menuLoansDisabled),
+            
+            .init(title: "Transfer",
+                  activeIcon: .menuTransferEnable,
+                  lockedIcon: .menuTransferDisabled),
+            
+            .init(title: "Loans",
+                  activeIcon: .menuLoansEnable,
+                  lockedIcon: .menuLoansDisabled),
+            
+            .init(title: "Saving",
+                  activeIcon: .menuSavingsEnable,
+                  lockedIcon: .menuSavingsDisabled,
+                  isDisabled: true)
         ]
     }
     

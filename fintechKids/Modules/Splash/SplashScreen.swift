@@ -30,6 +30,9 @@ struct SplashScreen<VM: SplashScreenVM>: View {
             case .loaded(nav: .goToLanguage):
                 router.navigate(to: .language)
                 
+            case .loaded(nav: .gotoHome):
+                router.navigate(to: .home)
+                
             case .loaded(nav: .none):
                 break
             }

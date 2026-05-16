@@ -74,6 +74,7 @@ struct ProfileScreen<VM: ProfileScreenVM>: View {
                             Task {
                                 await viewModel.action(.logout)
                                 viewModel.fhkModal.dismiss()
+                                router.popTo(.login)
                             }
                         },
                                             cancelAction: {

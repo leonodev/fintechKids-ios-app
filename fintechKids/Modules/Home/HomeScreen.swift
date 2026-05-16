@@ -15,6 +15,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     @State var viewModel: VM
     @State private var showPermissions = false
     @State private var selectedMenuTabBarIndex = 0
+    @State var isOpen: Bool = false
     
     var body: some View {
         ScreenContainer(title: Routes.Titles.home) {
@@ -178,14 +179,14 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 }
             }
         }
-        .padding(.bottom, -32)
+        .padding(.horizontal)
     }
     
     var floatMenuView: some View {
         HStack {
            Spacer()
             
-            FloatMenu(options: viewModel.viewState.options,
+            FloatMenu(options: viewModel.viewState.options, isOpen: $isOpen,
                       callback: { menu in
                 switch menu {
                 case .members:
