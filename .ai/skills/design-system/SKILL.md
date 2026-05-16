@@ -1,30 +1,40 @@
 ---
 name: design-system
-description: Gestiona y crea componentes de diseño del sistema FHKDesignSystem. Guía al usuario en la selección de componentes existentes y genera código de SwiftUI para nuevos componentes, asegurando el uso correcto de Tipografías, Colores y Espaciados.  
+description: Manages and creates design components for the FHKDesignSystem. Guides the user in selecting existing components and generates SwiftUI code for new components, ensuring the correct use of Typography, Colors, and Spacing.
+model: gemini-3-flash
 ---
 
 1. **Guidelines**:
-- usa este ejemplo [creacion de componente](example-component.swift) para que te guies como crear un nuevo componente.
-
+- Use this example [component creation](example-component.swift) as a guide on how to create a new component.
 
 2. **Domain Business Rules (Rules of Gold)**:
-* **Constraint 1:** cada componente que crees, ejemplo, un boton, debe soportar estos estados internos (`.skeleton`, `.error`, `.disabled`, `.loaded`). de esta manera cada componente podra reaccionar a cada uno de estos casos.
-* **Constraint 2:**  cada componente debe tener su Preview para poder ver como se ve el componente en los 4 estados.    
-* **Constraint 3:** los componentes no deben recibir ningun objeto de dominio, simplemente deben recibir propiedades primitivas para evitar acoplamientos.
-* **Constraint 4:**  debes tener en cuenta que cuando crees una nueva struct para un nuevo componente, debera ser public y debere tener un metodo init public para inicializar todos sus propiedades, esto porque todos estos componentes sin usados desde otro modulo externo.
-* **Constraint 5:** si te ordeno que añadas un nuevo lottie tu solo te encargaras de instanciar el nuevo lottie en el manager `Lotties.swift` yo manualmente lo pondre en el proyecto, tu solo encargate de que este declarada en este archivo, deberas preguntarme que nombre le pongo, yo te lo indicare.  
-* **Constraint 6:** si te pido que añadas un nuevo avatar, debes preguntarme que nombre le pongo, yo te lo indicare. tu deberas añadirlo en el archivo `AvatarType.swift` yo pondre la imagen manualmente en los assets.
+* **Constraint 1:** Every component created (e.g., a button) must support these internal states: (`.skeleton`, `.error`, `.disabled`, `.loaded`). This ensures each component can react to each specific case.
+* **Constraint 2:** Each component must include a Preview to visualize how it renders in all 4 states.
+* **Constraint 3:** Components must not receive any domain objects; they must only receive primitive properties to avoid coupling.
+* **Constraint 4:** New structs for components must be `public` and include a `public init` to initialize all properties, as these components are used by external modules. All internal properties must be `private let`.
+* **Constraint 5:** If the component requires an animation, you must ask me for the Lottie's name. If the component does not require animations, ignore this step. Only when applicable, instantiate the new Lottie in the `Lotties.swift` manager.
+* **Constraint 6:** If I ask to add a new avatar, you must ask me for the name I want to assign to it. You will then add it to the `AvatarType.swift` file; I will manually add the image to the assets.
 
 3. **UI & Design System (FHK Identity)**
 * **Design Tokens:** Always use `FHKColor`, `FHKSpace`, and `FHKSize`.
 * **Hardcoding Rule:** Zero hardcoded colors or paddings allowed.
 
-
-
 4. **AI Interaction Protocol**
-* **Behavior:** Sé interactivo y pregunta paso a paso / Sé directo y ejecuta el código de una vez.
+* **Behavior:** Be interactive and communicate in **Spanish**. Before generating code, analyze if the functional description suggests the use of animated icons or avatars. Ask explicitly: "¿Este componente requiere un Lottie o un Avatar?" Only if the answer is affirmative, proceed with questions regarding file names. If the answer is "no", execute the code directly following the design rules.
+
+
+5. **Commit Changes and push to FHKDesignSystem Repository**:
+- Use the agent `GitAgent`  to get the repository path and then commit all these changes and push them to the FHKDesignSystem Repository.
+- commit the staged changes using [conventional commit messages](/skills/commit-changes/conventional-commits.md) guidelines.
 
 
 * **Checklist:** 
-    - [ ] Todos las Componentes deben soportar estos 4 estados (`.skeleton`, `.error`, `.disabled`, `.loaded`)
-    - [ ] Todos los componentes creados deberan tener su Preview con sus cuatro estados
+    - [ ] All components must support the 4 states (`.skeleton`, `.error`, `.disabled`, `.loaded`).
+    - [ ] All created components must have a Preview with all four states.
+    - [ ] Components do not receive domain objects.
+    - [ ] New component structs are `public` with a `public init`.
+    - [ ] Lotties are referenced in their corresponding manager.
+    - [ ] Avatars are referenced in their corresponding manager.
+    - [ ] Use only system-defined colors, fonts, spacing, and sizes (FHK Design Tokens).
+    - [ ] Check if there have been any changes to the FHKDesignSystem Repository and make commit.
+    - [ ] Push to the FHKDesignSystem Repository

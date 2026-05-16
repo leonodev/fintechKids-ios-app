@@ -165,6 +165,11 @@ struct LoginScreen<VM: LoginScreenVM>: View {
             .shadow(radius: 20)
         }
         .padding(.bottom, FHKSpace.space28)
+        .onAppear {
+            if viewModel.hasSavedAuthToken {
+                router.navigate(to: .home)
+            }
+        }
     }
     
     var modalInformationError: some View {
