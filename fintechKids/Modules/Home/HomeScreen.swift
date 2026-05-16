@@ -14,6 +14,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     @State var viewModel: VM
     @State private var showPermissions = false
+    @State private var selectedMenuTabBarIndex = 0
     
     var body: some View {
         ScreenContainer(title: Routes.Titles.home) {
@@ -28,7 +29,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 goalMemberFamilyView
                 
                 Spacer()
-                floatMenuView
+                botomBarView
             }
             .fullScreenCover(isPresented: $showPermissions) {
                 PermissionRequestView(provider: viewModel.fhkCameraPermission)
@@ -165,6 +166,21 @@ struct HomeScreen<VM: HomeScreenVM>: View {
         .padding(.top, FHKSpace.space16)
     }
     
+    var botomBarView: some View {
+        ZStack {
+            VStack {
+                Spacer()
+                
+                FHKBottomBarContainer(items: viewModel.viewState.menuTabBarItems, selectedIndex: $selectedMenuTabBarIndex) { item in
+                    print("Click en \(item.title)")
+                } floatingButton: {
+                    floatMenuView
+                }
+            }
+        }
+        .padding(.bottom, -32)
+    }
+    
     var floatMenuView: some View {
         HStack {
            Spacer()
@@ -224,20 +240,4 @@ private extension HomeScreen {
         HomeScreen(viewModel: HomeScreenVM())
     }
     .background(FHKColor.indigo)
-}
-
-
-struct GradientDivider: View {
-    var body: some View {
-        Rectangle()
-            .fill(
-                LinearGradient(
-                    colors: [.gray, .purple, .gray],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
-            .frame(height: 3.5)
-            .padding(.horizontal)
-    }
 }

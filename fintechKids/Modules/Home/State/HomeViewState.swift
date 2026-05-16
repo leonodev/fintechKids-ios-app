@@ -14,6 +14,7 @@ import FHKDomain
 @Observable
 public class HomeViewState {
     var options: [FloatMenu.Option]
+    var menuTabBarItems: [FHKMenuTabBar.Item]
     var parentEmail: String?
 
     public var errorNameMember: String {
@@ -84,6 +85,13 @@ public class HomeViewState {
                   image: .init(systemName: "gamecontroller"),
                   color: FHKColor.ultraPurple,
                   menuType: .rewards)
+        ]
+        
+        menuTabBarItems = [
+            .init(title: "Remes", icon: Image(systemName: "house.fill")),
+            .init(title: "Bonus", icon: Image(systemName: "gift.fill")),
+            .init(title: "Agitet", icon: Image(systemName: "plus.circle.fill")),
+            .init(title: "Disabled", icon: Image(systemName: "lock.fill"), isDisabled: true)
         ]
     }
     
