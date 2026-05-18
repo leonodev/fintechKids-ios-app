@@ -21,3 +21,4 @@ Gemfile.lock # Generalmente se ignora si cada dev usa su propia versión (depend
 fastlane/report.xml
 *.resolved
 swiftlint-report.json
+fintechKids.xcodeproj/project.xcworkspace/xcuserdata/fleon.xcuserdatad/UserInterfaceState.xcuserstate
