@@ -1,0 +1,56 @@
+# Reglas que se activan por defecto y que queremos apagar
+disabled_rules:
+  - trailing_whitespace        # A veces molesto con las líneas vacías
+  - function_body_length       # Swift 6 con SwiftUI a veces crea cuerpos largos
+  - identifier_name            # Para no tener problemas con nombres cortos como 'id'
+
+# Reglas adicionales que no vienen activas por defecto (recomendadas para Swift 6)
+opt_in_rules:
+  - array_init
+  - contains_over_first_not_nil
+  - empty_count
+  - force_unwrapping           # Te obliga a no usar '!' (Seguridad ante todo)
+  - implicit_return            # Limpia el código eliminando 'return' innecesarios
+  - redundant_nil_coalescing
+  - vertical_whitespace_closing_braces
+
+# Configuración de carpetas
+included:
+  - fintechKids              # Cambia esto por el nombre de tu carpeta de código
+excluded:
+  - Pods
+  - DerivedData
+  - fintechKidsTests         # Opcional: si no quieres linting en tests
+
+# Personalización de reglas específicas
+line_length: 180               # Un poco más ancho que los 180 por defecto
+type_body_length:
+  warning: 500
+  error: 600
+
+# Formato de salida
+reporter: "xcode"              # Para que los avisos salgan integrados en Xcode
+
+
+# Guardian de Arquitectura FHK
+custom_rules:
+  fhk_layer_violation_viewmodel:
+    name: "Violation ViewModel"
+    message: "Error of Architecture: a ViewModel You should not import Infrastructure modules or DesignSystem (Storage/Firebase/Supabase). must use a repository."
+    regex: "(?m)^import\\s+(FHKStorage|FHKSupabase|Supabase|FHKAuth|FHKConfig|SwiftUI)"
+    included: ".*(VM|ViewModel)\\.swift"
+    severity: error
+
+  fhk_layer_violation_view:
+    name: "Violation View"
+    message: "Error of Architecture: the Views/Screens/ViewStates They should not import logic or infrastructure modules."
+    regex: "(?m)^import\\s+(FHKInjections|FHKAuth|FHKConfig|FHKStorage|FHKFirebase|FHKSupabase|Supabase)"
+    included: ".*(Screen|View|ViewState)\\.swift"
+    severity: error
+
+  fhk_layer_violation_repository:
+    name: "Violation Repository"
+    message: "Error of Architecture: the Repository They should not import the next modules."
+    regex: "(?m)^import\\s+(FHKAuth|FHKFirebase|FHKSupabase|Supabase)"
+    included: ".*(Repository)\\.swift"
+    severity: error

@@ -1,0 +1,23 @@
+# Directorios de Build y Archivos de Xcode generados
+/build
+*.ipa
+*.dSYM.zip
+*.xcarchive
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+/Pods
+/Package.resolved
+DerivedData/
+
+# Archivos de Entorno de Ruby/Bundler (NECESARIO)
+.bundle/
+/vendor/bundle/
+Gemfile.lock # Generalmente se ignora si cada dev usa su propia versión (depende del equipo)
+
+# Archivos de macOS
+.DS_Store
+
+# Logs de Fastlane y TestFlight (Si existen)
+fastlane/report.xml
+*.resolved
+swiftlint-report.json
