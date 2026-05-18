@@ -4,23 +4,23 @@
 ## 1. Role & Scope
 * **Module Name:** [FHKDesignSystem]
 * **Primary Responsibility:** [Responsible for exposing UI components, Colors, Fonts, Sizes, Spaces, etc.]
-* **Repository Root:** `../fintechKidsModules/FHKDesignSystem`
+* **Repository Root:** `../fintechKids-modulo-designsystem-ios`
 * **Critical Paths:**
-    1. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Components/Views`
+    1. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Components/Views`
         - Contains all views classified in subfolders by component type.
-    2. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Components/Views/Modifiers`
+    2. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Components/Views/Modifiers`
         - Contains modifiers that can be applied to Views.
-    3. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Components/Views/UIViewRepresentable`
+    3. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Components/Views/UIViewRepresentable`
         - Contains UI elements using UIKit, acting as wrappers for SwiftUI usage.
-    4. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Extensions`
+    4. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Extensions`
         - Contains extensions that can be applied to Views.
-    5. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Managers`
+    5. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Managers`
         - Contains managers for utilizing components such as Fonts, Colors, Images, Lotties, etc.
-    6. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Resources`
+    6. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Resources`
         - Contains Assets, Colors, Fonts, and Lotties in JSON format.
-    7. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Sizes`
+    7. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Sizes`
         - Contains all size typologies.
-    8. `../fintechKidsModules/FHKDesignSystem/Sources/FHKDesignSystem/Space`
+    8. `../fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Space`
         - Contains all spacing typologies.
 
 ## 2. Technical Stack & Dependencies
