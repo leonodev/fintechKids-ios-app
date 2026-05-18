@@ -14,6 +14,7 @@ import FHKDomain
 @Observable
 public class HomeViewState {
     var options: [FloatMenu.Option]
+    var menuTabBarItems: [FHKMenuTabBar.Item]
     var parentEmail: String?
 
     public var errorNameMember: String {
@@ -67,23 +68,42 @@ public class HomeViewState {
         options = [
             .init(title: "title_menu_members".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "person.crop.circle.badge.plus"),
-                  color: FHKColor.ultraPurple,
+                  color: FHKColor.wine,
                   menuType: .members),
             
             .init(title: "title_menu_tasks".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "house"),
-                  color: FHKColor.indigo,
+                  color: FHKColor.wine.opacity(0.8),
                   menuType: .tasks),
             
             .init(title: "title_menu_goals".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "note.text.badge.plus"),
-                  color: FHKColor.fuchsiaPink,
+                  color: FHKColor.ultraPurple.opacity(0.8),
                   menuType: .goals),
             
             .init(title: "title_menu_rewards".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "gamecontroller"),
                   color: FHKColor.ultraPurple,
                   menuType: .rewards)
+        ]
+        
+        menuTabBarItems = [
+            .init(title: "key_payments_title".localized().capitalizingFirstLetter(),
+                  activeIcon: .menuLoansEnable,
+                  lockedIcon: .menuLoansDisabled),
+            
+            .init(title: "key_transfer_title".localized().capitalizingFirstLetter(),
+                  activeIcon: .menuTransferEnable,
+                  lockedIcon: .menuTransferDisabled),
+            
+            .init(title: "key_loans_title".localized().capitalizingFirstLetter(),
+                  activeIcon: .menuLoansEnable,
+                  lockedIcon: .menuLoansDisabled),
+            
+            .init(title: "key_saving_title".localized().capitalizingFirstLetter(),
+                  activeIcon: .menuSavingsEnable,
+                  lockedIcon: .menuSavingsDisabled,
+                  isDisabled: true)
         ]
     }
     

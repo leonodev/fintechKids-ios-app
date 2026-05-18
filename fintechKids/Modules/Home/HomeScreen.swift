@@ -14,21 +14,24 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
     @State var viewModel: VM
     @State private var showPermissions = false
+    @State private var selectedMenuTabBarIndex = 0
+    @State var isOpen: Bool = false
     
     var body: some View {
         ScreenContainer(title: Routes.Titles.home) {
-            
-            VStack(alignment: .leading, spacing: 0) {
-                headerView
-                
-                membersView
-                
-                rewardsCollectedView
-                
-                goalMemberFamilyView
-                
-                Spacer()
-                floatMenuView
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    headerView
+                    membersView
+                    rewardsCollectedView
+                    goalMemberFamilyView
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                botomBarView
+            }
+            .refreshable {
+                loadAllInformation(isForce: true)
             }
             .fullScreenCover(isPresented: $showPermissions) {
                 PermissionRequestView(provider: viewModel.fhkCameraPermission)
@@ -36,17 +39,21 @@ struct HomeScreen<VM: HomeScreenVM>: View {
         }
         .background(FHKColor.indigo)
         .onAppear {
-            Task {
-                await viewModel.getParentMail()
-                async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: false))
-                async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: false))
-                async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: false))
-                await _ = (fetchMembers, fetchRewards, fetchGoalMembers)
-            }
+            loadAllInformation(isForce: false)
             
             //                if camaraPermissionManager.status != .authorized {
             //                    showPermissions = true
             //                }
+        }
+    }
+    
+    private func loadAllInformation(isForce: Bool) {
+        Task {
+            await viewModel.getParentMail()
+            async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: isForce))
+            async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: isForce))
+            async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: isForce))
+            await _ = (fetchMembers, fetchRewards, fetchGoalMembers)
         }
     }
 
@@ -165,11 +172,26 @@ struct HomeScreen<VM: HomeScreenVM>: View {
         .padding(.top, FHKSpace.space16)
     }
     
+    var botomBarView: some View {
+        ZStack {
+            VStack {
+                Spacer()
+                
+                FHKBottomBarContainer(items: viewModel.viewState.menuTabBarItems, selectedIndex: $selectedMenuTabBarIndex) { item in
+                    print("Click en \(item.title)")
+                } floatingButton: {
+                    floatMenuView
+                }
+            }
+        }
+        .padding(.horizontal)
+    }
+    
     var floatMenuView: some View {
         HStack {
            Spacer()
             
-            FloatMenu(options: viewModel.viewState.options,
+            FloatMenu(options: viewModel.viewState.options, isOpen: $isOpen,
                       callback: { menu in
                 switch menu {
                 case .members:
@@ -180,6 +202,9 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                     
                 case .goals:
                     router.navigate(to: .goals)
+                    
+                case .rewards:
+                    break
                     
                 default:
                     break
@@ -224,20 +249,4 @@ private extension HomeScreen {
         HomeScreen(viewModel: HomeScreenVM())
     }
     .background(FHKColor.indigo)
-}
-
-
-struct GradientDivider: View {
-    var body: some View {
-        Rectangle()
-            .fill(
-                LinearGradient(
-                    colors: [.gray, .purple, .gray],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
-            .frame(height: 3.5)
-            .padding(.horizontal)
-    }
 }
