@@ -26,6 +26,10 @@ struct FintechKidsApp: App {
         inject.fhkModal
     }
     
+    private var fhkStorage: any FHKStorageManagerProtocol {
+        inject.fhkStorage
+    }
+    
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -66,6 +70,9 @@ struct FintechKidsApp: App {
                 }
                 .padding(.top, 10) // Ajuste fino para la safe area si es necesario
                 .zIndex(999) // Prioridad de renderizado absoluta
+            }
+            .task {
+                await fhkStorage.clearKeychainIfNewInstallation()
             }
         }
     }

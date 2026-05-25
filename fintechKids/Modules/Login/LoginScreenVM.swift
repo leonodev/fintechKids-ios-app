@@ -62,7 +62,6 @@ final class LoginScreenVM: FHKCore.ViewModel {
             
         case .doLogin:
             await login()
-            await saveUserIntoKeychain()
             
         case .doLoginWithBiometrics:
             await loginWithBiometrics()
@@ -90,6 +89,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
             }
             
             try await fhkLoginRepository.savePinApproveTask(pin: pinToApprovedTask)
+            await saveUserIntoKeychain()
         } catch let error as FHKSupabaseError {
             viewState.loginState = .finish(result: .error)
             informateError(error)

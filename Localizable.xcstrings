@@ -234,6 +234,35 @@
         }
       }
     },
+    "coins_required_create_reward_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "amount of kidscoins required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cantidad kidscoins requeridos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "quantite de kidscoins requise"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "quantita di kidscoins richiesta"
+          }
+        }
+      }
+    },
     "collect_reward" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -346,6 +375,64 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "continuare"
+          }
+        }
+      }
+    },
+    "create_reward" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new reward"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nueva recompensa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nouvelle recompense"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nuova ricompensa"
+          }
+        }
+      }
+    },
+    "create_reward_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "create reward"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "crear recompensa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "creer recompense"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "creare ricompensa"
           }
         }
       }
@@ -1522,6 +1609,122 @@
         }
       }
     },
+    "msn_create_reward_instruction" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "define the name and the amount of time and kindcoins a family member must complete to achieve this goal"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "define el nombre y la cantidad de tiempo y de kindcoins debe realizar algun miembro de la familia para lograr alcanzar esta meta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "definissez le nom et la quantite de temps et de kindcoins qu un membre de la famille doit accomplir pour atteindre cet objectif"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "definisci il nome e la quantita di tempo e di kindcoins che un membro della famiglia deve completare per raggiungere questo obiettivo"
+          }
+        }
+      }
+    },
+    "msn_create_reward_loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "one moment, we are creating the reward"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un momento, estamos creando la recompensa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un moment, nous creons la recompense"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "un momento, stiamo creando la ricompensa"
+          }
+        }
+      }
+    },
+    "msn_create_reward_success" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "the reward has been created successfully"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "la recompensa ha sido creada correctamente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "la recompense a ete creee avec succes"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "la ricompensa e stata creata correttamente"
+          }
+        }
+      }
+    },
+    "msn_error_cannot_create_reward" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "we could not get the reward information"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no hemos podido obtener la informacion de la recompensa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nous n avons pas pu obtenir les informations sur la recompense"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non abbiamo potuto ottenere le informazioni sulla ricompensa"
+          }
+        }
+      }
+    },
     "msn_error_create_goal" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1547,6 +1750,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "non è stato possibile creare l'obiettivo, per favore riprova più tardi"
+          }
+        }
+      }
+    },
+    "msn_error_create_reward" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "it has not been possible to create the reward, please try again later"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no ha sido posible crear la recompensa, por favor intentalo mas tarde"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "il na pas ete possible de creer la recompense, veuillez reessayer plus tard"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "non e stato possibile creare la ricompensa, per favore riprova piu tardi"
           }
         }
       }
@@ -2392,6 +2624,35 @@
         }
       }
     },
+    "msn_rewards_loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "getting the rewards list"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "obteniendo el listado de recompensas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "obtention de la liste des recompenses"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ottenendo la lista delle ricompense"
+          }
+        }
+      }
+    },
     "msn_saving_coins" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2740,6 +3001,35 @@
         }
       }
     },
+    "name_create_reward_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "reward name"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nombre de la recompensa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nom de la recompense"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nome della ricompensa"
+          }
+        }
+      }
+    },
     "otp_expired_error" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2768,6 +3058,9 @@
           }
         }
       }
+    },
+    "Para alcanzar esta meta, necesitas:" : {
+
     },
     "password" : {
       "extractionState" : "manual",
@@ -3113,6 +3406,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "compiti"
+          }
+        }
+      }
+    },
+    "time_required_create_reward_placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "enter the required time"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cantidad de tiempo requerido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "entrez le temps requis"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "inserisci il tempo richiesto"
           }
         }
       }

@@ -36,4 +36,8 @@ extension String {
             keywords.contains { text.contains($0) }
         }
     }
+    
+    var toIntOrZero: Int {
+        Int(self) ?? 0
+    }
 }

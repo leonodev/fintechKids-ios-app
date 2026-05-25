@@ -10,12 +10,16 @@ import FHKDomain
 
 enum FHKRewardError: FHKError {
     case fetchListRewardFailed
+    case createRewardFailed
 
     var logMessage: String {
         switch self {
             
         case .fetchListRewardFailed:
             return "Error: fetching list reward"
+            
+        case .createRewardFailed:
+            return "Error: creating reward"
         }
     }
     
@@ -24,6 +28,9 @@ enum FHKRewardError: FHKError {
             
         case .fetchListRewardFailed:
             return "msn_error_fetch_rewards"
+            
+        case .createRewardFailed:
+            return "msn_error_create_reward"
         }
     }
     
@@ -32,6 +39,9 @@ enum FHKRewardError: FHKError {
         switch self {
         case .fetchListRewardFailed:
             return "fetch_rewards_failed"
+            
+        case .createRewardFailed:
+            return "create_reward_failed"
         }
     }
     
