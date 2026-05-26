@@ -1,35 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "title_or_separator" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "or"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "o"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ou"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "o"
-          }
-        }
-      }
-    },
     "/" : {
 
     },
@@ -2693,7 +2664,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Vas a transferir a tus ahorros"
           }
         },
@@ -4453,6 +4424,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "operazione fallita"
+          }
+        }
+      }
+    },
+    "title_or_separator" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "or"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "o"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ou"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "o"
           }
         }
       }

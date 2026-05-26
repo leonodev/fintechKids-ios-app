@@ -31,7 +31,9 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                botomBarView
+                if !viewModel.viewState.menuTabBarItems.isEmpty {
+                    botomBarView
+                }
             }
             .refreshable {
                 loadAllInformation(isForce: true)
@@ -56,7 +58,8 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: isForce))
             async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: isForce))
             async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: isForce))
-            await _ = (fetchMembers, fetchRewards, fetchGoalMembers)
+            async let fetchItemMenu: () = viewModel.action(.fetchInformationMenu)
+            await _ = (fetchMembers, fetchRewards, fetchGoalMembers, fetchItemMenu)
         }
     }
 
@@ -196,7 +199,6 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 }
             }
         }
-        .padding(.horizontal)
     }
     
     var floatMenuView: some View {

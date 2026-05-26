@@ -33,6 +33,10 @@ final class HomeScreenVM: FHKCore.ViewModel {
         inject.fhkCameraPermission
     }
     
+    private var fhkFirebaseRemoteConfig: any FHKRemoteConfigManagerProtocol {
+        inject.fhkFirebaseRemoteConfig
+    }
+    
     // Other Properties
     public var familyMembersList: [MemberEntity] = []
     public var rewardsCollectedList: [RewardCollectedEntity] = []
@@ -42,6 +46,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
         case fetchMemberFamily(force: Bool = false)
         case fetchRewardsCollected(force: Bool = false)
         case fetchMemberGoals(force: Bool = false)
+        case fetchInformationMenu
     }
     
     func getParentMail() async {
@@ -60,48 +65,28 @@ final class HomeScreenVM: FHKCore.ViewModel {
             
         case .fetchMemberGoals(let force):
             await fetchGoalMember(force: force)
+            
+        case .fetchInformationMenu:
+            await fetchMenuBotomHome()
         }
     }
-    
-    private func fetchMemberFamily(force: Bool) async {
-        viewState.familyState = .skeleton
-        
-        do {
-            guard let email = viewState.parentEmail else {
-                showNotificationError(msn: viewState.errorRecoveryInfoUser)
-                viewState.familyState = .defaultDataError
-                return
-            }
 
-            let members = try await fhkHomeRepository.fetchMembers(email: email, forceRefresh: force)
-            familyMembersList = members
-            viewState.familyState = .loaded
-        } catch {
-            viewState.familyState = .defaultDataError
-            showNotificationError(msn: viewState.errorFetchMembers)
-        }
+    func getNameMember(member: MemberEntity) -> String {
+        member.memberName
     }
     
-    private func fetchRewardsCollected(force: Bool) async {
-        viewState.rewardsState = .skeleton
-        do {
-            guard let email = viewState.parentEmail else {
-                showNotificationError(msn: viewState.errorRecoveryInfoUser)
-                viewState.rewardsState = .defaultDataError
-                return
-            }
+    func getAvatarMember(member: MemberEntity) -> String {
+        member.avatarName
+    }
+    
+    func getId(member: MemberEntity) -> UUID {
+        member.id
+    }
+}
 
-            let rewardsCollected = try await fhkHomeRepository.fetchRewardCollected(parentEmail: email,
-                                                                                        forceRefresh: force)
-            rewardsCollectedList = rewardsCollected
-            viewState.rewardsState = .loaded
-        } catch {
-            viewState.rewardsState = .defaultDataError
-            showNotificationError(msn: viewState.errorRewardCollect)
-        }
-    }
+private extension HomeScreenVM {
     
-    private func fetchGoalMember(force: Bool) async {
+    func fetchGoalMember(force: Bool) async {
         viewState.goalMemberState = .skeleton
         do {
             guard let email = viewState.parentEmail else {
@@ -120,20 +105,54 @@ final class HomeScreenVM: FHKCore.ViewModel {
         }
     }
     
-    func getNameMember(member: MemberEntity) -> String {
-        member.memberName
-    }
-    
-    func getAvatarMember(member: MemberEntity) -> String {
-        member.avatarName
-    }
-    
-    func getId(member: MemberEntity) -> UUID {
-        member.id
-    }
-}
+    func fetchRewardsCollected(force: Bool) async {
+        viewState.rewardsState = .skeleton
+        do {
+            guard let email = viewState.parentEmail else {
+                showNotificationError(msn: viewState.errorRecoveryInfoUser)
+                viewState.rewardsState = .defaultDataError
+                return
+            }
 
-private extension HomeScreenVM {
+            let rewardsCollected = try await fhkHomeRepository.fetchRewardCollected(parentEmail: email,
+                                                                                        forceRefresh: force)
+            rewardsCollectedList = rewardsCollected
+            viewState.rewardsState = .loaded
+        } catch {
+            viewState.rewardsState = .defaultDataError
+            showNotificationError(msn: viewState.errorRewardCollect)
+        }
+    }
+    
+    func fetchMemberFamily(force: Bool) async {
+        viewState.familyState = .skeleton
+        
+        do {
+            guard let email = viewState.parentEmail else {
+                showNotificationError(msn: viewState.errorRecoveryInfoUser)
+                viewState.familyState = .defaultDataError
+                return
+            }
+
+            let members = try await fhkHomeRepository.fetchMembers(email: email, forceRefresh: force)
+            familyMembersList = members
+            viewState.familyState = .loaded
+        } catch {
+            viewState.familyState = .defaultDataError
+            showNotificationError(msn: viewState.errorFetchMembers)
+        }
+    }
+    
+    func fetchMenuBotomHome() async {
+        do {
+            try await fhkFirebaseRemoteConfig.fetchConfig()
+            let menus = fhkFirebaseRemoteConfig.menuHomeItems
+            viewState.settingMenuOption(items: menus)
+        } catch {
+            return
+        }
+    }
+    
     func showNotificationError(msn: String) {
         fhkToast.show(info: FHKToastInfo(
             type: .error,
