@@ -127,8 +127,6 @@ struct RewardCreateScreen<VM: RewardCreateScreenVM>: View {
             })
         }
     }
-    
-    
 }
 
 extension RewardCreateScreen {

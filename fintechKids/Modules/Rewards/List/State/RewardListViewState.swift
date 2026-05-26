@@ -41,4 +41,8 @@ public class RewardListViewState {
     public var titleHours: String {
         "title_hours".localized().capitalizingFirstLetter()
     }
+    
+    public var titleOrSeparator: String {
+        "title_or_separator".localized().uppercased()
+    }
 }

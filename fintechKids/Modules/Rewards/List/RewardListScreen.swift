@@ -101,6 +101,11 @@ struct RewardListScreen<VM: RewardListScreenVM>: View {
                                             .font(.PangramSans.bold(FHKSize.size24))
                                             .foregroundColor(FHKColor.warning)
                                         
+                                        Text(viewModel.viewState.titleOrSeparator)
+                                            .font(.PangramSans.bold(FHKSize.size16))
+                                            .foregroundColor(FHKColor.lunarSand)
+                                            .padding(.vertical, FHKSize.size04)
+                                        
                                         Text("\(reward.coinsRequiered) KidsCoins")
                                             .font(.PangramSans.bold(FHKSize.size24))
                                             .foregroundColor(FHKColor.lunarSand.opacity(0.7))
