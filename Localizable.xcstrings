@@ -21,10 +21,23 @@
     "%@:" : {
 
     },
+    "%@: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@: %2$@"
+          }
+        }
+      }
+    },
     "%lld" : {
 
     },
     "%lld KidsCoins" : {
+
+    },
+    "+%lld" : {
 
     },
     "access_camera_btn_open_setting_permission" : {

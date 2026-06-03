@@ -64,12 +64,58 @@ struct TasksScreen<VM: TasksScreenVM>: View {
                                         Image(systemName: "paperclip")
                                             .resizable()
                                             .frame(width: FHKSize.size32, height: FHKSize.size32)
-                                            .foregroundStyle(FHKColor.yellow)
+                                            .colorDegradeStyle(startColor: FHKColor.yellow, endColor: FHKColor.warning)
                                             .padding(.trailing, FHKSpace.space08)
                                         
-                                        FHKDescriptionCardView(title: task.name,
-                                                               description: task.description)
+                                        Text(task.name)
+                                            .font(.PangramSans.bold(FHKSize.size16))
+                                            .foregroundColor(FHKColor.basicWhite)
+                                        
+                                        Spacer()
+                                        
+                                        VStack(alignment: .trailing) {
+                                            HStack {
+                                                viewModel.viewState.coinSingle
+                                                    .resizable()
+                                                    .frame(
+                                                        width: FHKSize.size28,
+                                                        height: FHKSize.size40)
+                                                    .padding(.trailing, -FHKSpace.space08)
+                                                
+                                                Text("+\(task.coinsGranted)")
+                                                    .font(.PangramSans.bold(FHKSize.size20))
+                                                    .colorDegradeStyle(startColor: FHKColor.yellow, endColor: FHKColor.warning)
+                                            }
+                                            
+                                            Text(viewModel.viewState.titleInCoins)
+                                                .font(.PangramSans.bold(FHKSize.size08))
+                                                .colorDegradeStyle(startColor: FHKColor.lunarSand, endColor: FHKColor.basicWhite)
+                                                .padding(.top, -18)
+                                        }
                                     }
+                                    
+                                    Text(task.description)
+                                        .font(.PangramSans.bold(FHKSize.size08))
+                                        .foregroundColor(FHKColor.basicWhite.opacity(0.8))
+                                        .padding(.leading, FHKSpace.space04)
+ 
+                                    HStack {
+                                        
+                                        Image(systemName: "clock.fill")
+                                            .resizable()
+                                            .frame(width: FHKSize.size20,
+                                                   height: FHKSize.size20)
+                                            .colorDegradeStyle(
+                                                startColor: FHKColor.pastelPink,
+                                                endColor: FHKColor.lunarSand)
+                                        
+                                        Text("\(viewModel.viewState.titleInTime): \(task.timeGranted)")
+                                            .font(.PangramSans.bold(FHKSize.size16))
+                                            .colorDegradeStyle(
+                                                startColor: FHKColor.pastelPink,
+                                                endColor: FHKColor.lunarSand)
+                                    }
+                                    .padding(.top)
                                 }
                             }
                         }
@@ -133,7 +179,7 @@ struct TasksScreen<VM: TasksScreenVM>: View {
     vm.viewState.taskList = [
         TaskEntity(
             createdAt: "2026-03-13 05:16:12.976+00",
-            name: "Limpiar los sabados...",
+            name: "Limpiar los sabados",
             description: "Limpiar cuarto completamente bien, con todo ordenado y la ropa sucia en su lugar",
             timeGranted: "2 horas",
             coinsGranted: 100,
