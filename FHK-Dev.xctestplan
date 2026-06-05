@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "CAE689E5-B845-4A0C-B9F3-F3103654C0A3",
+      "id" : "18FBFEA8-6A59-4B0D-8B9F-0E2E97508022",
       "name" : "Configuration 1",
       "options" : {
 
@@ -9,11 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "targetForVariableExpansion" : {
-      "containerPath" : "container:fintechKids.xcodeproj",
-      "identifier" : "5D30BFB62EC1E6FB005C42B4",
-      "name" : "fintechKids"
-    },
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [

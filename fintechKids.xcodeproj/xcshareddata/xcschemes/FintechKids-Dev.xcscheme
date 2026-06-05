@@ -30,10 +30,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:FintechKidsUI-Dev.xctestplan">
-         </TestPlanReference>
-         <TestPlanReference
-            reference = "container:FintechKids-Dev.xctestplan"
+            reference = "container:FHK-Dev.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -104,7 +101,7 @@
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

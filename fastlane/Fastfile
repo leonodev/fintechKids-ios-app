@@ -6,11 +6,15 @@ platform :ios do
 
   # Nueva lane de tests
   desc 'Builds project and executes unit tests'
-  lane :unit_test do |options|
+  lane :unit_test do
+    # Obtenemos el simulador más reciente automáticamente
+    device = "iPhone 17" # O el modelo que prefieras
+  
     scan(
-      clean: options[:clean] || true,
-      skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution] || false
-    )
+      scheme: "FintechKids-Dev",
+      # Xcode seleccionará el mejor simulador compatible para este dispositivo
+      destination: "platform=iOS Simulator,name=#{device}"
+  )
   end
 
   desc "Distribuye la build a testers via Firebase App Distribution"
