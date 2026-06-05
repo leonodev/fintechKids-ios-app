@@ -1,32 +1,28 @@
-# Customise this file, documentation can be found here:
-# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
-# All available actions: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Actions.md
-# can also be listed using the `fastlane actions` command
-
-# Change the syntax highlighting to Ruby
-# All lines starting with a # are ignored when running `fastlane`
-
-# If you want to automatically update fastlane if a new version is available:
-# update_fastlane
-
-# This is the minimum version number required.
-# Update this, if you use features of a newer version
 fastlane_version "2.0.0"
 
 default_platform(:ios)
 
 platform :ios do
+
+  # Nueva lane de tests
+  desc 'Builds project and executes unit tests'
+  lane :unit_test do |options|
+    scan(
+      clean: options[:clean] || true,
+      skip_package_dependencies_resolution: options[:skip_package_dependencies_resolution] || false
+    )
+  end
+
   desc "Distribuye la build a testers via Firebase App Distribution"
   lane :distribute do |options|
     
+    # 0. Ejecutar tests antes de distribuir (Opcional pero muy recomendado)
+    # unit_test(clean: true) 
+
     current_scheme = options[:scheme] || "FintechKids-Pro" 
 
-    increment_build_number(
-        xcodeproj: "fintechKids.xcodeproj" # Solo le pasamos el proyecto
-    )
+    increment_build_number(xcodeproj: "fintechKids.xcodeproj")
     
-    # 1. Compilación (Generar el .ipa)
-    # Se usa export_method: "development" para la cuenta gratuita
     gym(
       scheme: current_scheme, 
       configuration: "Release",
@@ -36,7 +32,6 @@ platform :ios do
       output_name: "#{current_scheme}.ipa" 
     )
 
-    # 2. Subir a Firebase App Distribution
     firebase_app_distribution(
       app: "1:454083888604:ios:39e954b6a2233c6c833b19",
       ipa_path: "build/#{current_scheme}.ipa",
@@ -44,20 +39,15 @@ platform :ios do
       release_notes: options[:notes] || "Build de prueba inicial para #{current_scheme}.",
     )
 
-    # Opcional: git_add y commit para guardar el cambio del número de build
     commit_version_bump(
-    message: "Increment build number to #{get_build_number}",
-    xcodeproj: "fintechKids.xcodeproj", 
-    # Usamos `force: true` para ignorar archivos que puedan no existir
-    # y confiamos SOLO en las rutas que nosotros definimos.
-    force: true, 
-    # Especificamos SÓLO los archivos que sabemos que existen y fueron modificados
-    # por increment_build_number.
-    include: [
-        "fintechKids.xcodeproj/project.pbxproj", 
-        "fintechKids/Configuration/Info-Dev.plist", 
-        "fintechKids/Configuration/Info-Pro.plist"
-    ]
-  )
+      message: "Increment build number to #{get_build_number}",
+      xcodeproj: "fintechKids.xcodeproj", 
+      force: true, 
+      include: [
+          "fintechKids.xcodeproj/project.pbxproj", 
+          "fintechKids/Configuration/Info-Dev.plist", 
+          "fintechKids/Configuration/Info-Pro.plist"
+      ]
+    )
   end
 end

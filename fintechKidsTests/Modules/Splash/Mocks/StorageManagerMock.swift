@@ -10,13 +10,13 @@ import FHKDomain
 
 /// Mock de almacenamiento que ignora las comprobaciones de Sendable de Swift 6.
 public final class StorageManagerMock: @unchecked Sendable, FHKStorageManagerProtocol {
-    
     // MARK: - Tracking Properties (UserDefaults)
     public var isCalledSaveUserDefaults = false
     public var isCalledReadUserDefaults = false
     public var isCalledUpdateUserDefaults = false
     public var isCalledDeleteUserDefaults = false
     public var isCalledExists = false
+    public var isClearKeychainIfNewInstallation = false
     
     // MARK: - Tracking Properties (Keychain)
     public var isCalledSaveKeychain = false
@@ -96,5 +96,9 @@ public final class StorageManagerMock: @unchecked Sendable, FHKStorageManagerPro
     public func isBiometryAvailable() -> Bool {
         isCalledIsBiometryAvailable = true
         return mockBiometryAvailable
+    }
+    
+    public func clearKeychainIfNewInstallation() async {
+        isClearKeychainIfNewInstallation = true
     }
 }
