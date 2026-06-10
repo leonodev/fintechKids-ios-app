@@ -145,11 +145,12 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 .font(.caption)
                 
                 Button(action: {
-                    viewModel.fhkToast.show(
-                        info: FHKToastInfo(type: .notification,
-                                           message: "Prueba de notificacion si incluso a doble linea o mas ...",
-                                           hasIcon: true),
-                        duration: 5.0)
+                    let info = FHKToastInfo(type: .notification,
+                                            message: "Prueba de notificacion si incluso a doble linea o mas ...",
+                                            hasIcon: true)
+                    Task {
+                        await viewModel.action(.showInfo(info: info))
+                    }
                 },
                 label: {
                     Text("Mostrar Notificacion")

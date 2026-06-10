@@ -10,11 +10,20 @@ import FHKDomain
 
 enum FHKLoginError: FHKError {
     case loginUserFailed
+    case accessTokenInvalid
+    case pinApproveInvalid
+    
     
     var logMessage: String {
         switch self {
         case .loginUserFailed:
             return "Error: User login process failed"
+            
+        case .accessTokenInvalid:
+            return "Error: Gettting Access token invalid"
+            
+        case .pinApproveInvalid:
+            return "Error: Pin by approve invalid"
         }
     }
     
@@ -22,6 +31,9 @@ enum FHKLoginError: FHKError {
         switch self {
         case .loginUserFailed:
             return "invalid_credentials_error"
+            
+        case .accessTokenInvalid, .pinApproveInvalid:
+            return "msn_generic_error"
         }
     }
     
@@ -30,6 +42,12 @@ enum FHKLoginError: FHKError {
         switch self {
         case .loginUserFailed:
             return "login_user_failed"
+            
+        case .accessTokenInvalid:
+            return "login_access_token_missing"
+            
+        case .pinApproveInvalid:
+            return "login_pin_approve_missing"
         }
     }
     

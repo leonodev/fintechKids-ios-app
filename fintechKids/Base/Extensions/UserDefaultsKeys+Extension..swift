@@ -10,4 +10,5 @@ import FHKDomain
 public extension UserDefaultsKeys {
     static let languageKey = "language_user"
     static let userMailKey = "user_email"
+    static let isUserAutenicatedKey = "is_user_autenticated"
 }

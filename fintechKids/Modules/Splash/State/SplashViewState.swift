@@ -15,7 +15,6 @@ public struct SplashViewState {
     public enum StateAction: Equatable {
         case goToLanguage
         case goToLogin
-        case gotoHome
         case none
     }
     

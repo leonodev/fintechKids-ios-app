@@ -37,6 +37,10 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
+    public var fhkSessionManager: any FHKSessionManagerProtocol {
+        inject.fhkSessionManager
+    }
+    
     // Other properties
     var hasSavedAuthToken: Bool {
         fhkLoginRepository.hasSavedToken
@@ -54,6 +58,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
     enum Action: Equatable {
         case doLogin
         case doLoginWithBiometrics
+        case showInfo(info: FHKToastInfo)
     }
     
     @MainActor
@@ -65,6 +70,9 @@ final class LoginScreenVM: FHKCore.ViewModel {
             
         case .doLoginWithBiometrics:
             await loginWithBiometrics()
+            
+        case .showInfo(let info):
+            await showToast(info: info)
         }
     }
     
@@ -78,18 +86,21 @@ final class LoginScreenVM: FHKCore.ViewModel {
             
             viewState.loginState = .finish(result: .success)
             guard let tokenAccess = userSession?.accessToken else {
+                informateError(FHKLoginError.accessTokenInvalid)
                 return
             }
             
             // We saved the Session Token PROTECTED by Face ID for the future
             saveSessionToken(tokenAccess: tokenAccess, isHasBiometry: isBiometryAvailable)
             
-            guard let pinToApprovedTask = userSession?.pinApproved else {
+            guard let pinToApprovedTask = userSession?.pinApproved, !pinToApprovedTask.isEmpty else {
+                informateError(FHKLoginError.pinApproveInvalid)
                 return
             }
             
             try await fhkLoginRepository.savePinApproveTask(pin: pinToApprovedTask)
             await saveUserIntoKeychain()
+            try await fhkSessionManager.login()      
         } catch let error as FHKSupabaseError {
             viewState.loginState = .finish(result: .error)
             informateError(error)
@@ -159,5 +170,9 @@ final class LoginScreenVM: FHKCore.ViewModel {
         
         // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
+    }
+    
+    private func showToast(info: FHKToastInfo) async {
+        fhkToast.show(info: info, duration: 5.0)
     }
 }

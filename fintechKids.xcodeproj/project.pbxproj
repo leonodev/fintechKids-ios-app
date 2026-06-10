@@ -69,7 +69,6 @@
 		5D30BFC42EC1E6FE005C42B4 /* fintechKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30BFCE2EC1E6FE005C42B4 /* fintechKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34593CA2FD2BF3A0094AF35 /* FHK-Dev.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FHK-Dev.xctestplan"; sourceTree = "<group>"; };
-		A3BDEB7D2FC6D46900ECE77E /* FridaGadget.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = FridaGadget.dylib; path = ../../../Downloads/FridaGadget.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -79,6 +78,13 @@
 				"Configuration/Info-Dev.plist",
 			);
 			target = 5D30BFB62EC1E6FB005C42B4 /* fintechKids */;
+		};
+		A3D556A62FD6D74C000F2496 /* Exceptions for "fintechKidsTests" folder in "fintechKidsTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Modules/Splash/Mocks/Untitled.swift,
+			);
+			target = 5D30BFC32EC1E6FE005C42B4 /* fintechKidsTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -93,6 +99,9 @@
 		};
 		5D30BFC72EC1E6FE005C42B4 /* fintechKidsTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A3D556A62FD6D74C000F2496 /* Exceptions for "fintechKidsTests" folder in "fintechKidsTests" target */,
+			);
 			path = fintechKidsTests;
 			sourceTree = "<group>";
 		};
@@ -157,7 +166,6 @@
 				5D30BFB92EC1E6FB005C42B4 /* fintechKids */,
 				5D30BFC72EC1E6FE005C42B4 /* fintechKidsTests */,
 				5D30BFD12EC1E6FE005C42B4 /* fintechKidsUITests */,
-				A3BDEB7C2FC6D46900ECE77E /* Frameworks */,
 				5D30BFB82EC1E6FB005C42B4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -170,14 +178,6 @@
 				5D30BFCE2EC1E6FE005C42B4 /* fintechKidsUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A3BDEB7C2FC6D46900ECE77E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A3BDEB7D2FC6D46900ECE77E /* FridaGadget.dylib */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
