@@ -29,6 +29,10 @@ final class ProfileScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
+    public var fhkSessionManager: any FHKSessionManagerProtocol {
+        inject.fhkSessionManager
+    }
+    
     public enum Action: Equatable {
         case logout
         case changeLanguageApp(String)

@@ -13,7 +13,6 @@ enum FHKLoginError: FHKError {
     case accessTokenInvalid
     case pinApproveInvalid
     
-    
     var logMessage: String {
         switch self {
         case .loginUserFailed:
