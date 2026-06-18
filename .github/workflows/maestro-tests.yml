@@ -56,9 +56,11 @@ jobs:
         run: |
           UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           
-          echo "🔄 Forzando actualización de Swift Packages..."
-          xcodebuild -resolvePackageDependencies -project fintechKids.xcodeproj -scheme FintechKids-Pro
-
+          # 🚀 Esto equivale a "Update to Latest Package Versions" e ignora la caché
+          echo "🔄 Forzando la descarga de los últimos commits de las ramas..."
+          xcodebuild -updatePackages -project fintechKids.xcodeproj -scheme FintechKids-Pro
+          
+          # 🏗️ Compilamos el proyecto con los paquetes actualizados de verdad
           echo "🏗️ Compilando con xcodebuild para el simulador: $UUID"
           
           xcodebuild -project fintechKids.xcodeproj \
