@@ -49,10 +49,10 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 break
             }
         }
-        .onAppear {
-            viewModel.viewState.email = "leonfrcol@gmail.com"
-            viewModel.viewState.password = "1234567890"
-        }
+//        .onAppear {
+//            viewModel.viewState.email = "leonfrcol@gmail.com"
+//            viewModel.viewState.password = "1234567890"
+//        }
     }
     
     var loadingView: some View {
@@ -85,11 +85,15 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 // Fields
                 VStack(spacing: FHKSpace.space16) {
                     FHKTextField(text: $viewModel.viewState.email,
-                                 placeholder: viewModel.viewState.emailPlaceholder)
+                                 placeholder: viewModel.viewState.emailPlaceholder,
+                                 identifier: "tfd_email_user_id"
+                    )
                     
                     FHKTextField(text: $viewModel.viewState.password,
                                  placeholder: viewModel.viewState.passwordPlaceholder,
-                                 isSecure: true)
+                                 isSecure: true,
+                                 identifier: "tfd_password_user_id"
+                    )
                 }
                 
                 // We only show the Face ID button if a previous token exists.
@@ -120,6 +124,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 FHKButtonPrimary(title: viewModel.viewState.startSesion,
                                  state: viewModel.viewState.isBtnContinueEnable,
                                  mode: .solid,
+                                 identifier: "btn_login_start_sesion_id",
                                  action: {
                     Task {
                         await viewModel.action(.doLogin)
@@ -177,6 +182,7 @@ struct LoginScreen<VM: LoginScreenVM>: View {
                 viewModel.fhkModal.dismiss()
             })
         }
+        .accessibilityIdentifier("error_modal_login_id")
     }
 }
 

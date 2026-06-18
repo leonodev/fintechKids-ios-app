@@ -103,6 +103,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                     .foregroundColor(FHKColor.lunarSand)
                     .padding(.trailing)
             }
+            .accessibilityIdentifier("btn_add_new_member_id")
             .background(FHKColor.lunarSand.opacity(0.2))
             .cornerRadius(FHKSize.size16)
             .onTapGesture {
@@ -124,7 +125,8 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                             }
                             
                             FHKTextField(text: $viewModel.viewState.memberNewName,
-                                         placeholder: viewModel.viewState.memberNewNamePlaceholder)
+                                         placeholder: viewModel.viewState.memberNewNamePlaceholder,
+                                         identifier: "tfd_name_new_member_id")
                             .padding(.top, FHKSize.size04)
                             
                             NewMemberContentView(viewModel: viewModel,
@@ -146,6 +148,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
                     FHKCreateMemberItem(name: viewModel.getNameMember(member: member),
                                         avatarName: viewModel.getAvatarMember(member: member),
                                         iconName: viewModel.getIconName(member: member),
+                                        identifier: "item_member_id",
                                         action: {
                         
                         viewModel.fhkModal.show(
@@ -181,6 +184,7 @@ struct RegisterMembersScreen<VM: RegisterMembersScreenVM>: View {
         FHKButtonPrimary(title: viewModel.viewState.titleBtnRegisterMember,
                          state: viewModel.viewState.stateBtnRegisterMember(isEnable: viewModel.isEnableBtnRegisterMember),
                          mode: .solid,
+                         identifier: "btn_register_new_member_id",
                          action: {
             Task {
                 await viewModel.action(.registerMembers)
@@ -235,6 +239,7 @@ internal struct NewMemberContentView: View {
                                             ? Color.yellow
                                             : Color.clear, lineWidth: FHKSize.size04)
                             )
+                            .accessibilityIdentifier("avatar_\(avatar.name)")
                             .onTapGesture {
                                 selectedAvatarName = avatar.name
                             }
@@ -245,6 +250,7 @@ internal struct NewMemberContentView: View {
             
             FHKButtonPrimary(title: viewModel.viewState.titleBtnAddMember,
                              state: viewModel.viewState.stateBtnAddMember,
+                             identifier: "btn_create_member_id",
                              action: {
                 Task {
                     await viewModel.action(.newMember)

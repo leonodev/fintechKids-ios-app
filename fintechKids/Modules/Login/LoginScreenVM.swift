@@ -21,6 +21,10 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkLoginRepository
     }
     
+    private var fhkRegisterRepository: any RegisterRepositoryProtocol {
+        inject.fhkRegisterRepository
+    }
+    
     private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
         inject.fhkFirebaseAnalitycs
     }
@@ -96,8 +100,20 @@ final class LoginScreenVM: FHKCore.ViewModel {
                 return
             }
             
-            guard let pinToApprovedTask = userSession?.pinApproved, !pinToApprovedTask.isEmpty else {
+            guard let pinToApprovedTask = userSession?.infoAditional?.pinApproved, !pinToApprovedTask.isEmpty else {
                 informateError(FHKLoginError.pinApproveInvalid)
+                return
+            }
+            
+            guard let familyName = userSession?.infoAditional?.familyName, !familyName.isEmpty else {
+                informateError(FHKLoginError.familyNameInvalid)
+                return
+            }
+
+            do {
+                try fhkRegisterRepository.saveFamilyInfoKeychain(familyName: familyName)
+            } catch {
+                informateError(FHKLoginError.familyNameInvalid)
                 return
             }
             

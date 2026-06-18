@@ -1,0 +1,70 @@
+name: Maestro UI Tests
+
+# 🎯 El disparador: Se ejecuta cada vez que se abre o actualiza un PR hacia main
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  e2e-testing:
+    # 🍏 Obligatorio usar macOS para poder levantar el simulador de Xcode
+    runs-on: macos-latest
+
+    steps:
+      # 1. Clonar el código del repositorio en la máquina virtual
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Encender el simulador de iOS de forma interna
+      - name: Boot iOS Simulator
+        run: |
+          # Buscamos el UUID de un iPhone 15 o similar disponible en el Mac de GitHub
+          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | awk 'NR==1{print $NF}' | tr -d '()')
+          echo "Booting simulator: $UUID"
+          xcrun simctl boot $UUID
+          # Esperamos a que el sistema operativo del iPhone termine de arrancar
+          xcrun simctl bootstatus $UUID
+
+      # 3. Instalar la herramienta CLI de Maestro
+      - name: Install Maestro CLI
+        run: |
+          curl -FsSL https://get.maestro.mobile.dev | bash
+          # Añadimos Maestro a las variables de entorno globales de GitHub
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      # 4. Limpieza inicial en Supabase usando tus Secrets seguros
+      - name: Clean Supabase Test User
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          TEST_USER_NAME: "user_test_e2e"
+        run: |
+          curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_goals_members?name=eq.user1" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}"
+
+      # 5. Compilar la App e instalarla en el simulador encendido
+      - name: Build and Install App
+        run: |
+          xcodebuild -project fintechKids.xcodeproj -scheme FintechKids-Pro -sdk iphonesimulator -configuration Debug -derivedDataPath build
+          
+          # Buscamos el binario .app compilado y lo instalamos en el simulador
+          APP_PATH=$(find build -name "FintechKids.app" | head -n 1)
+          xcrun simctl install booted "$APP_PATH"
+
+      # 6. Ejecución de los flujos de Maestro
+      - name: Run Maestro Tests
+        run: |
+          export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
+          maestro test --format html-detailed --output report.html \
+            Maestro/flows/select-language.yaml \
+            Maestro/flows/make-login.yaml \
+            Maestro/flows/create-new-member.yaml
+
+      # 7. Guardar el reporte HTML en GitHub (Se ejecuta pase lo que pase: Éxito o Fallo)
+      - name: Upload Maestro Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-html-report
+          path: report.html

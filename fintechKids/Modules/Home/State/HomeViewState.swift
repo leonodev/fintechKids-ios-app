@@ -69,22 +69,26 @@ public class HomeViewState {
             .init(title: "title_menu_members".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "person.crop.circle.badge.plus"),
                   color: FHKColor.wine,
-                  menuType: .members),
+                  menuType: .members,
+                  identifier: "btn_menu_member_id"),
             
-            .init(title: "title_menu_tasks".localized().capitalizingFirstLetter(),
-                  image: .init(systemName: "house"),
-                  color: FHKColor.wine.opacity(0.8),
-                  menuType: .tasks),
+                .init(title: "title_menu_tasks".localized().capitalizingFirstLetter(),
+                      image: .init(systemName: "house"),
+                      color: FHKColor.wine.opacity(0.8),
+                      menuType: .tasks,
+                      identifier: "btn_menu_tasks_id"),
             
-            .init(title: "title_menu_goals".localized().capitalizingFirstLetter(),
-                  image: .init(systemName: "note.text.badge.plus"),
-                  color: FHKColor.ultraPurple.opacity(0.8),
-                  menuType: .goals),
+                .init(title: "title_menu_goals".localized().capitalizingFirstLetter(),
+                      image: .init(systemName: "note.text.badge.plus"),
+                      color: FHKColor.ultraPurple.opacity(0.8),
+                      menuType: .goals,
+                      identifier: "btn_menu_goals_id"),
             
-            .init(title: "title_menu_rewards".localized().capitalizingFirstLetter(),
-                  image: .init(systemName: "gamecontroller"),
-                  color: FHKColor.ultraPurple,
-                  menuType: .rewards)
+                .init(title: "title_menu_rewards".localized().capitalizingFirstLetter(),
+                      image: .init(systemName: "gamecontroller"),
+                      color: FHKColor.ultraPurple,
+                      menuType: .rewards,
+                      identifier: "btn_menu_rewards_id")
         ]
     }
     

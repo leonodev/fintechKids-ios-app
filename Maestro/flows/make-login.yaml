@@ -1,0 +1,28 @@
+appId: com.fleon.fintechKids
+---
+# Configuramos el campo Email
+- tapOn:
+    id: "tfd_email_user_id"
+- inputText: "leonfrcol@gmail.com"
+
+# Configuramos el campo Password
+- tapOn:
+    id: "tfd_password_user_id"
+- inputText: "1234567890"
+
+# Pulsamos iniciar sesión
+- tapOn:
+    id: "btn_login_start_sesion_id"
+
+# si el boton de login no esta en pantalla
+- extendedWaitUntil:
+    notVisible:
+        id: "btn_login_start_sesion_id"
+    timeout: 3000
+
+# si el popup de error de login no esta en pantalla
+- extendedWaitUntil:
+    notVisible:
+        id: "error_modal_login_id"
+    timeout: 3000
+    

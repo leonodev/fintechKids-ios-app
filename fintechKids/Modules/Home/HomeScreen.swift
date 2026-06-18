@@ -70,6 +70,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 .colorDegradeStyle(startColor: FHKColor.pastelPink,
                                    endColor: .gray.opacity(0.8))
                 .isHidden(viewModel.familyMembersList.isEmpty)
+                .accessibilityIdentifier("title_home_screen_id")
             
             Spacer()
             
@@ -222,6 +223,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 }
                 print(index)
             })
+            .accessibilityIdentifier("btn_float_menu_id")
             
             Spacer()
         }

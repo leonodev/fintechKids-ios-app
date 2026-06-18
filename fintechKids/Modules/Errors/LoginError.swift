@@ -12,6 +12,7 @@ enum FHKLoginError: FHKError {
     case loginUserFailed
     case accessTokenInvalid
     case pinApproveInvalid
+    case familyNameInvalid
     
     var logMessage: String {
         switch self {
@@ -23,6 +24,9 @@ enum FHKLoginError: FHKError {
             
         case .pinApproveInvalid:
             return "Error: Pin by approve invalid"
+            
+        case .familyNameInvalid:
+            return "Error: Family name invalid"
         }
     }
     
@@ -32,6 +36,9 @@ enum FHKLoginError: FHKError {
             return "invalid_credentials_error"
             
         case .accessTokenInvalid, .pinApproveInvalid:
+            return "msn_generic_error"
+            
+        case .familyNameInvalid:
             return "msn_generic_error"
         }
     }
@@ -47,6 +54,9 @@ enum FHKLoginError: FHKError {
             
         case .pinApproveInvalid:
             return "login_pin_approve_missing"
+            
+        case .familyNameInvalid:
+            return "family_name_missing"
         }
     }
     

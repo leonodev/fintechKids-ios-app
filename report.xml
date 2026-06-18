@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="iPhone 17 - iOS 26.5 - F40B1703-CF2D-44C6-95B6-9B1F62B26BAE" tests="3" failures="0" time="95.0">
+    <testcase id="select-language" name="select-language" classname="select-language" file="Maestro/flows/select-language.yaml" time="39.0" status="SUCCESS"/>
+    <testcase id="make-login" name="make-login" classname="make-login" file="Maestro/flows/make-login.yaml" time="33.0" status="SUCCESS"/>
+    <testcase id="create-new-member" name="create-new-member" classname="create-new-member" file="Maestro/flows/create-new-member.yaml" time="23.0" status="SUCCESS"/>
+  </testsuite>
+</testsuites>

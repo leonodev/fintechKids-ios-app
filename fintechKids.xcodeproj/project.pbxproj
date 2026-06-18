@@ -25,11 +25,11 @@
 		5D3431B92EE466410056CF6F /* SnapshotTestingCustomDump in Frameworks */ = {isa = PBXBuildFile; productRef = 5D3431B82EE466410056CF6F /* SnapshotTestingCustomDump */; };
 		5D84DCF12EC8D91E00F6DDFE /* FHKUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 5D84DCF02EC8D91E00F6DDFE /* FHKUtils */; };
 		5DAE0C102EEDDA8C0020FA3D /* FHKStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 5DAE0C0F2EEDDA8C0020FA3D /* FHKStorage */; };
-		A308BBD22FC71853003FCEDA /* FHKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A308BBD12FC71853003FCEDA /* FHKAuth */; };
 		A3275D9C2FBB4FFA00622CB4 /* FHKDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = A3275D9B2FBB4FFA00622CB4 /* FHKDesignSystem */; };
 		A3275DA12FBB50F500622CB4 /* FHKSupabase in Frameworks */ = {isa = PBXBuildFile; productRef = A3275DA02FBB50F500622CB4 /* FHKSupabase */; };
 		A3275DA42FBB56F900622CB4 /* FHKFirebase in Frameworks */ = {isa = PBXBuildFile; productRef = A3275DA32FBB56F900622CB4 /* FHKFirebase */; };
 		A34593CB2FD2BF3A0094AF35 /* FHK-Dev.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = A34593CA2FD2BF3A0094AF35 /* FHK-Dev.xctestplan */; };
+		A3499B4C2FE0455900206A1F /* FHKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A3499B4B2FE0455900206A1F /* FHKAuth */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,7 +129,7 @@
 				5D03F46D2EE73DF6001FB7F9 /* Supabase in Frameworks */,
 				5D03F4692EE73DF6001FB7F9 /* Realtime in Frameworks */,
 				5D03F5632EE8C1E6001FB7F9 /* FHKConfig in Frameworks */,
-				A308BBD22FC71853003FCEDA /* FHKAuth in Frameworks */,
+				A3499B4C2FE0455900206A1F /* FHKAuth in Frameworks */,
 				5D03F4672EE73DF6001FB7F9 /* PostgREST in Frameworks */,
 				5D1101C72F02BCFE00F606E6 /* FHKInjections in Frameworks */,
 			);
@@ -218,7 +218,7 @@
 				A3275D9B2FBB4FFA00622CB4 /* FHKDesignSystem */,
 				A3275DA02FBB50F500622CB4 /* FHKSupabase */,
 				A3275DA32FBB56F900622CB4 /* FHKFirebase */,
-				A308BBD12FC71853003FCEDA /* FHKAuth */,
+				A3499B4B2FE0455900206A1F /* FHKAuth */,
 			);
 			productName = fintechKids;
 			productReference = 5D30BFB72EC1E6FB005C42B4 /* fintechKids.app */;
@@ -322,7 +322,7 @@
 				A3275D9D2FBB507D00622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-domain-ios" */,
 				A3275D9F2FBB50F500622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-supabase-ios" */,
 				A3275DA22FBB56F900622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-firebase-ios" */,
-				A308BBD02FC71853003FCEDA /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */,
+				A3499B4A2FE0455900206A1F /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5D30BFB82EC1E6FB005C42B4 /* Products */;
@@ -860,14 +860,6 @@
 				kind = branch;
 			};
 		};
-		A308BBD02FC71853003FCEDA /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-authentication-ios";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		A3275D9A2FBB4FF900622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-designsystem-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-designsystem-ios";
@@ -895,6 +887,14 @@
 		A3275DA22FBB56F900622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-firebase-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-firebase-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		A3499B4A2FE0455900206A1F /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-authentication-ios";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -978,11 +978,6 @@
 			package = 5DAE0C0E2EEDDA8C0020FA3D /* XCRemoteSwiftPackageReference "fintechKids-modulo-storage-ios" */;
 			productName = FHKStorage;
 		};
-		A308BBD12FC71853003FCEDA /* FHKAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A308BBD02FC71853003FCEDA /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */;
-			productName = FHKAuth;
-		};
 		A3275D9B2FBB4FFA00622CB4 /* FHKDesignSystem */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A3275D9A2FBB4FF900622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-designsystem-ios" */;
@@ -997,6 +992,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A3275DA22FBB56F900622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-firebase-ios" */;
 			productName = FHKFirebase;
+		};
+		A3499B4B2FE0455900206A1F /* FHKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3499B4A2FE0455900206A1F /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */;
+			productName = FHKAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

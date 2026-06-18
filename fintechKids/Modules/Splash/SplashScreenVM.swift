@@ -19,10 +19,6 @@ final class SplashScreenVM: FHKCore.ViewModel {
         inject.fhkSplashRepository
     }
     
-    private var fhkLoginRepository: any FHKLoginRepositoryProtocol {
-        inject.fhkLoginRepository
-    }
-    
     public enum Action: Equatable {
         case readLanguageCurrent
     }

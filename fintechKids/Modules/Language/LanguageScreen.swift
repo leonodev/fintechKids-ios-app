@@ -54,7 +54,6 @@ extension LanguageScreen {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             VStack {
-                
                 HStack(alignment: .top) {
                     EnvironmentView()
                         .padding(.top, FHKSize.size08)
@@ -67,13 +66,13 @@ extension LanguageScreen {
                             .multilineTextAlignment(.center)
                             .font(.PangramSans.bold(FHKSize.size28))
                             .padding(.top, FHKSize.size44)
+                            .accessibilityIdentifier("select_language_title_id")
                     }
                     
                     Spacer()
                     
                     VStack {
                         menuLanguageView
-                            .accessibilityIdentifier(viewModel.viewState.menuLanguageIdentifier)
                         Spacer()
                     }
                     .frame(width: FHKSize.size60)
@@ -83,6 +82,7 @@ extension LanguageScreen {
                 FHKButtonPrimary(title: viewModel.viewState.continueButtom,
                                  state: .enabled,
                                  mode: .solid,
+                                 identifier: "btn_language_continue_id",
                                  action: {
                     router.navigate(to: .login)
                 })
@@ -129,6 +129,7 @@ extension LanguageScreen {
     var menuClosedView: some View {
         viewModel.viewState.selectedFlag
             .resizable()
+            .accessibilityIdentifier("menu_selected_language_id")
             .accessibilityLabel("Idioma actual: \(viewModel.viewState.selectedFlag.imageToCode)")
             .accessibilityHint("Toca para cambiar el idioma")
             .accessibilityAddTraits(.isButton) // Indica que es interactivo
@@ -163,6 +164,7 @@ extension LanguageScreen {
                             isExpanded = false
                         }
                     }
+                    .accessibilityIdentifier("option_language_id")
             }
         }
     }
