@@ -19,16 +19,15 @@ jobs:
       # 2. Encender el simulador de iOS de forma dinámica
       - name: Boot iOS Simulator
         run: |
-          # Buscamos cualquier iPhone disponible en el sistema (evitando Apple Watch/TV)
-          UUID=$(xcrun simctl list devices available | grep "iPhone" | head -n 1 | awk '{print $NF}' | tr -d '()')
+          # Extraemos estrictamente el UUID usando una expresión regular pura
+          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           
-          # Control de errores por si la máquina no tiene simuladores
           if [ -z "$UUID" ]; then
-            echo "❌ Error: No se encontró ningún simulador de iPhone disponible en este runner."
+            echo "❌ Error: No se encontró ningún simulador de iPhone disponible en este Mac de GitHub."
             exit 1
           fi
           
-          echo "🎯 Simulador detectado con éxito. UUID: $UUID"
+          echo "🎯 ¡Simulador detectado con éxito! UUID: $UUID"
           echo "📱 Encendiendo el dispositivo..."
           xcrun simctl boot $UUID
           
