@@ -111,17 +111,14 @@ extension LanguageScreen {
     var menuLanguageView: some View {
         HStack {
             Spacer()
-            
-            GlassEffectContainer {
-                VStack(alignment: .trailing) {
-                    menuClosedView
-                    if isExpanded {
-                        menuOpenedView
-                    }
+    
+            VStack(alignment: .trailing) {
+                menuClosedView
+                if isExpanded {
+                    menuOpenedView
                 }
-                .padding()
             }
-            .padding(.top, FHKSize.size12)
+            .padding(.all, FHKSize.size12)
             .padding(.trailing, FHKSize.size12)
         }
     }
