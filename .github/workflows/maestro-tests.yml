@@ -50,7 +50,7 @@ jobs:
           curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?member_name=eq.user_test_e2e" \
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
-            
+
         # 5. Compilar la App e instalarla en el simulador encendido
       - name: Build and Install App
         run: |
@@ -63,32 +63,32 @@ jobs:
                      -derivedDataPath build \
                      -disablePackageRepositoryCache
           
-          echo "🪓 2. Aplicando parches globales en vivo..."
+          echo "🪓 2. Aplicando parches controlados..."
           
-          # 2a. Fix Firebase RemoteConfig
+          # 2a. Fix Firebase RemoteConfig (Este no da problemas de módulos)
           FIREBASE_FILE="build/SourcePackages/checkouts/fintechKids-modulo-firebase-ios/Sources/FHKFirebase/RemoteConfig/FHKRemoteConfigService.swift"
           if [ -f "$FIREBASE_FILE" ]; then
             sed -i '' 's/remoteConfig\.fetchAndActivate()/RemoteConfig.remoteConfig().fetchAndActivate()/g' "$FIREBASE_FILE"
             echo "✅ Firebase parchado."
           fi
           
-          # 2b. Fix Design System (Reemplazo genérico de '-> Glass' por '-> some View')
+          # 2b. INYECTAR EL TIPO 'Glass' FALTANTE (SIN TOCAR NINGÚN OTRO ARCHIVO)
           DS_DIR="build/SourcePackages/checkouts/fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem"
           if [ -d "$DS_DIR" ]; then
-            find "$DS_DIR" -name "*.swift" -exec sed -i '' 's/-> Glass/-> some View/g' {} +
-            echo "✅ Retornos de 'Glass' cambiados por 'some View' en todo el Design System."
-            
-            # 2c. Inyectar estructura Glass fantasma por si se instancia en los cuerpos de las funciones
-            cat << 'EOF' > "$DS_DIR/GlassDummy.swift"
+            echo "📦 Creando definición global de Glass..."
+            cat << 'EOF' > "$DS_DIR/GlassFix.swift"
           import SwiftUI
+
           public struct Glass: View {
-              public var body: some View { EmptyView() }
-              public init(variant: Any... = []) {}
-              public init(_ args: Any...) {}
+              public var body: some View {
+                  EmptyView()
+              }
               public init() {}
+              // Inicializador comodín por si el botón lo usa con parámetros
+              public init(_ args: Any...) {}
           }
           EOF
-            echo "✅ Estructura dummy 'Glass' inyectada con éxito."
+            echo "✅ Tipo 'Glass' inyectado en la raíz del Design System."
           fi
           
           echo "🏗️ 3. Compilando con xcodebuild para el simulador: $UUID"
