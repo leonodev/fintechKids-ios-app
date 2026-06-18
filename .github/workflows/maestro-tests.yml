@@ -63,15 +63,26 @@ jobs:
                      -derivedDataPath build \
                      -disablePackageRepositoryCache
           
-          echo "🪓 2. Modificando el código de Firebase en vivo antes de que Xcode compile"
-          TARGET_FILE="build/SourcePackages/checkouts/fintechKids-modulo-firebase-ios/Sources/FHKFirebase/RemoteConfig/FHKRemoteConfigService.swift"
+          echo "🪓 2. Modificando código en vivo (Firebase y Design System)"
+          FIREBASE_FILE="build/SourcePackages/checkouts/fintechKids-modulo-firebase-ios/Sources/FHKFirebase/RemoteConfig/FHKRemoteConfigService.swift"
+          DS_PROTOCOL="build/SourcePackages/checkouts/fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Components/Views/Buttons/Base/FHKButtonProtocol.swift"
+          DS_CIRCLE="build/SourcePackages/checkouts/fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Components/Views/Buttons/Types/FHKButtonCircle.swift"
           
-          if [ -f "$TARGET_FILE" ]; then
-            # Reemplaza la llamada conflictiva por la instancia local compatible con Swift 6
-            sed -i '' 's/remoteConfig\.fetchAndActivate()/RemoteConfig.remoteConfig().fetchAndActivate()/g' "$TARGET_FILE"
-            echo "✅ ¡Archivo de Firebase parchado con éxito en el servidor!"
-          else
-            echo "⚠️ No se encontró el archivo de Firebase en la ruta esperada, continuando..."
+          # Fix Firebase
+          if [ -f "$FIREBASE_FILE" ]; then
+            sed -i '' 's/remoteConfig\.fetchAndActivate()/RemoteConfig.remoteConfig().fetchAndActivate()/g' "$FIREBASE_FILE"
+            echo "✅ Firebase parchado."
+          fi
+          
+          # Fix Design System (Cambiamos el tipo de retorno 'Glass' por 'some View')
+          if [ -f "$DS_PROTOCOL" ]; then
+            sed -i '' 's/-> Glass {/-> some View {/g' "$DS_PROTOCOL"
+            echo "✅ Protocolo de Diseño parchado."
+          fi
+          
+          if [ -f "$DS_CIRCLE" ]; then
+            sed -i '' 's/-> Glass {/-> some View {/g' "$DS_CIRCLE"
+            echo "✅ Botón Círculo de Diseño parchado."
           fi
           
           echo "🏗️ 3. Compilando con xcodebuild para el simulador: $UUID"
@@ -83,7 +94,7 @@ jobs:
                      ONLY_ACTIVE_ARCH=YES \
                      -disablePackageRepositoryCache
           
-          # Buscamos el binario e instalamos en el simulador que ya está encendido (booted)
+          # Buscamos el binario e instalamos
           APP_PATH=$(find build -name "FintechKids.app" | head -n 1)
           xcrun simctl install booted "$APP_PATH"
 
