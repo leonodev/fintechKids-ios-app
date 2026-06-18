@@ -29,7 +29,7 @@ appId: com.fleon.fintechKids
 - tapOn: 
     id: "tfd_name_new_member_id"
 
-- inputText: "user1"
+- inputText: "user_test_e2e"
 
 - tapOn:
     id: "avatar_boy_1"

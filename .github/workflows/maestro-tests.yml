@@ -37,7 +37,7 @@ jobs:
       # 3. Instalar la herramienta CLI de Maestro
       - name: Install Maestro CLI
         run: |
-          curl -FsSL https://get.maestro.mobile.dev | bash
+          curl -fsSL https://get.maestro.mobile.dev | bash
           # Añadimos Maestro a las variables de entorno globales de GitHub
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
@@ -48,7 +48,7 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           TEST_USER_NAME: "user_test_e2e"
         run: |
-          curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?name=eq.user1" \
+          curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?name=eq.${TEST_USER_NAME}" \
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
 
