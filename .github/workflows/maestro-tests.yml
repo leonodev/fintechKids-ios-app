@@ -54,7 +54,12 @@ jobs:
       # 5. Compilar la App e instalarla en el simulador encendido
       - name: Build and Install App
         run: |
-          xcodebuild -project fintechKids.xcodeproj -scheme FintechKids-Pro -sdk iphonesimulator -configuration Debug -derivedDataPath build
+          xcodebuild -project fintechKids.xcodeproj \
+                     -scheme FintechKids-Pro \
+                     -sdk iphonesimulator \
+                     -configuration Debug \
+                     -derivedDataPath build \
+                     ONLY_ACTIVE_ARCH=YES 
           
           # Buscamos el binario .app compilado y lo instalamos en el simulador
           APP_PATH=$(find build -name "FintechKids.app" | head -n 1)
