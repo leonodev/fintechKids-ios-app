@@ -76,6 +76,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Configuration/Info-Dev.plist",
+				"Modules/Rewards/Collect/String+Time.swift.swift",
 			);
 			target = 5D30BFB62EC1E6FB005C42B4 /* fintechKids */;
 		};
