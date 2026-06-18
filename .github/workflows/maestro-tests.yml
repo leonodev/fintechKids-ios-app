@@ -50,8 +50,8 @@ jobs:
           curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?member_name=eq.user_test_e2e" \
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
-
-      # 5. Compilar la App e instalarla en el simulador encendido
+            
+        # 5. Compilar la App e instalarla en el simulador encendido
       - name: Build and Install App
         run: |
           UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
@@ -63,26 +63,32 @@ jobs:
                      -derivedDataPath build \
                      -disablePackageRepositoryCache
           
-          echo "🪓 2. Modificando código en vivo (Firebase y Design System)"
-          FIREBASE_FILE="build/SourcePackages/checkouts/fintechKids-modulo-firebase-ios/Sources/FHKFirebase/RemoteConfig/FHKRemoteConfigService.swift"
-          DS_PROTOCOL="build/SourcePackages/checkouts/fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Components/Views/Buttons/Base/FHKButtonProtocol.swift"
-          DS_CIRCLE="build/SourcePackages/checkouts/fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem/Components/Views/Buttons/Types/FHKButtonCircle.swift"
+          echo "🪓 2. Aplicando parches globales en vivo..."
           
-          # Fix Firebase
+          # 2a. Fix Firebase RemoteConfig
+          FIREBASE_FILE="build/SourcePackages/checkouts/fintechKids-modulo-firebase-ios/Sources/FHKFirebase/RemoteConfig/FHKRemoteConfigService.swift"
           if [ -f "$FIREBASE_FILE" ]; then
             sed -i '' 's/remoteConfig\.fetchAndActivate()/RemoteConfig.remoteConfig().fetchAndActivate()/g' "$FIREBASE_FILE"
             echo "✅ Firebase parchado."
           fi
           
-          # Fix Design System (Cambiamos el tipo de retorno 'Glass' por 'some View')
-          if [ -f "$DS_PROTOCOL" ]; then
-            sed -i '' 's/-> Glass {/-> some View {/g' "$DS_PROTOCOL"
-            echo "✅ Protocolo de Diseño parchado."
-          fi
-          
-          if [ -f "$DS_CIRCLE" ]; then
-            sed -i '' 's/-> Glass {/-> some View {/g' "$DS_CIRCLE"
-            echo "✅ Botón Círculo de Diseño parchado."
+          # 2b. Fix Design System (Reemplazo genérico de '-> Glass' por '-> some View')
+          DS_DIR="build/SourcePackages/checkouts/fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem"
+          if [ -d "$DS_DIR" ]; then
+            find "$DS_DIR" -name "*.swift" -exec sed -i '' 's/-> Glass/-> some View/g' {} +
+            echo "✅ Retornos de 'Glass' cambiados por 'some View' en todo el Design System."
+            
+            # 2c. Inyectar estructura Glass fantasma por si se instancia en los cuerpos de las funciones
+            cat << 'EOF' > "$DS_DIR/GlassDummy.swift"
+          import SwiftUI
+          public struct Glass: View {
+              public var body: some View { EmptyView() }
+              public init(variant: Any... = []) {}
+              public init(_ args: Any...) {}
+              public init() {}
+          }
+          EOF
+            echo "✅ Estructura dummy 'Glass' inyectada con éxito."
           fi
           
           echo "🏗️ 3. Compilando con xcodebuild para el simulador: $UUID"
