@@ -56,6 +56,9 @@ jobs:
         run: |
           UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           
+          echo "🔄 Forzando actualización de Swift Packages..."
+          xcodebuild -resolvePackageDependencies -project fintechKids.xcodeproj -scheme FintechKids-Pro
+
           echo "🏗️ Compilando con xcodebuild para el simulador: $UUID"
           
           xcodebuild -project fintechKids.xcodeproj \
