@@ -15,8 +15,10 @@ public final class SplashRepositoryMock: @unchecked Sendable, FHKSplashRepositor
     public var readLanguageCurrentCallCount = 0
     
     // MARK: - Mock Data
-    public var mockLanguageResponse: String? = nil
+    public var languageSelected: String? = nil
     public var mockError: (any FHKError)? = nil
+    
+    public var hasSavedAuthToken: Bool = false
 
     public init() {}
 
@@ -30,6 +32,6 @@ public final class SplashRepositoryMock: @unchecked Sendable, FHKSplashRepositor
             throw error
         }
         
-        return mockLanguageResponse
+        return languageSelected
     }
 }

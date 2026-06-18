@@ -47,6 +47,9 @@ public class CommonsDependencies: FHKDependencies {
         
         /// Main App
         inject.fhkToast = ToastService()
+        
+        /// Session Manager User
+        inject.fhkSessionManager = FHKSessionManager()
     }
 }
 

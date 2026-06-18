@@ -1,0 +1,9 @@
+# Cambia 'workspace' por 'project'
+project "fintechKids.xcodeproj"
+
+# El resto de parámetros están perfectos
+sdk "iphonesimulator"
+destination "platform=iOS Simulator,name=iPhone 17"
+code_coverage true
+xcargs '-parallelizeTargets'
+prelaunch_simulator true

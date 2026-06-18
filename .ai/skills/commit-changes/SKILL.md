@@ -18,7 +18,11 @@ When there are changes that have not been commited yet, Follow these steps to co
 3. **Commit Changes**:
 - commit the staged changes using [conventional commit messages](conventional-commits.md) guidelines.
  
-## Output Checklist
+## Output Checklist in the cases when you need to perform the following actions.
 - [ ] use git status
 - [ ] use git add
 - [ ] use git commit
+- [ ] use git push
+- [ ] create pr
+- [ ] merge pr
+- [ ] create tag

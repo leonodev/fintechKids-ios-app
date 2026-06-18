@@ -64,7 +64,7 @@ struct GoalScreen<VM: GoalScreenVM>: View {
                 
                 FHKRadioGroupField(
                     title: viewModel.viewState.titleHowGetGoal,
-                    options: viewModel.viewState.rewardsOptions,
+                    options: OptionsCommon.getOptionWorkType(),
                     selection: $viewModel.viewState.selectedGoalType,
                     onSelectionChanged: { value in
                         print("Se seleccionó: \(value)")
@@ -77,7 +77,7 @@ struct GoalScreen<VM: GoalScreenVM>: View {
                    
                     FHKRadioGroupField(
                         title: "",
-                        options: viewModel.viewState.durationOptions,
+                        options: OptionsCommon.getOptionDurationType(),
                         selection: $viewModel.viewState.selectedDurationType,
                         onSelectionChanged: { value in
                             print("Se seleccionó: \(value)")

@@ -19,16 +19,8 @@ final class SplashScreenVM: FHKCore.ViewModel {
         inject.fhkSplashRepository
     }
     
-    private var fhkLoginRepository: any FHKLoginRepositoryProtocol {
-        inject.fhkLoginRepository
-    }
-    
     public enum Action: Equatable {
         case readLanguageCurrent
-    }
-    
-    var hasSavedAuthToken: Bool {
-        fhkLoginRepository.hasSavedToken
     }
     
     @MainActor
@@ -51,10 +43,8 @@ final class SplashScreenVM: FHKCore.ViewModel {
     }
     
     private func getStateUser(hasLanguageSelected: Bool) -> SplashViewState.State {
-        if hasLanguageSelected && !hasSavedAuthToken {
+        if hasLanguageSelected {
             return .loaded(nav: .goToLogin)
-        } else if hasLanguageSelected && hasSavedAuthToken {
-            return .loaded(nav: .gotoHome)
         } else {
             return .loaded(nav: .goToLanguage)
         }

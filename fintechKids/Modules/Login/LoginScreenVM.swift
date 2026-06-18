@@ -21,6 +21,10 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkLoginRepository
     }
     
+    private var fhkRegisterRepository: any RegisterRepositoryProtocol {
+        inject.fhkRegisterRepository
+    }
+    
     private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
         inject.fhkFirebaseAnalitycs
     }
@@ -35,6 +39,10 @@ final class LoginScreenVM: FHKCore.ViewModel {
     
     public var fhkModal: any FHKModalProtocol {
         inject.fhkModal
+    }
+    
+    public var fhkSessionManager: any FHKSessionManagerProtocol {
+        inject.fhkSessionManager
     }
     
     // Other properties
@@ -54,6 +62,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
     enum Action: Equatable {
         case doLogin
         case doLoginWithBiometrics
+        case showInfo(info: FHKToastInfo)
     }
     
     @MainActor
@@ -62,10 +71,12 @@ final class LoginScreenVM: FHKCore.ViewModel {
             
         case .doLogin:
             await login()
-            await saveUserIntoKeychain()
             
         case .doLoginWithBiometrics:
             await loginWithBiometrics()
+            
+        case .showInfo(let info):
+            await showToast(info: info)
         }
     }
     
@@ -78,18 +89,40 @@ final class LoginScreenVM: FHKCore.ViewModel {
             let userSession = try await fhkLoginRepository.login(loginEntity: loginEntity)
             
             viewState.loginState = .finish(result: .success)
-            guard let tokenAccess = userSession?.accessToken else {
+            guard let tokenAccess = userSession?.accessToken, !tokenAccess.isEmpty else {
+                informateError(FHKLoginError.accessTokenInvalid)
                 return
             }
             
             // We saved the Session Token PROTECTED by Face ID for the future
-            saveSessionToken(tokenAccess: tokenAccess, isHasBiometry: isBiometryAvailable)
+            guard saveSessionToken(tokenAccess: tokenAccess,
+                                   isHasBiometry: isBiometryAvailable) else {
+                return
+            }
             
-            guard let pinToApprovedTask = userSession?.pinApproved else {
+            guard let pinToApprovedTask = userSession?.infoAditional?.pinApproved, !pinToApprovedTask.isEmpty else {
+                informateError(FHKLoginError.pinApproveInvalid)
+                return
+            }
+            
+            guard let familyName = userSession?.infoAditional?.familyName, !familyName.isEmpty else {
+                informateError(FHKLoginError.familyNameInvalid)
+                return
+            }
+
+            do {
+                try fhkRegisterRepository.saveFamilyInfoKeychain(familyName: familyName)
+            } catch {
+                informateError(FHKLoginError.familyNameInvalid)
                 return
             }
             
             try await fhkLoginRepository.savePinApproveTask(pin: pinToApprovedTask)
+            guard await saveUserIntoKeychain() else {
+                return
+            }
+            
+            try await fhkSessionManager.login()
         } catch let error as FHKSupabaseError {
             viewState.loginState = .finish(result: .error)
             informateError(error)
@@ -129,22 +162,26 @@ final class LoginScreenVM: FHKCore.ViewModel {
         }
     }
 
-    private func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) {
+    private func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) -> Bool {
         do {
             try fhkLoginRepository.saveAuthToken(tokenAccess, requiresBiometry: isHasBiometry)
+            return true
         } catch {
             viewState.loginState = .finish(result: .error)
             informateError(FHKAppError.saveTokenAccessKeychainFailed)
+            return false
         }
     }
     
-    func saveUserIntoKeychain() async {
+    func saveUserIntoKeychain() async -> Bool {
         do {
             try await fhkLoginRepository.saveUserIntoKeychain(email: viewState.email)
             Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
+            return true
         } catch {
             viewState.loginState = .finish(result: .error)
             informateError(FHKAppError.saveUserMailKeychainFailed)
+            return false
         }
     }
 
@@ -159,5 +196,9 @@ final class LoginScreenVM: FHKCore.ViewModel {
         
         // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
+    }
+    
+    private func showToast(info: FHKToastInfo) async {
+        fhkToast.show(info: info, duration: 5.0)
     }
 }

@@ -14,7 +14,7 @@ import FHKDomain
 @Observable
 public class HomeViewState {
     var options: [FloatMenu.Option]
-    var menuTabBarItems: [FHKMenuTabBar.Item]
+    var menuTabBarItems: [FHKMenuTabBar.Item] = []
     var parentEmail: String?
 
     public var errorNameMember: String {
@@ -69,46 +69,63 @@ public class HomeViewState {
             .init(title: "title_menu_members".localized().capitalizingFirstLetter(),
                   image: .init(systemName: "person.crop.circle.badge.plus"),
                   color: FHKColor.wine,
-                  menuType: .members),
+                  menuType: .members,
+                  identifier: "btn_menu_member_id"),
             
-            .init(title: "title_menu_tasks".localized().capitalizingFirstLetter(),
-                  image: .init(systemName: "house"),
-                  color: FHKColor.wine.opacity(0.8),
-                  menuType: .tasks),
+                .init(title: "title_menu_tasks".localized().capitalizingFirstLetter(),
+                      image: .init(systemName: "house"),
+                      color: FHKColor.wine.opacity(0.8),
+                      menuType: .tasks,
+                      identifier: "btn_menu_tasks_id"),
             
-            .init(title: "title_menu_goals".localized().capitalizingFirstLetter(),
-                  image: .init(systemName: "note.text.badge.plus"),
-                  color: FHKColor.ultraPurple.opacity(0.8),
-                  menuType: .goals),
+                .init(title: "title_menu_goals".localized().capitalizingFirstLetter(),
+                      image: .init(systemName: "note.text.badge.plus"),
+                      color: FHKColor.ultraPurple.opacity(0.8),
+                      menuType: .goals,
+                      identifier: "btn_menu_goals_id"),
             
-            .init(title: "title_menu_rewards".localized().capitalizingFirstLetter(),
-                  image: .init(systemName: "gamecontroller"),
-                  color: FHKColor.ultraPurple,
-                  menuType: .rewards)
+                .init(title: "title_menu_rewards".localized().capitalizingFirstLetter(),
+                      image: .init(systemName: "gamecontroller"),
+                      color: FHKColor.ultraPurple,
+                      menuType: .rewards,
+                      identifier: "btn_menu_rewards_id")
         ]
-        
-        menuTabBarItems = [
-            .init(title: "key_payments_title".localized().capitalizingFirstLetter(),
-                  activeIcon: .menuLoansEnable,
-                  lockedIcon: .menuLoansDisabled),
-            
-            .init(title: "key_transfer_title".localized().capitalizingFirstLetter(),
-                  activeIcon: .menuTransferEnable,
-                  lockedIcon: .menuTransferDisabled),
-            
-            .init(title: "key_loans_title".localized().capitalizingFirstLetter(),
-                  activeIcon: .menuLoansEnable,
-                  lockedIcon: .menuLoansDisabled),
-            
-            .init(title: "key_saving_title".localized().capitalizingFirstLetter(),
-                  activeIcon: .menuSavingsEnable,
-                  lockedIcon: .menuSavingsDisabled,
-                  isDisabled: true)
-        ]
+    }
+    
+    public func settingMenuOption(items: [MenuHomeItem]) {
+        for item in items {
+            menuTabBarItems.append(
+                FHKMenuTabBar.Item(title: item.label_localized_key.localized().capitalizingFirstLetter(),
+                                   activeIcon: getIconMenuHome(option: item.name),
+                                   lockedIcon: getIconMenuHome(option: item.name, isEnable: false),
+                                   isDisabled: !item.active)
+            )
+        }
     }
     
     public func getStateItemMemberComponent(memberName: String, avatarName: String) -> ComponentStateType {
         let isInfoComplete = !memberName.isEmpty && !avatarName.isEmpty
         return isInfoComplete ? .loaded : .error(errorNameMember)
+    }
+}
+
+private extension HomeViewState {
+    func getIconMenuHome(option: String, isEnable: Bool = true) -> Image {
+        switch option {
+        case "payments":
+            isEnable ? .menuPaymentEnable : .menuPaymentDisabled
+            
+        case "transfers":
+            isEnable ?  .menuTransferEnable : .menuTransferDisabled
+            
+        case "loans":
+            isEnable ?  .menuLoansEnable : .menuLoansDisabled
+            
+        case "savings":
+            isEnable ?  .menuSavingsEnable : .menuSavingsDisabled
+            
+        default:
+            Image("")
+        }
     }
 }

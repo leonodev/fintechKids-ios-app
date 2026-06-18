@@ -1,0 +1,39 @@
+appId: com.fleon.fintechKids
+---
+- launchApp:
+    clearState: true
+
+# ESCUDO ANTI-POPUPS: Si no aparecen, Maestro los ignora y continúa
+- tapOn:
+    text: "Allow"
+    optional: true
+
+- tapOn:
+    text: "Permitir"
+    optional: true
+
+# --- AHORA TU TEST CONTINÚA DE FORMA NORMAL ---
+
+# Esperamos de forma inteligente a que el título sea visible tras salir de la carga
+- extendedWaitUntil:
+    visible:
+        id: "select_language_title_id"
+    timeout: 5000
+
+# Pulsamos el botón del menú
+- tapOn:
+    id: "menu_selected_language_id"
+
+# Esperamos la animación .spring de las banderas desplegadas
+- extendedWaitUntil:
+    visible:
+        id: "option_language_id"
+    timeout: 3000
+
+# Seleccionamos el idioma del ForEach
+- tapOn:
+    id: "option_language_id"
+
+# Avanzamos en el flujo usando el botón
+- tapOn:
+    id: "btn_language_continue_id"

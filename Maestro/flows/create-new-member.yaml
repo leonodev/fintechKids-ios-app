@@ -1,0 +1,53 @@
+appId: com.fleon.fintechKids
+---
+- tapOn:
+    text: "Not Now"
+    optional: true
+
+- tapOn:
+    text: "Ahora no"
+    optional: true
+
+# Pulsamos el menú flotante en la Home (asumiendo que arranca cerrado porque la app está limpia)
+- tapOn:
+    id: "btn_float_menu_id"
+
+# Forzamos a Maestro a esperar de forma inteligente a que el botón aparezca tras la animación .spring
+- extendedWaitUntil:
+    visible:
+        id: "btn_menu_member_id"
+    timeout: 2000 # Le damos hasta 2 segundos de margen, pero continuará en cuanto sea visible
+
+# Ahora que está 100% visible y clickable, lo pulsamos para ir a la pantalla de creación
+- tapOn:
+    id: "btn_menu_member_id"
+
+#  Una vez cambie de pantalla, seguimos con las acciones de la vista de miembros
+- tapOn: 
+    id: "btn_add_new_member_id"
+
+- tapOn: 
+    id: "tfd_name_new_member_id"
+
+- inputText: "user1"
+
+- tapOn:
+    id: "avatar_boy_1"
+
+# boton crear miembro localmente, para porteriormente registrarlo en el backend
+- tapOn:
+    id: "btn_create_member_id"
+
+- extendedWaitUntil:
+    visible:
+        id: "item_member_id" # El ID del item del miembro creado
+    timeout: 100 # Le damos hasta milisegundos de margen como max para poder visualizarse
+
+# boton registrar nuevo miembro
+- tapOn:
+    id: "btn_register_new_member_id"
+
+- extendedWaitUntil:
+    visible:
+        id: "view_result_success_id"
+    timeout: 3000

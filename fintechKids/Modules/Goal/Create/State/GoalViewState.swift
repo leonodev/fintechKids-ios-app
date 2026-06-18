@@ -95,25 +95,25 @@ public class GoalViewState {
     
     public var goalState: State = .loaded
     
-    let rewardsOptions = [
-        FHKRadioOption(value: WorkType.time,
-                       label: "title_in_time".localized().capitalizingFirstLetter()),
-        
-        FHKRadioOption(value: WorkType.coins,
-                       label: "title_in_coins".localized().capitalizingFirstLetter())
-    ]
-    
-    let durationOptions = [
-        FHKRadioOption(value: DurationType.hours,
-                       label: "title_hours".localized().capitalizingFirstLetter()),
-        
-        FHKRadioOption(value: DurationType.days,
-                       label: "title_days".localized().capitalizingFirstLetter()),
-        
-        FHKRadioOption(value: DurationType.weeks,
-                       label: "title_weeks".localized().capitalizingFirstLetter()),
-        
-        FHKRadioOption(value: DurationType.months,
-                       label: "title_month".localized().capitalizingFirstLetter())
-    ]
+//    let rewardsOptions = [
+//        FHKRadioOption(value: WorkType.time,
+//                       label: "title_in_time".localized().capitalizingFirstLetter()),
+//        
+//        FHKRadioOption(value: WorkType.coins,
+//                       label: "title_in_coins".localized().capitalizingFirstLetter())
+//    ]
+//    
+//    let durationOptions = [
+//        FHKRadioOption(value: DurationType.hours,
+//                       label: "title_hours".localized().capitalizingFirstLetter()),
+//        
+//        FHKRadioOption(value: DurationType.days,
+//                       label: "title_days".localized().capitalizingFirstLetter()),
+//        
+//        FHKRadioOption(value: DurationType.weeks,
+//                       label: "title_weeks".localized().capitalizingFirstLetter()),
+//        
+//        FHKRadioOption(value: DurationType.months,
+//                       label: "title_month".localized().capitalizingFirstLetter())
+//    ]
 }

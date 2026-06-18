@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import ViewInspector
 
 final class fintechKidsUITests: XCTestCase {
 
@@ -40,26 +41,26 @@ final class fintechKidsUITests: XCTestCase {
     }
     
     
-    @MainActor
-    func testAllLanguageExistIntoMenu() throws {
-        
-
-        let app = XCUIApplication()
-        app.activate()
-        
-        app/*@START_MENU_TOKEN@*/.images["menu_language"]/*[[".otherElements",".images[\"spain-circle\"]",".images[\"menu_language\"]",".images"],[[[-1,2],[-1,1],[-1,3],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
-        app/*@START_MENU_TOKEN@*/.images["france-circle"]/*[[".otherElements.images[\"france-circle\"]",".images[\"france-circle\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
-        
-        sleep(1)
-        app/*@START_MENU_TOKEN@*/.images["menu_language"]/*[[".otherElements",".images[\"spain-circle\"]",".images[\"menu_language\"]",".images"],[[[-1,2],[-1,1],[-1,3],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
-        app.images["italy-circle"].firstMatch.tap()
-        
-        sleep(1)
-        app.images["menu_language"].firstMatch.tap()
-        app.images["england-circle"].firstMatch.tap()
-        
-        sleep(1)
-        app/*@START_MENU_TOKEN@*/.images["menu_language"]/*[[".otherElements",".images[\"spain-circle\"]",".images[\"menu_language\"]",".images"],[[[-1,2],[-1,1],[-1,3],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
-        app.images["spain-circle"].firstMatch.tap()
-    }
+//    @MainActor
+//    func testAllLanguageExistIntoMenu() throws {
+//        
+//
+//        let app = XCUIApplication()
+//        app.activate()
+//        
+//        app/*@START_MENU_TOKEN@*/.images["menu_language"]/*[[".otherElements",".images[\"spain-circle\"]",".images[\"menu_language\"]",".images"],[[[-1,2],[-1,1],[-1,3],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+//        app/*@START_MENU_TOKEN@*/.images["france-circle"]/*[[".otherElements.images[\"france-circle\"]",".images[\"france-circle\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+//        
+//        sleep(1)
+//        app/*@START_MENU_TOKEN@*/.images["menu_language"]/*[[".otherElements",".images[\"spain-circle\"]",".images[\"menu_language\"]",".images"],[[[-1,2],[-1,1],[-1,3],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+//        app.images["italy-circle"].firstMatch.tap()
+//        
+//        sleep(1)
+//        app.images["menu_language"].firstMatch.tap()
+//        app.images["england-circle"].firstMatch.tap()
+//        
+//        sleep(1)
+//        app/*@START_MENU_TOKEN@*/.images["menu_language"]/*[[".otherElements",".images[\"spain-circle\"]",".images[\"menu_language\"]",".images"],[[[-1,2],[-1,1],[-1,3],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+//        app.images["spain-circle"].firstMatch.tap()
+//    }
 }

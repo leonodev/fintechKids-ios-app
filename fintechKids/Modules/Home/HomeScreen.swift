@@ -22,13 +22,18 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     headerView
+                    
                     membersView
+                       
                     rewardsCollectedView
+                        
                     goalMemberFamilyView
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                botomBarView
+                if !viewModel.viewState.menuTabBarItems.isEmpty {
+                    botomBarView
+                }
             }
             .refreshable {
                 loadAllInformation(isForce: true)
@@ -53,7 +58,8 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: isForce))
             async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: isForce))
             async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: isForce))
-            await _ = (fetchMembers, fetchRewards, fetchGoalMembers)
+            async let fetchItemMenu: () = viewModel.action(.fetchInformationMenu)
+            await _ = (fetchMembers, fetchRewards, fetchGoalMembers, fetchItemMenu)
         }
     }
 
@@ -63,6 +69,8 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 .font(.PangramSans.bold(FHKSize.size12))
                 .colorDegradeStyle(startColor: FHKColor.pastelPink,
                                    endColor: .gray.opacity(0.8))
+                .isHidden(viewModel.familyMembersList.isEmpty)
+                .accessibilityIdentifier("title_home_screen_id")
             
             Spacer()
             
@@ -84,6 +92,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 case .loaded, .disabled:
                     ForEach(viewModel.familyMembersList) { member in
                         getMemberLoaded(member: member)
+                            .isHidden(viewModel.familyMembersList.isEmpty)
                     }
                     
                 case .error:
@@ -98,6 +107,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     var rewardsCollectedView: some View {
         VStack(alignment: .leading) {
             GradientDivider()
+                .isHidden(viewModel.rewardsCollectedList.isEmpty)
             
             Text(viewModel.viewState.titleRewardsCollected)
                 .font(.PangramSans.bold(FHKSize.size12))
@@ -105,6 +115,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 .padding(.top, FHKSpace.space16)
                 .colorDegradeStyle(startColor: FHKColor.pastelPink,
                                    endColor: .gray.opacity(0.8))
+                .isHidden(viewModel.rewardsCollectedList.isEmpty)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: FHKSpace.space16) {
@@ -116,6 +127,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                     case .loaded, .disabled:
                         ForEach(viewModel.rewardsCollectedList) { ticket in
                             getRewardCollectCardLoaded(ticket: ticket)
+                                .isHidden(viewModel.rewardsCollectedList.isEmpty)
                         }
                         
                     case .error:
@@ -132,6 +144,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     var goalMemberFamilyView: some View {
         VStack(alignment: .leading) {
             GradientDivider()
+                .isHidden(viewModel.goalMemberList.isEmpty)
             
             Text(viewModel.viewState.msnGoalsInCurse)
                 .font(.PangramSans.bold(FHKSize.size16))
@@ -139,6 +152,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 .padding(.top, FHKSpace.space16)
                 .colorDegradeStyle(startColor: FHKColor.pastelPink,
                                    endColor: .gray.opacity(0.8))
+                .isHidden(viewModel.goalMemberList.isEmpty)
                      
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: FHKSpace.space16) {
@@ -157,6 +171,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                                             workType: goal.rewardsSystemType,
                                             action: { id in
                             })
+                            .isHidden(viewModel.goalMemberList.isEmpty)
                         }
                         
                     case .error:
@@ -168,6 +183,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             .padding(.horizontal, FHKSpace.space08)
             
             GradientDivider()
+                .isHidden(viewModel.goalMemberList.isEmpty)
         }
         .padding(.top, FHKSpace.space16)
     }
@@ -184,7 +200,6 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                 }
             }
         }
-        .padding(.horizontal)
     }
     
     var floatMenuView: some View {
@@ -204,13 +219,11 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                     router.navigate(to: .goals)
                     
                 case .rewards:
-                    break
-                    
-                default:
-                    break
+                    router.navigate(to: .rewards)
                 }
                 print(index)
             })
+            .accessibilityIdentifier("btn_float_menu_id")
             
             Spacer()
         }

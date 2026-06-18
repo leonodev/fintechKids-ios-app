@@ -26,6 +26,14 @@ struct FintechKidsApp: App {
         inject.fhkModal
     }
     
+    private var fhkStorage: any FHKStorageManagerProtocol {
+        inject.fhkStorage
+    }
+    
+    private var fhkSessionManager: any FHKSessionManagerProtocol {
+        inject.fhkSessionManager
+    }
+    
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -37,7 +45,14 @@ struct FintechKidsApp: App {
                             titleBtn: "title_btn_screen_security".localized())
                     } else {
                         NavigationContainer(router: appRouter) {
-                            SplashScreen(viewModel: SplashScreenVM())
+                            if fhkSessionManager.isAuthenticated {
+                                HomeScreen(viewModel: HomeScreenVM())
+                            } else {
+                                SplashScreen(viewModel: SplashScreenVM())
+                            }
+                        }
+                        .task {
+                            await fhkSessionManager.initializeSession()
                         }
                         .onAppear {
                             deepLinkProcessor.setAppRouter(appRouter)
@@ -66,6 +81,9 @@ struct FintechKidsApp: App {
                 }
                 .padding(.top, 10) // Ajuste fino para la safe area si es necesario
                 .zIndex(999) // Prioridad de renderizado absoluta
+            }
+            .task {
+                await fhkStorage.clearKeychainIfNewInstallation()
             }
         }
     }

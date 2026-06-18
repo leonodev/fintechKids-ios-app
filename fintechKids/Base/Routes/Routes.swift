@@ -23,7 +23,9 @@ public enum Routes: NavigationDestination {
     case tasks(isFromChildSelection: Bool, MemberEntity?)
     case createTask
     case startTask(TaskEntity, MemberEntity)
+    case rewards
     case collectReward(CollectRewardEntity, MemberEntity)
+    case createReward
     case profile
     case presentGoldenTicket(GoldenTicketEntity)
     
@@ -50,7 +52,9 @@ public enum Routes: NavigationDestination {
         case .tasks: return "tasks"
         case .createTask: return "create_task"
         case .startTask: return "start_task"
+        case .rewards: return "rewards"
         case .collectReward: return "collect_reward"
+        case .createReward: return "create_reward"
         case .presentGoldenTicket: return "golden_ticket"
         }
     }
@@ -69,7 +73,9 @@ extension Routes {
         public static let goals = "goal_list".localized().capitalizingFirstLetter()
         public static let profile = "profile".localized().capitalizingFirstLetter()
         public static let tasks = "tasks".localized().capitalizingFirstLetter()
+        public static let rewards = "title_rewards".localized().capitalizingFirstLetter()
         public static let collectReward = "collect_reward".localized().capitalizingFirstLetter()
+        public static let createReward = "create_reward".localized().capitalizingFirstLetter()
     }
 }
 
@@ -121,6 +127,12 @@ extension Routes {
             RewardCollectScreen(viewModel: RewardCollectScreenVM(),
                                 collectEntity: collectRewardEntity,
                                 memberEntity: memberEntity)
+            
+        case .rewards:
+            RewardListScreen(viewModel: RewardListScreenVM())
+            
+        case .createReward:
+            RewardCreateScreen(viewModel: RewardCreateScreenVM())
             
         case .presentGoldenTicket(let info):
             RewardGoldenTicketScreen(ticketEntity: info)

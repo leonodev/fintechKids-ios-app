@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "nokogiri", "~> 1.15.0"
+gem "nokogiri", ">= 1.16.7"
 gem "fastlane", "~> 2.0"
 gem "abbrev"
 

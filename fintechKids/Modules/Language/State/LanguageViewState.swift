@@ -36,9 +36,6 @@ public struct LanguageViewState {
         .englandCircleFlag,
         .franceCircleFlag
     ]
-    
-    // Properties Accessibility
-    public var menuLanguageIdentifier: String = "menu_language"
 
     public enum State: Equatable {
         case loading
