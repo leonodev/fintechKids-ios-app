@@ -56,11 +56,15 @@ jobs:
         run: |
           UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           
-          # 🚀 Esto equivale a "Update to Latest Package Versions" e ignora la caché
-          echo "🔄 Forzando la descarga de los últimos commits de las ramas..."
-          xcodebuild -updatePackages -project fintechKids.xcodeproj -scheme FintechKids-Pro
+          # 🔥 1. Destruimos el candado oculto para que no use la caché vieja
+          echo "🗑️ Eliminando Package.resolved viejo..."
+          rm -f fintechKids.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
           
-          # 🏗️ Compilamos el proyecto con los paquetes actualizados de verdad
+          # 🔄 2. Forzamos a Xcode a resolver los paquetes buscando lo último que haya en internet
+          echo "🔄 Descargando las dependencias actualizadas desde cero..."
+          xcodebuild -resolvePackageDependencies -project fintechKids.xcodeproj -scheme FintechKids-Pro
+          
+          # 🏗️ 3. Compilamos el proyecto con los paquetes frescos de verdad
           echo "🏗️ Compilando con xcodebuild para el simulador: $UUID"
           
           xcodebuild -project fintechKids.xcodeproj \
