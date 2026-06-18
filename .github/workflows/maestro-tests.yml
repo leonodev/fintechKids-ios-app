@@ -16,14 +16,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Encender el simulador de iOS de forma interna
+      # 2. Encender el simulador de iOS de forma dinámica
       - name: Boot iOS Simulator
         run: |
-          # Buscamos el UUID de un iPhone 15 o similar disponible en el Mac de GitHub
-          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | awk 'NR==1{print $NF}' | tr -d '()')
-          echo "Booting simulator: $UUID"
+          # Buscamos cualquier iPhone disponible en el sistema (evitando Apple Watch/TV)
+          UUID=$(xcrun simctl list devices available | grep "iPhone" | head -n 1 | awk '{print $NF}' | tr -d '()')
+          
+          # Control de errores por si la máquina no tiene simuladores
+          if [ -z "$UUID" ]; then
+            echo "❌ Error: No se encontró ningún simulador de iPhone disponible en este runner."
+            exit 1
+          fi
+          
+          echo "🎯 Simulador detectado con éxito. UUID: $UUID"
+          echo "📱 Encendiendo el dispositivo..."
           xcrun simctl boot $UUID
-          # Esperamos a que el sistema operativo del iPhone termine de arrancar
+          
+          echo "⏳ Esperando a que el sistema operativo termine de arrancar..."
           xcrun simctl bootstatus $UUID
 
       # 3. Instalar la herramienta CLI de Maestro
