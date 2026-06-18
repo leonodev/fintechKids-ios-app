@@ -48,7 +48,7 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           TEST_USER_NAME: "user_test_e2e"
         run: |
-          curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_goals_members?name=eq.user1" \
+          curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?name=eq.user1" \
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
 
