@@ -9,7 +9,7 @@ on:
 jobs:
   e2e-testing:
     # Obligatorio usar macOS para poder levantar el simulador de Xcode
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       # 1. Clonar el código del repositorio en la máquina virtual
