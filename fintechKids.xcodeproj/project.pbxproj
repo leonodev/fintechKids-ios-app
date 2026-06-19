@@ -867,7 +867,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/leonodev/fintechKids-modulo-designsystem-ios";
 			requirement = {
-				branch = main;
+				branch = "fix-remove-ios26";
 				kind = branch;
 			};
 		};
