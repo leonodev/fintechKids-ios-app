@@ -16,6 +16,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 🔍 NUEVO PASO: Verificar Versiones Exactas de Compilación
+      - name: 🔍 Verificar Versiones Exactas de Compilación
+        run: |
+          echo "=== Versión de macOS ==="
+          sw_vers
+          echo "=== Versión de Xcode ==="
+          xcodebuild -version
+          echo "=== Versión de Swift ==="
+          swift --version
+          echo "=== SDKs Disponibles ==="
+          xcodebuild -showsdks
+
       # 2. Encender el simulador de iOS de forma dinámica
       - name: Boot iOS Simulator
         run: |
@@ -51,7 +63,7 @@ jobs:
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
 
-        # 5. Compilar la App e instalarla en el simulador encendido
+      # 5. Compilar la App e instalarla en el simulador encendido
       - name: Build and Install App
         run: |
           UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
