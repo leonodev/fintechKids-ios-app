@@ -31,19 +31,21 @@ jobs:
       # 2. Encender el simulador de iOS de forma dinámica
       - name: Boot iOS Simulator
         run: |
-          # Extraemos estrictamente el UUID usando una expresión regular pura
-          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          # Filtramos específicamente por iPhone 15 o iPhone 16 para asegurar compatibilidad
+          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           
           if [ -z "$UUID" ]; then
-            echo "❌ Error: No se encontró ningún simulador de iPhone disponible en este Mac de GitHub."
+            # Si no encuentra el 15, buscamos cualquier iPhone como plan B
+            UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          fi
+          
+          if [ -z "$UUID" ]; then
+            echo "❌ Error: No se encontró ningún simulador disponible."
             exit 1
           fi
           
-          echo "🎯 ¡Simulador detectado con éxito! UUID: $UUID"
-          echo "📱 Encendiendo el dispositivo..."
+          echo "🎯 ¡Simulador detectado! UUID: $UUID"
           xcrun simctl boot $UUID
-          
-          echo "⏳ Esperando a que el sistema operativo termine de arrancar..."
           xcrun simctl bootstatus $UUID
 
       # 3. Instalar la herramienta CLI de Maestro
@@ -66,7 +68,11 @@ jobs:
       # 5. Compilar la App e instalarla en el simulador encendido
       - name: Build and Install App
         run: |
-          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          # Buscamos el mismo UUID filtrado
+          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          if [ -z "$UUID" ]; then
+            UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          fi
           
           echo "🔄 1. Descargando paquetes..."
           xcodebuild -resolvePackageDependencies \
@@ -76,31 +82,27 @@ jobs:
                      -disablePackageRepositoryCache
           
           echo "🪓 2. Aplicando parches de compatibilidad..."
-          # Fix Firebase RemoteConfig
           FIREBASE_FILE="build/SourcePackages/checkouts/fintechKids-modulo-firebase-ios/Sources/FHKFirebase/RemoteConfig/FHKRemoteConfigService.swift"
           if [ -f "$FIREBASE_FILE" ]; then
             sed -i '' 's/remoteConfig\.fetchAndActivate()/RemoteConfig.remoteConfig().fetchAndActivate()/g' "$FIREBASE_FILE"
-            echo "✅ Firebase parchado."
           fi
           
-          # BAJAR DISPONIBILIDAD DE iOS 26 A iOS 17 EN EL MÓDULO DE DISEÑO
           DS_PATH="build/SourcePackages/checkouts/fintechKids-modulo-designsystem-ios/Sources/FHKDesignSystem"
           if [ -d "$DS_PATH" ]; then
-            echo "🔮 Engañando al compilador: Cambiando iOS 26.0 por iOS 17.0..."
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
-            echo "✅ Disponibilidad forzada a iOS 17.0 con éxito."
           fi
           
-          echo "🏗️ 3. Compilando con xcodebuild para el simulador: $UUID"
+          echo "🏗️ 3. Compilando controlando los recursos del servidor..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
                      -destination "platform=iOS Simulator,id=$UUID" \
                      -configuration Debug \
                      -derivedDataPath build \
                      ONLY_ACTIVE_ARCH=YES \
-                     -disablePackageRepositoryCache
+                     -disablePackageRepositoryCache \
+                     -IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
+                     -jobs 2
           
-          # Buscamos el binario e instalamos
           APP_PATH=$(find build -name "FintechKids.app" | head -n 1)
           xcrun simctl install booted "$APP_PATH"
 
