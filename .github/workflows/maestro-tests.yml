@@ -86,16 +86,15 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando con destino fijo y parches de rendimiento..."
+          echo "🏗️ 3. Compilando con destino genérico para evitar el crash de assets..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination "platform=iOS Simulator,name=iPhone 16" \
+                     -destination "generic/platform=iOS Simulator" \
                      -configuration Debug \
                      -derivedDataPath build \
                      ARCHS=arm64 \
-                     ONLY_ACTIVE_ARCH=YES \
+                     ONLY_ACTIVE_ARCH=NO \
                      COMPRESS_PNG_FILES=NO \
-                     ASSETCATALOG_COMPILER_OPTIMIZATION=time \
                      -disablePackageRepositoryCache \
                      COMPILER_INDEX_STORE_ENABLE=NO \
                      SWIFT_STRICT_CONCURRENCY=minimal \
@@ -103,7 +102,7 @@ jobs:
                      IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
                      SWIFT_EXEC_MAX_JOBS=2
           
-          echo "🚀 4. Levantando simulador e instalando la App..."
+          echo "🚀 4. Levantando simulador real de la CI e instalando la App..."
           UUID=$(xcrun simctl list devices available | grep "iPhone 16" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           xcrun simctl boot "$UUID" || true
           
