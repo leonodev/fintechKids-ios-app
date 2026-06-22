@@ -89,7 +89,7 @@ jobs:
           echo "🏗️ 3. Compilando con destino fijo y parches de rendimiento..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination "platform=iOS Simulator,name=iPhone 15" \
+                     -destination "platform=iOS Simulator,name=iPhone 16" \
                      -configuration Debug \
                      -derivedDataPath build \
                      ARCHS=arm64 \
@@ -104,11 +104,12 @@ jobs:
                      SWIFT_EXEC_MAX_JOBS=2
           
           echo "🚀 4. Levantando simulador e instalando la App..."
-          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          UUID=$(xcrun simctl list devices available | grep "iPhone 16" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           xcrun simctl boot "$UUID" || true
           
           APP_PATH=$(find build -iname "fintechKids.app" | head -n 1)
           xcrun simctl install "$UUID" "$APP_PATH"
+      
 
       # 6. Ejecución de los flujos de Maestro
       - name: Run Maestro Tests
