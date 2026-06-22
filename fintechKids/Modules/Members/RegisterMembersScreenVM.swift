@@ -11,6 +11,7 @@ import FHKInjections
 import FHKFirebase
 import FHKUtils
 import FHKDomain
+import Foundation
 
 @Observable
 final class RegisterMembersScreenVM: FHKCore.ViewModel {
