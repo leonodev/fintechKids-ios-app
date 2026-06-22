@@ -30,6 +30,6 @@ final class LanguageRepository: FHKLanguageRepositoryProtocol {
     }
 
     func changeLanguageApp(_ language: String) async {
-        fhkLanguage.changeLanguage(to: language)
+        await fhkLanguage.changeLanguage(to: language)
     }
 }

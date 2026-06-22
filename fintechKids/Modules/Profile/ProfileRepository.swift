@@ -45,6 +45,7 @@ final class ProfileRepository: FHKProfileRepositoryProtocol {
         return language ?? LanguageType.es.code
     }
     
+    @MainActor
     func setNewLanguage(lang: String) {
         fhkLanguage.changeLanguage(to: lang)
     }
