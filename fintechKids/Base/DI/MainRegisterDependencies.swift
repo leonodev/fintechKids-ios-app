@@ -18,6 +18,7 @@ import FHKSupabase
 
 public class CommonsDependencies: FHKDependencies {
     
+    @MainActor
     static func register() throws {
         let storage = FHKStorageManager(userDefault: FHKUserDefault(),
                                         keychain: FHKKeychainStorage())
