@@ -68,12 +68,6 @@ jobs:
       # 5. Compilar la App e instalarla en el simulador encendido
       - name: Build and Install App
         run: |
-          # Buscamos el mismo UUID filtrado
-          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
-          if [ -z "$UUID" ]; then
-            UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
-          fi
-          
           echo "🔄 1. Descargando paquetes..."
           xcodebuild -resolvePackageDependencies \
                      -project fintechKids.xcodeproj \
@@ -92,18 +86,25 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando controlando los recursos del servidor..."
+          echo "🏗️ 3. Compilando para Simulador Genérico (Bypassa el App Thinning de la CI)..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination "platform=iOS Simulator,id=$UUID" \
+                     -destination 'generic/platform=iOS Simulator' \
                      -configuration Debug \
                      -derivedDataPath build \
                      ONLY_ACTIVE_ARCH=YES \
                      -disablePackageRepositoryCache \
-                     -IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
-                     -jobs 2
+                     COMPILER_INDEX_STORE_ENABLE=NO
           
-          APP_PATH=$(find build -name "FintechKids.app" | head -n 1)
+          echo "📱 4. Buscando el binario generado e instalándolo en el simulador..."
+          APP_PATH=$(find build -name "fintechKids.app" -type d | head -n 1)
+          
+          if [ -z "$APP_PATH" ]; then
+            echo "❌ Error: No se encontró el archivo .app compilado."
+            exit 1
+          fi
+          
+          echo "🎯 Aplicación encontrada en: $APP_PATH"
           xcrun simctl install booted "$APP_PATH"
 
       # 6. Ejecución de los flujos de Maestro
