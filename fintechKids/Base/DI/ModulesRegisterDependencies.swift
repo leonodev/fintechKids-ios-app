@@ -20,6 +20,7 @@ import FHKSupabase
 
 public class ModulesDependencies: FHKDependencies {
     
+    @MainActor
     static func register() throws {
         
         /// Main App (fhkLanguage Depend of Storage)
