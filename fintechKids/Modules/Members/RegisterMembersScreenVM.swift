@@ -103,7 +103,7 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     
     @MainActor
     func removeMember(_ member: MemberEntity) async {
-        familyMembers.removeAll(where: { $0.id == member.id })
+        familyMembers.removeAll(where: { $0.id.uuidString == member.id.uuidString })
     }
     
     func getNameMember(member: MemberEntity) -> String {
