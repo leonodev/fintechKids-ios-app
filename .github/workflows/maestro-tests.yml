@@ -88,31 +88,19 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando para arquitectura única simulada..."
+          echo "🏗️ 3. Compilando con límites de memoria para la CI..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
                      -destination "platform=iOS Simulator,id=$UUID" \
                      -configuration Debug \
                      -derivedDataPath build \
-                     ARCHS=arm64 \
                      ONLY_ACTIVE_ARCH=YES \
                      -disablePackageRepositoryCache \
                      COMPILER_INDEX_STORE_ENABLE=NO \
-                     ASSETCATALOG_COMPILER_NOTICES=NO \
-                     ASSETCATALOG_COMPILER_WARNINGS=NO
+                     IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
+                     SWIFT_EXEC_MAX_JOBS=2
           
-          APP_PATH=$(find build -name "FintechKids.app" | head -n 1)
-          xcrun simctl install booted "$APP_PATH"
-          
-          echo "📱 4. Buscando el binario generado e instalándolo en el simulador..."
-          APP_PATH=$(find build -name "fintechKids.app" -type d | head -n 1)
-          
-          if [ -z "$APP_PATH" ]; then
-            echo "❌ Error: No se encontró el archivo .app compilado."
-            exit 1
-          fi
-          
-          echo "🎯 Aplicación encontrada en: $APP_PATH"
+          APP_PATH=$(find build -name "fintechKids.app" | head -n 1)
           xcrun simctl install booted "$APP_PATH"
 
       # 6. Ejecución de los flujos de Maestro
