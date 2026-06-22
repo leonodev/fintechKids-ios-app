@@ -86,12 +86,13 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando para iPhone 16 estricto para deshabilitar el thinning..."
+          echo "🏗️ 3. Compilando en modo silencioso (Solo errores)..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
                      -destination "platform=iOS Simulator,name=iPhone 16" \
                      -configuration Debug \
                      -derivedDataPath build \
+                     -quiet \
                      ARCHS=arm64 \
                      ONLY_ACTIVE_ARCH=YES \
                      COMPRESS_PNG_FILES=NO \
