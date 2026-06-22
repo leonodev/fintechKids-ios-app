@@ -65,7 +65,7 @@ jobs:
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
 
-      # 5. Compilar la App en modo universal e instalarla
+      # 5. Compilar la App e instalarla en el simulador de la CI
       - name: Build and Install App
         run: |
           echo "🔄 1. Descargando paquetes..."
@@ -86,21 +86,25 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando variante universal (Sin App Thinning)..."
+          echo "🏗️ 3. Compilando con destino fijo y parches de rendimiento..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination "generic/platform=iOS Simulator" \
+                     -destination "platform=iOS Simulator,name=iPhone 15" \
                      -configuration Debug \
                      -derivedDataPath build \
                      ARCHS=arm64 \
-                     ONLY_ACTIVE_ARCH=NO \
+                     ONLY_ACTIVE_ARCH=YES \
                      COMPRESS_PNG_FILES=NO \
                      ASSETCATALOG_COMPILER_OPTIMIZATION=time \
                      -disablePackageRepositoryCache \
-                     COMPILER_INDEX_STORE_ENABLE=NO
+                     COMPILER_INDEX_STORE_ENABLE=NO \
+                     SWIFT_STRICT_CONCURRENCY=minimal \
+                     SWIFT_TREAT_WARNINGS_AS_ERRORS=NO \
+                     IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
+                     SWIFT_EXEC_MAX_JOBS=2
           
           echo "🚀 4. Levantando simulador e instalando la App..."
-          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           xcrun simctl boot "$UUID" || true
           
           APP_PATH=$(find build -iname "fintechKids.app" | head -n 1)
