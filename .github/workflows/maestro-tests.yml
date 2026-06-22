@@ -65,11 +65,9 @@ jobs:
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
 
-      # 5. Compilar la App e instalarla en el simulador encendido
+      # 5. Compilar la App en modo universal e instalarla
       - name: Build and Install App
         run: |
-          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
-          
           echo "🔄 1. Descargando paquetes..."
           xcodebuild -resolvePackageDependencies \
                      -project fintechKids.xcodeproj \
@@ -88,20 +86,25 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando con límites de memoria para la CI..."
+          echo "🏗️ 3. Compilando variante universal (Sin App Thinning)..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination "platform=iOS Simulator,id=$UUID" \
+                     -destination "generic/platform=iOS Simulator" \
                      -configuration Debug \
                      -derivedDataPath build \
-                     ONLY_ACTIVE_ARCH=YES \
+                     ARCHS=arm64 \
+                     ONLY_ACTIVE_ARCH=NO \
+                     COMPRESS_PNG_FILES=NO \
+                     ASSETCATALOG_COMPILER_OPTIMIZATION=time \
                      -disablePackageRepositoryCache \
-                     COMPILER_INDEX_STORE_ENABLE=NO \
-                     IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
-                     SWIFT_EXEC_MAX_JOBS=2
+                     COMPILER_INDEX_STORE_ENABLE=NO
           
-          APP_PATH=$(find build -name "fintechKids.app" | head -n 1)
-          xcrun simctl install booted "$APP_PATH"
+          echo "🚀 4. Levantando simulador e instalando la App..."
+          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          xcrun simctl boot "$UUID" || true
+          
+          APP_PATH=$(find build -iname "fintechKids.app" | head -n 1)
+          xcrun simctl install "$UUID" "$APP_PATH"
 
       # 6. Ejecución de los flujos de Maestro
       - name: Run Maestro Tests
