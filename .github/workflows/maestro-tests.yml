@@ -68,6 +68,8 @@ jobs:
       # 5. Compilar la App e instalarla en el simulador encendido
       - name: Build and Install App
         run: |
+          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          
           echo "🔄 1. Descargando paquetes..."
           xcodebuild -resolvePackageDependencies \
                      -project fintechKids.xcodeproj \
@@ -86,15 +88,21 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando para Simulador Genérico (Bypassa el App Thinning de la CI)..."
+          echo "🏗️ 3. Compilando para arquitectura única simulada..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination 'generic/platform=iOS Simulator' \
+                     -destination "platform=iOS Simulator,id=$UUID" \
                      -configuration Debug \
                      -derivedDataPath build \
+                     ARCHS=arm64 \
                      ONLY_ACTIVE_ARCH=YES \
                      -disablePackageRepositoryCache \
-                     COMPILER_INDEX_STORE_ENABLE=NO
+                     COMPILER_INDEX_STORE_ENABLE=NO \
+                     ASSETCATALOG_COMPILER_NOTICES=NO \
+                     ASSETCATALOG_COMPILER_WARNINGS=NO
+          
+          APP_PATH=$(find build -name "FintechKids.app" | head -n 1)
+          xcrun simctl install booted "$APP_PATH"
           
           echo "📱 4. Buscando el binario generado e instalándolo en el simulador..."
           APP_PATH=$(find build -name "fintechKids.app" -type d | head -n 1)
