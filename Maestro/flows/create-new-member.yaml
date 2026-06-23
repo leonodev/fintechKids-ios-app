@@ -1,16 +1,11 @@
 appId: com.fleon.fintechKids
+config:
+    permissions:
+        all: allow
 ---
 
 - launchApp:
     clearState: false
-
-- tapOn:
-    text: "Not Now"
-    optional: true
-
-- tapOn:
-    text: "Ahora no"
-    optional: true
 
 # Pulsamos el menú flotante en la Home (asumiendo que arranca cerrado porque la app está limpia)
 - tapOn:
@@ -45,8 +40,7 @@ appId: com.fleon.fintechKids
 - extendedWaitUntil:
     visible:
         id: "item_member_id" # El ID del item del miembro creado
-    timeout: 100 # Le damos hasta milisegundos de margen como max para poder visualizarse
-
+    timeout: 3000
 # boton registrar nuevo miembro
 - tapOn:
     id: "btn_register_new_member_id"

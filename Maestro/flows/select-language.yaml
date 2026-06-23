@@ -1,18 +1,10 @@
 appId: com.fleon.fintechKids
+config:
+    permissions:
+        all: allow
 ---
 - launchApp:
     clearState: true
-
-# ESCUDO ANTI-POPUPS: Si no aparecen, Maestro los ignora y continúa
-- tapOn:
-    text: "Allow"
-    optional: true
-
-- tapOn:
-    text: "Permitir"
-    optional: true
-
-# --- AHORA TU TEST CONTINÚA DE FORMA NORMAL ---
 
 # Subimos a 30000ms (30s) para soportar el arranque en frío de la CI
 - extendedWaitUntil:

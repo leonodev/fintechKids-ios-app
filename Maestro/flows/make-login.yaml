@@ -1,7 +1,7 @@
-appId: com.fleon.fintechKidsw
+appId: com.fleon.fintechKids
 ---
 - launchApp:
-    clearState: false # Mantenemos la sesión del paso anterior
+    clearState: false
 
 # Configuramos el campo Email
 - tapOn:

@@ -120,10 +120,6 @@ jobs:
       # 6. Ejecución de los flujos de Maestro
       - name: Run Maestro Tests
         run: |
-          # 1. Inyectamos el permiso directamente en el sistema operativo del simulador
-          xcrun simctl privacy "${{ env.TARGET_SIMULATOR_UUID }}" grant notifications com.fleon.fintechKids
-          
-          # 2. Corremos Maestro normalmente
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
           maestro test --format html-detailed --output report.html \
             Maestro/flows/select-language.yaml \
