@@ -87,8 +87,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
         do {
             let loginEntity = LoginEntity(email: viewState.email, password: viewState.password)
             let userSession = try await fhkLoginRepository.login(loginEntity: loginEntity)
-            
-            viewState.loginState = .finish(result: .success)
+
             guard let tokenAccess = userSession?.accessToken, !tokenAccess.isEmpty else {
                 informateError(FHKLoginError.accessTokenInvalid)
                 return
@@ -123,6 +122,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
             }
             
             try await fhkSessionManager.login()
+            viewState.loginState = .finish(result: .success)
         } catch let error as FHKSupabaseError {
             viewState.loginState = .finish(result: .error)
             informateError(error)
