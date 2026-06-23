@@ -28,7 +28,7 @@ jobs:
           echo "=== SDKs Disponibles ==="
           xcodebuild -showsdks
 
-      # 2. Encender el simulador de iOS de forma dinámica y registrar su UUID global
+     # 2. Encender el simulador de iOS de forma dinámica y registrar su UUID global
       - name: Boot iOS Simulator
         run: |
           # Buscamos cualquier iPhone disponible en el entorno actual de Xcode
@@ -41,12 +41,12 @@ jobs:
           
           echo "🎯 ¡Simulador detectado! UUID: $UUID"
           
-          # 🔥 LA CLAVE: Forzar a macOS a abrir la app del Simulador con entorno gráfico
-          open -a Simulator
-          
-          # Ahora sí, encendemos el dispositivo específico
+          # Encendemos el dispositivo específico (SIN open -a Simulator)
           xcrun simctl boot "$UUID"
           xcrun simctl bootstatus "$UUID"
+          
+          # Un respiro de 15 segundos para que el sistema operativo del simulador cargue en paz
+          sleep 15
           
           # Guardamos el UUID en el entorno de la sesión para usarlo en los siguientes pasos
           echo "TARGET_SIMULATOR_UUID=$UUID" >> $GITHUB_ENV
