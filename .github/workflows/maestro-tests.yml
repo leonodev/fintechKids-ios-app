@@ -63,6 +63,11 @@ jobs:
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}"
 
+      - name: 🔓 Unlock macOS Keychain for Simulator
+        run: |
+          security unlock-keychain -p "" login.keychain || true
+          security set-keychain-settings -lut 7200 login.keychain || true
+
       # 5. Compilar la App e instalarla en el simulador de la CI
       - name: Build and Install App
         run: |
