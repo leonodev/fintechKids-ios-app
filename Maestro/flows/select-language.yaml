@@ -1,4 +1,7 @@
 appId: com.fleon.fintechKids
+config:
+    permissions:
+        all: allow # 🔔 Concede notificaciones y alertas automáticamente tras limpiar el estado
 ---
 - launchApp:
     clearState: true

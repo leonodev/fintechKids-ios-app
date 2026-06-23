@@ -1,5 +1,11 @@
 appId: com.fleon.fintechKids
+config:
+    permissions:
+        all: allow
 ---
+- launchApp:
+    clearState: false # Mantenemos la sesión del paso anterior
+    
 # Configuramos el campo Email
 - tapOn:
     id: "tfd_email_user_id"

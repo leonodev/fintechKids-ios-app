@@ -1,5 +1,12 @@
 appId: com.fleon.fintechKids
+config:
+    permissions:
+        all: allow
 ---
+
+- launchApp:
+    clearState: false
+    
 - tapOn:
     text: "Not Now"
     optional: true
