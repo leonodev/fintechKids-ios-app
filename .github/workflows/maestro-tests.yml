@@ -1,6 +1,6 @@
 name: Maestro UI Tests
 
-# 🎯 El disparador: Se ejecuta cada vez que se abre o actualiza un PR hacia main
+# 🎯 El disparador: Se ejecuta cada vez que se abre o actualiza una IT hacia main
 on:
   pull_request:
     branches: [ "main" ]
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🔍 NUEVO PASO: Verificar Versiones Exactas de Compilación
+      # 🔍 Verificar Versiones Exactas de Compilación
       - name: 🔍 Verificar Versiones Exactas de Compilación
         run: |
           echo "=== Versión de macOS ==="
@@ -28,25 +28,23 @@ jobs:
           echo "=== SDKs Disponibles ==="
           xcodebuild -showsdks
 
-      # 2. Encender el simulador de iOS de forma dinámica
+      # 2. Encender el simulador de iOS de forma dinámica y registrar su UUID global
       - name: Boot iOS Simulator
         run: |
-          # Filtramos específicamente por iPhone 15 o iPhone 16 para asegurar compatibilidad
-          UUID=$(xcrun simctl list devices available | grep "iPhone 15" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
+          # Buscamos cualquier iPhone disponible en el entorno actual de Xcode
+          UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           
           if [ -z "$UUID" ]; then
-            # Si no encuentra el 15, buscamos cualquier iPhone como plan B
-            UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
-          fi
-          
-          if [ -z "$UUID" ]; then
-            echo "❌ Error: No se encontró ningún simulador disponible."
+            echo "❌ Error: No se encontró ningún simulador de iPhone disponible en este runner."
             exit 1
           fi
           
           echo "🎯 ¡Simulador detectado! UUID: $UUID"
-          xcrun simctl boot $UUID
-          xcrun simctl bootstatus $UUID
+          xcrun simctl boot "$UUID"
+          xcrun simctl bootstatus "$UUID"
+          
+          # Guardamos el UUID en el entorno de la sesión para usarlo en los siguientes pasos
+          echo "TARGET_SIMULATOR_UUID=$UUID" >> $GITHUB_ENV
 
       # 3. Instalar la herramienta CLI de Maestro
       - name: Install Maestro CLI
@@ -86,10 +84,10 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando en modo silencioso (Solo errores)..."
+          echo "🏗️ 3. Compilando apuntando al ID del simulador encendido..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination "platform=iOS Simulator,name=iPhone 16" \
+                     -destination "platform=iOS Simulator,id=${{ env.TARGET_SIMULATOR_UUID }}" \
                      -configuration Debug \
                      -derivedDataPath build \
                      -quiet \
@@ -104,12 +102,9 @@ jobs:
                      IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
                      SWIFT_EXEC_MAX_JOBS=2
           
-          echo "🚀 4. Levantando simulador real de la CI e instalando la App..."
-          UUID=$(xcrun simctl list devices available | grep "iPhone 16" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
-          xcrun simctl boot "$UUID" || true
-          
+          echo "🚀 4. Instalando la App en el simulador objetivo..."
           APP_PATH=$(find build -iname "fintechKids.app" | head -n 1)
-          xcrun simctl install "$UUID" "$APP_PATH"
+          xcrun simctl install "${{ env.TARGET_SIMULATOR_UUID }}" "$APP_PATH"
       
 
       # 6. Ejecución de los flujos de Maestro
