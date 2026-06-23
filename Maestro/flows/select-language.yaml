@@ -14,21 +14,21 @@ appId: com.fleon.fintechKids
 
 # --- AHORA TU TEST CONTINÚA DE FORMA NORMAL ---
 
-# Esperamos de forma inteligente a que el título sea visible tras salir de la carga
+# Subimos a 30000ms (30s) para soportar el arranque en frío de la CI
 - extendedWaitUntil:
     visible:
         id: "select_language_title_id"
-    timeout: 5000
+    timeout: 30000
 
 # Pulsamos el botón del menú
 - tapOn:
     id: "menu_selected_language_id"
 
-# Esperamos la animación .spring de las banderas desplegadas
+# Subimos a 10000ms (10s) por si la animación de las banderas va lenta en la CI
 - extendedWaitUntil:
     visible:
         id: "option_language_id"
-    timeout: 3000
+    timeout: 10000
 
 # Seleccionamos el idioma del ForEach
 - tapOn:
