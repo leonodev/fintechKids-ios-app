@@ -7,12 +7,10 @@ appId: com.fleon.fintechKids
 - tapOn:
     text: "Allow"
     optional: true
-    timeout: 3000
 
 - tapOn:
     text: "Permitir"
     optional: true
-    timeout: 3000
 
 # --- AHORA TU TEST CONTINÚA DE FORMA NORMAL ---
 

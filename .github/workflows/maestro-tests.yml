@@ -126,10 +126,22 @@ jobs:
             Maestro/flows/make-login.yaml \
             Maestro/flows/create-new-member.yaml
 
-      # 7. Guardar el reporte HTML en GitHub (Se ejecuta pase lo que pase: Éxito o Fallo)
-      - name: Upload Maestro Report Artifact
+      # 🔍 NUEVO PASO: Si Maestro falla, rescatamos los Logs de choque de Apple
+      - name: 📋 Capture Simulator Crash Logs on Failure
+        if: always()
+        run: |
+          mkdir -p simulator_logs
+          # 1. Copiamos los reportes de diagnóstico y crashes nativos de macOS
+          cp -R ~/Library/Logs/DiagnosticReports/ simulator_logs/ || true
+          # 2. Volcamos los últimos 15 minutos del log del sistema del simulador
+          xcrun simctl spawn "${{ env.TARGET_SIMULATOR_UUID }}" log show --last 15m > simulator_logs/simulator_system.log || true
+
+      # 7. Guardar tanto el reporte de Maestro como los logs del sistema
+      - name: Upload Test Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-html-report
-          path: report.html
+          name: maestro-and-system-results
+          path: |
+            report.html
+            simulator_logs/
