@@ -40,6 +40,11 @@ jobs:
           fi
           
           echo "🎯 ¡Simulador detectado! UUID: $UUID"
+          
+          # 🔥 LA CLAVE: Forzar a macOS a abrir la app del Simulador con entorno gráfico
+          open -a Simulator
+          
+          # Ahora sí, encendemos el dispositivo específico
           xcrun simctl boot "$UUID"
           xcrun simctl bootstatus "$UUID"
           
