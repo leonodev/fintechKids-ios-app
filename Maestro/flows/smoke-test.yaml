@@ -7,6 +7,24 @@ config:
     appId: com.fleon.fintechKids
 
 # ==========================================
+# 0. PASO CRÍTICO: MANEJAR POPUPS DEL SISTEMA
+# ==========================================
+# Después del launchApp, iOS muestra diálogos de permiso (notificaciones).
+# El config 'notifications: allow' no siempre funciona automáticamente.
+# Debemos aceptar explícitamente cualquier diálogo del sistema.
+- runFlow:
+    when:
+      visible: "Allow"
+    commands:
+      - tapOn: "Allow"
+
+- runFlow:
+    when:
+      visible: "Permitir"
+    commands:
+      - tapOn: "Permitir"
+
+# ==========================================
 # 1. FLUJO: SELECCIÓN DE IDIOMA
 # ==========================================
 - extendedWaitUntil:
@@ -31,15 +49,11 @@ config:
 # ==========================================
 # 2. FLUJO: INICIAR SESIÓN (LOGIN)
 # ==========================================
-# Estrategia: La app puede tardar mucho en CI. Usamos un extendedWaitUntil
-# con un timeout muy largo (120s) para darle tiempo de sobra.
-# Tan pronto como el elemento aparezca, el flujo continúa.
 - extendedWaitUntil:
     visible:
       id: "tfd_email_user_id"
-    timeout: 120000  # <-- AUMENTADO a 2 minutos. Es solo un máximo, no una pausa.
+    timeout: 120000
 
-# Pequeña pausa de seguridad tras la aparición del elemento
 - waitForAnimationToEnd
 
 - tapOn:
@@ -50,7 +64,6 @@ config:
     id: "tfd_password_user_id"
 - inputText: "1234567890"
 
-# Ocultar el teclado antes de tocar el botón, para evitar toques fallidos
 - hideKeyboard
 
 - waitForAnimationToEnd
@@ -58,11 +71,9 @@ config:
 - tapOn:
     id: "btn_login_start_sesion_id"
 
-# Estrategia: Esperar a que la pantalla principal esté presente, no solo a que el botón desaparezca.
-# Esto es mucho más fiable.
 - extendedWaitUntil:
     visible:
-        id: "btn_float_menu_id"  # <-- ¡CAMBIADO! Esperamos la UI de la pantalla principal.
+        id: "btn_float_menu_id"
     timeout: 60000
 
 # ==========================================
