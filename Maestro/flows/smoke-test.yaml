@@ -1,7 +1,7 @@
 appId: com.fleon.fintechKids
 config:
     permissions:
-        all: allow
+        notifications: allow # 👈 Quirúrgico: Solo notificaciones para evitar bloqueos en iOS
 ---
 - launchApp:
     clearState: true
@@ -47,7 +47,6 @@ config:
 - tapOn:
     id: "btn_login_start_sesion_id"
 
-# Esperamos correctamente a que el botón desaparezca (Sintaxis Real)
 - extendedWaitUntil:
     notVisible:
         id: "btn_login_start_sesion_id"

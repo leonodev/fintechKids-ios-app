@@ -46,7 +46,7 @@ jobs:
           xcrun simctl bootstatus "$UUID"
           
           # Un respiro de 15 segundos para que el sistema operativo del simulador cargue en paz
-          sleep 15
+          sleep 40
           
           # Guardamos el UUID en el entorno de la sesión para usarlo en los siguientes pasos
           echo "TARGET_SIMULATOR_UUID=$UUID" >> $GITHUB_ENV
