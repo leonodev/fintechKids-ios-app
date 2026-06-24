@@ -121,8 +121,13 @@ jobs:
       - name: Run Maestro Tests
         run: |
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
-          maestro test --format html-detailed --output report.html \
+          
+          # 🎯 Le pasamos explícitamente el --device para que no pierda tiempo buscando
+          maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
             Maestro/flows/smoke-test.yaml
+        shell: /bin/bash -e {0}
+        env:
+          TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
 
       # 🔍 NUEVO PASO: Si Maestro falla, rescatamos los Logs de choque de Apple
       - name: 📋 Capture Simulator Crash Logs on Failure

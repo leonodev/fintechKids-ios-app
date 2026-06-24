@@ -4,7 +4,7 @@ config:
         notifications: allow # 👈 Quirúrgico: Solo notificaciones para evitar bloqueos en iOS
 ---
 - launchApp:
-    clearState: true
+    appId: com.fleon.fintechKids
 
 # ==========================================
 # 1. FLUJO: SELECCIÓN DE IDIOMA
