@@ -97,7 +97,7 @@ jobs:
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
                      -destination "platform=iOS Simulator,id=${{ env.TARGET_SIMULATOR_UUID }}" \
-                     -configuration Release \  # 👈 CAMBIADO A RELEASE
+                     -configuration Release \
                      -derivedDataPath build \
                      -quiet \
                      ARCHS=arm64 \
