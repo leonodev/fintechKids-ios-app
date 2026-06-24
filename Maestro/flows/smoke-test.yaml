@@ -7,22 +7,29 @@ config:
     appId: com.fleon.fintechKids
 
 # ==========================================
-# 0. PASO CRÍTICO: MANEJAR POPUPS DEL SISTEMA
+# 0. PASO CRÍTICO: MANEJAR POPUPS DEL SISTEMA (USANDO COORDENADAS)
 # ==========================================
-# Después del launchApp, iOS muestra diálogos de permiso (notificaciones).
-# El config 'notifications: allow' no siempre funciona automáticamente.
-# Debemos aceptar explícitamente cualquier diálogo del sistema.
-- runFlow:
-    when:
-      visible: "Allow"
-    commands:
-      - tapOn: "Allow"
+# Los diálogos de sistema iOS no exponen correctamente sus textos
+# a las herramientas de accesibilidad. Usamos coordenadas relativas.
+# En iPhone, el botón "Allow"/"Permitir" está aproximadamente en:
+# - X: 66% del ancho de la pantalla (botón derecho)
+# - Y: 72% de la altura (parte inferior del diálogo)
 
-- runFlow:
-    when:
-      visible: "Permitir"
-    commands:
-      - tapOn: "Permitir"
+# Primero, esperamos a que el diálogo aparezca completamente
+- waitForAnimationToEnd
+
+# Tocar el botón "Allow"/"Permitir" usando coordenadas
+- tapOn:
+    point: "66%,72%"
+
+# Esperar a que el diálogo desaparezca
+- waitForAnimationToEnd
+
+# Por si acaso, intentamos también con otra coordenada común
+- tapOn:
+    point: "66%,75%"
+
+- waitForAnimationToEnd
 
 # ==========================================
 # 1. FLUJO: SELECCIÓN DE IDIOMA
