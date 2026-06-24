@@ -93,11 +93,11 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando apuntando al ID del simulador encendido..."
+          echo "🏗️ 3. Compilando en modo Debug (para salvar la CPU del runner)..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
                      -destination "platform=iOS Simulator,id=${{ env.TARGET_SIMULATOR_UUID }}" \
-                     -configuration Release \
+                     -configuration Debug \
                      -derivedDataPath build \
                      -quiet \
                      ARCHS=arm64 \
@@ -114,14 +114,19 @@ jobs:
           echo "🚀 4. Instalando la App en el simulador objetivo..."
           APP_PATH=$(find build -iname "fintechKids.app" | head -n 1)
           xcrun simctl install "${{ env.TARGET_SIMULATOR_UUID }}" "$APP_PATH"
-      
+          
+          echo "💤 5. OBLIGATORIO: Esperando 60 segundos para enfriar la CPU y estabilizar el simulador..."
+          sleep 60
 
       # 6. Ejecución del flujo unificado de Maestro
       - name: Run Maestro Tests
         run: |
-          # ⏱️ Bajamos esto a 1 minuto (60000ms). Si XCTest se quiere colgar esperando "idleness",
-          # lo obligamos a rendirse rápido para que continúe con el test sin perder tiempo.
-          export MAESTRO_DRIVER_STARTUP_TIMEOUT=60000
+          echo "📱 Pre-lanzando la app de forma nativa para saltar el bloqueo de XCTest..."
+          xcrun simctl launch "${{ env.TARGET_SIMULATOR_UUID }}" com.fleon.fintechKids || true
+          sleep 20
+          
+          echo "🤖 Iniciando Maestro..."
+          export MAESTRO_DRIVER_STARTUP_TIMEOUT=90000
           
           maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
             Maestro/flows/smoke-test.yaml
@@ -129,7 +134,7 @@ jobs:
         env:
           TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
 
-      # 🕵️‍♂️ PASO EXTRA: Si el test falla, le metemos Rayos X a la pantalla
+      # 7 🕵️‍♂️ PASO EXTRA: Si el test falla, le metemos Rayos X a la pantalla
       - name: 🔍 Print UI Hierarchy on Failure
         if: failure()
         run: |
@@ -138,7 +143,7 @@ jobs:
           echo "===================================================="
           maestro hierarchy
 
-      # 🔍 NUEVO PASO: Si Maestro falla, rescatamos los Logs de choque de Apple
+      # 8 🔍 NUEVO PASO: Si Maestro falla, rescatamos los Logs de choque de Apple
       - name: 📋 Capture Simulator Crash Logs on Failure
         if: always()
         run: |
@@ -148,7 +153,7 @@ jobs:
           # 2. Volcamos los últimos 15 minutos del log del sistema del simulador
           xcrun simctl spawn "${{ env.TARGET_SIMULATOR_UUID }}" log show --last 15m > simulator_logs/simulator_system.log || true
 
-      # 7. Guardar tanto el reporte de Maestro como los logs del sistema
+      # 9. Guardar tanto el reporte de Maestro como los logs del sistema
       - name: Upload Test Artifacts
         if: always()
         uses: actions/upload-artifact@v4
