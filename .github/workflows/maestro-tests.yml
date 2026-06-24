@@ -31,7 +31,6 @@ jobs:
      # 2. Encender el simulador de iOS de forma dinámica y registrar su UUID global
       - name: Boot iOS Simulator
         run: |
-          # Buscamos cualquier iPhone disponible en el entorno actual de Xcode
           UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
           
           if [ -z "$UUID" ]; then
@@ -41,14 +40,14 @@ jobs:
           
           echo "🎯 ¡Simulador detectado! UUID: $UUID"
           
-          # Encendemos el dispositivo específico (SIN open -a Simulator)
           xcrun simctl boot "$UUID"
           xcrun simctl bootstatus "$UUID"
           
-          # Un respiro de 15 segundos para que el sistema operativo del simulador cargue en paz
+          # ⚡️ EL TRUCO: Desactivar animaciones del sistema para evitar que XCTest se congele esperando idleness
+          xcrun simctl spawn "$UUID" defaults write com.apple.springboard WindowAnimationScale -float 0.0
+          
           sleep 40
           
-          # Guardamos el UUID en el entorno de la sesión para usarlo en los siguientes pasos
           echo "TARGET_SIMULATOR_UUID=$UUID" >> $GITHUB_ENV
 
       # 3. Instalar la herramienta CLI de Maestro
@@ -98,7 +97,7 @@ jobs:
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
                      -destination "platform=iOS Simulator,id=${{ env.TARGET_SIMULATOR_UUID }}" \
-                     -configuration Debug \
+                     -configuration Release \  # 👈 CAMBIADO A RELEASE
                      -derivedDataPath build \
                      -quiet \
                      ARCHS=arm64 \
