@@ -47,10 +47,10 @@ config:
 - tapOn:
     id: "btn_login_start_sesion_id"
 
-# Esperamos de forma correcta a que el botón de login desaparezca (Carga exitosa)
+# Esperamos correctamente a que el botón desaparezca (Sintaxis Real)
 - extendedWaitUntil:
-    id: "btn_login_start_sesion_id"
-    notVisible: true # 👈 ¡Sintaxis corregida!
+    notVisible:
+        id: "btn_login_start_sesion_id"
     timeout: 5000
 
 # ==========================================
@@ -86,7 +86,6 @@ config:
 - tapOn:
     id: "btn_create_member_id"
 
-# Le damos 3 segundos realistas para que SwiftUI pinte el nuevo miembro en la lista
 - extendedWaitUntil:
     visible:
         id: "item_member_id" 
