@@ -117,14 +117,12 @@ jobs:
           xcrun simctl install "${{ env.TARGET_SIMULATOR_UUID }}" "$APP_PATH"
       
 
-      # 6. Ejecución de los flujos de Maestro
+      # 6. Ejecución del flujo unificado de Maestro
       - name: Run Maestro Tests
         run: |
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
           maestro test --format html-detailed --output report.html \
-            Maestro/flows/select-language.yaml \
-            Maestro/flows/make-login.yaml \
-            Maestro/flows/create-new-member.yaml
+            Maestro/flows/smoke-test.yaml
 
       # 🔍 NUEVO PASO: Si Maestro falla, rescatamos los Logs de choque de Apple
       - name: 📋 Capture Simulator Crash Logs on Failure

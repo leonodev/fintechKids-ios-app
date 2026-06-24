@@ -1,0 +1,101 @@
+appId: com.fleon.fintechKids
+config:
+    permissions:
+        all: allow
+---
+- launchApp:
+    clearState: true
+
+# ==========================================
+# 1. FLUJO: SELECCIÓN DE IDIOMA
+# ==========================================
+- extendedWaitUntil:
+    visible:
+        id: "select_language_title_id"
+    timeout: 30000
+
+- tapOn:
+    id: "menu_selected_language_id"
+
+- extendedWaitUntil:
+    visible:
+        id: "option_language_id"
+    timeout: 10000
+
+- tapOn:
+    id: "option_language_id"
+
+- tapOn:
+    id: "btn_language_continue_id"
+
+# ==========================================
+# 2. FLUJO: INICIAR SESIÓN (LOGIN)
+# ==========================================
+- extendedWaitUntil:
+    visible:
+        id: "tfd_email_user_id"
+    timeout: 10000
+
+- tapOn:
+    id: "tfd_email_user_id"
+- inputText: "leonfrcol@gmail.com"
+
+- tapOn:
+    id: "tfd_password_user_id"
+- inputText: "1234567890"
+
+- tapOn:
+    id: "btn_login_start_sesion_id"
+
+# Esperamos de forma correcta a que el botón de login desaparezca (Carga exitosa)
+- extendedWaitUntil:
+    id: "btn_login_start_sesion_id"
+    notVisible: true # 👈 ¡Sintaxis corregida!
+    timeout: 5000
+
+# ==========================================
+# 3. FLUJO: CREAR NUEVO MIEMBRO
+# ==========================================
+- extendedWaitUntil:
+    visible:
+        id: "btn_float_menu_id"
+    timeout: 10000
+
+- tapOn:
+    id: "btn_float_menu_id"
+
+- extendedWaitUntil:
+    visible:
+        id: "btn_menu_member_id"
+    timeout: 3000
+
+- tapOn:
+    id: "btn_menu_member_id"
+
+- tapOn: 
+    id: "btn_add_new_member_id"
+
+- tapOn: 
+    id: "tfd_name_new_member_id"
+
+- inputText: "user_test_e2e"
+
+- tapOn:
+    id: "avatar_boy_1"
+
+- tapOn:
+    id: "btn_create_member_id"
+
+# Le damos 3 segundos realistas para que SwiftUI pinte el nuevo miembro en la lista
+- extendedWaitUntil:
+    visible:
+        id: "item_member_id" 
+    timeout: 3000
+
+- tapOn:
+    id: "btn_register_new_member_id"
+
+- extendedWaitUntil:
+    visible:
+        id: "view_result_success_id"
+    timeout: 5000
