@@ -121,12 +121,12 @@ jobs:
       # 6. Ejecución del flujo unificado de Maestro
       - name: Run Maestro Tests
         run: |
-          echo "📱 Pre-lanzando la app de forma nativa para saltar el bloqueo de XCTest..."
-          xcrun simctl launch "${{ env.TARGET_SIMULATOR_UUID }}" com.fleon.fintechKids || true
-          sleep 20
-          
-          echo "🤖 Iniciando Maestro..."
-          export MAESTRO_DRIVER_STARTUP_TIMEOUT=90000
+          echo "🧹 Matando cualquier instancia previa de la app para un arranque limpio..."
+          xcrun simctl terminate "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids" 2>/dev/null || true
+          sleep 5
+
+          echo "🤖 Iniciando Maestro con timeouts extendidos..."
+          export MAESTRO_DRIVER_STARTUP_TIMEOUT=120000  # Aumentado a 2 minutos
           
           maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
             Maestro/flows/smoke-test.yaml

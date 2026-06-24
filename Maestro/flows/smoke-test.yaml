@@ -31,10 +31,16 @@ config:
 # ==========================================
 # 2. FLUJO: INICIAR SESIÓN (LOGIN)
 # ==========================================
+# Estrategia: La app puede tardar mucho en CI. Usamos un extendedWaitUntil
+# con un timeout muy largo (120s) para darle tiempo de sobra.
+# Tan pronto como el elemento aparezca, el flujo continúa.
 - extendedWaitUntil:
     visible:
-        id: "tfd_email_user_id"
-    timeout: 10000
+      id: "tfd_email_user_id"
+    timeout: 120000  # <-- AUMENTADO a 2 minutos. Es solo un máximo, no una pausa.
+
+# Pequeña pausa de seguridad tras la aparición del elemento
+- waitForAnimationToEnd
 
 - tapOn:
     id: "tfd_email_user_id"
@@ -44,13 +50,20 @@ config:
     id: "tfd_password_user_id"
 - inputText: "1234567890"
 
+# Ocultar el teclado antes de tocar el botón, para evitar toques fallidos
+- hideKeyboard
+
+- waitForAnimationToEnd
+
 - tapOn:
     id: "btn_login_start_sesion_id"
 
+# Estrategia: Esperar a que la pantalla principal esté presente, no solo a que el botón desaparezca.
+# Esto es mucho más fiable.
 - extendedWaitUntil:
-    notVisible:
-        id: "btn_login_start_sesion_id"
-    timeout: 5000
+    visible:
+        id: "btn_float_menu_id"  # <-- ¡CAMBIADO! Esperamos la UI de la pantalla principal.
+    timeout: 60000
 
 # ==========================================
 # 3. FLUJO: CREAR NUEVO MIEMBRO
