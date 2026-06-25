@@ -118,11 +118,44 @@ jobs:
           echo "💤 5. OBLIGATORIO: Esperando 60 segundos para enfriar la CPU y estabilizar el simulador..."
           sleep 60
 
-     
+      - name: 📸 Screenshot Before Maestro
+        if: always()
+        run: |
+          xcrun simctl screenshot "${{ env.TARGET_SIMULATOR_UUID }}" screenshot_before_maestro.png
+          
+      - name: Upload Debug Screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-screenshots
+          path: screenshot_before_maestro.png  
+
+      # 6. Ejecución del flujo unificado de Maestro
+      - name: Run Maestro Tests
+        run: |
+          echo "🧹 Preparando entorno limpio..."
+          xcrun simctl terminate "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids" 2>/dev/null || true
+          sleep 2
+          
+          echo "📱 Abriendo la app manualmente para asegurar que esté en primer plano..."
+          xcrun simctl launch "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids"
+          sleep 10  # Dar tiempo a que la app cargue completamente
+          
+          echo "📸 Verificando que la app esté en primer plano..."
+          xcrun simctl screenshot "$TARGET_SIMULATOR_UUID" screenshot_before_maestro.png
+          
+          echo "🤖 Iniciando Maestro con timeouts extendidos..."
+          export MAESTRO_DRIVER_STARTUP_TIMEOUT=120000
+          
+          maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
+            Maestro/flows/smoke-test.yaml
+        shell: /bin/bash -e {0}
+        env:
+          TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
 
       # 7 🕵️‍♂️ PASO EXTRA: Si el test falla, le metemos Rayos X a la pantalla
       - name: 🔍 Print UI Hierarchy on Failure
-        
+        if: failure()
         run: |
           echo "===================================================="
           echo "🤖 REVISANDO QUÉ HAY EN LA PANTALLA EN ESTE MOMENTO..."

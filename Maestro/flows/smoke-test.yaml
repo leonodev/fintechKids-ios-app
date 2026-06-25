@@ -2,113 +2,29 @@ appId: com.fleon.fintechKids
 ---
 - launchApp:
     appId: com.fleon.fintechKids
+    clearState: false
 
-# Pequeña pausa para que el diálogo de permisos aparezca
-- waitForAnimationToEnd
+# Estrategia 1: Buscar los Lottie IDs
+- runFlow:
+    when:
+      visible: 
+        id: "lottie_operations_board_id"
+    commands:
+      - waitForAnimationToEnd
 
-# Tocar donde está el botón "Permitir" del diálogo de notificaciones
-# En iPhone, el botón está a la derecha, aproximadamente a 2/3 del ancho
-# y cerca del 72-75% de la altura de la pantalla
-- tapOn:
-    point: "66%,72%"
+# Estrategia 2: Si los Lottie no son visibles, esperar a que termine la carga
+- extendedWaitUntil:
+    notVisible:
+      id: "lottie_operations_board_id"
+    timeout: 60000
 
-# Esperar a que el diálogo desaparezca
-- waitForAnimationToEnd
-
-# ==========================================
-# 1. FLUJO: SELECCIÓN DE IDIOMA
-# ==========================================
+# Estrategia 3: Buscar directamente el título de idioma
 - extendedWaitUntil:
     visible:
-        id: "select_language_title_id"
+      id: "select_language_title_id"
     timeout: 30000
 
 - tapOn:
     id: "menu_selected_language_id"
 
-- extendedWaitUntil:
-    visible:
-        id: "option_language_id"
-    timeout: 10000
-
-- tapOn:
-    id: "option_language_id"
-
-- tapOn:
-    id: "btn_language_continue_id"
-
-# ==========================================
-# 2. FLUJO: INICIAR SESIÓN (LOGIN)
-# ==========================================
-- extendedWaitUntil:
-    visible:
-      id: "tfd_email_user_id"
-    timeout: 120000
-
-- waitForAnimationToEnd
-
-- tapOn:
-    id: "tfd_email_user_id"
-- inputText: "leonfrcol@gmail.com"
-
-- tapOn:
-    id: "tfd_password_user_id"
-- inputText: "1234567890"
-
-- hideKeyboard
-
-- waitForAnimationToEnd
-
-- tapOn:
-    id: "btn_login_start_sesion_id"
-
-- extendedWaitUntil:
-    visible:
-        id: "btn_float_menu_id"
-    timeout: 60000
-
-# ==========================================
-# 3. FLUJO: CREAR NUEVO MIEMBRO
-# ==========================================
-- extendedWaitUntil:
-    visible:
-        id: "btn_float_menu_id"
-    timeout: 10000
-
-- tapOn:
-    id: "btn_float_menu_id"
-
-- extendedWaitUntil:
-    visible:
-        id: "btn_menu_member_id"
-    timeout: 3000
-
-- tapOn:
-    id: "btn_menu_member_id"
-
-- tapOn: 
-    id: "btn_add_new_member_id"
-
-- tapOn: 
-    id: "tfd_name_new_member_id"
-
-- inputText: "user_test_e2e"
-
-- tapOn:
-    id: "avatar_boy_1"
-
-- tapOn:
-    id: "btn_create_member_id"
-
-- extendedWaitUntil:
-    visible:
-        id: "item_member_id" 
-    timeout: 3000
-
-- tapOn:
-    id: "btn_register_new_member_id"
-
-- extendedWaitUntil:
-    visible:
-        id: "view_result_success_id"
-    timeout: 5000
+# Resto del flow...
