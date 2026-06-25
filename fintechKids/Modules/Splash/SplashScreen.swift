@@ -48,13 +48,15 @@ struct SplashScreen<VM: SplashScreenVM>: View {
             
             LottieView(animationName: Lotties.operationsBoard,
                        loopMode: .loop,
-                       contentMode: .scaleAspectFit)
+                       contentMode: .scaleAspectFit,
+            identifier: "lottie_operations_board_id")
             
             Spacer()
             
             LottieView(animationName: Lotties.progressBar,
                        loopMode: .loop,
-                       contentMode: .scaleAspectFit)
+                       contentMode: .scaleAspectFit,
+            identifier: "lottie_progress_bar_id")
         }
         .onAppear {
             Task {
