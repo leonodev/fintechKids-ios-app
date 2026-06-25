@@ -122,7 +122,7 @@ jobs:
 
       # 7 🕵️‍♂️ PASO EXTRA: Si el test falla, le metemos Rayos X a la pantalla
       - name: 🔍 Print UI Hierarchy on Failure
-        if: failure()
+        
         run: |
           echo "===================================================="
           echo "🤖 REVISANDO QUÉ HAY EN LA PANTALLA EN ESTE MOMENTO..."
