@@ -4,11 +4,44 @@ appId: com.fleon.fintechKids
     appId: com.fleon.fintechKids
     clearState: false
 
-# Solo esperar por el título de idioma, sin depender de Lottie IDs
+# ==========================================
+# 1. FLUJO: SELECCIÓN DE IDIOMA (COMPLETO)
+# ==========================================
+
+# Verificar que estamos en la pantalla correcta
 - extendedWaitUntil:
     visible:
       id: "select_language_title_id"
     timeout: 60000
 
+# Verificar que el menú de idiomas existe
+- assertVisible:
+    id: "menu_selected_language_id"
+
+# Abrir el menú de selección de idioma
 - tapOn:
     id: "menu_selected_language_id"
+
+# Esperar a que las opciones aparezcan
+- extendedWaitUntil:
+    visible:
+        id: "option_language_id"
+    timeout: 10000
+
+# Seleccionar el idioma 
+- tapOn:
+    id: "option_language_id"
+
+# Verificar que el botón de continuar está habilitado
+- assertVisible:
+    id: "btn_language_continue_id"
+
+# Presionar continuar
+- tapOn:
+    id: "btn_language_continue_id"
+
+# Verificar que avanzamos a la siguiente pantalla
+- extendedWaitUntil:
+    notVisible:
+      id: "select_language_title_id"
+    timeout: 10000
