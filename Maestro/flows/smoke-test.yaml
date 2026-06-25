@@ -4,27 +4,11 @@ appId: com.fleon.fintechKids
     appId: com.fleon.fintechKids
     clearState: false
 
-# Estrategia 1: Buscar los Lottie IDs
-- runFlow:
-    when:
-      visible: 
-        id: "lottie_operations_board_id"
-    commands:
-      - waitForAnimationToEnd
-
-# Estrategia 2: Si los Lottie no son visibles, esperar a que termine la carga
-- extendedWaitUntil:
-    notVisible:
-      id: "lottie_operations_board_id"
-    timeout: 60000
-
-# Estrategia 3: Buscar directamente el título de idioma
+# Solo esperar por el título de idioma, sin depender de Lottie IDs
 - extendedWaitUntil:
     visible:
       id: "select_language_title_id"
-    timeout: 30000
+    timeout: 60000
 
 - tapOn:
     id: "menu_selected_language_id"
-
-# Resto del flow...

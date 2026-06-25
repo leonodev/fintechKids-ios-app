@@ -93,7 +93,13 @@ jobs:
             find "$DS_PATH" -name "*.swift" -type f -exec sed -i '' 's/iOS 26.0/iOS 17.0/g' {} +
           fi
           
-          echo "🏗️ 3. Compilando en modo Debug (para salvar la CPU del runner)..."
+          echo "🔄 Reiniciando el simulador para limpiar estado..."
+          xcrun simctl shutdown "${{ env.TARGET_SIMULATOR_UUID }}" || true
+          sleep 5
+          xcrun simctl boot "${{ env.TARGET_SIMULATOR_UUID }}"
+          xcrun simctl bootstatus "${{ env.TARGET_SIMULATOR_UUID }}"
+          
+          echo "🏗️ 3. Compilando en modo Debug..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
                      -destination "platform=iOS Simulator,id=${{ env.TARGET_SIMULATOR_UUID }}" \
@@ -111,17 +117,17 @@ jobs:
                      IDEBuildOperationMaxNumberOfConcurrentCompileTasks=2 \
                      SWIFT_EXEC_MAX_JOBS=2
           
-          echo "🚀 4. Instalando la App en el simulador objetivo..."
+          echo "🚀 4. Instalando la App en el simulador..."
           APP_PATH=$(find build -iname "fintechKids.app" | head -n 1)
           xcrun simctl install "${{ env.TARGET_SIMULATOR_UUID }}" "$APP_PATH"
           
-          echo "💤 5. OBLIGATORIO: Esperando 60 segundos para enfriar la CPU y estabilizar el simulador..."
+          echo "💤 5. Esperando 60 segundos para estabilizar..."
           sleep 60
-
-      - name: 📸 Screenshot Before Maestro
+      
+            - name: 📸 Screenshot Before Maestro
         if: always()
         run: |
-          xcrun simctl screenshot "${{ env.TARGET_SIMULATOR_UUID }}" screenshot_before_maestro.png
+          xcrun simctl io "${{ env.TARGET_SIMULATOR_UUID }}" screenshot screenshot_before_maestro.png
           
       - name: Upload Debug Screenshot
         if: always()
@@ -137,14 +143,22 @@ jobs:
           xcrun simctl terminate "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids" 2>/dev/null || true
           sleep 2
           
-          echo "📱 Abriendo la app manualmente para asegurar que esté en primer plano..."
+          echo "📱 Intentando abrir la app manualmente..."
           xcrun simctl launch "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids"
-          sleep 10  # Dar tiempo a que la app cargue completamente
+          LAUNCH_EXIT_CODE=$?
+          echo "Exit code de launch: $LAUNCH_EXIT_CODE"
+          
+          if [ $LAUNCH_EXIT_CODE -ne 0 ]; then
+            echo "❌ ERROR: No se pudo abrir la app"
+            exit 1
+          fi
+          
+          sleep 10
           
           echo "📸 Verificando que la app esté en primer plano..."
           xcrun simctl screenshot "$TARGET_SIMULATOR_UUID" screenshot_before_maestro.png
           
-          echo "🤖 Iniciando Maestro con timeouts extendidos..."
+          echo "🤖 Iniciando Maestro..."
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=120000
           
           maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
@@ -163,14 +177,13 @@ jobs:
           maestro hierarchy
 
       # 8 🔍 NUEVO PASO: Si Maestro falla, rescatamos los Logs de choque de Apple
-      - name: 📋 Capture Simulator Crash Logs on Failure
+            - name: 📋 Capture Simulator Crash Logs on Failure
         if: always()
         run: |
           mkdir -p simulator_logs
-          # 1. Copiamos los reportes de diagnóstico y crashes nativos de macOS
           cp -R ~/Library/Logs/DiagnosticReports/ simulator_logs/ || true
-          # 2. Volcamos los últimos 15 minutos del log del sistema del simulador
-          xcrun simctl spawn "${{ env.TARGET_SIMULATOR_UUID }}" log show --last 15m > simulator_logs/simulator_system.log || true
+          # El comando correcto para logs del simulador
+          xcrun simctl spawn "${{ env.TARGET_SIMULATOR_UUID }}" log show --last 15m --predicate 'process contains "fintechKids"' > simulator_logs/simulator_system.log 2>&1 || true
 
       # 9. Guardar tanto el reporte de Maestro como los logs del sistema
       - name: Upload Test Artifacts
