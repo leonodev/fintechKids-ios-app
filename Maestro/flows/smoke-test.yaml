@@ -6,7 +6,7 @@ appId: com.fleon.fintechKids
 
 # 📸 Screenshot de la pantalla de carga
 - waitForAnimationToEnd
-- screenshot: "01-pantalla-carga"
+- takeScreenshot: "01-pantalla-carga"
 
 # ==========================================
 # 1. FLUJO: SELECCIÓN DE IDIOMA (COMPLETO)
