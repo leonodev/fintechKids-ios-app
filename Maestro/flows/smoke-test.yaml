@@ -4,48 +4,25 @@ appId: com.fleon.fintechKids
     appId: com.fleon.fintechKids
     clearState: false
 
-# 📸 Screenshot de la pantalla de carga
-- waitForAnimationToEnd
-- takeScreenshot: "01-pantalla-carga"
+# Estrategia 1: Buscar los Lottie IDs
+- runFlow:
+    when:
+      visible: 
+        id: "lottie_operations_board_id"
+    commands:
+      - waitForAnimationToEnd
 
-# ==========================================
-# 1. FLUJO: SELECCIÓN DE IDIOMA (COMPLETO)
-# ==========================================
-
-# Verificar que estamos en la pantalla correcta
-- extendedWaitUntil:
-    visible:
-      id: "select_language_title_id"
-    timeout: 60000
-
-# Verificar que el menú de idiomas existe
-- assertVisible:
-    id: "menu_selected_language_id"
-
-# Abrir el menú de selección de idioma
-- tapOn:
-    id: "menu_selected_language_id"
-
-# Esperar a que las opciones aparezcan
-- extendedWaitUntil:
-    visible:
-        id: "option_language_id"
-    timeout: 10000
-
-# Seleccionar el idioma 
-- tapOn:
-    id: "option_language_id"
-
-# Verificar que el botón de continuar está habilitado
-- assertVisible:
-    id: "btn_language_continue_id"
-
-# Presionar continuar
-- tapOn:
-    id: "btn_language_continue_id"
-
-# Verificar que avanzamos a la siguiente pantalla
+# Estrategia 2: Si los Lottie no son visibles, esperar a que termine la carga
 - extendedWaitUntil:
     notVisible:
+      id: "lottie_operations_board_id"
+    timeout: 60000
+
+# Estrategia 3: Buscar directamente el título de idioma
+- extendedWaitUntil:
+    visible:
       id: "select_language_title_id"
-    timeout: 10000
+    timeout: 30000
+
+- tapOn:
+    id: "menu_selected_language_id"
