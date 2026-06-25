@@ -1,34 +1,18 @@
 appId: com.fleon.fintechKids
-config:
-    permissions:
-        notifications: allow # 👈 Quirúrgico: Solo notificaciones para evitar bloqueos en iOS
 ---
 - launchApp:
     appId: com.fleon.fintechKids
 
-# ==========================================
-# 0. PASO CRÍTICO: MANEJAR POPUPS DEL SISTEMA (USANDO COORDENADAS)
-# ==========================================
-# Los diálogos de sistema iOS no exponen correctamente sus textos
-# a las herramientas de accesibilidad. Usamos coordenadas relativas.
-# En iPhone, el botón "Allow"/"Permitir" está aproximadamente en:
-# - X: 66% del ancho de la pantalla (botón derecho)
-# - Y: 72% de la altura (parte inferior del diálogo)
-
-# Primero, esperamos a que el diálogo aparezca completamente
+# Pequeña pausa para que el diálogo de permisos aparezca
 - waitForAnimationToEnd
 
-# Tocar el botón "Allow"/"Permitir" usando coordenadas
+# Tocar donde está el botón "Permitir" del diálogo de notificaciones
+# En iPhone, el botón está a la derecha, aproximadamente a 2/3 del ancho
+# y cerca del 72-75% de la altura de la pantalla
 - tapOn:
     point: "66%,72%"
 
 # Esperar a que el diálogo desaparezca
-- waitForAnimationToEnd
-
-# Por si acaso, intentamos también con otra coordenada común
-- tapOn:
-    point: "66%,75%"
-
 - waitForAnimationToEnd
 
 # ==========================================
