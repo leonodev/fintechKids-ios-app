@@ -122,6 +122,10 @@ jobs:
           xcrun simctl terminate "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids" 2>/dev/null || true
           sleep 2
           
+          echo "📱 Abriendo la app manualmente..."
+          xcrun simctl launch "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids"
+          sleep 10
+          
           echo "🤖 Iniciando Maestro..."
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
           
