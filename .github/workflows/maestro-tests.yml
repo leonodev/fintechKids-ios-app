@@ -122,10 +122,6 @@ jobs:
           xcrun simctl terminate "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids" 2>/dev/null || true
           sleep 2
           
-          echo "📱 Abriendo la app manualmente..."
-          xcrun simctl launch "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids"
-          sleep 10
-          
           echo "🤖 Iniciando Maestro..."
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
           
@@ -138,9 +134,7 @@ jobs:
       - name: 🔍 Print UI Hierarchy on Failure
         if: failure()
         run: |
-          echo "===================================================="
-          echo "🤖 REVISANDO QUÉ HAY EN LA PANTALLA EN ESTE MOMENTO..."
-          echo "===================================================="
+          export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
           maestro hierarchy
         env:
           TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}

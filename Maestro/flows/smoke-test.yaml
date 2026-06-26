@@ -1,9 +1,8 @@
 appId: com.fleon.fintechKids
 ---
+- launchApp:
+    appId: com.fleon.fintechKids
 
-# ==========================================
-# 1. FLUJO: SELECCIÓN DE IDIOMA
-# ==========================================
 - extendedWaitUntil:
     visible:
         id: "select_language_title_id"
