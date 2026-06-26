@@ -7,7 +7,7 @@ on:
 
 jobs:
   e2e-testing:
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 20
 
     steps:
@@ -123,7 +123,7 @@ jobs:
           sleep 2
           
           echo "🤖 Iniciando Maestro..."
-          export MAESTRO_DRIVER_STARTUP_TIMEOUT=120000
+          export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
           
           maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
             Maestro/flows/smoke-test.yaml
