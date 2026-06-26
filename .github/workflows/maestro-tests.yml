@@ -1,6 +1,5 @@
 name: Maestro UI Tests
 
-# 🎯 El disparador: Se ejecuta cada vez que se abre o actualiza una IT hacia main
 on:
   pull_request:
     branches: [ "main" ]
@@ -8,15 +7,13 @@ on:
 
 jobs:
   e2e-testing:
-    # Obligatorio usar macOS para poder levantar el simulador de Xcode
     runs-on: macos-15
+    timeout-minutes: 20
 
     steps:
-      # 1. Clonar el código del repositorio en la máquina virtual
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🔍 Verificar Versiones Exactas de Compilación
       - name: 🔍 Verificar Versiones Exactas de Compilación
         run: |
           echo "=== Versión de macOS ==="
@@ -28,7 +25,6 @@ jobs:
           echo "=== SDKs Disponibles ==="
           xcodebuild -showsdks
 
-     # 2. Encender el simulador de iOS de forma dinámica y registrar su UUID global
       - name: Boot iOS Simulator
         run: |
           UUID=$(xcrun simctl list devices available | grep "iPhone" | grep -oE '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}' | head -n 1)
@@ -42,22 +38,17 @@ jobs:
           
           xcrun simctl boot "$UUID"
           xcrun simctl bootstatus "$UUID"
-          
-          # ⚡️ EL TRUCO: Desactivar animaciones del sistema para evitar que XCTest se congele esperando idleness
           xcrun simctl spawn "$UUID" defaults write com.apple.springboard WindowAnimationScale -float 0.0
           
           sleep 40
           
           echo "TARGET_SIMULATOR_UUID=$UUID" >> $GITHUB_ENV
 
-      # 3. Instalar la herramienta CLI de Maestro
       - name: Install Maestro CLI
         run: |
           curl -fsSL https://get.maestro.mobile.dev | bash
-          # Añadimos Maestro a las variables de entorno globales de GitHub
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      # 4. Limpieza inicial en Supabase usando tus Secrets seguros
       - name: Clean Supabase Test User
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -72,7 +63,6 @@ jobs:
           security unlock-keychain -p "" login.keychain || true
           security set-keychain-settings -lut 7200 login.keychain || true
 
-      # 5. Compilar la App e instalarla en el simulador de la CI
       - name: Build and Install App
         run: |
           echo "🔄 1. Descargando paquetes..."
@@ -94,15 +84,15 @@ jobs:
           fi
           
           echo "🔄 Reiniciando el simulador para limpiar estado..."
-          xcrun simctl shutdown "${{ env.TARGET_SIMULATOR_UUID }}" || true
+          xcrun simctl shutdown "$TARGET_SIMULATOR_UUID" || true
           sleep 5
-          xcrun simctl boot "${{ env.TARGET_SIMULATOR_UUID }}"
-          xcrun simctl bootstatus "${{ env.TARGET_SIMULATOR_UUID }}"
+          xcrun simctl boot "$TARGET_SIMULATOR_UUID"
+          xcrun simctl bootstatus "$TARGET_SIMULATOR_UUID"
           
           echo "🏗️ 3. Compilando en modo Debug..."
           xcodebuild -project fintechKids.xcodeproj \
                      -scheme FintechKids-Pro \
-                     -destination "platform=iOS Simulator,id=${{ env.TARGET_SIMULATOR_UUID }}" \
+                     -destination "platform=iOS Simulator,id=$TARGET_SIMULATOR_UUID" \
                      -configuration Debug \
                      -derivedDataPath build \
                      -quiet \
@@ -119,45 +109,18 @@ jobs:
           
           echo "🚀 4. Instalando la App en el simulador..."
           APP_PATH=$(find build -iname "fintechKids.app" | head -n 1)
-          xcrun simctl install "${{ env.TARGET_SIMULATOR_UUID }}" "$APP_PATH"
+          xcrun simctl install "$TARGET_SIMULATOR_UUID" "$APP_PATH"
           
           echo "💤 5. Esperando 60 segundos para estabilizar..."
           sleep 60
-      
-      - name: 📸 Screenshot Before Maestro
-        if: always()
-        run: |
-          # Usar el comando correcto para tomar screenshot
-          xcrun simctl io "${{ env.TARGET_SIMULATOR_UUID }}" screenshot screenshot_before_maestro.png
-          
-      - name: Upload Debug Screenshot
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-screenshots
-          path: screenshot_before_maestro.png  
+        env:
+          TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
 
-      # 6. Ejecución del flujo unificado de Maestro
       - name: Run Maestro Tests
         run: |
-          echo "🧹 Preparando entorno limpio..."
+          echo "🧹 Terminando app previa..."
           xcrun simctl terminate "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids" 2>/dev/null || true
           sleep 2
-          
-          echo "📱 Intentando abrir la app manualmente..."
-          xcrun simctl launch "$TARGET_SIMULATOR_UUID" "com.fleon.fintechKids"
-          LAUNCH_EXIT_CODE=$?
-          echo "Exit code de launch: $LAUNCH_EXIT_CODE"
-          
-          if [ $LAUNCH_EXIT_CODE -ne 0 ]; then
-            echo "❌ ERROR: No se pudo abrir la app"
-            exit 1
-          fi
-          
-          sleep 10
-          
-          echo "📸 Verificando que la app esté en primer plano..."
-          xcrun simctl screenshot "$TARGET_SIMULATOR_UUID" screenshot_before_maestro.png
           
           echo "🤖 Iniciando Maestro..."
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=120000
@@ -168,7 +131,6 @@ jobs:
         env:
           TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
 
-      # 7 🕵️‍♂️ PASO EXTRA: Si el test falla, le metemos Rayos X a la pantalla
       - name: 🔍 Print UI Hierarchy on Failure
         if: failure()
         run: |
@@ -176,18 +138,18 @@ jobs:
           echo "🤖 REVISANDO QUÉ HAY EN LA PANTALLA EN ESTE MOMENTO..."
           echo "===================================================="
           maestro hierarchy
+        env:
+          TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
 
-      # 8 🔍 NUEVO PASO: Si Maestro falla, rescatamos los Logs de choque de Apple
       - name: 📋 Capture Simulator Crash Logs on Failure
         if: always()
         run: |
           mkdir -p simulator_logs
-          # 1. Copiamos los reportes de diagnóstico y crashes nativos de macOS
           cp -R ~/Library/Logs/DiagnosticReports/ simulator_logs/ || true
-          # 2. Volcamos los últimos 15 minutos del log del sistema del simulador
-          xcrun simctl spawn "${{ env.TARGET_SIMULATOR_UUID }}" log show --last 15m > simulator_logs/simulator_system.log || true
+          xcrun simctl spawn "$TARGET_SIMULATOR_UUID" log show --last 15m --predicate 'process contains "fintechKids"' > simulator_logs/simulator_system.log 2>&1 || true
+        env:
+          TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
 
-      # 9. Guardar tanto el reporte de Maestro como los logs del sistema
       - name: Upload Test Artifacts
         if: always()
         uses: actions/upload-artifact@v4
