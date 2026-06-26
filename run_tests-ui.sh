@@ -36,7 +36,7 @@ curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?member_name=eq.use
 echo "🏃 Ejecutando pruebas de Maestro en orden estricto..."
 # 🌟 LA MAGIA: Cambiamos a formato 'html-detailed'
 maestro test --format html-detailed --output report.html \
-  Maestro/flows/select-language.yaml \
+  Maestro/flows/smoke-test.yaml \
   Maestro/flows/make-login.yaml \
   Maestro/flows/create-new-member.yaml
 
