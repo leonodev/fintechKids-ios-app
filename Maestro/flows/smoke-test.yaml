@@ -3,22 +3,3 @@ appId: com.fleon.fintechKids
 - launchApp:
     appId: com.fleon.fintechKids
     clearState: true
-
-- extendedWaitUntil:
-    visible:
-        id: "select_language_title_id"
-    timeout: 60000
-
-- tapOn:
-    id: "menu_selected_language_id"
-
-- extendedWaitUntil:
-    visible:
-        id: "option_language_id"
-    timeout: 10000
-
-- tapOn:
-    id: "option_language_id"
-
-- tapOn:
-    id: "btn_language_continue_id"
