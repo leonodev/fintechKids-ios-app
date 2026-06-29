@@ -1,10 +1,25 @@
 appId: com.fleon.fintechKids
-config:
-    permissions:
-        all: allow
 ---
+
 - launchApp:
     clearState: true
+
+# Dar tiempo a que cargue lo que sea
+- waitForAnimationToEnd
+
+# Captura 1: nada más abrir
+- takeScreenshot: .maestro/screenshots/start
+
+- tapOn: 
+    text: "Permitir|Allow"
+
+
+# Esperar 5 segundos por si hay popups
+- swipe:
+    direction: UP
+
+# Captura 2: después de 5 segundos
+- takeScreenshot: .maestro/screenshots/after-5-seconds
 
 # Subimos a 30000ms (30s) para soportar el arranque en frío de la CI
 - extendedWaitUntil:

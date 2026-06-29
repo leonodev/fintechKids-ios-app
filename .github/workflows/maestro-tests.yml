@@ -127,7 +127,7 @@ jobs:
           
           maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
           --test-output-dir test-output \
-            Maestro/flows/smoke-test.yaml
+            .maestro/flows/select-language.yaml
         shell: /bin/bash -e {0}
         env:
           TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}

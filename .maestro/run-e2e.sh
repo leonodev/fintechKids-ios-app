@@ -33,12 +33,13 @@ curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?member_name=eq.use
   -H "apikey: ${SUPABASE_KEY}" \
   -H "Authorization: Bearer ${SUPABASE_KEY}"
 
+ 
+
 echo "🏃 Ejecutando pruebas de Maestro en orden estricto..."
-# 🌟 LA MAGIA: Cambiamos a formato 'html-detailed'
 maestro test --format html-detailed --output report.html \
-  Maestro/flows/smoke-test.yaml \
-  Maestro/flows/make-login.yaml \
-  Maestro/flows/create-new-member.yaml
+  .maestro/flows/select-language.yaml \
+  .maestro/flows/make-login.yaml \
+  .maestro/flows/create-new-member.yaml
 
 echo "📊 Abriendo el reporte detallado en tu navegador..." 
 if [ -f report.html ]; then
