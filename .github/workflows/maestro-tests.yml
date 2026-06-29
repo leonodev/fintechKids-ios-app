@@ -125,8 +125,9 @@ jobs:
           echo "🤖 Iniciando Maestro..."
           export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
           
-          maestro test --device "$TARGET_SIMULATOR_UUID" --format screenshot --output report.html \
-          Maestro/flows/smoke-test.yaml
+          maestro test --device "$TARGET_SIMULATOR_UUID" --format html-detailed --output report.html \
+          --test-output-dir test-output \
+            Maestro/flows/smoke-test.yaml
         shell: /bin/bash -e {0}
         env:
           TARGET_SIMULATOR_UUID: ${{ env.TARGET_SIMULATOR_UUID }}
@@ -155,4 +156,5 @@ jobs:
           name: maestro-and-system-results
           path: |
             report.html
+            test-output/
             simulator_logs/
