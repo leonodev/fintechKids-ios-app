@@ -24,3 +24,4 @@ fastlane/test_output
 swiftlint-report.json
 fintechKids.xcodeproj/project.xcworkspace/xcuserdata/fleon.xcuserdatad/UserInterfaceState.xcuserstate
 .maestro/screenshots
+report.html
