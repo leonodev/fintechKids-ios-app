@@ -4,8 +4,10 @@ appId: com.fleon.fintechKids
 - launchApp:
     clearState: true
 
-# Dar tiempo a que cargue lo que sea
-- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+        text: "Permitir|Allow"
+    timeout: 30000
 
 # Captura 1: nada más abrir
 - takeScreenshot: .maestro/screenshots/start
