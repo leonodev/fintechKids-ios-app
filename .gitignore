@@ -25,3 +25,5 @@ swiftlint-report.json
 fintechKids.xcodeproj/project.xcworkspace/xcuserdata/fleon.xcuserdatad/UserInterfaceState.xcuserstate
 .maestro/screenshots
 report.html
+.maestro/.maestro
+report.xml

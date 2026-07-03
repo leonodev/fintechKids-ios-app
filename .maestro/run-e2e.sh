@@ -37,9 +37,9 @@ curl -s -X DELETE "${SUPABASE_URL}/rest/v1/fhk_family_members?member_name=eq.use
 
 echo "🏃 Ejecutando pruebas de Maestro en orden estricto..."
 maestro test --format html-detailed --output report.html \
-  .maestro/flows/select-language.yaml \
-  .maestro/flows/make-login.yaml \
-  .maestro/flows/create-new-member.yaml
+  flows/select-language.yaml \
+  flows/make-login.yaml \
+  flows/create-new-member.yaml
 
 echo "📊 Abriendo el reporte detallado en tu navegador..." 
 if [ -f report.html ]; then
