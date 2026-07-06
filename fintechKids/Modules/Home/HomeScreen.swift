@@ -18,38 +18,40 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     @State var isOpen: Bool = false
     
     var body: some View {
-        VStack {
-            ScrollView {
-                /// section title bar and icon profile
-                headerView
-                /// section members of family
-                membersView
-                /// section rewards list
-                rewardsCollectedView
-                /// section goals list
-                goalMemberFamilyView
+        ScreenContainer {
+            VStack {
+                
+                ScrollView {
+                    /// section title bar and icon profile
+                    headerView
+                    /// section members of family
+                    membersView
+                    /// section rewards list
+                    rewardsCollectedView
+                    /// section goals list
+                    goalMemberFamilyView
+                }
+                .background(FHKColor.indigo)
+                .refreshable {
+                    loadAllInformation(isForce: true)
+                }
+                .fullScreenCover(isPresented: $showPermissions) {
+                    PermissionRequestView(provider: viewModel.fhkCameraPermission)
+                }
+                
+                Spacer()
+                if !viewModel.viewState.menuTabBarItems.isEmpty {
+                    botomBarView
+                }
             }
+            .ignoresSafeArea(edges: .bottom)
             .background(FHKColor.indigo)
-            .refreshable {
-                loadAllInformation(isForce: true)
+            .onAppear {
+                loadAllInformation(isForce: false)
+                //                if camaraPermissionManager.status != .authorized {
+                //                    showPermissions = true
+                //                }
             }
-            .fullScreenCover(isPresented: $showPermissions) {
-                PermissionRequestView(provider: viewModel.fhkCameraPermission)
-            }
- 
-            Spacer()
-            if !viewModel.viewState.menuTabBarItems.isEmpty {
-                botomBarView
-            }
-        }
-        .frame(maxHeight: .infinity)
-        .ignoresSafeArea()
-        .background(FHKColor.indigo)
-        .onAppear {
-            loadAllInformation(isForce: false)
-            //                if camaraPermissionManager.status != .authorized {
-            //                    showPermissions = true
-            //                }
         }
     }
     
