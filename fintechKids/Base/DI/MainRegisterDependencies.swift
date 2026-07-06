@@ -27,7 +27,15 @@ public class CommonsDependencies: FHKDependencies {
         inject.fhkStorage = storage
 
         /// FHKFirebase
+#if DEBUG
+        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
+            inject.fhkFirebaseRemoteConfig = FHKRemoteConfigServiceMock()
+        } else {
+            inject.fhkFirebaseRemoteConfig = FHKRemoteConfigService()
+        }
+        #else
         inject.fhkFirebaseRemoteConfig = FHKRemoteConfigService()
+        #endif
         inject.fhkFirebaseAnalitycs = FHKAnalyticsService()
         
         /// FHKAuth

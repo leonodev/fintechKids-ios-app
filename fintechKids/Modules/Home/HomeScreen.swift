@@ -18,34 +18,35 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     @State var isOpen: Bool = false
     
     var body: some View {
-        ScreenContainer(title: Routes.Titles.home) {
+        VStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    headerView
-                    
-                    membersView
-                       
-                    rewardsCollectedView
-                        
-                    goalMemberFamilyView
-                }
+                /// section title bar and icon profile
+                headerView
+                /// section members of family
+                membersView
+                /// section rewards list
+                rewardsCollectedView
+                /// section goals list
+                goalMemberFamilyView
             }
-            .safeAreaInset(edge: .bottom) {
-                if !viewModel.viewState.menuTabBarItems.isEmpty {
-                    botomBarView
-                }
-            }
+            .background(FHKColor.indigo)
             .refreshable {
                 loadAllInformation(isForce: true)
             }
             .fullScreenCover(isPresented: $showPermissions) {
                 PermissionRequestView(provider: viewModel.fhkCameraPermission)
             }
+ 
+            Spacer()
+            if !viewModel.viewState.menuTabBarItems.isEmpty {
+                botomBarView
+            }
         }
+        .frame(maxHeight: .infinity)
+        .ignoresSafeArea()
         .background(FHKColor.indigo)
         .onAppear {
             loadAllInformation(isForce: false)
-            
             //                if camaraPermissionManager.status != .authorized {
             //                    showPermissions = true
             //                }
@@ -169,7 +170,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
                                             total: Double(goal.rewardsSystemValue),
                                             title: goal.nameGoal.uppercased(),
                                             workType: goal.rewardsSystemType,
-                                            action: { id in
+                                            action: { _ in
                             })
                             .isHidden(viewModel.goalMemberList.isEmpty)
                         }
@@ -189,16 +190,13 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     }
     
     var botomBarView: some View {
-        ZStack {
-            VStack {
-                Spacer()
-                
-                FHKBottomBarContainer(items: viewModel.viewState.menuTabBarItems, selectedIndex: $selectedMenuTabBarIndex) { item in
-                    print("Click en \(item.title)")
-                } floatingButton: {
-                    floatMenuView
-                }
-            }
+        FHKBottomBarContainer(
+            items: viewModel.viewState.menuTabBarItems,
+            selectedIndex: $selectedMenuTabBarIndex
+        ) { item in
+            print("Click en \(item.title)")
+        } floatingButton: {
+            floatMenuView
         }
     }
     
@@ -258,8 +256,9 @@ private extension HomeScreen {
 }
 
 #Preview {
-    VStack {
-        HomeScreen(viewModel: HomeScreenVM())
+    PreviewMockContainer {
+        VStack {
+            HomeScreen(viewModel: HomeScreenVM())
+        }
     }
-    .background(FHKColor.indigo)
 }
