@@ -18,7 +18,7 @@ struct HomeScreen<VM: HomeScreenVM>: View {
     @State var isOpen: Bool = false
     
     var body: some View {
-        ScreenContainer {
+        ScreenContainer(title: Routes.Titles.home) {
             VStack {
                 
                 ScrollView {
