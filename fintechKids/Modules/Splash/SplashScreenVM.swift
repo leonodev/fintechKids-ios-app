@@ -15,7 +15,7 @@ final class SplashScreenVM: FHKCore.ViewModel {
     var viewState: SplashViewState = .init()
     
     // Properties Injected
-    private var fhkSplashRepository: any FHKSplashRepositoryProtocol {
+    private var fhkSplashRepository: FHKSplashRepository {
         inject.fhkSplashRepository
     }
     

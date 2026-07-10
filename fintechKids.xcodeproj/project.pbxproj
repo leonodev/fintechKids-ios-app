@@ -28,8 +28,8 @@
 		A3275D9C2FBB4FFA00622CB4 /* FHKDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = A3275D9B2FBB4FFA00622CB4 /* FHKDesignSystem */; };
 		A3275DA12FBB50F500622CB4 /* FHKSupabase in Frameworks */ = {isa = PBXBuildFile; productRef = A3275DA02FBB50F500622CB4 /* FHKSupabase */; };
 		A3275DA42FBB56F900622CB4 /* FHKFirebase in Frameworks */ = {isa = PBXBuildFile; productRef = A3275DA32FBB56F900622CB4 /* FHKFirebase */; };
-		A34593CB2FD2BF3A0094AF35 /* FHK-Dev.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = A34593CA2FD2BF3A0094AF35 /* FHK-Dev.xctestplan */; };
 		A3499B4C2FE0455900206A1F /* FHKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A3499B4B2FE0455900206A1F /* FHKAuth */; };
+		A3812D7E300101B6008B3896 /* FHKUnitTest.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = A3812D7D300101B6008B3896 /* FHKUnitTest.xctestplan */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,7 +68,7 @@
 		5D30BFB72EC1E6FB005C42B4 /* fintechKids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fintechKids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30BFC42EC1E6FE005C42B4 /* fintechKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D30BFCE2EC1E6FE005C42B4 /* fintechKidsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fintechKidsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A34593CA2FD2BF3A0094AF35 /* FHK-Dev.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FHK-Dev.xctestplan"; sourceTree = "<group>"; };
+		A3812D7D300101B6008B3896 /* FHKUnitTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FHKUnitTest.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -79,13 +79,6 @@
 				"Modules/Rewards/Collect/String+Time.swift.swift",
 			);
 			target = 5D30BFB62EC1E6FB005C42B4 /* fintechKids */;
-		};
-		A3D556A62FD6D74C000F2496 /* Exceptions for "fintechKidsTests" folder in "fintechKidsTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Modules/Splash/Mocks/Untitled.swift,
-			);
-			target = 5D30BFC32EC1E6FE005C42B4 /* fintechKidsTests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -100,9 +93,6 @@
 		};
 		5D30BFC72EC1E6FE005C42B4 /* fintechKidsTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A3D556A62FD6D74C000F2496 /* Exceptions for "fintechKidsTests" folder in "fintechKidsTests" target */,
-			);
 			path = fintechKidsTests;
 			sourceTree = "<group>";
 		};
@@ -160,7 +150,7 @@
 		5D30BFAE2EC1E6FB005C42B4 = {
 			isa = PBXGroup;
 			children = (
-				A34593CA2FD2BF3A0094AF35 /* FHK-Dev.xctestplan */,
+				A3812D7D300101B6008B3896 /* FHKUnitTest.xctestplan */,
 				5D1100482EF6B60000F606E6 /* Localizable.xcstrings */,
 				5D03F5772EE9D5F2001FB7F9 /* GoogleService-Info.plist */,
 				5D03F3B22EE49BC3001FB7F9 /* FHKIcon.icon */,
@@ -343,7 +333,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D1100CE2EFBF88500F606E6 /* Localizable.xcstrings in Resources */,
-				A34593CB2FD2BF3A0094AF35 /* FHK-Dev.xctestplan in Resources */,
 				5D03F3B32EE49BC3001FB7F9 /* FHKIcon.icon in Resources */,
 				5D03F5782EE9D5F2001FB7F9 /* GoogleService-Info.plist in Resources */,
 			);
@@ -353,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3812D7E300101B6008B3896 /* FHKUnitTest.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

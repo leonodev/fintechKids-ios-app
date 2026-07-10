@@ -21,7 +21,7 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
-    public var fhkToast: any FHKToastProtocol {
+    public var fhkToast: FHKToast {
         inject.fhkToast
     }
     
@@ -51,7 +51,7 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
     }
     
     func displayNotification(message: String, type: ToastType = .warning) {
-        fhkToast.show(info: viewState.toastInfo(msn: message, type: type))
+        fhkToast.show(viewState.toastInfo(msn: message, type: type))
     }
 }
 

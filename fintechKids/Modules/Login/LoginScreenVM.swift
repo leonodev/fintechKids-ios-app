@@ -17,11 +17,11 @@ final class LoginScreenVM: FHKCore.ViewModel {
     var viewState: LoginViewState = .init()
     
     // Properties injected
-    private var fhkLoginRepository: any FHKLoginRepositoryProtocol {
+    private var fhkLoginRepository: FHKLoginRepository {
         inject.fhkLoginRepository
     }
     
-    private var fhkRegisterRepository: any RegisterRepositoryProtocol {
+    private var fhkRegisterRepository: FHKRegisterRepository {
         inject.fhkRegisterRepository
     }
     
@@ -29,11 +29,11 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkFirebaseAnalitycs
     }
     
-    private var fhkSecurity: any FHKSecurityProtocol {
+    private var fhkSecurity: FHKSecurity {
         inject.fhkSecurity
     }
     
-    public var fhkToast: any FHKToastProtocol {
+    public var fhkToast: FHKToast {
         inject.fhkToast
     }
     
@@ -47,7 +47,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
     
     // Other properties
     var hasSavedAuthToken: Bool {
-        fhkLoginRepository.hasSavedToken
+        fhkLoginRepository.hasSavedToken()
     }
     
     // Others Properties
@@ -56,7 +56,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
     }
     
     var biometryIconName: String {
-        fhkSecurity.biometryIcon
+        fhkSecurity.biometryIcon()
     }
     
     enum Action: Equatable {
@@ -86,7 +86,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
         
         do {
             let loginEntity = LoginEntity(email: viewState.email, password: viewState.password)
-            let userSession = try await fhkLoginRepository.login(loginEntity: loginEntity)
+            let userSession = try await fhkLoginRepository.login(loginEntity)
 
             guard let tokenAccess = userSession?.accessToken, !tokenAccess.isEmpty else {
                 informateError(FHKLoginError.accessTokenInvalid)
@@ -110,13 +110,19 @@ final class LoginScreenVM: FHKCore.ViewModel {
             }
 
             do {
-                try fhkRegisterRepository.saveFamilyInfoKeychain(familyName: familyName)
+                try fhkRegisterRepository.saveFamilyInfoKeychain(familyName)
             } catch {
                 informateError(FHKLoginError.familyNameInvalid)
                 return
             }
             
-            try await fhkLoginRepository.savePinApproveTask(pin: pinToApprovedTask)
+            do {
+                try await fhkLoginRepository.savePinApproveTask(pinToApprovedTask)
+            } catch {
+                informateError(FHKLoginError.pinApproveInvalid)
+                return
+            }
+            
             guard await saveUserIntoKeychain() else {
                 return
             }
@@ -137,15 +143,14 @@ final class LoginScreenVM: FHKCore.ViewModel {
         let prompt = getBiometryPrompt(biometryType: fhkSecurity.getBiometryType())
         
         do {
-            try await fhkLoginRepository.loginWithBiometrics(prompt: prompt)
+            try await fhkLoginRepository.loginWithBiometrics(prompt)
             viewState.loginState = .finish(result: .success)
         } catch let error as FHKSupabaseError {
             viewState.loginState = .finish(result: .error)
             informateError(error)
         } catch {
-            let fhkError = error as? any FHKError ?? FHKAppError.biometryCancelAuthentication
             viewState.loginState = .finish(result: .error)
-            informateError(fhkError)
+            informateError(FHKAppError.biometryAuthenticationFailed)
         }
     }
     
@@ -164,7 +169,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
 
     private func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) -> Bool {
         do {
-            try fhkLoginRepository.saveAuthToken(tokenAccess, requiresBiometry: isHasBiometry)
+            try fhkLoginRepository.saveAuthToken(tokenAccess, isHasBiometry)
             return true
         } catch {
             viewState.loginState = .finish(result: .error)
@@ -175,7 +180,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
     
     func saveUserIntoKeychain() async -> Bool {
         do {
-            try await fhkLoginRepository.saveUserIntoKeychain(email: viewState.email)
+            try await fhkLoginRepository.saveUserIntoKeychain(viewState.email)
             Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
             return true
         } catch {
@@ -199,6 +204,6 @@ final class LoginScreenVM: FHKCore.ViewModel {
     }
     
     private func showToast(info: FHKToastInfo) async {
-        fhkToast.show(info: info, duration: 5.0)
+        fhkToast.show(info, duration: 5.0)
     }
 }

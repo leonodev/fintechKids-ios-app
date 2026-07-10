@@ -14,13 +14,12 @@ import FHKUtils
 
 @MainActor
 @Observable
-final class ToastService: NSObject, ApplicationService, FHKToastProtocol {
-    var currentToast: FHKToastInfo?
-    var isVisible: Bool = false
+public final class ToastService: NSObject, ApplicationService {
+    public var currentToast: FHKToastInfo?
+    public var isVisible: Bool = false
     private var dismissalTask: Task<Void, Never>?
 
-    /// Displays a slice of toast with a specific setting and duration.
-    func show(info: FHKToastInfo, duration: Double = 5.0) {
+    public func show(info: FHKToastInfo, duration: Double) {
         dismissalTask?.cancel()
 
         self.currentToast = info
@@ -37,8 +36,7 @@ final class ToastService: NSObject, ApplicationService, FHKToastProtocol {
         }
     }
     
-    /// Oculta el toast inmediatamente
-    func dismiss() {
+    public func dismiss() {
         dismissalTask?.cancel()
         dismissalTask = nil
         
@@ -48,8 +46,8 @@ final class ToastService: NSObject, ApplicationService, FHKToastProtocol {
     }
 }
 
-public extension FHKToastProtocol {
-    func show(info: FHKToastInfo, duration: Double = 5.0) {
-        self.show(info: info, duration: duration)
+extension FHKToast {
+    public func show(_ info: FHKToastInfo, duration: Double = 5.0) {
+        self.show(info, duration)
     }
 }

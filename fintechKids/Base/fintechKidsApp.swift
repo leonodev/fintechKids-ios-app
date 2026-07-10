@@ -10,6 +10,7 @@ import FHKCore
 import FHKInjections
 import FHKDesignSystem
 import FHKDomain
+import FHKStorage
 
 @main
 struct FintechKidsApp: App {
@@ -18,7 +19,7 @@ struct FintechKidsApp: App {
     @State private var appRouter = NavigationRouter<Routes>()
     private let deepLinkProcessor: DeepLinkRouterProtocol = DeepLinkRouter()
     
-    private var fhkToast: any FHKToastProtocol {
+    private var fhkToast: FHKToast {
         inject.fhkToast
     }
     
@@ -26,7 +27,7 @@ struct FintechKidsApp: App {
         inject.fhkModal
     }
     
-    private var fhkStorage: any FHKStorageManagerProtocol {
+    private var fhkStorage: FHKStorageManager {
         inject.fhkStorage
     }
     
@@ -67,10 +68,10 @@ struct FintechKidsApp: App {
                 .animation(.default, value: appState.isJailbroken)
                 
                 VStack {
-                    if fhkToast.isVisible, let info = fhkToast.currentToast {
+                    if fhkToast.isVisible(), let info = fhkToast.currentToast() {
                         ToastView(
                             isVisible: Binding(
-                                get: { fhkToast.isVisible },
+                                get: { fhkToast.isVisible() },
                                 set: { _ in fhkToast.dismiss() }
                             ),
                             info: info

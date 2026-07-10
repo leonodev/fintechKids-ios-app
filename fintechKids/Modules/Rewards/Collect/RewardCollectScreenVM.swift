@@ -42,7 +42,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
-    public var fhkToast: any FHKToastProtocol {
+    public var fhkToast: FHKToast {
         inject.fhkToast
     }
     
@@ -289,7 +289,7 @@ private extension RewardCollectScreenVM {
     }
     
     func displayNotification(message: String, type: ToastType = .warning) {
-        fhkToast.show(info: viewState.toastInfo(msn: message, type: type))
+        fhkToast.show(viewState.toastInfo(msn: message, type: type))
     }
     
     private func handleBalanceError(_ error: Error) {

@@ -16,7 +16,7 @@ final class ProfileRepository: FHKProfileRepositoryProtocol {
         inject.fhkSupabase
     }
     
-    private var fhkStorage: any FHKStorageManagerProtocol {
+    private var fhkStorage: FHKStorageManager {
         inject.fhkStorage
     }
     

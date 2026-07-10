@@ -22,52 +22,100 @@ public class ModulesDependencies: FHKDependencies {
     
     @MainActor
     static func register() throws {
-        
         /// Main App (fhkLanguage Depend of Storage)
-        inject.fhkLanguage = FHKLanguageManager()
-        inject.fhkLanguageRepository = LanguageRepository()
-        inject.fhkCameraPermission = CameraPermissionService()
+        /// FHKLanguage
+        inject.register((any FHKLanguageManagerProtocol).self,
+                        standard: { FHKLanguageManager() }
+        )
+        
+        /// FHKLanguage
+        inject.register((any FHKLanguageRepositoryProtocol).self,
+                        standard: { LanguageRepository() }
+        )
+        
+        /// CameraPermissionService
+        inject.register((any FHKPermissionProtocol).self,
+        standard: { CameraPermissionService() }
+        )
     
         /// Main App / Modules / Login
-        inject.fhkLoginRepository = LoginRepository()
+        inject.register(FHKLoginRepository.self,
+                        standard: { .live },
+                        testing: { .test }
+        )
         
         /// Main App / Modules / Splash
-        inject.fhkSplashRepository = SplashRepository()
+        inject.register(FHKSplashRepository.self,
+                        standard: { .live },
+                        preview: { .preview },
+                        testing: { .test }
+        )
         
         /// Main App / Modules / Register
-        inject.fhkRegisterRepository = RegisterRepository()
+        inject.register(FHKRegisterRepository.self,
+                        standard: { .live },
+                        testing: { .test }
+        )
         
         /// Main App / Modules / Register Members
-        inject.fhkRegisterMembersRepository = RegisterMembersRepository()
+        inject.register((any FHKRegisterMembersRepositoryProtocol).self,
+                        standard: { RegisterMembersRepository() }
+        )
 
         /// Main App / Modules / Home
-        inject.fhkHomeRepository = HomeRepository()
-        
+        inject.register((any FHKHomeRepositoryProtocol).self,
+                        standard: { HomeRepository() }
+        )
+                                        
         /// Main App / Modules / Profile
-        inject.fhkProfileRepository = ProfileRepository()
+        inject.register((any FHKProfileRepositoryProtocol).self,
+                        standard: { ProfileRepository() }
+        )
         
         /// Main App / Modules / Members
         let supabaseClientMembers = try makeSupabaseClient()
-        inject.fhkSupabaseMembers = FHKSupabaseMembers(supabaseClient: supabaseClientMembers)
+        inject.register((any FHKSupabaseMembersProtocol).self,
+                        standard: { FHKSupabaseMembers(supabaseClient: supabaseClientMembers) }
+        )
         
         // Main App / Modules / Task
         let supabaseClient = try makeSupabaseClient()
-        inject.fhkSupabaseTask = FHKSupabaseTask(supabaseClient: supabaseClient)
-        inject.fhkTasksRepository = TasksRepository()
+        inject.register((any FHKSupabaseTaskProtocol).self,
+                        standard: { FHKSupabaseTask(supabaseClient: supabaseClient) }
+        )
+        
+        inject.register((any FHKTasksRepositoryProtocol).self,
+                        standard: { TasksRepository() }
+        )
         
         // Main App / Modules / Goal
         let supabaseClientGoal = try makeSupabaseClient()
-        inject.fhkSupabaseGoal = FHKSupabaseGoals(supabaseClient: supabaseClientGoal)
-        inject.fhkGoalsRepository = GoalRepository()
+        inject.register((any FHKSupabaseGoalProtocol).self,
+                        standard: { FHKSupabaseGoals(supabaseClient: supabaseClientGoal) }
+        )
         
+        inject.register((any FHKGoalRepositoryProtocol).self,
+                        standard: { GoalRepository() }
+        )
+
         // Main App / Modules / Balance
         let supabaseClientBalance = try makeSupabaseClient()
-        inject.fhkSupabaseBalance = FHKSupabaseBalance(supabaseClient: supabaseClientBalance)
-        inject.fhkBalanceRepository = BalanceRepository()
+        inject.register((any FHKSupabaseBalanceProtocol).self,
+                        standard: { FHKSupabaseBalance(supabaseClient: supabaseClientBalance) }
+        )
+       
+        inject.register((any FHKBalanceRepositoryProtocol).self,
+                        standard: { BalanceRepository() }
+        )
         
         // Main App / Modules / Rewards
         let supabaseClientRewards = try makeSupabaseClient()
-        inject.fhkSupabaseRewards = FHKSupabaseRewards(supabaseClient: supabaseClientRewards)
-        inject.fhkRewardsRepository = RewardCollectRepository()
+        inject.register((any FHKSupabaseRewardsProtocol).self,
+                        standard: { FHKSupabaseRewards(supabaseClient: supabaseClientRewards) }
+        )
+        
+        inject.register((any FHKRewardRepositoryProtocol).self,
+                        standard: { RewardCollectRepository() }
+        )
     }
 }

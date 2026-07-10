@@ -21,7 +21,7 @@ final class RegisterScreenVM: FHKCore.ViewModel {
         inject.fhkFirebaseAnalitycs
     }
     
-    private var fhkRegisterRepository: any RegisterRepositoryProtocol {
+    private var fhkRegisterRepository: FHKRegisterRepository {
         inject.fhkRegisterRepository
     }
     
@@ -57,9 +57,9 @@ final class RegisterScreenVM: FHKCore.ViewModel {
                                                         password: viewState.password,
                                                         familyName: viewState.familyName,
                                                         approvePIN: viewState.pinApproveTask)
-            let response = try await fhkRegisterRepository.register(registerEntity: registerUserEntity)
+            let response = try await fhkRegisterRepository.register(registerUserEntity)
             
-            try fhkRegisterRepository.saveFamilyInfoKeychain(familyName: viewState.familyName)
+            try fhkRegisterRepository.saveFamilyInfoKeychain(viewState.familyName)
             
             viewState.registerState = .finish(result: .success)
             Logger.info("USER REGISTERED SUCCESS \(response)")

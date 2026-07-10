@@ -5,41 +5,57 @@
 //  Created by fleon  on 8/6/26.
 //
 
-import XCTest
+import Testing
 import FHKInjections
 import FHKDomain
 @testable import fintechKids
 internal import FHKCore
+internal import FHKStorage
 
 @MainActor
-final class SplashRepositoryTest: XCTestCase {
-    
-    func test_when_read_preview_language_selected_then_return_language() async throws {
-        let storageMock = StorageManagerMock()
-        
+@Suite("Splash")
+struct SplashRepositoryTest {
+    //<verbo/resultado>_<condición>()
+    @Test("Return language previous selected and saved",
+          .tags(.language))
+    func readPreviewLanguageSelected_thenReturnLanguage() async throws {
+        let splashSpy = CallTracker()
+
         try await inject.withOverrides {
-            try await storageMock.saveUserDefaults("ES", forKey: "dummyKey")
-            inject.fhkStorage = storageMock
+            inject.fhkStorage = FHKStorageManager.test
             
-            let sut = SplashRepository()
+            let sut = FHKSplashRepository.live
             let language = try await sut.readLanguageCurrent()
+            splashSpy.increment()
             
-            XCTAssertTrue(storageMock.isCalledSaveUserDefaults)
-            XCTAssertTrue(storageMock.mockStoredValue as? String == language)
+            #expect(language == "EN")
+            #expect(splashSpy.isCalled)
+            #expect(splashSpy.callCount == 1)
         }
     }
     
+    @Test("Return nil if user not selected language previously",
+          .tags(.language))
     func test_when_language_no_has_selected_then_return_nil() async throws {
-        let storageMock = StorageManagerMock()
+        let splashSpy = CallTracker()
         
+        var mockStorage = FHKStorageManager.test
         try await inject.withOverrides {
-            inject.fhkStorage = storageMock
+            inject.fhkStorage = mockStorage
             
-            let sut = SplashRepository()
+            mockStorage.readUserDefaultsData = { _ in
+                splashSpy.increment()
+                return nil // We return whatever we want.
+            }
+            
+            inject.fhkStorage = mockStorage
+            let sut = FHKSplashRepository.live
+            
             let language = try await sut.readLanguageCurrent()
             
-            XCTAssertTrue(storageMock.isCalledReadUserDefaults)
-            XCTAssertNil(language)
+            #expect(language == nil)
+            #expect(splashSpy.isCalled)
+            #expect(splashSpy.callCount == 1)
         }
     }
 }

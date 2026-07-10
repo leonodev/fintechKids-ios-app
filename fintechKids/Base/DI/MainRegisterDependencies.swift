@@ -20,45 +20,72 @@ public class CommonsDependencies: FHKDependencies {
     
     @MainActor
     static func register() throws {
-        let storage = FHKStorageManager(userDefault: FHKUserDefault(),
-                                        keychain: FHKKeychainStorage())
-
-        /// FHKStorage
-        inject.fhkStorage = storage
-
-        /// FHKFirebase
-#if DEBUG
-        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-            inject.fhkFirebaseRemoteConfig = FHKRemoteConfigServiceMock()
-        } else {
-            inject.fhkFirebaseRemoteConfig = FHKRemoteConfigService()
-        }
-        #else
-        inject.fhkFirebaseRemoteConfig = FHKRemoteConfigService()
-        #endif
-        inject.fhkFirebaseAnalitycs = FHKAnalyticsService()
+        // Register Base dependencies
         
+        /// FHKServicesAPI
+        inject.register((any FHKServicesAPIProtocol).self,
+                        standard: { FHKServicesAPI() }
+        )
+        
+        /// FHKSecurity
+        inject.register(FHKSecurity.self,
+                        standard: { .live },
+                        testing: { .test }
+        )
+        
+        /// FHKStorage
+        inject.register(FHKStorageManager.self,
+                        standard: { .live(userDefault: FHKUserDefault(), keychain: FHKKeychainStorage()) },
+                        testing: { .test }
+        )
+        
+        /// FHKConfiguration
+        inject.register((any FHKConfigurationProtocol).self,
+                        standard: { FHKConfiguration() }
+        )
+        
+        /// FHKFirebase
+        inject.register((any FHKRemoteConfigManagerProtocol).self,
+                        standard: { FHKRemoteConfigService() },
+                        preview: { FHKRemoteConfigServiceMock() },
+                        testing: { FHKRemoteConfigServiceMock() }
+        )
+
         /// FHKAuth
-        inject.fhkSecurity = FHKSecurity()
+        inject.register((any FHKAnalyticsProtocol).self,
+                        standard: { FHKAnalyticsService() }
+        )
         
         /// FHKConfig
-        inject.fhkConfiguration = FHKConfiguration()
+        inject.register((any FHKConfigurationProtocol).self,
+                        standard: { FHKConfiguration() }
+        )
         
-        // FHKCore
-        inject.fhkServicesAPI = FHKServicesAPI()
-           
+        // FHKServices
+        inject.register((any FHKServicesAPIProtocol).self,
+                        standard: { FHKServicesAPI() }
+        )
+        
         // FHKAuth
         let supabaseClient = try makeSupabaseClient()
-        inject.fhkSupabase = FHKSupabase(client: supabaseClient)
+        inject.register((any FHKAuthProtocol).self,
+                        standard: { FHKSupabase(client: supabaseClient) }
+        )
         
         /// FHKDesignSystem
-        inject.fhkModal = FHKModal()
+        inject.register((any FHKModalProtocol).self,
+                        standard: { FHKModal() }
+        )
         
         /// Main App
-        inject.fhkToast = ToastService()
-        
+        inject.register(FHKToast.self,
+                        standard: { .live }
+        )
+
         /// Session Manager User
-        inject.fhkSessionManager = FHKSessionManager()
+        inject.register((any FHKSessionManagerProtocol).self,
+                        standard: { FHKSessionManager() }
+        )
     }
 }
 

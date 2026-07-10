@@ -18,7 +18,7 @@ public final class FHKLanguageManager: FHKLanguageManagerProtocol {
     public var currentBundle: Bundle = .main
     
     // Properties inject
-    private var storageManager: any FHKStorageManagerProtocol {
+    private var storageManager: FHKStorageManager {
         inject.fhkStorage
     }
     

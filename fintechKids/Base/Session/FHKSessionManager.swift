@@ -9,13 +9,14 @@ import Foundation
 import Observation
 import FHKDomain
 import FHKInjections
+import FHKStorage
 
 @Observable
 public final class FHKSessionManager: FHKSessionManagerProtocol {
     public var isAuthenticated: Bool = false
     private let authKey = UserDefaultsKeys.isUserAutenicatedKey
     
-    private var fhkStorage: any FHKStorageManagerProtocol {
+    private var fhkStorage: FHKStorageManager {
         inject.fhkStorage
     }
 

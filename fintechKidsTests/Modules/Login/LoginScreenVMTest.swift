@@ -5,7 +5,7 @@
 //  Created by fleon  on 8/6/26.
 //
 
-import XCTest
+import Testing
 import FHKInjections
 import FHKDomain
 import Supabase
@@ -13,332 +13,607 @@ import SwiftUI
 @testable import fintechKids
 internal import FHKCore
 internal import FHKUtils
+internal import FHKStorage
+
 
 @MainActor
-final class LoginScreenVMTest: XCTestCase {
-    var loginRepositoryMock: LoginRepositoryMock!
-    var toastMock: ToastMock!
-    var modalMock: ModalMock!
-    var securityMock: SecurityMock!
+struct LoginScreenVMTest {
     
-    
-    private func setupMocks() {
-        loginRepositoryMock = LoginRepositoryMock()
-        toastMock = ToastMock()
-        modalMock = ModalMock()
-        securityMock = SecurityMock(type: .none)
-    }
-    
-    func test_when_login_successfully_then_return_access_token() async throws {
-        setupMocks()
+    @Test("Return access token after login successfully",
+          .tags(.login))
+    func loginSuccessfully_then_returnAccessToken() async throws {
+        let loginSpy = CallTracker()
+        let registerSpy = CallTracker()
 
         await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessMock()
+            }
+            
+            var mockRegisterRepository = inject.fhkRegisterRepository
+            mockRegisterRepository.saveFamilyInfoKeychain = { _ in
+                registerSpy.increment()
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
+            inject.fhkRegisterRepository = mockRegisterRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLogin)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .success))
-            XCTAssertTrue(loginRepositoryMock.isCalledLogin)
-            XCTAssertNil(loginRepositoryMock.errorLoginToThrow)
+            #expect(sut.viewState.loginState == .finish(result: .success))
+            
+            // Asserts del repositorio de Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts del repositorio de Register
+            #expect(registerSpy.isCalled)
+            #expect(registerSpy.callCount == 1)
         }
     }
     
-    func test_when_login_supabase_failed_then_return_error() async throws {
-        setupMocks()
+    @Test("Informate error when login not has access token valid",
+          .tags(.login))
+    func informateError_whenLoginSuccessNotHasAccessTokenValid() async throws {
+        let loginSpy = CallTracker()
 
         await inject.withOverrides {
-            loginRepositoryMock.errorLoginToThrow = FHKSupabaseError.invalidCredentials(context: nil)
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessWithInvalidTokenMock()
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLogin)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .error))
-            XCTAssertTrue(loginRepositoryMock.isCalledLogin)
-            XCTAssertNil(loginRepositoryMock.sessionToReturn)
-            XCTAssertEqual(sut.viewState.msnLoginFail, "invalid_credentials_error".localized())
+            #expect(loginSpy.callCount == 1)
+            #expect(loginSpy.isCalled)
+            #expect(sut.viewState.msnLoginFail == FHKLoginError.accessTokenInvalid.messageLocalized)
         }
     }
     
-    func test_when_login_successfully_then_msn_error_to_save_token() async throws {
-        setupMocks()
+    @Test("Return Error type FHKSupabaseError when login in Supabase failed",
+          .tags(.login))
+    func loginSupabaseFailed_thenReturnSupabaseError() async throws {
+        let loginSpy = CallTracker()
 
         await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            loginRepositoryMock.errorSaveTokenToThrow = FHKAppError.saveTokenAccessKeychainFailed
+            configureDefaultMocks()
             
-            inject.fhkLoginRepository = loginRepositoryMock
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                throw FHKSupabaseError.invalidCredentials(context: nil)
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLogin)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .error))
-            XCTAssertTrue(loginRepositoryMock.isCalledSaveAuthToken)
-            XCTAssertEqual(loginRepositoryMock.isCalledSaveAuthTokenCount, 1)
-            XCTAssertNotNil(loginRepositoryMock.errorSaveTokenToThrow)
-            XCTAssertEqual(sut.viewState.msnLoginFail, "msn_proccessing_information_secure".localized())
+            #expect(sut.viewState.loginState == .finish(result: .error))
+            #expect(loginSpy.callCount == 1)
+            #expect(loginSpy.isCalled)
+            #expect(sut.viewState.msnLoginFail == FHKSupabaseError.invalidCredentials(context: nil).messageLocalized)
         }
     }
     
-    func test_when_login_successfully_then_error_to_save_user_into_keychain() async throws {
-        setupMocks()
+    @Test("Return Error of type FHKLoginError when login in Supabase failed with error Unknown",
+          .tags(.login))
+    func loginSupabaseFailed_thenReturnGenericeError() async throws {
+        let loginSpy = CallTracker()
 
         await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            loginRepositoryMock.errorSaveUserKeyChainToThrow = FHKAppError.saveUserMailKeychainFailed
+            configureDefaultMocks()
             
-            inject.fhkLoginRepository = loginRepositoryMock
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                throw FHKLoginError.loginUserFailed
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLogin)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .error))
-            XCTAssertTrue(loginRepositoryMock.isCalledSaveUserIntoKeychain)
-            XCTAssertEqual(loginRepositoryMock.isCalledSaveUserIntoKeychainCount, 1)
-            XCTAssertNotNil(loginRepositoryMock.errorSaveUserKeyChainToThrow)
+            #expect(sut.viewState.loginState == .finish(result: .error))
+            #expect(loginSpy.callCount == 1)
+            #expect(loginSpy.isCalled)
+            #expect(sut.viewState.msnLoginFail == FHKLoginError.loginUserFailed.messageLocalized)
         }
     }
     
-    func test_when_login_successfully_then_error_save_pin_task_aproved() async throws {
-        setupMocks()
-
+    
+    @Test("Return Error if login successfully but save session token failed",
+          .tags(.login))
+    func loginSuccessfully_then_msnErrorToSaveSessionToken() async throws {
+        let loginSpy = CallTracker()
+        let saveTokenSpy = CallTracker()
+    
         await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            loginRepositoryMock.errorSavePinToThrow = FHKLoginError.pinApproveInvalid
+            configureDefaultMocks()
             
-            inject.fhkLoginRepository = loginRepositoryMock
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessMock()
+            }
+
+            mockLoginRepository.saveAuthToken = { _, _ in
+                saveTokenSpy.increment()
+                throw FHKAppError.saveTokenAccessKeychainFailed
+            }
+
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLogin)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .error))
-            XCTAssertTrue(loginRepositoryMock.isCalledSavePinApproveTask)
-            XCTAssertEqual(loginRepositoryMock.isCalledSavePinApproveTaskCount, 1)
-            XCTAssertNotNil(loginRepositoryMock.errorSavePinToThrow)
+            #expect(sut.viewState.loginState == .finish(result: .error))
+            
+            // Asserts del repositorio de Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts attemp save token by fail
+            #expect(saveTokenSpy.isCalled)
+            #expect(saveTokenSpy.callCount == 1)
         }
     }
     
-    func test_when_login_successfully_then_pin_task_aproved_no_exist() async throws {
-        setupMocks()
-
+    @Test("Return Error if login successfully but save family name is invalid",
+          .tags(.login))
+    func loginSuccessfully_then_msnErrorToSaveFamilyName() async throws {
+        let loginSpy = CallTracker()
+    
         await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccessWithoutPIN()
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessWithoutFamilyNameMock()
+            }
+
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLogin)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .success))
-            XCTAssertEqual(sut.viewState.msnLoginFail, "msn_generic_error".localized())
+            // Asserts del repositorio de Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts display error to user
+            #expect(sut.viewState.msnLoginFail == FHKLoginError.familyNameInvalid.messageLocalized)
         }
     }
     
-    func test_when_login_successfully_then_access_token_not_exist() async throws {
-        setupMocks()
-
+    @Test("Informate Error with login successfully but save family into keychain failed",
+          .tags(.login))
+    func loginSuccessfully_thenErrorToSaveFamilyNameKeychain() async throws {
+        let loginSpy = CallTracker()
+        let saveFamilyNameKeychainSpy = CallTracker()
+    
         await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccessWithoutToken()
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessMock()
+            }
+            
+            var mockRegisterRepository = inject.fhkRegisterRepository
+            mockRegisterRepository.saveFamilyInfoKeychain = { _ in
+                saveFamilyNameKeychainSpy.increment()
+                throw FHKLoginError.familyNameInvalid
+            }
+            
+            inject.fhkRegisterRepository = mockRegisterRepository
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLogin)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .success))
-            XCTAssertEqual(sut.viewState.msnLoginFail, "msn_generic_error".localized())
+            // Asserts del repositorio de Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts attemp save user into keychain by fail
+            #expect(saveFamilyNameKeychainSpy.isCalled)
+            #expect(saveFamilyNameKeychainSpy.callCount == 1)
         }
     }
     
-    func test_when_login_biometrics_successfully_then_state_success() async throws {
-        setupMocks()
-
+    @Test("Return error if login successfully but save user into keychain failed",
+          .tags(.login))
+    func loginSuccessfully_thenErrorToSaveUserIntoKeychain() async throws {
+        let loginSpy = CallTracker()
+        let savUserKeyChainSpy = CallTracker()
+    
         await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessMock()
+            }
+            
+            mockLoginRepository.saveUserIntoKeychain = { _ in
+                savUserKeyChainSpy.increment()
+                throw FHKAppError.saveUserMailKeychainFailed
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
+            
+            let sut = LoginScreenVM()
+            await sut.action(.doLogin)
+            
+            #expect(sut.viewState.loginState == .finish(result: .error))
+            
+            // Asserts del repositorio de Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts attemp save user into keychain by fail
+            #expect(savUserKeyChainSpy.isCalled)
+            #expect(savUserKeyChainSpy.callCount == 1)
+        }
+    }
+    
+    @Test("Return error if login successfully but save pin into keychain failed",
+          .tags(.login))
+    func loginSuccessfully_thenErrorSavePinTaskAproved() async throws {
+        let loginSpy = CallTracker()
+        let savePinSpy = CallTracker()
+        
+        await inject.withOverrides {
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessMock()
+            }
+            
+            mockLoginRepository.savePinApproveTask = { _ in
+                savePinSpy.increment()
+                throw FHKLoginError.pinApproveInvalid
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
+            
+            let sut = LoginScreenVM()
+            await sut.action(.doLogin)
+            
+            // Asserts called of Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts called of save pin
+            #expect(savePinSpy.isCalled)
+            #expect(savePinSpy.callCount == 1)
+            
+            // Asserts display error to user
+            #expect(sut.viewState.msnLoginFail == FHKLoginError.pinApproveInvalid.messageLocalized)
+        }
+    }
+    
+    @Test("Display error to user if login successfully but pin task aproved not exist",
+          .tags(.login))
+    func loginSuccessfully_thenDisplayError_whenPinTaskAprovedNotExist() async throws {
+        let loginSpy = CallTracker()
+        
+        await inject.withOverrides {
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.login = { _ in
+                loginSpy.increment()
+                return .sessionSuccessWithoutPinApprovedMock()
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
+            
+            let sut = LoginScreenVM()
+            await sut.action(.doLogin)
+            
+            // Asserts del repositorio de Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            #expect(sut.viewState.msnLoginFail == FHKLoginError.pinApproveInvalid.messageLocalized)
+        }
+    }
+    
+    
+    @Test("Validate login with biometrics successfully",
+          .tags(.login))
+    func loginBiometricsSuccessfully_thenStateSuccess() async throws {
+        let loginSpy = CallTracker()
+        
+        await inject.withOverrides {
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.loginWithBiometrics = { _ in
+                loginSpy.increment()
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .success))
-            XCTAssertTrue(loginRepositoryMock.isCalledLoginBiometrics)
-            XCTAssertNil(loginRepositoryMock.errorLoginToThrow)
+            // Asserts called of Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
         }
     }
     
-    func test_when_login_supabase_biometrics_fail_then_return_msn_error() async throws {
-        setupMocks()
-
+    @Test("Validate login with biometrics FaceID successfully",
+          .tags(.login))
+    func loginBiometricsFaceIDSuccessfully_thenStateSuccess() async throws {
+        let loginSpy = CallTracker()
+        let securitySpy = CallTracker()
+        
         await inject.withOverrides {
-            loginRepositoryMock.errorLoginToThrow = FHKSupabaseError.accessToken
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.loginWithBiometrics = { _ in
+                loginSpy.increment()
+            }
+            
+            var mockSecurityDevice = inject.fhkSecurity
+            mockSecurityDevice.getBiometryType = {
+                securitySpy.increment()
+                return .faceID
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
+            inject.fhkSecurity = mockSecurityDevice
             
             let sut = LoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .error))
-            XCTAssertTrue(loginRepositoryMock.isCalledLoginBiometrics)
-            XCTAssertNotNil(loginRepositoryMock.errorLoginToThrow)
-            XCTAssertEqual(sut.viewState.msnLoginFail, "msn_generic_error".localized())
+            // Asserts called of Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
             
+            // Asserts called of get biometry type
+            #expect(securitySpy.isCalled)
+            #expect(securitySpy.callCount == 1)
         }
     }
     
-    func test_when_login_supabase_cancel_biometrics_fail_then_return_state_error() async throws {
-        setupMocks()
-
+    @Test("Validate login with biometrics TouchID successfully",
+          .tags(.login))
+    func loginBiometricsTouchIDSuccessfully_thenStateSuccess() async throws {
+        let loginSpy = CallTracker()
+        let securitySpy = CallTracker()
+        
         await inject.withOverrides {
-            loginRepositoryMock.errorLoginToThrow = FHKAppError.biometryCancelAuthentication
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.loginWithBiometrics = { _ in
+                loginSpy.increment()
+            }
+            
+            var mockSecurityDevice = inject.fhkSecurity
+            mockSecurityDevice.getBiometryType = {
+                securitySpy.increment()
+                return .touchID
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
+            inject.fhkSecurity = mockSecurityDevice
             
             let sut = LoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
-            XCTAssertEqual(sut.viewState.loginState, .finish(result: .error))
-            XCTAssertTrue(loginRepositoryMock.isCalledLoginBiometrics)
-            XCTAssertNotNil(loginRepositoryMock.errorLoginToThrow)
+            // Asserts called of Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
             
+            // Asserts called of get biometry type
+            #expect(securitySpy.isCalled)
+            #expect(securitySpy.callCount == 1)
         }
     }
     
-    func test_when_show_toast_then_display_toast() async {
-        setupMocks()
+    @Test("Display error to user when login with biometrics fails",
+          .tags(.login))
+    func loginSupabaseBiometricsFail_thenShowUserErrorMsn() async throws {
+        let loginSpy = CallTracker()
         
         await inject.withOverrides {
-            inject.fhkToast = toastMock
+            configureDefaultMocks()
             
-            let sut = LoginScreenVM()
-            await sut.action(.showInfo(info: FHKToastInfo.dummyToastInfo()))
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.loginWithBiometrics = { _ in
+                loginSpy.increment()
+                throw FHKSupabaseError.accessToken
+            }
             
-            XCTAssertTrue(toastMock.isCalledShow)
-            XCTAssertEqual(toastMock.currentToast?.type, .success)
-            XCTAssertTrue(toastMock.isVisible)
-        }
-    }
-    
-    func test_when_dismiss_toast_then_remove_toast() async {
-        setupMocks()
-        
-        await inject.withOverrides {
-            inject.fhkToast = toastMock
-            
-            let sut = LoginScreenVM()
-            sut.fhkToast.dismiss()
-            
-            XCTAssertTrue(toastMock.isCalledShow)
-            XCTAssertNil(toastMock.currentToast)
-            XCTAssertFalse(toastMock.isVisible)
-        }
-    }
-    
-    func test_when_show_modal_then_display_modal() async {
-        setupMocks()
-        
-        await inject.withOverrides {
-            inject.fhkModal = modalMock
-            
-            let sut = LoginScreenVM()
-            sut.fhkModal.show(onDismiss: {}, content: {})
-            
-            XCTAssertTrue(modalMock.isPresented)
-        }
-    }
-    
-    func test_when_dismiss_modal_then_remove_modal() async {
-        setupMocks()
-        
-        await inject.withOverrides {
-            inject.fhkModal = modalMock
-            
-            let sut = LoginScreenVM()
-            sut.fhkModal.dismiss()
-            
-            XCTAssertFalse(modalMock.isPresented)
-        }
-    }
-    
-    func test_when_login_successfully_then_token_exist() async throws {
-        setupMocks()
-
-        await inject.withOverrides {
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            inject.fhkLoginRepository = loginRepositoryMock
-            
-            let sut = LoginScreenVM()
-            XCTAssertTrue(sut.hasSavedAuthToken)
-        }
-    }
-    
-    func test_when_faceid_biometric_enable_then_return_icon_faceid() async throws {
-        setupMocks()
-        
-        await inject.withOverrides {
-            securityMock.biometryType = .faceID
-            inject.fhkSecurity = securityMock
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            inject.fhkLoginRepository = loginRepositoryMock
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
-            let icon = sut.biometryIconName
-            XCTAssertEqual(icon, "faceid")
-            XCTAssertEqual(sut.viewState.msnFaceId, "prompt_face_id".localized().capitalizingFirstLetter())
+            #expect(sut.viewState.loginState == .finish(result: .error))
+            
+            // Asserts called of Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts display error to user
+            #expect(sut.viewState.msnLoginFail == FHKSupabaseError.accessToken.messageLocalized)
         }
     }
     
-    func test_when_touchId_biometric_enable_then_return_icon_faceid() async throws {
-        setupMocks()
+    @Test("Display error generic to user when login with biometrics fails",
+          .tags(.login))
+    func loginSupabaseBiometricsFail_thenReturnMsnGenericError() async throws {
+        let loginSpy = CallTracker()
         
         await inject.withOverrides {
-            securityMock.biometryType = .touchID
-            inject.fhkSecurity = securityMock
-            loginRepositoryMock.sessionToReturn = FHKUserSession.dummySessionSuccess()
-            inject.fhkLoginRepository = loginRepositoryMock
+            configureDefaultMocks()
+            
+            var mockLoginRepository = inject.fhkLoginRepository
+            mockLoginRepository.loginWithBiometrics = { _ in
+                loginSpy.increment()
+                throw FHKAppError.biometryAuthenticationFailed
+            }
+            
+            inject.fhkLoginRepository = mockLoginRepository
             
             let sut = LoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
-            let icon = sut.biometryIconName
-            XCTAssertEqual(icon, "touchid")
-            XCTAssertEqual(sut.viewState.msnTouchId, "prompt_touch_id".localized().capitalizingFirstLetter())
+            #expect(sut.viewState.loginState == .finish(result: .error))
+            
+            // Asserts called of Login
+            #expect(loginSpy.isCalled)
+            #expect(loginSpy.callCount == 1)
+            
+            // Asserts display error to user
+            #expect(sut.viewState.msnLoginFail == FHKAppError.biometryAuthenticationFailed.messageLocalized)
         }
+    }
+    
+    @Test("Display toast when showInfo action is called",
+          .tags(.showToast))
+    func displayToast_thenShowToastIsCalled() async {
+        let toastSpy = CallTracker()
+        
+        await inject.withOverrides {
+            configureDefaultMocks()
+            
+            var mockToast = inject.fhkToast
+            mockToast.show = { _, _ in
+                toastSpy.increment()
+            }
+            
+            inject.fhkToast = mockToast
+  
+            let sut = LoginScreenVM()
+            await sut.action(.showInfo(info: FHKToastInfo(type: .success, message: "success", hasIcon: true)))
+            
+            // Asserts called
+            #expect(toastSpy.isCalled)
+            #expect(toastSpy.callCount == 1)
+        }
+    }
+    
+    
+    private func configureDefaultMocks() {
+        inject.fhkLoginRepository = .test
+        inject.fhkRegisterRepository = .test
+        inject.fhkStorage = .test
+        inject.fhkToast = .test
+        inject.fhkSecurity = .test
     }
 }
 
 extension FHKUserSession {
-    
-     static func dummySessionSuccess() -> FHKUserSession {
-        FHKUserSession(id: UUID(),
-                       email: "user@test.com",
-                       accessToken: "3FD345GHY345345DF",
-                       refreshToken: "FSDFSD234234FSD",
-                       expiresAt: Date(),
-                       pinApproved: "1234")
+    static func sessionSuccessMock() -> FHKUserSession {
+        let sessionMock = UserSessionMock()
+            .withEmail("user@test.com")
+            .withAccessToken("3FD345GHY345345DF")
+            .withPin("1234")
+            .withFamilyName("My Family")
+            .build()
+        
+        return sessionMock
     }
     
-    static func dummySessionSuccessWithoutPIN() -> FHKUserSession {
-       FHKUserSession(id: UUID(),
-                      email: "user@test.com",
-                      accessToken: "3FD345GHY345345DF",
-                      refreshToken: "FSDFSD234234FSD",
-                      expiresAt: Date(),
-                      pinApproved: "")
-   }
+    static func sessionSuccessWithoutPinApprovedMock() -> FHKUserSession {
+        let sessionMock = UserSessionMock()
+            .withEmail("user@test.com")
+            .withAccessToken("3FD345GHY345345DF")
+            .withFamilyName("My Family")
+            .build()
+        
+        return sessionMock
+    }
     
-    static func dummySessionSuccessWithoutToken() -> FHKUserSession {
-        FHKUserSession(id: UUID(),
-                       email: "user@test.com",
-                       accessToken: "",
-                       refreshToken: "FSDFSD234234FSD",
-                       expiresAt: Date(),
-                       pinApproved: "1234")
+    static func sessionSuccessWithoutFamilyNameMock() -> FHKUserSession {
+        let sessionMock = UserSessionMock()
+            .withEmail("user@test.com")
+            .withAccessToken("3FD345GHY345345DF")
+            .withPin("1234")
+            .build()
+        
+        return sessionMock
+    }
+    
+    static func sessionSuccessWithInvalidTokenMock() -> FHKUserSession {
+        let sessionMock = UserSessionMock()
+            .withEmail("user@test.com")
+            .build()
+
+        return sessionMock
     }
 }
 
-extension FHKToastInfo {
+struct UserSessionMock {
+    private var email: String = ""
+    private var accessToken: String?
+    private var refreshToken: String?
+    private var pin: String = ""
+    private var familyName: String = ""
+
+    func withEmail(_ email: String) -> Self {
+        var copy = self
+        copy.email = email
+        return copy
+    }
     
-    static func dummyToastInfo() -> FHKToastInfo {
-        FHKToastInfo(type: .success, message: "success", hasIcon: true)
+    func withAccessToken(_ accessToken: String) -> Self {
+        var copy = self
+        copy.accessToken = accessToken
+        return copy
+    }
+    
+    func withRefreshToken(_ refreshToken: String) -> Self {
+        var copy = self
+        copy.refreshToken = refreshToken
+        return copy
+    }
+    
+    func withPin(_ pin: String) -> Self {
+        var copy = self
+        copy.pin = pin
+        return copy
+    }
+    
+    func withFamilyName(_ familyName: String) -> Self {
+        var copy = self
+        copy.familyName = familyName
+        return copy
+    }
+
+    func build() -> FHKUserSession {
+        FHKUserSession(id: UUID(),
+                       email: email,
+                       accessToken: accessToken,
+                       refreshToken: refreshToken,
+                       expiresAt: Date(),
+                       infoAditional: InfoAditional(pinApproved: pin, familyName: familyName))
     }
 }
+

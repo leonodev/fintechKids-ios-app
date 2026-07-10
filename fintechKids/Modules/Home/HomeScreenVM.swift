@@ -25,7 +25,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
         inject.fhkGoalsRepository
     }
     
-    public var fhkToast: any FHKToastProtocol {
+    public var fhkToast: FHKToast {
         inject.fhkToast
     }
     
@@ -154,7 +154,7 @@ private extension HomeScreenVM {
     }
     
     func showNotificationError(msn: String) {
-        fhkToast.show(info: FHKToastInfo(
+        fhkToast.show(FHKToastInfo(
             type: .error,
             message: msn,
             hasIcon: true)

@@ -26,7 +26,7 @@ struct SplashScreen<VM: SplashScreenVM>: View {
             switch state {
             case .loaded(nav: .goToLogin):
                 router.navigate(to: .login)
-                
+
             case .loaded(nav: .goToLanguage):
                 router.navigate(to: .language)
                 
@@ -67,5 +67,7 @@ struct SplashScreen<VM: SplashScreenVM>: View {
 }
 
 #Preview {
-    SplashScreen(viewModel: SplashScreenVM())
+    PreviewMockContainer {
+        SplashScreen(viewModel: SplashScreenVM())
+    }
 }

@@ -9,15 +9,19 @@ import FHKDomain
 import FHKInjections
 import FHKStorage
 
-final class SplashRepository: FHKSplashRepositoryProtocol {
+public extension FHKSplashRepository {
     
-    // Properties Injected
-    private var fhkStorage: any FHKStorageManagerProtocol {
-        inject.fhkStorage
-    }
-    
-    func readLanguageCurrent() async throws -> String? {
-        try await fhkStorage.readUserDefaults(String.self,
-                                              forKey: UserDefaultsKeys.languageKey)
+    static var live: Self {
+        let storage = inject.fhkStorage
+        var repository = Self()
+        
+        repository.readLanguageCurrent = {
+            try await storage.readUserDefaults(
+                String.self,
+                forKey: UserDefaultsKeys.languageKey
+            )
+        }
+        
+        return repository
     }
 }

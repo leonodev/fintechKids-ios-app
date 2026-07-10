@@ -30,7 +30,7 @@ final class RewardCreateScreenVM: FHKCore.ViewModel {
         inject.fhkFirebaseAnalitycs
     }
     
-    public var fhkToast: any FHKToastProtocol {
+    public var fhkToast: FHKToast {
         inject.fhkToast
     }
     
@@ -56,7 +56,7 @@ final class RewardCreateScreenVM: FHKCore.ViewModel {
     }
     
     func displayNotification(message: String, type: ToastType = .warning) {
-        fhkToast.show(info: viewState.toastInfo(msn: message, type: type))
+        fhkToast.show(viewState.toastInfo(msn: message, type: type))
     }
 }
 

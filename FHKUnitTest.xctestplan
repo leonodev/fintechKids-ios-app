@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "18FBFEA8-6A59-4B0D-8B9F-0E2E97508022",
+      "id" : "29F74233-CF70-44C7-BB3C-2C0C7BF3ED83",
       "name" : "Configuration 1",
       "options" : {
 
@@ -14,7 +14,7 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:fintechKids.xcodeproj",
+        "containerPath" : "container:..\/..\/..\/..\/..\/..\/..\/..\/Documents\/FHK-iOS\/fintechKids-ios-app\/fintechKids.xcodeproj",
         "identifier" : "5D30BFC32EC1E6FE005C42B4",
         "name" : "fintechKidsTests"
       }
