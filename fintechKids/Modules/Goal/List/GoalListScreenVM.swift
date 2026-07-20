@@ -22,7 +22,7 @@ final class GoalListScreenVM: FHKCore.ViewModel {
         inject.fhkGoalsRepository
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -48,7 +48,7 @@ private extension GoalListScreenVM {
     
     func fetchGoalList(force: Bool) async {
         do {
-            guard let emailParent = fhkConfiguration.parentMail else {
+            guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.goalListState = .finish(result: .error)
                 return
             }

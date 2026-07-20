@@ -22,7 +22,7 @@ final class TaskCreateScreenVM: FHKCore.ViewModel {
         inject.fhkTasksRepository
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -54,7 +54,7 @@ private extension TaskCreateScreenVM {
         viewState.taskCreateState = .loading
         
         do {
-            guard let emailParent = fhkConfiguration.parentMail else {
+            guard let emailParent = fhkConfiguration.parentMail() else {
                 informateError(FHKAppError.readUserMailKeychainFailed)
                 viewState.taskCreateState = .finish(result: .error)
                 return

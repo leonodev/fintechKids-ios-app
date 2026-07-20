@@ -22,7 +22,7 @@ final class RewardCreateScreenVM: FHKCore.ViewModel {
         inject.fhkRewardsRepository
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -52,7 +52,7 @@ final class RewardCreateScreenVM: FHKCore.ViewModel {
     }
     
     func getParentMail() -> String? {
-        fhkConfiguration.parentMail
+        fhkConfiguration.parentMail()
     }
     
     func displayNotification(message: String, type: ToastType = .warning) {

@@ -20,7 +20,7 @@ final class ProfileRepository: FHKProfileRepositoryProtocol {
         inject.fhkStorage
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -37,7 +37,7 @@ final class ProfileRepository: FHKProfileRepositoryProtocol {
     }
     
     func getEmailParent() throws -> String? {
-        fhkConfiguration.parentMail
+        fhkConfiguration.parentMail()
     }
     
     func getLanguageCurrent() async -> String {
@@ -52,6 +52,6 @@ final class ProfileRepository: FHKProfileRepositoryProtocol {
     
     public func getFamilyName() async -> String? {
         fhkConfiguration.refreshFamilyName()
-        return fhkConfiguration.familyName
+        return fhkConfiguration.familyName()
     }
 }

@@ -22,7 +22,7 @@ final class TasksScreenVM: FHKCore.ViewModel {
         inject.fhkTasksRepository
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -54,7 +54,7 @@ private extension TasksScreenVM {
         viewState.taskState = .loading
         
         do {
-            guard let emailParent = fhkConfiguration.parentMail else {
+            guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.taskState = .finish(result: .error)
                 return
             }
@@ -82,7 +82,7 @@ private extension TasksScreenVM {
         viewState.taskState = .loading
         
         do {
-            guard let emailParent = fhkConfiguration.parentMail else {
+            guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.taskState = .finish(result: .error)
                 return
             }

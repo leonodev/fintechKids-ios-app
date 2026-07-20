@@ -30,7 +30,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         inject.fhkRewardsRepository
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -47,7 +47,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
     }
     
     public var parentMail: String? {
-        fhkConfiguration.parentMail
+        fhkConfiguration.parentMail()
     }
     
     public enum Action: Equatable {
@@ -100,7 +100,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
     }
     
     func getGoalMemberEntity(goal: GoalEntity, member: MemberEntity, collect: CollectRewardEntity) -> GoalMemberEntity? {
-        guard let emailParent = fhkConfiguration.parentMail, let goalID = goal.id else {
+        guard let emailParent = fhkConfiguration.parentMail(), let goalID = goal.id else {
             displayNotification(message: viewState.msnCreateGoalMemberDataUncompleted)
             return nil
         }
@@ -130,7 +130,7 @@ private extension RewardCollectScreenVM {
     
     func fetchGoalList(force: Bool) async {
         do {
-            guard let emailParent = fhkConfiguration.parentMail else {
+            guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.collectState = .finish(result: .error)
                 return
             }
@@ -159,7 +159,7 @@ private extension RewardCollectScreenVM {
     
     func fetchRewards(force: Bool) async {
         do {
-            guard let emailParent = fhkConfiguration.parentMail else {
+            guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.collectState = .finish(result: .error)
                 return
             }

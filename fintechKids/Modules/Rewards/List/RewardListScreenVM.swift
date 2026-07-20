@@ -18,7 +18,7 @@ final class RewardListScreenVM: FHKCore.ViewModel {
     var viewState: RewardListViewState = .init()
     
     // Properties Injected
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -48,7 +48,7 @@ private extension RewardListScreenVM {
     
     func fetchRewardList(force: Bool) async {
         do {
-            guard let emailParent = fhkConfiguration.parentMail else {
+            guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.rewardListState = .finish(result: .error)
                 return
             }

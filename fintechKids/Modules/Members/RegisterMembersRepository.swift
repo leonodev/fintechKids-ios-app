@@ -12,7 +12,7 @@ import FHKStorage
 final class RegisterMembersRepository: FHKRegisterMembersRepositoryProtocol {
     
     // Properties injected
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -25,11 +25,11 @@ final class RegisterMembersRepository: FHKRegisterMembersRepositoryProtocol {
     }
     
     public func getParentMail() async -> String? {
-        fhkConfiguration.parentMail
+        fhkConfiguration.parentMail()
     }
     
     public func getFamilyName() async -> String? {
         fhkConfiguration.refreshFamilyName()
-        return fhkConfiguration.familyName
+        return fhkConfiguration.familyName()
     }
 }

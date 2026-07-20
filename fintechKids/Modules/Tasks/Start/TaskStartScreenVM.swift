@@ -25,7 +25,7 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
         inject.fhkToast
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -58,7 +58,7 @@ final class TaskStartScreenVM: FHKCore.ViewModel {
 private extension TaskStartScreenVM {
     
     func validateTasK() {
-        let pinParent = fhkConfiguration.approvePin ?? ""
+        let pinParent = fhkConfiguration.approvePin() ?? ""
         let pinEntered = viewState.approvePIN
         
         if pinEntered == pinParent {

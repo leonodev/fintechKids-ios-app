@@ -22,7 +22,7 @@ final actor HomeRepository: FHKHomeRepositoryProtocol {
         inject.fhkSupabaseRewards
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -56,6 +56,6 @@ final actor HomeRepository: FHKHomeRepositoryProtocol {
     }
     
     public func getParentMail() async -> String? {
-        fhkConfiguration.parentMail
+        fhkConfiguration.parentMail()
     }
 }

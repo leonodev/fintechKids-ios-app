@@ -22,7 +22,7 @@ final class GoalScreenVM: FHKCore.ViewModel {
         inject.fhkGoalsRepository
     }
     
-    private var fhkConfiguration: any FHKConfigurationProtocol {
+    private var fhkConfiguration: FHKConfiguration {
         inject.fhkConfiguration
     }
     
@@ -116,7 +116,7 @@ private extension GoalScreenVM {
     }
     
     func getParentMail() -> String? {
-        guard let emailParent = fhkConfiguration.parentMail else {
+        guard let emailParent = fhkConfiguration.parentMail() else {
             displayNotification(message: viewState.msnWarningMissingEmail, type: .error)
             return nil
         }
