@@ -47,10 +47,10 @@ public class CommonsDependencies: FHKDependencies {
         )
         
         /// FHKFirebase
-        inject.register((any FHKRemoteConfigManagerProtocol).self,
-                        standard: { FHKRemoteConfigService() },
-                        preview: { FHKRemoteConfigServiceMock() },
-                        testing: { FHKRemoteConfigServiceMock() }
+        inject.register(FHKRemoteConfig.self,
+                        standard: { .live },
+                        preview: { .preview },
+                        testing: { .test }
         )
 
         /// FHKAuth

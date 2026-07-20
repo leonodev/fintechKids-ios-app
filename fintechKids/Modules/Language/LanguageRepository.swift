@@ -16,14 +16,14 @@ final class LanguageRepository: FHKLanguageRepositoryProtocol {
         inject.fhkLanguage
     }
     
-    private var fhkFirebaseRemoteConfig: any FHKRemoteConfigManagerProtocol {
+    private var fhkFirebaseRemoteConfig: FHKRemoteConfig {
         inject.fhkFirebaseRemoteConfig
     }
     
     func fetchConfig() async -> [String] {
         do {
             try await fhkFirebaseRemoteConfig.fetchConfig()
-            return await fhkFirebaseRemoteConfig.enabledLanguages
+            return await fhkFirebaseRemoteConfig.enabledLanguages()
         } catch {
             return []
         }

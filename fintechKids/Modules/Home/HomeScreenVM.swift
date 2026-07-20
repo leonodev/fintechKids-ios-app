@@ -33,7 +33,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
         inject.fhkCameraPermission
     }
     
-    private var fhkFirebaseRemoteConfig: any FHKRemoteConfigManagerProtocol {
+    private var fhkFirebaseRemoteConfig: FHKRemoteConfig {
         inject.fhkFirebaseRemoteConfig
     }
     
@@ -147,7 +147,7 @@ private extension HomeScreenVM {
         do {
             try await fhkFirebaseRemoteConfig.fetchConfig()
             let menus = fhkFirebaseRemoteConfig.menuHomeItems
-            viewState.settingMenuOption(items: menus)
+            viewState.settingMenuOption(items: menus())
         } catch {
             return
         }
