@@ -21,7 +21,7 @@ final class ProfileScreenVM: FHKCore.ViewModel {
         inject.fhkProfileRepository
     }
     
-    private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
         inject.fhkFirebaseAnalitycs
     }
     

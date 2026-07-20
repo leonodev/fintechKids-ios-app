@@ -54,8 +54,9 @@ public class CommonsDependencies: FHKDependencies {
         )
 
         /// FHKAuth
-        inject.register((any FHKAnalyticsProtocol).self,
-                        standard: { FHKAnalyticsService() }
+        inject.register(FHKAnalytics.self,
+                        standard: { .live },
+                        testing: { .test }
         )
         
         // FHKAuth

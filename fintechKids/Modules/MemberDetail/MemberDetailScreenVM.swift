@@ -22,7 +22,7 @@ final class MemberDetailScreenVM: FHKCore.ViewModel {
         inject.fhkBalanceRepository
     }
     
-    private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
         inject.fhkFirebaseAnalitycs
     }
     

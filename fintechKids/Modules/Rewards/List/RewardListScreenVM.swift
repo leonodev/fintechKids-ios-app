@@ -26,7 +26,7 @@ final class RewardListScreenVM: FHKCore.ViewModel {
         inject.fhkRewardsRepository
     }
     
-    private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
         inject.fhkFirebaseAnalitycs
     }
     

@@ -25,7 +25,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkRegisterRepository
     }
     
-    private var fhkFirebaseAnalitycs: any FHKAnalyticsProtocol {
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
         inject.fhkFirebaseAnalitycs
     }
     
