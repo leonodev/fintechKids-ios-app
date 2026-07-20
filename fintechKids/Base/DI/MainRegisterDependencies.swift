@@ -23,8 +23,9 @@ public class CommonsDependencies: FHKDependencies {
         // Register Base dependencies
         
         /// FHKServicesAPI
-        inject.register((any FHKServicesAPIProtocol).self,
-                        standard: { FHKServicesAPI() }
+        inject.register(FHKServices.self,
+                        standard: { .live },
+                        testing: { .test }
         )
         
         /// FHKSecurity
@@ -59,11 +60,6 @@ public class CommonsDependencies: FHKDependencies {
         /// FHKConfig
         inject.register((any FHKConfigurationProtocol).self,
                         standard: { FHKConfiguration() }
-        )
-        
-        // FHKServices
-        inject.register((any FHKServicesAPIProtocol).self,
-                        standard: { FHKServicesAPI() }
         )
         
         // FHKAuth
@@ -107,11 +103,7 @@ public class FHKDependencies {
         if environment == .localhost {
             urlString = "http://localhost:3001"
         } else {
-            urlString = try inject.fhkServicesAPI.getURL(
-                environment: environment,
-                country: .spanish,
-                serviceKey: .supabase
-            )
+            urlString = try inject.fhkServicesAPI.getURL(environment, .spanish, .supabase)
         }
  
         guard let url = URL(string: urlString) else {

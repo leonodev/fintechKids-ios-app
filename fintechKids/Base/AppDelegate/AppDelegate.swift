@@ -31,7 +31,7 @@ class AppDelegate: ServicesApplicationDelegate {
             try ModulesDependencies.register()
             Logger.info("All dependencies registered successfully")
         } catch {
-            Logger.error("Error: Dependencies registered failed")
+            fatalError("❌ Critical error during dependency registration: \(error)")
         }
         
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
