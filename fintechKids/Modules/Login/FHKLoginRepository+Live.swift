@@ -92,7 +92,7 @@ public extension FHKLoginRepository {
         }
         
         repository.login = { loginEntity in
-            try await supabase.login(loginEntity: loginEntity)
+            try await supabase.login(loginEntity)
         }
         
         repository.loginWithBiometrics = { prompt in
@@ -109,9 +109,9 @@ public extension FHKLoginRepository {
             }
             
             // Si FaceID lo acepta, configuramos la sesión con 'supabase'
-            try await supabase.setSession(accessToken: savedToken)
+            try await supabase.setSession(savedToken)
             
-            let isAuthenticated = await supabase.isUserAuthenticated
+            let isAuthenticated = await supabase.isUserAuthenticated()
             if !isAuthenticated {
                 throw FHKAppError.biometryNotAvailable
             }

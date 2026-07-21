@@ -14,7 +14,7 @@ public extension FHKRegisterRepository {
         var repo = Self()
         
         repo.register = { registerEntity in
-            try await inject.fhkSupabase.register(registerEntity: registerEntity)
+            try await inject.fhkSupabase.register(registerEntity)
         }
         
         repo.saveFamilyInfoKeychain = { familyName in

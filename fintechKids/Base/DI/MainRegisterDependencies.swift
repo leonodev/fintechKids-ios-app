@@ -61,8 +61,9 @@ public class CommonsDependencies: FHKDependencies {
         
         // FHKAuth
         let supabaseClient = try makeSupabaseClient()
-        inject.register((any FHKAuthProtocol).self,
-                        standard: { FHKSupabase(client: supabaseClient) }
+        inject.register(FHKAuth.self,
+                        standard: { .live(client: supabaseClient) },
+                        testing: { .test }
         )
         
         /// FHKDesignSystem

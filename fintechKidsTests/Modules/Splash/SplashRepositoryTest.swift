@@ -22,7 +22,7 @@ struct SplashRepositoryTest {
         let splashSpy = CallTracker()
 
         try await inject.withOverrides {
-            inject.fhkStorage = FHKStorageManager.test
+            configureDefaultMocks()
             
             let sut = FHKSplashRepository.live
             let language = try await sut.readLanguageCurrent()
@@ -57,5 +57,9 @@ struct SplashRepositoryTest {
             #expect(splashSpy.isCalled)
             #expect(splashSpy.callCount == 1)
         }
+    }
+    
+    private func configureDefaultMocks() {
+        inject.fhkStorage = FHKStorageManager.test
     }
 }

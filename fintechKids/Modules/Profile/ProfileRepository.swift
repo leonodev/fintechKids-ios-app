@@ -12,7 +12,7 @@ import FHKStorage
 final class ProfileRepository: FHKProfileRepositoryProtocol {
     
     // Properties Injected
-    private var fhkSupabase: any FHKAuthProtocol {
+    private var fhkSupabase: FHKAuth {
         inject.fhkSupabase
     }
     
