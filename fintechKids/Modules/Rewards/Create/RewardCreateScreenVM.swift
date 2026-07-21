@@ -34,7 +34,7 @@ final class RewardCreateScreenVM: FHKCore.ViewModel {
         inject.fhkToast
     }
     
-    public var fhkModal: any FHKModalProtocol {
+    public var fhkModal: FHKModal {
         inject.fhkModal
     }
     

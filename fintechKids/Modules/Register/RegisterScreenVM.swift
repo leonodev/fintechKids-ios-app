@@ -25,7 +25,7 @@ final class RegisterScreenVM: FHKCore.ViewModel {
         inject.fhkRegisterRepository
     }
     
-    public var fhkModal: any FHKModalProtocol {
+    public var fhkModal: FHKModal {
         inject.fhkModal
     }
     

@@ -38,7 +38,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         inject.fhkFirebaseAnalitycs
     }
     
-    public var fhkModal: any FHKModalProtocol {
+    public var fhkModal: FHKModal {
         inject.fhkModal
     }
     

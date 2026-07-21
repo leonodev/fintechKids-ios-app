@@ -17,7 +17,7 @@ import FHKUtils
 final class TaskStartScreenVM: FHKCore.ViewModel {
     var viewState: TaskStartViewState = .init()
     
-    public var fhkModal: any FHKModalProtocol {
+    public var fhkModal: FHKModal {
         inject.fhkModal
     }
     

@@ -23,7 +23,7 @@ struct FintechKidsApp: App {
         inject.fhkToast
     }
     
-    private var fhkModal: any FHKModalProtocol {
+    private var fhkModal: FHKModal {
         inject.fhkModal
     }
     

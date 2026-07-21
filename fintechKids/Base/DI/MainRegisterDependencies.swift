@@ -67,8 +67,10 @@ public class CommonsDependencies: FHKDependencies {
         )
         
         /// FHKDesignSystem
-        inject.register((any FHKModalProtocol).self,
-                        standard: { FHKModal() }
+        inject.register(FHKModal.self,
+                        standard: { .live },
+                        preview: { .preview },
+                        testing: {.test }
         )
         
         /// Main App

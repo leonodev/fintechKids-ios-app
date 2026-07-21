@@ -265,5 +265,7 @@ internal struct NewMemberContentView: View {
 }
 
 #Preview {
-    RegisterMembersScreen(viewModel: RegisterMembersScreenVM())
+    PreviewMockContainer {
+        RegisterMembersScreen(viewModel: RegisterMembersScreenVM())
+    }
 }

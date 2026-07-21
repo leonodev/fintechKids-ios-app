@@ -154,5 +154,7 @@ struct TaskCreateScreen<VM: TaskCreateScreenVM>: View {
 }
 
 #Preview {
-    TaskCreateScreen(viewModel: TaskCreateScreenVM())
+    PreviewMockContainer {
+        TaskCreateScreen(viewModel: TaskCreateScreenVM())
+    }
 }

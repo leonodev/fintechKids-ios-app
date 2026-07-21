@@ -9,16 +9,16 @@ import SwiftUI
 import FHKDomain
 
 public struct FHKModalPresenter: ViewModifier {
-    var manager: FHKModalProtocol
+    var manager: FHKModal
     
-    public init(manager: FHKModalProtocol) {
+    public init(manager: FHKModal) {
         self.manager = manager
     }
 
     public func body(content: Content) -> some View {
         content
             .overlay {
-                if manager.isPresented, let popupContent = manager.content {
+                if manager.isPresented(), let popupContent = manager.content() {
                     FHKPopupContainer(content: popupContent) {
                         manager.dismiss()
                     }

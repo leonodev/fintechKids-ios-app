@@ -152,5 +152,7 @@ struct GoalScreen<VM: GoalScreenVM>: View {
 }
 
 #Preview {
-    GoalScreen(viewModel: GoalScreenVM())
+    PreviewMockContainer {
+        GoalScreen(viewModel: GoalScreenVM())
+    }
 }

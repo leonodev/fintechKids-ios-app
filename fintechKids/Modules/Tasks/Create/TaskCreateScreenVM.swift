@@ -30,7 +30,7 @@ final class TaskCreateScreenVM: FHKCore.ViewModel {
         inject.fhkFirebaseAnalitycs
     }
     
-    public var fhkModal: any FHKModalProtocol {
+    public var fhkModal: FHKModal {
         inject.fhkModal
     }
     
