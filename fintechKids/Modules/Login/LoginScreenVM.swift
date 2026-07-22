@@ -41,8 +41,8 @@ final class LoginScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
-    public var fhkSessionManager: any FHKSessionManagerProtocol {
-        inject.fhkSessionManager
+    public var fhkSession: FHKSession {
+        inject.fhkSession
     }
     
     // Other properties
@@ -127,7 +127,7 @@ final class LoginScreenVM: FHKCore.ViewModel {
                 return
             }
             
-            try await fhkSessionManager.login()
+            try await fhkSession.login()
             viewState.loginState = .finish(result: .success)
         } catch let error as FHKSupabaseError {
             viewState.loginState = .finish(result: .error)

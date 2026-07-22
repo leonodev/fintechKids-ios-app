@@ -79,8 +79,9 @@ public class CommonsDependencies: FHKDependencies {
         )
 
         /// Session Manager User
-        inject.register((any FHKSessionManagerProtocol).self,
-                        standard: { FHKSessionManager() }
+        inject.register(FHKSession.self,
+                        standard: { .live },
+                        testing: {.test }
         )
     }
 }

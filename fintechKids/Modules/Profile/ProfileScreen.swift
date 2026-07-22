@@ -74,7 +74,7 @@ struct ProfileScreen<VM: ProfileScreenVM>: View {
                             Task {
                                 await viewModel.action(.logout)
                                 viewModel.fhkModal.dismiss()
-                                try await viewModel.fhkSessionManager.logout()
+                                try await viewModel.fhkSession.logout()
                             }
                         },
                                             cancelAction: {

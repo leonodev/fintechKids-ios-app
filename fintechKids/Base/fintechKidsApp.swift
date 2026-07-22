@@ -31,8 +31,8 @@ struct FintechKidsApp: App {
         inject.fhkStorage
     }
     
-    private var fhkSessionManager: any FHKSessionManagerProtocol {
-        inject.fhkSessionManager
+    private var fhkSessionManager: FHKSession {
+        inject.fhkSession
     }
     
     var body: some Scene {
@@ -46,7 +46,7 @@ struct FintechKidsApp: App {
                             titleBtn: "title_btn_screen_security".localized())
                     } else {
                         NavigationContainer(router: appRouter) {
-                            if fhkSessionManager.isAuthenticated {
+                            if fhkSessionManager.isAuthenticated() {
                                 HomeScreen(viewModel: HomeScreenVM())
                             } else {
                                 SplashScreen(viewModel: SplashScreenVM())

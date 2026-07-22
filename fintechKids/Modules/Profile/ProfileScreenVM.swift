@@ -29,8 +29,8 @@ final class ProfileScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
-    public var fhkSessionManager: any FHKSessionManagerProtocol {
-        inject.fhkSessionManager
+    public var fhkSession: FHKSession {
+        inject.fhkSession
     }
     
     public enum Action: Equatable {
