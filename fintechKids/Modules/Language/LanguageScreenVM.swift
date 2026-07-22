@@ -22,7 +22,7 @@ public final class LanguageScreenVM: FHKCore.ViewModel {
         inject.fhkFirebaseAnalitycs
     }
     
-    private var fhkLanguageRepository: any FHKLanguageRepositoryProtocol {
+    private var fhkLanguageRepository: FHKLanguageRepository {
         inject.fhkLanguageRepository
     }
     

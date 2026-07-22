@@ -31,8 +31,10 @@ public class ModulesDependencies: FHKDependencies {
         )
         
         /// FHKLanguage
-        inject.register((any FHKLanguageRepositoryProtocol).self,
-                        standard: { LanguageRepository() }
+        inject.register(FHKLanguageRepository.self,
+                        standard: { .preview },
+                        preview: { .preview },
+                        testing: { .test }
         )
         
         /// CameraPermissionService
