@@ -32,7 +32,7 @@ public class ModulesDependencies: FHKDependencies {
         
         /// FHKLanguage
         inject.register(FHKLanguageRepository.self,
-                        standard: { .preview },
+                        standard: { .live },
                         preview: { .preview },
                         testing: { .test }
         )
