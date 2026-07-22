@@ -12,7 +12,7 @@ import FHKStorage
 final class LanguageRepository: FHKLanguageRepositoryProtocol {
     
     // Properties Injected
-    private var fhkLanguage: any FHKLanguageManagerProtocol {
+    private var fhkLanguage: FHKLanguage {
         inject.fhkLanguage
     }
     
@@ -30,6 +30,6 @@ final class LanguageRepository: FHKLanguageRepositoryProtocol {
     }
 
     func changeLanguageApp(_ language: String) async {
-        await fhkLanguage.changeLanguage(to: language)
+        await fhkLanguage.changeLanguage(language)
     }
 }

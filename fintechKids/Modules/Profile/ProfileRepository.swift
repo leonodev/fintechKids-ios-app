@@ -24,7 +24,7 @@ final class ProfileRepository: FHKProfileRepositoryProtocol {
         inject.fhkConfiguration
     }
     
-    private var fhkLanguage: any FHKLanguageManagerProtocol {
+    private var fhkLanguage: FHKLanguage {
         inject.fhkLanguage
     }
     
@@ -47,7 +47,7 @@ final class ProfileRepository: FHKProfileRepositoryProtocol {
     
     @MainActor
     func setNewLanguage(lang: String) {
-        fhkLanguage.changeLanguage(to: lang)
+        fhkLanguage.changeLanguage(lang)
     }
     
     public func getFamilyName() async -> String? {

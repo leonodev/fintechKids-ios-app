@@ -168,5 +168,7 @@ extension LanguageScreen {
 }
 
 #Preview {
-    LanguageScreen(viewModel: LanguageScreenVM())
+    PreviewMockContainer {
+        LanguageScreen(viewModel: LanguageScreenVM())
+    }
 }

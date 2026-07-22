@@ -24,8 +24,10 @@ public class ModulesDependencies: FHKDependencies {
     static func register() throws {
         /// Main App (fhkLanguage Depend of Storage)
         /// FHKLanguage
-        inject.register((any FHKLanguageManagerProtocol).self,
-                        standard: { FHKLanguageManager() }
+        inject.register(FHKLanguage.self,
+                        standard: { .live },
+                        preview: { .english },
+                        testing: { .test }
         )
         
         /// FHKLanguage
