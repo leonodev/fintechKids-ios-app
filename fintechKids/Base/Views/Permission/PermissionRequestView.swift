@@ -11,12 +11,12 @@ import FHKDesignSystem
 
 public struct PermissionRequestView: View {
     @Environment(\.dismiss) var dismiss
-    let provider: any FHKPermissionProtocol
+    let provider: FHKPermission
     
     // Feedback háptico para mejorar la UX
     private let haptic = UIImpactFeedbackGenerator(style: .medium)
     
-    public init(provider: any FHKPermissionProtocol) {
+    public init(provider: FHKPermission) {
         self.provider = provider
     }
     
@@ -34,7 +34,7 @@ public struct PermissionRequestView: View {
     private var headerSection: some View {
         VStack(spacing: 20) {
             
-            Text(provider.title)
+            Text(provider.title())
                 .font(.title.bold())
             Spacer()
             
@@ -43,7 +43,7 @@ public struct PermissionRequestView: View {
                         contentMode: .scaleAspectFit)
             
             Spacer()
-            Text(provider.message)
+            Text(provider.message())
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -56,7 +56,7 @@ public struct PermissionRequestView: View {
     private var actionButtons: some View {
         VStack(spacing: 12) {
             
-            FHKButtonPrimary(title: provider.titleButtonSetting,
+            FHKButtonPrimary(title: provider.titleButtonSetting(),
                              state: .enabled,
                              mode: .solid,
                              action: handleAction)
@@ -70,7 +70,7 @@ public struct PermissionRequestView: View {
 //                    .foregroundColor(.white)
 //                    .cornerRadius(16)
 //            }
-            FHKButtonPrimary(title: provider.titleButtonLater,
+            FHKButtonPrimary(title: provider.titleButtonLater(),
                              textColor: FHKColor.gray,
                              style: .outlined,
                              state: .enabled,
@@ -85,15 +85,16 @@ public struct PermissionRequestView: View {
         haptic.prepare()
         haptic.impactOccurred()
         
-        if provider.status == .denied {
+        if provider.status() == .denied {
             // Deep Linking a los ajustes de la App
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
             if UIApplication.shared.canOpenURL(settingsUrl) {
                 UIApplication.shared.open(settingsUrl)
             }
         } else {
-            provider.requestPermission { _ in
-                DispatchQueue.main.async { dismiss() }
+            Task {
+                let _ = await provider.requestPermission()
+                dismiss()
             }
         }
     }

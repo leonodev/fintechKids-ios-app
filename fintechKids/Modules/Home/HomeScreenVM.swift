@@ -29,7 +29,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
         inject.fhkToast
     }
     
-    public var fhkCameraPermission: any FHKPermissionProtocol {
+    public var fhkCameraPermission: FHKPermission {
         inject.fhkCameraPermission
     }
     

@@ -48,9 +48,9 @@ struct HomeScreen<VM: HomeScreenVM>: View {
             .background(FHKColor.indigo)
             .onAppear {
                 loadAllInformation(isForce: false)
-                //                if camaraPermissionManager.status != .authorized {
-                //                    showPermissions = true
-                //                }
+                if viewModel.fhkCameraPermission.status() != .authorized {
+                    showPermissions = true
+                }
             }
         }
     }

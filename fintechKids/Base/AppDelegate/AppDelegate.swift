@@ -18,7 +18,7 @@ class AppDelegate: ServicesApplicationDelegate {
         [
             FirebaseRemoteService(),
             PushNotificationService(),
-            CameraPermissionService(),
+            //CameraPermissionService(),
             ToastService()
         ]
     }

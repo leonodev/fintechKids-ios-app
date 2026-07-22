@@ -37,9 +37,11 @@ public class ModulesDependencies: FHKDependencies {
                         testing: { .test }
         )
         
-        /// CameraPermissionService
-        inject.register((any FHKPermissionProtocol).self,
-        standard: { CameraPermissionService() }
+        /// CameraPermission
+        inject.register(FHKPermission.self,
+                        standard: { .liveCamera },
+                        preview: { .preview },
+                        testing: { .test }
         )
     
         /// Main App / Modules / Login
