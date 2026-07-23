@@ -70,8 +70,10 @@ public class ModulesDependencies: FHKDependencies {
         )
 
         /// Main App / Modules / Home
-        inject.register((any FHKHomeRepositoryProtocol).self,
-                        standard: { HomeRepository() }
+        inject.register(FHKHomeRepository.self,
+                        standard: { .live },
+                        preview: { .preview },
+                        testing: { .test }
         )
                                         
         /// Main App / Modules / Profile
