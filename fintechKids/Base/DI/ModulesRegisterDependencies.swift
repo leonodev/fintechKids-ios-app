@@ -64,8 +64,9 @@ public class ModulesDependencies: FHKDependencies {
         )
         
         /// Main App / Modules / Register Members
-        inject.register((any FHKRegisterMembersRepositoryProtocol).self,
-                        standard: { RegisterMembersRepository() }
+        inject.register(FHKRegisterMembersRepository.self,
+                        standard: { .live },
+                        testing: { .test }
         )
 
         /// Main App / Modules / Home

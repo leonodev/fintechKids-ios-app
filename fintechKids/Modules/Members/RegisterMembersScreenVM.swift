@@ -18,7 +18,7 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
     var viewState: RegisterMembersViewState = .init()
     
     // Properties injected
-    private var fhkRegisterMembersRepository: any FHKRegisterMembersRepositoryProtocol {
+    private var fhkRegisterMembersRepository: FHKRegisterMembersRepository {
         inject.fhkRegisterMembersRepository
     }
     
@@ -90,7 +90,7 @@ final class RegisterMembersScreenVM: FHKCore.ViewModel {
         viewState.registerMembersState = .loading
         
         do {
-            try await fhkRegisterMembersRepository.registerMembers(members: familyMembers)
+            try await fhkRegisterMembersRepository.registerMembers(familyMembers)
             viewState.registerMembersState = .finish(result: .success)
         } catch let error as FHKSupabaseError {
             viewState.registerMembersState = .finish(result: .error)
