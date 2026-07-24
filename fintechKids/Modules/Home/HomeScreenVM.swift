@@ -21,7 +21,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
         inject.fhkHomeRepository
     }
     
-    private var fhkGoalsRepository: any FHKGoalRepositoryProtocol {
+    private var fhkGoalsRepository: FHKGoalRepository {
         inject.fhkGoalsRepository
     }
     
@@ -57,14 +57,14 @@ final class HomeScreenVM: FHKCore.ViewModel {
     @MainActor
     func action(_ action: Action) async {
         switch action {
-        case .fetchMemberFamily(let force):
-            await fetchMemberFamily(isForce: force)
+        case .fetchMemberFamily(let isRefresh):
+            await fetchMemberFamily(isRefresh: isRefresh)
             
-        case .fetchRewardsCollected(let force):
-            await fetchRewardsCollected(isForce: force)
+        case .fetchRewardsCollected(let isRefresh):
+            await fetchRewardsCollected(isRefresh: isRefresh)
             
-        case .fetchMemberGoals(let force):
-            await fetchGoalMember(force: force)
+        case .fetchMemberGoals(let isRefresh):
+            await fetchGoalMember(isRefresh: isRefresh)
             
         case .fetchInformationMenu:
             await fetchMenuBotomHome()
@@ -86,7 +86,7 @@ final class HomeScreenVM: FHKCore.ViewModel {
 
 private extension HomeScreenVM {
     
-    func fetchGoalMember(force: Bool) async {
+    func fetchGoalMember(isRefresh: Bool) async {
         viewState.goalMemberState = .skeleton
         do {
             guard let email = viewState.parentEmail else {
@@ -95,8 +95,7 @@ private extension HomeScreenVM {
                 return
             }
 
-            let goalMember = try await fhkGoalsRepository.fetchGoalMemberFamily(emailParent: email,
-                                                                                forceRefresh: force)
+            let goalMember = try await fhkGoalsRepository.fetchGoalMemberFamily(email, isRefresh)
             goalMemberList = goalMember
             viewState.goalMemberState = .loaded
         } catch {
@@ -105,7 +104,7 @@ private extension HomeScreenVM {
         }
     }
     
-    func fetchRewardsCollected(isForce: Bool) async {
+    func fetchRewardsCollected(isRefresh: Bool) async {
         viewState.rewardsState = .skeleton
         do {
             guard let email = viewState.parentEmail else {
@@ -114,7 +113,7 @@ private extension HomeScreenVM {
                 return
             }
 
-            let rewardsCollected = try await fhkHomeRepository.fetchRewardCollected(email, isForce)
+            let rewardsCollected = try await fhkHomeRepository.fetchRewardCollected(email, isRefresh)
             rewardsCollectedList = rewardsCollected
             viewState.rewardsState = .loaded
         } catch {
@@ -123,7 +122,7 @@ private extension HomeScreenVM {
         }
     }
     
-    func fetchMemberFamily(isForce: Bool) async {
+    func fetchMemberFamily(isRefresh: Bool) async {
         viewState.familyState = .skeleton
         
         do {
@@ -133,7 +132,7 @@ private extension HomeScreenVM {
                 return
             }
 
-            let members = try await fhkHomeRepository.fetchMembers(email, isForce)
+            let members = try await fhkHomeRepository.fetchMembers(email, isRefresh)
             familyMembersList = members
             viewState.familyState = .loaded
         } catch {

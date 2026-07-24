@@ -18,7 +18,7 @@ final class GoalScreenVM: FHKCore.ViewModel {
     var viewState: GoalViewState = .init()
     
     // Properties Injected
-    private var fhkGoalsRepository: any FHKGoalRepositoryProtocol {
+    private var fhkGoalsRepository: FHKGoalRepository {
         inject.fhkGoalsRepository
     }
     
@@ -82,7 +82,7 @@ private extension GoalScreenVM {
                                   measureType: durationType.value,
                                   status: .inCurse)
             
-            try await fhkGoalsRepository.createGoal(goal: goal)
+            try await fhkGoalsRepository.createGoal(goal)
             viewState.goalState = .finish(result: .success)
         } catch {
             informateError(FHKGoalError.createGoalFailed)
@@ -104,7 +104,7 @@ private extension GoalScreenVM {
                                   measureType: WorkType.coins.value,
                                   status: .inCurse)
             
-            try await fhkGoalsRepository.createGoal(goal: goal)
+            try await fhkGoalsRepository.createGoal(goal)
             viewState.goalState = .finish(result: .success)
         } catch let pgError as FHKSupabaseError {
             informateError(pgError)

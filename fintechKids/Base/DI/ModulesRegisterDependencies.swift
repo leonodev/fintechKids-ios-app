@@ -109,12 +109,16 @@ public class ModulesDependencies: FHKDependencies {
         
         // Main App / Modules / Goal
         let supabaseClientGoal = try makeSupabaseClient()
-        inject.register((any FHKSupabaseGoalProtocol).self,
-                        standard: { FHKSupabaseGoals(supabaseClient: supabaseClientGoal) }
+        inject.register(FHKSupabaseGoal.self,
+                        standard: { .live(supabaseClient: supabaseClientGoal) },
+                        preview: { .preview },
+                        testing: { .test }
         )
         
-        inject.register((any FHKGoalRepositoryProtocol).self,
-                        standard: { GoalRepository() }
+        inject.register(FHKGoalRepository.self,
+                        standard: { .live },
+                        preview: { .preview },
+                        testing: { .test }
         )
 
         // Main App / Modules / Balance

@@ -18,7 +18,7 @@ final class GoalListScreenVM: FHKCore.ViewModel {
     var viewState: GoalListViewState = .init()
     
     // Properties Injected
-    private var fhkGoalsRepository: any FHKGoalRepositoryProtocol {
+    private var fhkGoalsRepository: FHKGoalRepository {
         inject.fhkGoalsRepository
     }
     
@@ -38,15 +38,15 @@ final class GoalListScreenVM: FHKCore.ViewModel {
     public func action(_ action: Action) async {
         switch action {
             
-        case .fetchGoals(let force):
-            await fetchGoalList(force: force)
+        case .fetchGoals(let isForce):
+            await fetchGoalList(isForce: isForce)
         }
     }
 }
 
 private extension GoalListScreenVM {
     
-    func fetchGoalList(force: Bool) async {
+    func fetchGoalList(isForce: Bool) async {
         do {
             guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.goalListState = .finish(result: .error)
@@ -54,7 +54,7 @@ private extension GoalListScreenVM {
             }
             
             viewState.goalListState = .loading
-            let goalList = try await fhkGoalsRepository.getGoals(emailParent: emailParent, forceRefresh: force)
+            let goalList = try await fhkGoalsRepository.getGoals(emailParent, isForce)
             viewState.goalList = goalList
             viewState.goalListState =  !viewState.goalList.isEmpty ? .finish(result: .success) : .empty
         } catch {

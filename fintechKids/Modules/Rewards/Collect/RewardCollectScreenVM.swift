@@ -22,7 +22,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         inject.fhkBalanceRepository
     }
     
-    private var fhkGoalsRepository: any FHKGoalRepositoryProtocol {
+    private var fhkGoalsRepository: FHKGoalRepository {
         inject.fhkGoalsRepository
     }
     
@@ -67,17 +67,17 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
     public func action(_ action: Action) async {
         switch action {
             
-        case .fetchGoals(let force):
-            await fetchGoalList(force: force)
+        case .fetchGoals(let isRefresh):
+            await fetchGoalList(isRefresh: isRefresh)
             
-        case .fetchMemberGoals(let memberId, let force):
-            await fetchGoalMember(memberId: memberId, force: force)
+        case .fetchMemberGoals(let memberId, let isRefresh):
+            await fetchGoalMember(memberId: memberId, isRefresh: isRefresh)
             
         case .fetchBalance(let memberId):
             await fetchBalance(memberId: memberId)
             
-        case .fetchRewards(let force):
-            await fetchRewards(force: force)
+        case .fetchRewards(let isRefresh):
+            await fetchRewards(force: isRefresh)
             
         case .filterGoals(let model):
             await filterGoals(model: model)
@@ -128,7 +128,7 @@ private extension RewardCollectScreenVM {
         }
     }
     
-    func fetchGoalList(force: Bool) async {
+    func fetchGoalList(isRefresh: Bool) async {
         do {
             guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.collectState = .finish(result: .error)
@@ -136,7 +136,7 @@ private extension RewardCollectScreenVM {
             }
             
             viewState.collectState = .loading
-            let goalList = try await fhkGoalsRepository.getGoals(emailParent: emailParent, forceRefresh: force)
+            let goalList = try await fhkGoalsRepository.getGoals(emailParent, isRefresh)
             viewState.goalList = goalList
             viewState.collectState = .loaded
         } catch {
@@ -145,10 +145,10 @@ private extension RewardCollectScreenVM {
         }
     }
     
-    func fetchGoalMember(memberId: UUID, force: Bool) async {
+    func fetchGoalMember(memberId: UUID, isRefresh: Bool) async {
         do {
             viewState.collectState = .loading
-            let goalMemberList = try await fhkGoalsRepository.fetchGoalMember(memberId: memberId, forceRefresh: force)
+            let goalMemberList = try await fhkGoalsRepository.fetchGoalMember(memberId, isRefresh)
             viewState.goalMemberList = goalMemberList
             viewState.collectState = .loaded
         } catch {
@@ -257,7 +257,7 @@ private extension RewardCollectScreenVM {
         viewState.collectState = .loading
         
         do {
-            try await fhkGoalsRepository.createGoalMember(goal: goalMember)
+            try await fhkGoalsRepository.createGoalMember(goalMember)
             viewState.collectState = .finish(result: .success)
         } catch {
             handleBalanceError(error)
