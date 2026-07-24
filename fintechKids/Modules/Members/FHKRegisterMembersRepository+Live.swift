@@ -15,7 +15,7 @@ public extension FHKRegisterMembersRepository {
         var registeMembers = Self()
         
         registeMembers.registerMembers = { members in
-            try await inject.fhkSupabaseMembers.addMembers(members: members)
+            try await inject.fhkSupabaseMembers.addMembers(members)
         }
         
         registeMembers.getParentMail = {

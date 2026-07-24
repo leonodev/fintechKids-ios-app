@@ -17,7 +17,7 @@ final class ProfileScreenVM: FHKCore.ViewModel {
     var viewState: ProfileViewState = .init()
     
     // Properties Injected
-    private var fhkProfileRepository: any FHKProfileRepositoryProtocol {
+    private var fhkProfileRepository: FHKProfileRepository {
         inject.fhkProfileRepository
     }
     
@@ -55,11 +55,17 @@ final class ProfileScreenVM: FHKCore.ViewModel {
     }
     
     public func getCurrentLanguage() async -> String {
-        await fhkProfileRepository.getLanguageCurrent()
+        do {
+            let language = try await fhkProfileRepository.getLanguageCurrent()
+            return language
+        } catch {
+            informateError(FHKAppError.userDefaultsFailed)
+            return ""
+        }
     }
     
     public func changeLanguage(newLang: String) {
-        fhkProfileRepository.setNewLanguage(lang: newLang)
+        fhkProfileRepository.setNewLanguage(newLang)
     }
     
     public func getEmailParent() async -> String {
@@ -83,7 +89,7 @@ private extension ProfileScreenVM {
         
         do {
             try await fhkProfileRepository.logout()
-            try fhkProfileRepository.deleteKeychain(key: KeychainKey.authToken.rawValue)
+            try fhkProfileRepository.deleteKeychain(KeychainKey.authToken.rawValue)
             viewState.profileState = .finish(result: .success)
         } catch {
             viewState.profileState = .finish(result: .error)

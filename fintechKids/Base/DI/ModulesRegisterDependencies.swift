@@ -26,7 +26,7 @@ public class ModulesDependencies: FHKDependencies {
         /// FHKLanguage
         inject.register(FHKLanguage.self,
                         standard: { .live },
-                        preview: { .english },
+                        preview: { .preview(.es) },
                         testing: { .test }
         )
         
@@ -77,14 +77,19 @@ public class ModulesDependencies: FHKDependencies {
         )
                                         
         /// Main App / Modules / Profile
-        inject.register((any FHKProfileRepositoryProtocol).self,
-                        standard: { ProfileRepository() }
+        /// It only changes the flag for the selected language; if you want to view the entire screen in another language, you must change the language in FHKLanguage.
+        inject.register(FHKProfileRepository.self,
+                        standard: { .live },
+                        preview: { .preview(.es) },
+                        testing: { .test }
         )
         
         /// Main App / Modules / Members
         let supabaseClientMembers = try makeSupabaseClient()
-        inject.register((any FHKSupabaseMembersProtocol).self,
-                        standard: { FHKSupabaseMembers(supabaseClient: supabaseClientMembers) }
+        inject.register(FHKSupabaseMembers.self,
+                        standard: { .live(supabaseClient: supabaseClientMembers) },
+                        preview: { .preview },
+                        testing: { .test }
         )
         
         // Main App / Modules / Task

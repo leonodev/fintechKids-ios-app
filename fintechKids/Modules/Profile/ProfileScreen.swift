@@ -212,8 +212,9 @@ struct ProfileScreen<VM: ProfileScreenVM>: View {
 }
 
 #Preview {
-    VStack {
-        ProfileScreen(viewModel: ProfileScreenVM())
+    PreviewMockContainer {
+        VStack {
+            ProfileScreen(viewModel: ProfileScreenVM())
+        }
     }
-    .background(FHKColor.indigo)
 }

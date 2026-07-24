@@ -25,7 +25,7 @@ public extension FHKHomeRepository {
             }
             
             Logger.info("🌐 Getting Members list from backend")
-            let membersList = try await inject.fhkSupabaseMembers.fetchFamilyMembers(parentEmail: email)
+            let membersList = try await inject.fhkSupabaseMembers.fetchFamilyMembers(email)
             await cache.setMembersCache(membersList)
             return membersList
         }
