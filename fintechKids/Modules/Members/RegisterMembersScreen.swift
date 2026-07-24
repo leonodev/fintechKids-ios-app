@@ -266,6 +266,10 @@ internal struct NewMemberContentView: View {
 
 #Preview {
     PreviewMockContainer {
-        RegisterMembersScreen(viewModel: RegisterMembersScreenVM())
+        let vm = RegisterMembersScreenVM()
+        RegisterMembersScreen(viewModel: vm)
+            .task {
+                await vm.action(.newMember)
+            }
     }
 }

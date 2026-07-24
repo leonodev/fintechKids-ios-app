@@ -66,6 +66,7 @@ public class ModulesDependencies: FHKDependencies {
         /// Main App / Modules / Register Members
         inject.register(FHKRegisterMembersRepository.self,
                         standard: { .live },
+                        preview: { .preview },
                         testing: { .test }
         )
 
