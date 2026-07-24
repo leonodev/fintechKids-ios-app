@@ -18,7 +18,7 @@ final class TaskCreateScreenVM: FHKCore.ViewModel {
     var viewState: TaskCreateViewState = .init()
     
     // Properties Injected
-    private var fhkTasksRepository: any FHKTasksRepositoryProtocol {
+    private var fhkTasksRepository: FHKTasksRepository {
         inject.fhkTasksRepository
     }
     
@@ -71,7 +71,7 @@ private extension TaskCreateScreenVM {
                                   coinsGranted: Int(viewState.rewardsKidsCoin) ?? 0,
                                   emailParent: emailParent)
             
-            try await fhkTasksRepository.createTask(task: task)
+            try await fhkTasksRepository.createTask(task)
             viewState.taskCreateState = .finish(result: .success)
         } catch let error as FHKSupabaseError {
             viewState.taskCreateState = .finish(result: .error)

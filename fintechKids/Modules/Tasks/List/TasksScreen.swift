@@ -174,21 +174,11 @@ struct TasksScreen<VM: TasksScreenVM>: View {
 }
 
 #Preview {
-    let vm = TasksScreenVM()
-    
-    vm.viewState.taskList = [
-        TaskEntity(
-            createdAt: "2026-03-13 05:16:12.976+00",
-            name: "Limpiar los sabados",
-            description: "Limpiar cuarto completamente bien, con todo ordenado y la ropa sucia en su lugar",
-            timeGranted: "2 horas",
-            coinsGranted: 100,
-            emailParent: "email@gmail.com"
-        )
-    ]
-    
-    // 2. Devolvemos la vista dentro de tu contenedor
-    return PreviewContainer {
+    PreviewMockContainer {
+        let vm = TasksScreenVM()
         TasksScreen(viewModel: vm)
+            .task {
+                await vm.action(.fetchTasks(force: false))
+            }
     }
 }

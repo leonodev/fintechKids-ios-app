@@ -43,6 +43,7 @@ public class CommonsDependencies: FHKDependencies {
         /// FHKConfiguration
         inject.register(FHKConfiguration.self,
                         standard: { .live },
+                        preview: { .preview },
                         testing: { .test }
         )
         

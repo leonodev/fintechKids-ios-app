@@ -18,7 +18,7 @@ final class TasksScreenVM: FHKCore.ViewModel {
     var viewState: TasksViewState = .init()
     
     // Properties Injected
-    private var fhkTasksRepository: any FHKTasksRepositoryProtocol {
+    private var fhkTasksRepository: FHKTasksRepository {
         inject.fhkTasksRepository
     }
     
@@ -39,8 +39,8 @@ final class TasksScreenVM: FHKCore.ViewModel {
     public func action(_ action: Action) async {
         switch action {
             
-        case .fetchTasks(let force):
-            await fetchTasksList(force: force)
+        case .fetchTasks(let isForce):
+            await fetchTasksList(isForce: isForce)
             
         case .createTask:
             await createNewTask()
@@ -66,8 +66,8 @@ private extension TasksScreenVM {
                                   coinsGranted: 10,
                                   emailParent: emailParent)
             
-            try await fhkTasksRepository.createTask(task: task)
-            await fetchTasksList(force: true)
+            try await fhkTasksRepository.createTask(task)
+            await fetchTasksList(isForce: true)
             viewState.taskState = .finish(result: .success)
         } catch let error as FHKSupabaseError {
             viewState.taskState = .finish(result: .error)
@@ -78,7 +78,7 @@ private extension TasksScreenVM {
         }
     }
     
-    func fetchTasksList(force: Bool) async {
+    func fetchTasksList(isForce: Bool) async {
         viewState.taskState = .loading
         
         do {
@@ -87,7 +87,7 @@ private extension TasksScreenVM {
                 return
             }
             
-            let taskList = try await fhkTasksRepository.getTasks(emailParent: emailParent, forceRefresh: force)
+            let taskList = try await fhkTasksRepository.getTasks(emailParent, isForce)
             viewState.taskList = taskList
             viewState.taskState = .finish(result: .success)
         } catch {

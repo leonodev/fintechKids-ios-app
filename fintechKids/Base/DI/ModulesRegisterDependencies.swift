@@ -95,12 +95,16 @@ public class ModulesDependencies: FHKDependencies {
         
         // Main App / Modules / Task
         let supabaseClient = try makeSupabaseClient()
-        inject.register((any FHKSupabaseTaskProtocol).self,
-                        standard: { FHKSupabaseTask(supabaseClient: supabaseClient) }
+        inject.register(FHKSupabaseTask.self,
+                        standard: { .live(supabaseClient: supabaseClient) },
+                        preview: { .preview },
+                        testing: { .test }
         )
         
-        inject.register((any FHKTasksRepositoryProtocol).self,
-                        standard: { TasksRepository() }
+        inject.register(FHKTasksRepository.self,
+                        standard: { .live },
+                        preview: { .preview },
+                        testing: { . test }
         )
         
         // Main App / Modules / Goal
