@@ -18,7 +18,7 @@ final class MemberDetailScreenVM: FHKCore.ViewModel {
     var viewState: MemberDetailState = .init()
     
     // Properties injected
-    private var fhkBalanceRepository: any FHKBalanceRepositoryProtocol {
+    private var fhkBalanceRepository: FHKBalanceRepository {
         inject.fhkBalanceRepository
     }
     
@@ -45,7 +45,7 @@ private extension MemberDetailScreenVM {
     func fetchBalance(memberId: UUID) async {
         do {
             viewState.memberState = .loading
-            let balance = try await fhkBalanceRepository.fetchBalance(memberId: memberId)
+            let balance = try await fhkBalanceRepository.fetchBalance(memberId)
             viewState.balance = balance
             viewState.memberState = .loaded
         } catch {

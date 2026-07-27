@@ -18,7 +18,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
     var viewState: RewardCollectViewState = .init()
     
     // Properties injected
-    private var fhkBalanceRepository: FHKBalanceRepositoryProtocol {
+    private var fhkBalanceRepository: FHKBalanceRepository {
         inject.fhkBalanceRepository
     }
     
@@ -178,7 +178,7 @@ private extension RewardCollectScreenVM {
     func fetchBalance(memberId: UUID) async {
         do {
             viewState.collectState = .loading
-            let balance = try await fhkBalanceRepository.fetchBalance(memberId: memberId)
+            let balance = try await fhkBalanceRepository.fetchBalance(memberId)
             viewState.balance = balance
             viewState.collectState = .loaded
         } catch {
@@ -220,7 +220,7 @@ private extension RewardCollectScreenVM {
     func updateBalanceCoinsMember(balance: BalanceKidsCoinsEntity) async {
         viewState.collectState = .loading
         do {
-            try await fhkBalanceRepository.updateKidsCoinsBalance(memberId: balance.memberId, infoBalance: balance)
+            try await fhkBalanceRepository.updateKidsCoinsBalance(balance.memberId, balance)
             await fetchBalance(memberId: balance.memberId)
             viewState.collectState = .finish(result: .success)
         } catch {
@@ -231,7 +231,7 @@ private extension RewardCollectScreenVM {
     func updateBalanceTimeMember(balance: BalanceTimeEntity) async {
         viewState.collectState = .loading
         do {
-            try await fhkBalanceRepository.updateTimeBalance(memberId: balance.memberId, infoBalance: balance)
+            try await fhkBalanceRepository.updateTimeBalance(balance.memberId, balance)
             await fetchBalance(memberId: balance.memberId)
             viewState.collectState = .finish(result: .success)
         } catch {
@@ -242,7 +242,7 @@ private extension RewardCollectScreenVM {
     func collectSendTicketGolden(ticketData: GoldenTicketParamsEntity) async {
         viewState.collectState = .loading
         do {
-            try await fhkBalanceRepository.sendGoldenTicket(data: ticketData)
+            try await fhkBalanceRepository.sendGoldenTicket(ticketData)
             viewState.goldenTicket = GoldenTicketEntity(recipientName: ticketData.recipientName,
                                                         taskDescription: ticketData.taskDescription,
                                                         reward: ticketData.reward,

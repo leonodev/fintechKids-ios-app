@@ -123,12 +123,16 @@ public class ModulesDependencies: FHKDependencies {
 
         // Main App / Modules / Balance
         let supabaseClientBalance = try makeSupabaseClient()
-        inject.register((any FHKSupabaseBalanceProtocol).self,
-                        standard: { FHKSupabaseBalance(supabaseClient: supabaseClientBalance) }
+        inject.register(FHKSupabaseBalance.self,
+                        standard: { .live(supabaseClient: supabaseClientBalance) },
+                        preview: { .preview },
+                        testing: { .test }
         )
        
-        inject.register((any FHKBalanceRepositoryProtocol).self,
-                        standard: { BalanceRepository() }
+        inject.register(FHKBalanceRepository.self,
+                        standard: { .live },
+                        preview: { .preview },
+                        testing: { .test },
         )
         
         // Main App / Modules / Rewards
