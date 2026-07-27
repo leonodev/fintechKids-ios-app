@@ -30,6 +30,7 @@
 		A3275DA42FBB56F900622CB4 /* FHKFirebase in Frameworks */ = {isa = PBXBuildFile; productRef = A3275DA32FBB56F900622CB4 /* FHKFirebase */; };
 		A3499B4C2FE0455900206A1F /* FHKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A3499B4B2FE0455900206A1F /* FHKAuth */; };
 		A3812D7E300101B6008B3896 /* FHKUnitTest.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = A3812D7D300101B6008B3896 /* FHKUnitTest.xctestplan */; };
+		A3BC73CA301756C000D8D4D8 /* FHKDomainTesting in Frameworks */ = {isa = PBXBuildFile; productRef = A3BC73C9301756C000D8D4D8 /* FHKDomainTesting */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +124,7 @@
 				A3499B4C2FE0455900206A1F /* FHKAuth in Frameworks */,
 				5D03F4672EE73DF6001FB7F9 /* PostgREST in Frameworks */,
 				5D1101C72F02BCFE00F606E6 /* FHKInjections in Frameworks */,
+				A3BC73CA301756C000D8D4D8 /* FHKDomainTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +159,7 @@
 				5D30BFB92EC1E6FB005C42B4 /* fintechKids */,
 				5D30BFC72EC1E6FE005C42B4 /* fintechKidsTests */,
 				5D30BFD12EC1E6FE005C42B4 /* fintechKidsUITests */,
+				A3BC73C8301756C000D8D4D8 /* Frameworks */,
 				5D30BFB82EC1E6FB005C42B4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -169,6 +172,13 @@
 				5D30BFCE2EC1E6FE005C42B4 /* fintechKidsUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A3BC73C8301756C000D8D4D8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,6 +220,7 @@
 				A3275DA02FBB50F500622CB4 /* FHKSupabase */,
 				A3275DA32FBB56F900622CB4 /* FHKFirebase */,
 				A3499B4B2FE0455900206A1F /* FHKAuth */,
+				A3BC73C9301756C000D8D4D8 /* FHKDomainTesting */,
 			);
 			productName = fintechKids;
 			productReference = 5D30BFB72EC1E6FB005C42B4 /* fintechKids.app */;
@@ -995,6 +1006,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A3499B4A2FE0455900206A1F /* XCRemoteSwiftPackageReference "fintechKids-modulo-authentication-ios" */;
 			productName = FHKAuth;
+		};
+		A3BC73C9301756C000D8D4D8 /* FHKDomainTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3275D9D2FBB507D00622CB4 /* XCRemoteSwiftPackageReference "fintechKids-modulo-domain-ios" */;
+			productName = FHKDomainTesting;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

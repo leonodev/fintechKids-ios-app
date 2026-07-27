@@ -18,7 +18,7 @@ final class RewardCreateScreenVM: FHKCore.ViewModel {
     var viewState: RewardCreateViewState = .init()
     
     // Properties injected
-    private var fhkRewardsRepository: any FHKRewardRepositoryProtocol {
+    private var fhkRewardsRepository: FHKRewardRepository {
         inject.fhkRewardsRepository
     }
     
@@ -65,7 +65,7 @@ private extension RewardCreateScreenVM {
     func createReward(reward: RewardEntity) async {
         do {
             viewState.createState = .loading
-            try await fhkRewardsRepository.createReward(reward: reward)
+            try await fhkRewardsRepository.createReward(reward)
             viewState.createState = .finish(result: .success)
         } catch {
             informateError(FHKRewardError.createRewardFailed)

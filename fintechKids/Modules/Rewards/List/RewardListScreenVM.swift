@@ -22,7 +22,7 @@ final class RewardListScreenVM: FHKCore.ViewModel {
         inject.fhkConfiguration
     }
     
-    private var fhkRewardsRepository: any FHKRewardRepositoryProtocol {
+    private var fhkRewardsRepository: FHKRewardRepository {
         inject.fhkRewardsRepository
     }
     
@@ -38,15 +38,15 @@ final class RewardListScreenVM: FHKCore.ViewModel {
     public func action(_ action: Action) async {
         switch action {
             
-        case .fetchRewards(let force):
-            await fetchRewardList(force: force)
+        case .fetchRewards(let isRefresh):
+            await fetchRewardList(isRefresh: isRefresh)
         }
     }
 }
 
 private extension RewardListScreenVM {
     
-    func fetchRewardList(force: Bool) async {
+    func fetchRewardList(isRefresh: Bool) async {
         do {
             guard let emailParent = fhkConfiguration.parentMail() else {
                 viewState.rewardListState = .finish(result: .error)
@@ -54,7 +54,7 @@ private extension RewardListScreenVM {
             }
             
             viewState.rewardListState = .loading
-            let rewardList = try await fhkRewardsRepository.fetchRewards(emailParent: emailParent, forceRefresh: force)
+            let rewardList = try await fhkRewardsRepository.fetchRewards(emailParent, isRefresh)
             viewState.rewardList = rewardList
             viewState.rewardListState =  !viewState.rewardList.isEmpty ? .finish(result: .success) : .empty
         } catch {

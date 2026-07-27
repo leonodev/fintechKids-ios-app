@@ -26,7 +26,7 @@ final class RewardCollectScreenVM: FHKCore.ViewModel {
         inject.fhkGoalsRepository
     }
     
-    private var fhkRewardsRepository: any FHKRewardRepositoryProtocol {
+    private var fhkRewardsRepository: FHKRewardRepository {
         inject.fhkRewardsRepository
     }
     
@@ -165,8 +165,7 @@ private extension RewardCollectScreenVM {
             }
             
             viewState.collectState = .loading
-            let rewards = try await fhkRewardsRepository.fetchRewards(emailParent: emailParent,
-                                                                      forceRefresh: force)
+            let rewards = try await fhkRewardsRepository.fetchRewards(emailParent, force)
             viewState.rewardList = rewards
             viewState.collectState = .loaded
         } catch {

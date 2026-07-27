@@ -11,17 +11,33 @@ import FHKStorage
 import FHKCore
 import FHKUtils
 
-final actor RewardCollectRepository: FHKRewardRepositoryProtocol {
+public extension FHKRewardRepository {
     
-    // Properties injected
-    private var fhkSupabaseReward: any FHKSupabaseRewardsProtocol {
-        inject.fhkSupabaseRewards
+    static var live: Self {
+        var repository = Self()
+        let rewardCollet = RewardCollectRepository()
+        
+        repository.createReward = { reward in
+            try await rewardCollet.createReward(reward: reward)
+        }
+        
+        repository.fetchRewards = { emailParent, forceRefresh in
+            try await rewardCollet.fetchRewards(emailParent: emailParent, forceRefresh: forceRefresh)
+        }
+        
+        repository.clearCache = {
+            await rewardCollet.clearCache()
+        }
+        
+        return repository
     }
-    
+}
+
+private final actor RewardCollectRepository {
     private var rewardsCache: CachedData<[RewardEntity]>?
     
     func createReward(reward: RewardEntity) async throws {
-        try await fhkSupabaseReward.createReward(reward: reward)
+        try await inject.fhkSupabaseRewards.createReward(reward)
     }
     
     func fetchRewards(emailParent: String, forceRefresh: Bool) async throws -> [RewardEntity] {
@@ -31,7 +47,7 @@ final actor RewardCollectRepository: FHKRewardRepositoryProtocol {
         }
         
         Logger.info("🌐 Getting reward list from backend")
-        let rewardList = try await fhkSupabaseReward.fetchRewards(emailParent: emailParent)
+        let rewardList = try await inject.fhkSupabaseRewards.fetchRewards(emailParent)
         
         self.rewardsCache = CachedData(content: rewardList)
         return rewardList

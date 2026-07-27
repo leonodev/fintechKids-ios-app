@@ -9,6 +9,7 @@ import SwiftUI
 import FHKCore
 import FHKDesignSystem
 import FHKDomain
+import FHKDomainTesting
 import FHKUtils
 
 struct RewardGoldenTicketScreen: View {
@@ -28,5 +29,11 @@ struct RewardGoldenTicketScreen: View {
                                  ticketCode: "\(ticketEntity.ticketCode)")
             }
         }
+    }
+}
+
+#Preview {
+    PreviewMockContainer {
+        RewardGoldenTicketScreen(ticketEntity: GoldenTicketEntity.previewItem)
     }
 }

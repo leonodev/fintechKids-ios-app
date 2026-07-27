@@ -143,3 +143,11 @@ extension RewardCreateScreen {
                             emailParent: emailParent)
     }
 }
+
+
+#Preview {
+    PreviewMockContainer {
+        let vm = RewardCreateScreenVM()
+        RewardCreateScreen(viewModel: vm)
+    }
+}

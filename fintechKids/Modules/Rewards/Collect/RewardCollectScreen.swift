@@ -9,6 +9,7 @@ import SwiftUI
 import FHKCore
 import FHKDesignSystem
 import FHKDomain
+import FHKDomainTesting
 
 struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
     @NavigationRouterWrapper<Routes> private var router
@@ -450,5 +451,14 @@ struct RewardCollectScreen<VM: RewardCollectScreenVM>: View {
             .font(.PangramSans.bold(FHKSize.size16))
             .foregroundColor(FHKColor.lunarSand.opacity(0.9))
             .padding(.top, FHKSize.size16)
+    }
+}
+
+#Preview {
+    PreviewMockContainer {
+        let vm = RewardCollectScreenVM()
+        RewardCollectScreen(viewModel: vm,
+                            collectEntity: CollectRewardEntity.previewItem,
+                            memberEntity: MemberEntity.previewItem)
     }
 }

@@ -39,7 +39,7 @@ public extension FHKHomeRepository {
             }
             
             Logger.info("🌐 Getting Reward Collected list from backend")
-            let rewardCollectedList =  try await inject.fhkSupabaseRewards.fetchRewardCollected(parentEmail: email)
+            let rewardCollectedList =  try await inject.fhkSupabaseRewards.fetchRewardCollected(email)
             await cache.setRewardsCache(rewardCollectedList)
             return rewardCollectedList
         }

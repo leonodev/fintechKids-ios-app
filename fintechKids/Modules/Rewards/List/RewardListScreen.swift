@@ -128,3 +128,13 @@ struct RewardListScreen<VM: RewardListScreenVM>: View {
         }
     }
 }
+
+#Preview {
+    PreviewMockContainer {
+        var vm = RewardListScreenVM()
+        RewardListScreen(viewModel: vm)
+            .task {
+                await vm.action(.fetchRewards(force: false))
+            }
+    }
+}

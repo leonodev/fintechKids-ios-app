@@ -16,6 +16,7 @@ import FHKAuth
 import FHKCore
 import Supabase
 import FHKDomain
+import FHKDomainTesting
 import FHKSupabase
 
 public class ModulesDependencies: FHKDependencies {
@@ -137,12 +138,16 @@ public class ModulesDependencies: FHKDependencies {
         
         // Main App / Modules / Rewards
         let supabaseClientRewards = try makeSupabaseClient()
-        inject.register((any FHKSupabaseRewardsProtocol).self,
-                        standard: { FHKSupabaseRewards(supabaseClient: supabaseClientRewards) }
+        inject.register(FHKSupabaseRewards.self,
+                        standard: { .live(supabaseClient: supabaseClientRewards) },
+                        preview: { .preview },
+                        testing: { .test }
         )
         
-        inject.register((any FHKRewardRepositoryProtocol).self,
-                        standard: { RewardCollectRepository() }
+        inject.register(FHKRewardRepository.self,
+                        standard: { .live },
+                        preview: { .preview(reward: 4)},
+                        testing: { .test }
         )
     }
 }
