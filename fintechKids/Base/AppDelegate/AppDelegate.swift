@@ -18,7 +18,6 @@ class AppDelegate: ServicesApplicationDelegate {
         [
             FirebaseRemoteService(),
             PushNotificationService(),
-            //CameraPermissionService(),
             ToastService()
         ]
     }
@@ -27,7 +26,7 @@ class AppDelegate: ServicesApplicationDelegate {
                               didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         do {
-            try CommonsDependencies.register()
+            try BasicDependencies.register()
             try ModulesDependencies.register()
             Logger.info("All dependencies registered successfully")
         } catch {

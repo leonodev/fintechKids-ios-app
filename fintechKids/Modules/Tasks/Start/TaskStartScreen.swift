@@ -9,6 +9,7 @@ import SwiftUI
 import FHKCore
 import FHKDesignSystem
 import FHKDomain
+import FHKDomainTesting
 
 struct TaskStartScreen<VM: TaskStartScreenVM>: View {
     @State var viewModel: VM
@@ -199,19 +200,9 @@ struct TaskStartScreen<VM: TaskStartScreenVM>: View {
 }
 
 #Preview {
-    PreviewContainer {
+    PreviewMockContainer {
         TaskStartScreen(viewModel: TaskStartScreenVM(),
-                        task: TaskEntity(
-            createdAt: "2026-03-13 05:16:12.976+00",
-            name: "Limpiar los sabados su cuarto y ademas ayudar con ...",
-            description: "Limpiar cuarto completamente bien, con todo ordenado y la ropa sucia en su lugar",
-            timeGranted: "2 horas",
-            coinsGranted: 100,
-            emailParent: "email@gmail.com"
-                        ), member: MemberEntity(id: UUID(),
-                                                emailParent: "email@gmail.com",
-                                                memberName: "Isaac",
-                                                familyName: "Leon's",
-                                                avatarName: "boy_6"))
+                        task: TaskEntity.previewItem,
+                        member: MemberEntity.previewItem)
     }
 }

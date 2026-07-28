@@ -14,20 +14,20 @@ import FHKStorage
 import FHKAuth
 import FHKCore
 import FHKDomain
+import FHKDomainTesting
 import FHKSupabase
 
-public class CommonsDependencies: FHKDependencies {
+public class BasicDependencies {
     
     @MainActor
     static func register() throws {
         // Register Base dependencies
-        
         /// FHKServicesAPI
         inject.register(FHKServices.self,
                         standard: { .live },
                         testing: { .test }
         )
-        
+
         /// FHKSecurity
         inject.register(FHKSecurity.self,
                         standard: { .live },
@@ -61,7 +61,7 @@ public class CommonsDependencies: FHKDependencies {
         )
         
         // FHKAuth
-        let supabaseClient = try makeSupabaseClient()
+        let supabaseClient = try APIClientFactory.makeSupabaseClient()
         inject.register(FHKAuth.self,
                         standard: { .live(client: supabaseClient) },
                         testing: { .test }
@@ -83,48 +83,6 @@ public class CommonsDependencies: FHKDependencies {
         inject.register(FHKSession.self,
                         standard: { .live },
                         testing: {.test }
-        )
-    }
-}
-
-public class FHKDependencies {
-    static func makeSupabaseClient(_ environment: EnvironmentType = .production) throws -> SupabaseClient {
-        let urlString: String
-        
-        // Creamos la configuración nativa de Apple
-        let configuration = URLSessionConfiguration.default
-        // peticiones de trafico de cada paquete
-        configuration.timeoutIntervalForRequest = 10.0
-        
-        // para respuestas completas
-        configuration.timeoutIntervalForResource = 30.0
-        
-        // Creamos la sesión con esa configuración
-        let customSession = URLSession(configuration: configuration)
-        
-        if environment == .localhost {
-            urlString = "http://localhost:3001"
-        } else {
-            urlString = try inject.fhkServicesAPI.getURL(environment, .spanish, .supabase)
-        }
- 
-        guard let url = URL(string: urlString) else {
-            throw FHKAppError.invalidURL(urlString)
-        }
-        
-        let anonKey = try inject.fhkSecurity.getAnonKey()
-        return SupabaseClient(
-            supabaseURL: url,
-            supabaseKey: anonKey,
-            options: SupabaseClientOptions(
-                db: .init(schema: "public"),
-                auth: .init(
-                    autoRefreshToken: true
-                ),
-                global: .init(
-                    session: customSession
-                )
-            )
         )
     }
 }

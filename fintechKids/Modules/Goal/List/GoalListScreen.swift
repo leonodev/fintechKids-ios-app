@@ -129,27 +129,11 @@ struct GoalListScreen<VM: GoalListScreenVM>: View {
 }
 
 #Preview {
-    PreviewContainer {
+    PreviewMockContainer {
         let vm = GoalListScreenVM()
-        
-        vm.viewState.goalList = [
-            GoalEntity(expirationDate: "2026-03-20 20:24:21.568999+00",
-                       name: "Name",
-                       emailParent: "email@gmail.com",
-                       value: 2000,
-                       measureType: "coins",
-                       status: .inCurse),
-            
-            GoalEntity(expirationDate: "2026-03-20 20:24:21.568999+00",
-                       name: "Name",
-                       emailParent: "email@gmail.com",
-                       value: 3,
-                       measureType: "hours",
-                       status: .inCurse)
-        ]
-        
-        return PreviewContainer {
-            GoalListScreen(viewModel: vm)
-        }
+        GoalListScreen(viewModel: vm)
+            .task {
+                await vm.action(.fetchGoals(force: false))
+            }
     }
 }

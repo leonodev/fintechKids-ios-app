@@ -17,7 +17,7 @@ public struct PreviewMockContainer<Content: View>: View {
         self.content = content
         
         #if DEBUG
-        try? CommonsDependencies.register()
+        try? BasicDependencies.register()
         try? ModulesDependencies.register()
         #endif
     }

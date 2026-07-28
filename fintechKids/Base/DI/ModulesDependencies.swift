@@ -19,10 +19,12 @@ import FHKDomain
 import FHKDomainTesting
 import FHKSupabase
 
-public class ModulesDependencies: FHKDependencies {
+public class ModulesDependencies {
     
     @MainActor
     static func register() throws {
+        let supabaseClient = try APIClientFactory.makeSupabaseClient()
+        
         /// Main App (fhkLanguage Depend of Storage)
         /// FHKLanguage
         inject.register(FHKLanguage.self,
@@ -87,15 +89,13 @@ public class ModulesDependencies: FHKDependencies {
         )
         
         /// Main App / Modules / Members
-        let supabaseClientMembers = try makeSupabaseClient()
         inject.register(FHKSupabaseMembers.self,
-                        standard: { .live(supabaseClient: supabaseClientMembers) },
+                        standard: { .live(supabaseClient: supabaseClient) },
                         preview: { .preview },
                         testing: { .test }
         )
         
         // Main App / Modules / Task
-        let supabaseClient = try makeSupabaseClient()
         inject.register(FHKSupabaseTask.self,
                         standard: { .live(supabaseClient: supabaseClient) },
                         preview: { .preview },
@@ -109,23 +109,21 @@ public class ModulesDependencies: FHKDependencies {
         )
         
         // Main App / Modules / Goal
-        let supabaseClientGoal = try makeSupabaseClient()
         inject.register(FHKSupabaseGoal.self,
-                        standard: { .live(supabaseClient: supabaseClientGoal) },
+                        standard: { .live(supabaseClient: supabaseClient) },
                         preview: { .preview },
                         testing: { .test }
         )
         
         inject.register(FHKGoalRepository.self,
                         standard: { .live },
-                        preview: { .preview },
+                        preview: { .preview(3) },
                         testing: { .test }
         )
 
         // Main App / Modules / Balance
-        let supabaseClientBalance = try makeSupabaseClient()
         inject.register(FHKSupabaseBalance.self,
-                        standard: { .live(supabaseClient: supabaseClientBalance) },
+                        standard: { .live(supabaseClient: supabaseClient) },
                         preview: { .preview },
                         testing: { .test }
         )
@@ -137,9 +135,8 @@ public class ModulesDependencies: FHKDependencies {
         )
         
         // Main App / Modules / Rewards
-        let supabaseClientRewards = try makeSupabaseClient()
         inject.register(FHKSupabaseRewards.self,
-                        standard: { .live(supabaseClient: supabaseClientRewards) },
+                        standard: { .live(supabaseClient: supabaseClient) },
                         preview: { .preview },
                         testing: { .test }
         )
