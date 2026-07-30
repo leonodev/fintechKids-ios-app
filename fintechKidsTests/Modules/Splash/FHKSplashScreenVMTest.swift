@@ -1,5 +1,5 @@
 //
-//  SplashScreenVMTest.swift
+//  FHKSplashScreenVMTest.swift
 //  fintechKidsTests
 //
 //  Created by Fredy Leon on 5/3/26.
@@ -15,7 +15,7 @@ internal import FHKCore
 
 @MainActor
 @Suite("Splash")
-struct SplashScreenVMTest {
+struct FHKSplashScreenVMTest {
 
     @Test("Navigate to language screen, when no previous selection",
           .tags(.language))
@@ -47,7 +47,7 @@ struct SplashScreenVMTest {
     }
 }
 
-private extension SplashScreenVMTest {
+private extension FHKSplashScreenVMTest {
     func assertStateWithCalled(
         withResult result: Result<String?, Error>,
         thenExpects expectedState: FHKSplashViewState.State

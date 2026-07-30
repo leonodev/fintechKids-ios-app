@@ -1,5 +1,5 @@
 //
-//  SplashRepositoryTest.swift
+//  FHKSplashRepositoryTest.swift
 //  fintechKids
 //
 //  Created by fleon  on 8/6/26.
@@ -14,7 +14,7 @@ internal import FHKStorage
 
 @MainActor
 @Suite("Splash")
-struct SplashRepositoryTest {
+struct FHKSplashRepositoryTest {
     //<verbo/resultado>_<condición>()
     @Test("Return language previous selected and saved",
           .tags(.language))

@@ -1,5 +1,5 @@
 //
-//  LoginScreenVMTest.swift
+//  FHKLoginScreenVMTest.swift
 //  fintechKids
 //
 //  Created by fleon  on 8/6/26.
@@ -18,7 +18,7 @@ internal import FHKStorage
 
 
 @MainActor
-struct LoginScreenVMTest {
+struct FHKLoginScreenVMTest {
     
     @Test("Return access token after login successfully",
           .tags(.login))
