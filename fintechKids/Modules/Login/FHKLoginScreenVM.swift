@@ -190,7 +190,7 @@ final class FHKLoginScreenVM: FHKCore.ViewModel {
         }
     }
 
-    private func informateError(_ error: any FHKError) {
+    private func informateError(_ error: some FHKError) {
         // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))

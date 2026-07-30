@@ -82,7 +82,7 @@ private extension FHKTaskCreateScreenVM {
         }
     }
     
-    func informateError(_ error: any FHKError) {
+    func informateError(_ error: some FHKError) {
         // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
             fhkFirebaseAnalitycs.track(.error(.init(from: error)))
