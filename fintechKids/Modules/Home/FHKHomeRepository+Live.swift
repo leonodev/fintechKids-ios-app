@@ -30,7 +30,6 @@ public extension FHKHomeRepository {
             return membersList
         }
 
-        
         repository.fetchRewardCollected = { email, forceRefresh in
             // first ckeck if exist data in cache
             if let cachedList = await cache.getValidRewardsCache(forceRefresh: forceRefresh) {

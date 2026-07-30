@@ -1,0 +1,78 @@
+//
+//  FHKRewardListScreenVM.swift
+//  fintechKids
+//
+//  Created by fleon  on 25/5/26.
+//
+
+import Foundation
+import Observation
+import FHKCore
+import FHKInjections
+import FHKDomain
+import FHKFirebase
+import FHKUtils
+
+@Observable
+final class FHKRewardListScreenVM: FHKCore.ViewModel {
+    var viewState: FHKRewardListViewState = .init()
+    
+    // Properties Injected
+    private var fhkConfiguration: FHKConfiguration {
+        inject.fhkConfiguration
+    }
+    
+    private var fhkRewardsRepository: FHKRewardRepository {
+        inject.fhkRewardsRepository
+    }
+    
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
+        inject.fhkFirebaseAnalitycs
+    }
+    
+    public enum Action: Equatable {
+        case fetchRewards(force: Bool = false)
+    }
+    
+    @MainActor
+    public func action(_ action: Action) async {
+        switch action {
+            
+        case .fetchRewards(let isRefresh):
+            await fetchRewardList(isRefresh: isRefresh)
+        }
+    }
+}
+
+private extension FHKRewardListScreenVM {
+    
+    func fetchRewardList(isRefresh: Bool) async {
+        do {
+            guard let emailParent = fhkConfiguration.parentMail() else {
+                viewState.rewardListState = .finish(result: .error)
+                return
+            }
+            
+            viewState.rewardListState = .loading
+            let rewardList = try await fhkRewardsRepository.fetchRewards(emailParent, isRefresh)
+            viewState.rewardList = rewardList
+            viewState.rewardListState =  !viewState.rewardList.isEmpty ? .finish(result: .success) : .empty
+        } catch {
+            informateError(FHKRewardError.fetchListRewardFailed)
+            viewState.rewardListState = .finish(result: .error)
+        }
+    }
+    
+    func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
+        if error.isShouldTrack {
+            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
+        }
+        
+        // We show the user the localized message (UX)
+        viewState.msnUserError = error.messageLocalized
+        
+        // We print the full details to the console (Debug)
+        Logger.error(error.logMessage)
+    }
+}

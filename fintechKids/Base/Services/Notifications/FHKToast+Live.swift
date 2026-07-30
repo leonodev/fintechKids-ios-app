@@ -16,7 +16,7 @@ extension FHKToast {
     @MainActor
     public static var live: Self {
         var manager = Self()
-        let service = ToastService()
+        let service = FHKToastService()
         manager.currentToast = { @MainActor in service.currentToast }
         manager.isVisible    = { @MainActor in service.isVisible }
         

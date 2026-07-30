@@ -9,6 +9,7 @@ import Testing
 import Foundation
 import FHKInjections
 import FHKDomain
+import FHKDomainTesting
 @testable import fintechKids
 internal import FHKCore
 
@@ -49,7 +50,7 @@ struct SplashScreenVMTest {
 private extension SplashScreenVMTest {
     func assertStateWithCalled(
         withResult result: Result<String?, Error>,
-        thenExpects expectedState: SplashViewState.State
+        thenExpects expectedState: FHKSplashViewState.State
     ) async throws {
         let splashSpy = CallTracker()
 
@@ -68,7 +69,7 @@ private extension SplashScreenVMTest {
 
             inject.fhkSplashRepository = customMock
 
-            let sut = SplashScreenVM()
+            let sut = FHKSplashScreenVM()
             await sut.action(.readLanguageCurrent)
 
             #expect(sut.viewState.splashState == expectedState)

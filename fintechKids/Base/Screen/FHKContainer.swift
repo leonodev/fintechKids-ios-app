@@ -8,7 +8,7 @@ import SwiftUI
 import FHKInjections
 import FHKDesignSystem
 
-public struct ScreenContainer<Content: View>: View {
+public struct FHKScreenContainer<Content: View>: View {
     private let content: () -> Content
     private let showNavigationBar: Bool
     private let title: String?

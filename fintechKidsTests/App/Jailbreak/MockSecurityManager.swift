@@ -58,13 +58,13 @@ final class SecurityManagerTests: XCTestCase {
         let compromisedMock = MockSecurityManager(shouldBeCompromised: true)
         
         // Al ser AppState @MainActor, debemos instanciarlo en el hilo principal usando await
-        let compromisedAppState = AppState(detector: compromisedMock)
+        let compromisedAppState = FHKAppState(detector: compromisedMock)
         
         XCTAssertTrue( compromisedAppState.isJailbroken, "AppState debería reflejar que el dispositivo está comprometido.")
         
         // Caso seguro
         let safeMock = MockSecurityManager(shouldBeCompromised: false)
-        let safeAppState = AppState(detector: safeMock)
+        let safeAppState = FHKAppState(detector: safeMock)
         
         XCTAssertFalse(safeAppState.isJailbroken, "AppState debería reflejar que el dispositivo está seguro.")
     }

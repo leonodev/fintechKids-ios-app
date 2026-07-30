@@ -1,0 +1,88 @@
+//
+//  FHKRewardCreateScreenVM.swift
+//  fintechKids
+//
+//  Created by fleon  on 19/5/26.
+//
+
+import Foundation
+import Observation
+import FHKCore
+import FHKInjections
+import FHKDomain
+import FHKFirebase
+import FHKUtils
+
+@Observable
+final class FHKRewardCreateScreenVM: FHKCore.ViewModel {
+    var viewState: FHKRewardCreateViewState = .init()
+    
+    // Properties injected
+    private var fhkRewardsRepository: FHKRewardRepository {
+        inject.fhkRewardsRepository
+    }
+    
+    private var fhkConfiguration: FHKConfiguration {
+        inject.fhkConfiguration
+    }
+    
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
+        inject.fhkFirebaseAnalitycs
+    }
+    
+    public var fhkToast: FHKToast {
+        inject.fhkToast
+    }
+    
+    public var fhkModal: FHKModal {
+        inject.fhkModal
+    }
+    
+    public enum Action: Equatable {
+        case createReward(reward: RewardEntity)
+    }
+    
+    @MainActor
+    public func action(_ action: Action) async {
+        switch action {
+            
+        case .createReward(let reward):
+            await createReward(reward: reward)
+        }
+    }
+    
+    func getParentMail() -> String? {
+        fhkConfiguration.parentMail()
+    }
+    
+    func displayNotification(message: String, type: ToastType = .warning) {
+        fhkToast.show(viewState.toastInfo(msn: message, type: type))
+    }
+}
+
+private extension FHKRewardCreateScreenVM {
+    
+    func createReward(reward: RewardEntity) async {
+        do {
+            viewState.createState = .loading
+            try await fhkRewardsRepository.createReward(reward)
+            viewState.createState = .finish(result: .success)
+        } catch {
+            informateError(FHKRewardError.createRewardFailed)
+            viewState.createState = .finish(result: .error)
+        }
+    }
+    
+    func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
+        if error.isShouldTrack {
+            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
+        }
+        
+        // We show the user the localized message (UX)
+        viewState.msnUserError = error.messageLocalized
+        
+        // We print the full details to the console (Debug)
+        Logger.error(error.logMessage)
+    }
+}

@@ -8,6 +8,7 @@
 import Testing
 import FHKInjections
 import FHKDomain
+import FHKDomainTesting
 import Supabase
 import SwiftUI
 @testable import fintechKids
@@ -42,7 +43,7 @@ struct LoginScreenVMTest {
             inject.fhkLoginRepository = mockLoginRepository
             inject.fhkRegisterRepository = mockRegisterRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             #expect(sut.viewState.loginState == .finish(result: .success))
@@ -73,7 +74,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             #expect(loginSpy.callCount == 1)
@@ -98,7 +99,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             #expect(sut.viewState.loginState == .finish(result: .error))
@@ -124,7 +125,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             #expect(sut.viewState.loginState == .finish(result: .error))
@@ -157,7 +158,7 @@ struct LoginScreenVMTest {
 
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             #expect(sut.viewState.loginState == .finish(result: .error))
@@ -188,7 +189,7 @@ struct LoginScreenVMTest {
 
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             // Asserts del repositorio de Login
@@ -224,7 +225,7 @@ struct LoginScreenVMTest {
             inject.fhkRegisterRepository = mockRegisterRepository
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             // Asserts del repositorio de Login
@@ -259,7 +260,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             #expect(sut.viewState.loginState == .finish(result: .error))
@@ -296,7 +297,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             // Asserts called of Login
@@ -328,7 +329,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLogin)
             
             // Asserts del repositorio de Login
@@ -354,7 +355,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
             // Asserts called of Login
@@ -386,7 +387,7 @@ struct LoginScreenVMTest {
             inject.fhkLoginRepository = mockLoginRepository
             inject.fhkSecurity = mockSecurityDevice
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
             // Asserts called of Login
@@ -422,7 +423,7 @@ struct LoginScreenVMTest {
             inject.fhkLoginRepository = mockLoginRepository
             inject.fhkSecurity = mockSecurityDevice
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
             // Asserts called of Login
@@ -451,7 +452,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
             #expect(sut.viewState.loginState == .finish(result: .error))
@@ -481,7 +482,7 @@ struct LoginScreenVMTest {
             
             inject.fhkLoginRepository = mockLoginRepository
             
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.doLoginWithBiometrics)
             
             #expect(sut.viewState.loginState == .finish(result: .error))
@@ -510,7 +511,7 @@ struct LoginScreenVMTest {
             
             inject.fhkToast = mockToast
   
-            let sut = LoginScreenVM()
+            let sut = FHKLoginScreenVM()
             await sut.action(.showInfo(info: FHKToastInfo(type: .success, message: "success", hasIcon: true)))
             
             // Asserts called
