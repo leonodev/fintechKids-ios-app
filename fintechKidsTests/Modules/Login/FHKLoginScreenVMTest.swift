@@ -520,6 +520,60 @@ struct FHKLoginScreenVMTest {
         }
     }
     
+    @Test("Display faceid Icon when BiometricFaceID is enable",
+          .tags(.login))
+    func displayIconBiometric_thenShowIconBiometricFaceID() async {
+        let securitySpy = CallTracker()
+
+        await inject.withOverrides {
+            configureDefaultMocks()
+            
+            var mockSecurity = inject.fhkSecurity
+            mockSecurity.biometryIcon = {
+                securitySpy.increment()
+                return "faceid"
+            }
+            
+            inject.fhkSecurity = mockSecurity
+            
+            let sut = FHKLoginScreenVM()
+            let icon = sut.biometryIconName
+            
+            #expect(icon == "faceid")
+            
+            // Asserts called
+            #expect(securitySpy.isCalled)
+            #expect(securitySpy.callCount == 1)
+        }
+    }
+    
+    @Test("Get Token Valido when Login Has Been Success",
+          .tags(.login))
+    func getTokenValido_whenLoginHasBeenSuccess() async {
+        let repositorSpy = CallTracker()
+        
+        await inject.withOverrides {
+            configureDefaultMocks()
+            
+            var mockRepository = inject.fhkLoginRepository
+            mockRepository.hasSavedToken = {
+                repositorSpy.increment()
+                return true
+            }
+            
+            inject.fhkLoginRepository = mockRepository
+            
+            let sut = FHKLoginScreenVM()
+            let isHasToken = sut.hasSavedAuthToken
+            
+            #expect(isHasToken == true)
+            
+            // Asserts called
+            #expect(repositorSpy.isCalled)
+            #expect(repositorSpy.callCount == 1)
+            
+        }
+    }
     
     private func configureDefaultMocks() {
         inject.fhkLoginRepository = .test
