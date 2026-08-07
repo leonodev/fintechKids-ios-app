@@ -1,0 +1,11 @@
+//
+//  Prod.xcconfig
+//  FintechKidsApp
+//
+//  Created by fleon  on 6/8/26.
+//
+
+PP_NAME = FHK
+PRODUCT_BUNDLE_IDENTIFIER = com.fleon.fintechKids
+BASE_URL = https:${SLASH}${SLASH}chaukyiczbxkkbnxgahi.supabase.co
+APP_ICON_NAME = AppIcon

@@ -1,0 +1,11 @@
+//
+//  QA.xcconfig
+//  FintechKidsApp
+//
+//  Created by fleon  on 6/8/26.
+//
+
+APP_NAME = FHK (QA)
+PRODUCT_BUNDLE_IDENTIFIER = com.tuistdemo.app.qa
+BASE_URL = https:${SLASH}${SLASH}-qa.chaukyiczbxkkbnxgahi.supabase.co
+APP_ICON_NAME = AppIcon-QA
