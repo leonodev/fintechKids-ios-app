@@ -30,7 +30,7 @@ let appTargets = [
 ]
 
 
-let modules: [String] = []
+let modulesExamples: [String] = ["DesignSystem"]
 
 let project = Project.makeApp(
     name: "FintechKidsApp",
@@ -41,5 +41,6 @@ let project = Project.makeApp(
         authModuleFeature
     ],
     schemes: Scheme.makeAppSchemes(
-        appName: "FintechKidsApp") + Scheme.makeExampleSchemes(moduleNames: modules)
+        appName: "FintechKidsApp") +
+    Scheme.makeExampleSchemes(moduleNames: modulesExamples)
 )
