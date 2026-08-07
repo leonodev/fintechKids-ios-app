@@ -78,6 +78,36 @@ public extension Target {
         
         return targets
     }
+    
+    /// Target de tipo App con la configuración estándar del equipo.
+    static func app(
+        name: String,
+        dependencies: [TargetDependency] = []
+    ) -> Target {
+        .target(
+            name: name,
+            destinations: .iOS,
+            product: .app,
+            bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
+            deploymentTargets: .iOS("17.0"),
+            infoPlist: .extendingDefault(with: [
+                "CFBundleDisplayName": "$(APP_NAME)",
+                "BASE_URL": "$(BASE_URL)",
+                "UIBackgroundModes": ["remote-notification"],
+                "UILaunchScreen": [:]
+            ]),
+            sources: ["Targets/\(name)/Sources/**"],
+            resources: ["Targets/\(name)/Resources/**"],
+            entitlements: .file(path: .relativeToRoot("Targets/\(name)/\(name).entitlements")),
+            dependencies: dependencies,
+            settings: .settings(
+                base: defaultSettings.base.merging([
+                    "ASSETCATALOG_COMPILER_APPICON_NAME": "$(APP_ICON_NAME)"
+                ]) { $1 },
+                configurations: [.dev, .qa, .prod]
+            )
+        )
+    }
 
     /// Genera la App de Ejemplo aislada para probar el módulo de forma independiente.
     static func moduleExample(
@@ -109,36 +139,7 @@ public extension Target {
         )
     }
 
-    /// Target de tipo App con la configuración estándar del equipo.
-    static func app(
-        name: String,
-        dependencies: [TargetDependency] = []
-    ) -> Target {
-        .target(
-            name: name,
-            destinations: .iOS,
-            product: .app,
-            bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
-            deploymentTargets: .iOS("17.0"),
-            infoPlist: .extendingDefault(with: [
-                "CFBundleDisplayName": "$(APP_NAME)",
-                "BASE_URL": "$(BASE_URL)",
-                "UIBackgroundModes": ["remote-notification"],
-                "UILaunchScreen": [:]
-            ]),
-            sources: ["Targets/\(name)/Sources/**"],
-            resources: ["Targets/\(name)/Resources/**"],
-            entitlements: .file(path: .relativeToRoot("Targets/\(name)/\(name).entitlements")),
-            dependencies: dependencies,
-            settings: .settings(
-                base: defaultSettings.base.merging([
-                    "ASSETCATALOG_COMPILER_APPICON_NAME": "$(APP_ICON_NAME)"
-                ]) { $1 },
-                configurations: [.dev, .qa, .prod]
-            )
-        )
-    }
-
+    
     /// Target para compartir Mocks y Fakes entre Tests, Previews y Examples
     static func moduleTesting(
         for moduleName: String,
@@ -147,7 +148,6 @@ public extension Target {
         dependencies: [TargetDependency] = []
     ) -> Target {
         let basePath = "Targets/\(category)/\(moduleName)"
-        
         return .target(
             name: "\(moduleName)Testing",
             destinations: .iOS,
