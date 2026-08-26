@@ -7,8 +7,8 @@
 
 import FLibInjections
 import FLibStorage
-import Domain
-import Core
+import FHKDomain
+import FHKCore
 
 public extension FHKSplashRepository {
     

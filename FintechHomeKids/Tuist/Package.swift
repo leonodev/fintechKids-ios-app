@@ -2,14 +2,20 @@
 import PackageDescription
 
 #if TUIST
-    import struct ProjectDescription.PackageSettings
+import ProjectDescription
+import ProjectDescriptionHelpers
 
-    let packageSettings = PackageSettings(
-        // Customize the product types for specific package product
-        // Default is .staticFramework
-        // productTypes: ["Alamofire": .framework,]
-        productTypes: [:]
+let packageSettings = PackageSettings(
+    productTypes: [:],
+    /// Al asignar baseSettings Tuist generará los proyectos de todas las dependencias SPM con las configuraciones Dev, QA y Prod, ya que los FHK solo tiene Debug y Release
+    baseSettings: .settings(
+        configurations: [
+            .dev,
+            .qa,
+            .prod
+        ]
     )
+)
 #endif
 
 let package = Package(

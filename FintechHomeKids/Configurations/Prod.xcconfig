@@ -1,0 +1,6 @@
+#include "Base.xcconfig"
+
+PP_NAME = FHK
+PRODUCT_BUNDLE_IDENTIFIER = com.fleon.fintechKids
+BASE_URL = https:${SLASH}${SLASH}pro.supabase.co
+APP_ICON_NAME = AppIcon-Pro

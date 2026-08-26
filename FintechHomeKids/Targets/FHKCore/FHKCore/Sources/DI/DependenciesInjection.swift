@@ -14,4 +14,9 @@ public extension DependenciesInjection {
         get { get(FHKStorageManager.self) }
         set { set(newValue, for: FHKStorageManager.self) }
     }
+    
+    var fhkEnvironment: FHKEnvironment {
+        get { get(FHKEnvironment.self) }
+        set { set(newValue, for: FHKEnvironment.self) }
+    }
 }

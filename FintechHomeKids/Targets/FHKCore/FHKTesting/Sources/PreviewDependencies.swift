@@ -17,6 +17,11 @@ public struct FHKPreviewDependencies {
     public static func registerDefaults() {
         #if DEBUG
         // Mocks de Storage
+        
+        inject.register(FHKEnvironment.self,
+                        live: { .live }
+        )
+        
         inject.register(FHKStorageManager.self,
                         testing: { .test }
         )

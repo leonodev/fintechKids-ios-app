@@ -2,35 +2,24 @@ import ProjectDescription
 
 public extension Target {
     
-    // Configuración base de Settings
+    // Configuración base con los 3 ambientes globales
     static var defaultSettings: Settings {
-        .settings(base: [
-            /// Desactiva la búsqueda de cabeceras Objective-C en módulos de Swift puro
-            "DEFINES_MODULE": "YES",
-            
-            /// Evita que scripts de terceros lean o modifiquen archivos fuera de la carpeta del proyecto
-            "ENABLE_USER_SCRIPT_SANDBOXING": "YES",
-            
-            /// Genera autocompletado tipado para String Catalogs (.xcstrings)
-            "LOCALIZED_STRING_CATALOG_GENERATE_SYMBOLS": "YES",
-            
-            /// Genera autocompletado tipado para imágenes y colores (.xcassets)
-            "ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS": "YES",
-            
-            /// Silencia avisos de falta de símbolos en librerías estáticas
-            "OTHER_LIBTOOLFLAGS": "-no_warning_for_no_symbols",
-            
-            /// Permite el uso de @testable import en los targets de pruebas
-            "ENABLE_TESTABILITY": "YES",
-            
-            /// Todos los módulos heredarán Swift 6 por defecto
-            "SWIFT_VERSION": "6.0",
-            
-            "OTHER_LDFLAGS": .array(["$(inherited)", "-ObjC"])
-        ])
+        .settings(
+            base: [
+                "DEFINES_MODULE": "YES",
+                "ENABLE_USER_SCRIPT_SANDBOXING": "YES",
+                "LOCALIZED_STRING_CATALOG_GENERATE_SYMBOLS": "YES",
+                "ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS": "YES",
+                "OTHER_LIBTOOLFLAGS": "-no_warning_for_no_symbols",
+                "ENABLE_TESTABILITY": "YES",
+                "SWIFT_VERSION": "6.0",
+                "OTHER_LDFLAGS": .array(["$(inherited)", "-ObjC"])
+            ],
+            configurations: [.dev, .qa, .prod] // Todos los targets deben conocer Dev, QA y Prod
+        )
     }
 
-    // 1. Target Core / Base (Inyecciones, Utilidades, Storage)
+    // 1. Core
     static func coreModule(name: String, dependencies: [TargetDependency] = []) -> Target {
         .target(
             name: name,
@@ -46,7 +35,7 @@ public extension Target {
         )
     }
 
-    // 2. Target Domain (Código Swift puro: Protocolos, UseCases, Entidades)
+    // 2. Domain
     static func domainModule(dependencies: [TargetDependency] = []) -> Target {
         .target(
             name: "FHKDomain",
@@ -61,7 +50,7 @@ public extension Target {
         )
     }
 
-    // 3. Targets de Features (Vistas, ViewModels, Previews). NO reciben Infraestructura.
+    // 3. Features
     static func featureModule(
         name: String,
         hasExample: Bool = true,
@@ -70,7 +59,6 @@ public extension Target {
         let basePath = "Targets/Features/\(name)"
         var targets: [Target] = []
 
-        // Módulo principal de la Feature (.framework para Previews instantáneas)
         let mainTarget = Target.target(
             name: name,
             destinations: .iOS,
@@ -90,7 +78,6 @@ public extension Target {
         )
         targets.append(mainTarget)
 
-        // App de Ejemplo aislada para desarrollo individual
         if hasExample {
             let exampleTarget = Target.target(
                 name: "\(name)Example",
@@ -99,6 +86,7 @@ public extension Target {
                 bundleId: "com.fleon.fintechHomeKids.\(name.lowercased()).example",
                 deploymentTargets: .iOS("17.0"),
                 infoPlist: .extendingDefault(with: [
+                    "BASE_URL": "$(BASE_URL)",
                     "CFBundleDisplayName": "\(name) Example",
                     "UILaunchScreen": [:]
                 ]),
@@ -112,7 +100,7 @@ public extension Target {
         return targets
     }
 
-    // 4. Target Infrastructure (Firebase, Supabase, SDKs pesados)
+    // 4. Infrastructure
     static func infraModule(name: String, dependencies: [TargetDependency] = []) -> Target {
         .target(
             name: name,
@@ -130,22 +118,31 @@ public extension Target {
         )
     }
 
-    // 5. App Principal (Ensamblador de la DI)
+    // 5. App Principal
     static func mainApp(dependencies: [TargetDependency] = []) -> Target {
         .target(
             name: "FintechHomeKids",
             destinations: .iOS,
             product: .app,
-            bundleId: "com.fleon.fintechHomeKids",
+            bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
             deploymentTargets: .iOS("17.0"),
             infoPlist: .extendingDefault(with: [
-                "CFBundleDisplayName": "FintechHomeKids",
+                "CFBundleDisplayName": "$(APP_NAME)",
+                "BASE_URL": "$(BASE_URL)",
                 "UILaunchScreen": [:]
             ]),
             sources: ["Targets/FintechHomeKids/Sources/**"],
-            resources: ["Targets/FintechHomeKids/Resources/**"],
+            resources: [
+                "Targets/FintechHomeKids/Resources/**",
+                .glob(pattern: .relativeToRoot("GoogleService-Info.plist"))
+            ],
             dependencies: dependencies,
-            settings: defaultSettings
+            settings: .settings(
+                base: defaultSettings.base.merging([
+                    "ASSETCATALOG_COMPILER_APPICON_NAME": "$(APP_ICON_NAME)"
+                ]) { $1 },
+                configurations: [.dev, .qa, .prod]
+            )
         )
     }
 }
