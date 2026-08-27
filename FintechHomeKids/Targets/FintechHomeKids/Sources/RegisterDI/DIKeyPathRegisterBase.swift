@@ -1,5 +1,5 @@
 //
-//  DependenciesRegisterBase.swift
+//  DIKeyPathRegisterBase.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 25/8/26.

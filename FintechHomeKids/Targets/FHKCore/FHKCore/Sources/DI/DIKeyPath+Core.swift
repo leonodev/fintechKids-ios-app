@@ -1,5 +1,5 @@
 //
-//  DependenciesDeclareBase.swift
+//  DIKeyPath+Core.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 25/8/26.
