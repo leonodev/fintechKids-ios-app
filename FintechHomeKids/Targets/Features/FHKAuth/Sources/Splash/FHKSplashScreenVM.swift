@@ -6,12 +6,19 @@
 //
 
 import Observation
+import FHKCore
+import FHKDomain
 
 @Observable
 public final class FHKSplashScreenVM: FHKCore.ViewModel {
     var viewState: FHKSplashViewState = .init()
     
     public init() {}
+    
+    // Properties Injected
+    private var fhkSplashRepository: FHKSplashRepository {
+        inject.fhkSplashRepository
+    }
     
     public enum Action: Equatable {
         case readLanguageCurrent
@@ -28,22 +35,19 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
     
     @MainActor
     private func readLanguageCurrent() async {
-       
+        do {
+            let isLanguageSelected = try await fhkSplashRepository.readLanguageCurrent()
+            viewState.splashState = getStateUser(hasLanguageSelected: isLanguageSelected != nil)
+        } catch {
+            viewState.splashState = .loaded(nav: .goToLanguage)
+        }
     }
-}
-
-public enum FHKCore {}
-
-
-public extension FHKCore {
-    @MainActor
-    protocol ViewModel {
-        associatedtype Action: Equatable
-        func action(_ action: Action) async
-    }
-}
-public extension FHKCore.ViewModel {
-    var nameAction: String {
-        String(describing: Self.self) + ".Action"
+    
+    private func getStateUser(hasLanguageSelected: Bool) -> FHKSplashViewState.State {
+        if hasLanguageSelected {
+            return .loaded(nav: .goToLogin)
+        } else {
+            return .loaded(nav: .goToLanguage)
+        }
     }
 }
