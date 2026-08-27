@@ -25,6 +25,7 @@ class FHKAppDelegate: ServicesApplicationDelegate {
     ) -> Bool {
         do {
             try FHKBaseDependencies.register()
+            try FHKModulesDependencies.register()
             Logger.info("All dependencies registered successfully")
         } catch {
             fatalError("❌ Critical error during dependency registration: \(error)")
