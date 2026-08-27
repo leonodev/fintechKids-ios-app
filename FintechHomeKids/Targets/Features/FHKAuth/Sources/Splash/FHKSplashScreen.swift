@@ -9,10 +9,12 @@ import SwiftUI
 import FHKDesignSystem
 import FLibUtils
 import FHKTesting
+import FHKCore
 
 public struct FHKSplashScreen: View {
     @State private var viewModel: FHKSplashScreenVM
-    
+    private var router = NavigationRouter<AuthRoute>()
+
     public init() {
         self._viewModel = State(initialValue: FHKSplashScreenVM())
     }
