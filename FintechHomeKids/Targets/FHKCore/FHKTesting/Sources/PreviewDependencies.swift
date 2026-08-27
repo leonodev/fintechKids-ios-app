@@ -38,5 +38,10 @@ public enum FHKPreviewDependencies {
                         preview: { .preview },
                         testing: { .test }
         )
+        
+        inject.registerMock(FHKSplashRepository.self,
+                            preview: { .preview },
+                            testing: { .test }
+        )
     }
 }
