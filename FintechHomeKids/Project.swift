@@ -17,7 +17,8 @@ let project = Project(
         ]),
         Target.coreModule(name: "FHKDesignSystem", dependencies: [
             .target(name: "FHKCore"),
-            .external(name: "Lottie")
+            .external(name: "Lottie"),
+            .external(name: "Algorithms")
         ]),
         Target.domainModule(dependencies: [
             .target(name: "FHKCore")

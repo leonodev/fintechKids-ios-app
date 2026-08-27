@@ -1,8 +1,8 @@
 //
-//  FHKColor.swift
-//  FintechHomeKids
+//  Colors.swift
+//  FHKDesignSystem
 //
-//  Created by Fredy Leon on 25/8/26.
+//  Created by Fredy Leon on 22/11/25.
 //
 
 import SwiftUI

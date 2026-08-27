@@ -1,5 +1,5 @@
 //
-//  FHKBaseDependencies.swift
+//  DependenciesRegisterBase.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 25/8/26.
@@ -24,6 +24,14 @@ public class FHKBaseDependencies {
         inject.register(FHKStorageManager.self,
                         live: { .live(userDefault: FHKUserDefault(),
                                       keychain: FHKKeychainStorage()) }
-        ) 
+        )
+        
+        inject.register(FHKSession.self,
+                        live: { .live }
+        )
+        
+        inject.register(FHKModal.self,
+                        live: { .live }
+        )
     }
 }

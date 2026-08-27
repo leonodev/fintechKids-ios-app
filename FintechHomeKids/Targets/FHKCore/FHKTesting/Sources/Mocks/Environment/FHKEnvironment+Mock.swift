@@ -13,4 +13,18 @@ extension FHKEnvironment {
     static var test: Self {
         Self()
     }
+    
+    static var preview: Self {
+        var view = Self()
+        
+        view.baseURL = {
+            return "https://preview.fintechhomekids.com"
+        }
+        
+        view.appName = {
+            return "fintechhomekids-preview"
+        }
+        
+        return view
+    }
 }

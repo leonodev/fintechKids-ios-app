@@ -1,5 +1,5 @@
 //
-//  DependenciesInjection.swift
+//  DependenciesDeclareBase.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 25/8/26.
@@ -18,5 +18,15 @@ public extension DependenciesInjection {
     var fhkEnvironment: FHKEnvironment {
         get { get(FHKEnvironment.self) }
         set { set(newValue, for: FHKEnvironment.self) }
+    }
+    
+    var fhkSession: FHKSession {
+        get { get(FHKSession.self) }
+        set { set(newValue, for: FHKSession.self) }
+    }
+    
+    var fhkModal: FHKModal {
+        get { get(FHKModal.self) }
+        set { set(newValue, for: FHKModal.self) }
     }
 }

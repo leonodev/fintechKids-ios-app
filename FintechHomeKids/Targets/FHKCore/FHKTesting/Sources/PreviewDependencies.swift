@@ -11,21 +11,32 @@ import FHKDomain
 import FLibInjections
 import FLibStorage
 
-public struct FHKPreviewDependencies {
+public enum FHKPreviewDependencies {
     
     @MainActor
     public static func registerDefaults() {
         #if DEBUG
-        // Mocks de Storage
-        
-        inject.register(FHKEnvironment.self,
-                        live: { .live }
+        registerBaseMocks()
+        #endif
+    }
+    
+    @MainActor
+    private static func registerBaseMocks() {
+        inject.registerMock(FHKEnvironment.self,
+                            preview: { .preview }
         )
         
-        inject.register(FHKStorageManager.self,
+        inject.registerMock(FHKStorageManager.self,
                         testing: { .test }
         )
         
-        #endif
+        inject.registerMock(FHKSession.self,
+                        testing: { .test }
+        )
+        
+        inject.registerMock(FHKModal.self,
+                        preview: { .preview },
+                        testing: { .test }
+        )
     }
 }
