@@ -43,5 +43,10 @@ public enum FHKPreviewDependencies {
                             preview: { .preview },
                             testing: { .test }
         )
+        
+        inject.registerMock(FHKLanguage.self,
+                            preview: { .preview(.en) },
+                            testing: { .test }
+        )
     }
 }

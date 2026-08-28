@@ -8,7 +8,6 @@
 import SwiftUI
 import Foundation
 
-
 // Observable navigation router
 @MainActor
 @Observable

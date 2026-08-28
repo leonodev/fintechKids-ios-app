@@ -9,8 +9,8 @@ import FLibUtils
 
 public struct FHKSplashViewState {
     // Properties Screen View
-    public let titleApp: String = "title_name_app".localized()
-    public let subtitleApp: String = "title_kids".localized()
+    public var titleApp: String { "title_name_app".localized(.module) }
+    public var subtitleApp: String { "title_kids".localized(.module) }
     
     public enum StateAction: Equatable {
         case goToLanguage

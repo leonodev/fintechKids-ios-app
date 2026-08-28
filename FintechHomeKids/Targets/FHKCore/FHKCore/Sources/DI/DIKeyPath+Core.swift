@@ -29,4 +29,14 @@ public extension DependenciesInjection {
         get { get(FHKModal.self) }
         set { set(newValue, for: FHKModal.self) }
     }
+    
+    var fhkToast: FHKToast {
+        get { get(FHKToast.self) }
+        set { set(newValue, for: FHKToast.self) }
+    }
+    
+    var fhkLanguage: FHKLanguage {
+        get { get(FHKLanguage.self) }
+        set { set(newValue, for: FHKLanguage.self) }
+    }
 }

@@ -1,0 +1,93 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+      "title_screen_security" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "device not compatible"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "dispositivo no compatible"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "appareil non pris en charge"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "dispositivo non supportato"
+            }
+          }
+        }
+      },
+      "msn_screen_security" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "for security reasons, this application cannot run on jailbroken devices."
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "por razones de seguridad, esta aplicación no puede ejecutarse en dispositivos con modificaciones de sistema (Jailbreak)."
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "pour des raisons de sécurité, cette application ne peut pas fonctionner sur les appareils jailbreakés."
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "per motivi di sicurezza, questa applicazione non può essere eseguita su dispositivi jailbroken."
+            }
+          }
+        }
+      },
+      "title_btn_screen_security" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "close application"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "cerrar aplicación"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "fermer l'application"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "chiudi l'applicazione"
+            }
+          }
+        }
+      }
+  },
+  "version" : "1.1"
+}

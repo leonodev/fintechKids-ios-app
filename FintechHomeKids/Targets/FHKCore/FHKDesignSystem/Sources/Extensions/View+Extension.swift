@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FHKCore
 
 public extension View {
     @ViewBuilder
@@ -31,5 +32,11 @@ public extension View {
         } else {
             elseTransform(self)
         }
+    }
+}
+
+public extension View {
+    func setToastStyle(isVisible: Binding<Bool>, info: FHKToastInfo) -> some View {
+        modifier(ToastModifier(isVisible: isVisible, info: info))
     }
 }

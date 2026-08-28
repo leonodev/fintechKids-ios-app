@@ -12,19 +12,46 @@ struct MainApp: App {
     @State private var authRouter = NavigationRouter<AuthRoute>()
     private let deepLinkRouter = FHKDeepLinkRouter()
     
+    private var fhkToast: FHKToast {
+        inject.fhkToast
+    }
+    
     init() {
         setupDeepLinks()
     }
     
     var body: some Scene {
         WindowGroup {
-            FHKSplashScreen()
+            ZStack {
+                Group {
+                    if jailbreak.isDeviceCompromised() { 
+                        blockerAppView
+                    } else {
+                        startAppView
+                    }
+                }
+                .animation(.default, value: jailbreak.isDeviceCompromised())
+                
+                infoAppView
+            }
+            .task {
+                await inject.fhkStorage.clearKeychainIfNewInstallation()
+            }
         }
     }
     
     //Registro de Handlers concretos
     private func setupDeepLinks() {
         deepLinkRouter.register(handler: AuthDeepLinkHandler(router: authRouter))
+    }
+    
+    // MARK: - Componentes auxiliares (Security / Toast)
+    var blockerAppView: some View {
+        SecurityBlockerView(
+            title: "title_screen_security".localized(.module),
+            msn: "msn_screen_security".localized(.module),
+            titleBtn: "title_btn_screen_security".localized(.module)
+        )
     }
     
     /// Vista de arranque según el estado de sesión
@@ -50,28 +77,10 @@ struct MainApp: App {
         .modifier(ModalPresenter(manager: inject.fhkModal))
     }
     
-    // MARK: - Flujo No Autenticado (Login, Registro, Splash)
+    // MARK: - Flujo No Autenticado (Splash, Language, Login, Registro)
     var unauthenticatedFlow: some View {
         NavigationContainer(router: authRouter) {
-            // Pantalla inicial del flujo de Auth
             FHKSplashScreen()
-            // Conectas las rutas exclusivas de FHKAuth
-                .navigationDestination(for: AuthRoute.self) { route in
-                    switch route {
-                    case .login:
-                        EmptyView()
-                        //@comentado
-                        //FHKLoginScreen(viewModel: FHKLoginScreenVM())
-                    case .register:
-                        EmptyView()
-                        
-                    case .language:
-                        EmptyView()
-                        //@comentado
-                        //FHKRegisterScreen(viewModel: FHKRegisterScreenVM())
-                        // case .forgotPassword, etc.
-                    }
-                }
         }
     }
     
@@ -94,6 +103,24 @@ struct MainApp: App {
         //                    }
         //                }
         //        }
+    }
+    
+    var infoAppView: some View {
+        VStack {
+            if inject.fhkToast.isVisible(), let info = inject.fhkToast.currentToast() {
+                ToastView(
+                    isVisible: Binding(
+                        get: { inject.fhkToast.isVisible() },
+                        set: { _ in inject.fhkToast.dismiss() }
+                    ),
+                    info: info
+                )
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+            Spacer()
+        }
+        .padding(.top, 10)
+        .zIndex(999)
     }
     
     

@@ -33,5 +33,13 @@ public class FHKBaseDependencies {
         inject.register(FHKModal.self,
                         live: { .live }
         )
+        
+        inject.register(FHKToast.self,
+                        live: { .live }
+        )
+        
+        inject.register(FHKLanguage.self,
+                        live: { .live }
+        )
     }
 }
