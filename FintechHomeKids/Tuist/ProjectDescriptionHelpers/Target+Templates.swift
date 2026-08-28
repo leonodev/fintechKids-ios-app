@@ -109,7 +109,7 @@ public extension Target {
             bundleId: "com.fleon.fintechHomeKids.infra.\(name.lowercased())",
             deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
-            sources: ["Targets/FHKInfrastructure/\(name)/Sources/**"],
+            sources: ["Targets/\(name)/Sources/**"],
             dependencies: [
                 .target(name: "FHKDomain"),
                 .target(name: "FHKCore")

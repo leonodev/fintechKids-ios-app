@@ -27,7 +27,7 @@ let package = Package(
         .package(url: "https://github.com/supabase/supabase-swift.git", from: "2.5.1"),
         .package(url: "https://github.com/leonodev/FLib-Utils.git", from: "1.0.3"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.6.0"),
-        .package(url: "https://github.com/leonodev/FLib-Injections.git", from: "1.0.5"),
+        .package(url: "https://github.com/leonodev/FLib-Injections.git", from: "1.0.6"),
         .package(url: "https://github.com/leonodev/FLib-Storage.git", from: "1.0.6")
     ]
 )

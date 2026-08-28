@@ -20,8 +20,7 @@ struct FHKAuthExampleApp: App {
 
     var body: some Scene {
         WindowGroup {
-            //FHKSplashScreen()
-            
+
             VStack(spacing: 20) {
                 Image(systemName: "flag.pattern.checkered")
                     .font(.system(size: 60))

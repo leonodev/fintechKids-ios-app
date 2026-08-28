@@ -23,13 +23,17 @@ let project = Project(
         Target.domainModule(dependencies: [
             .target(name: "FHKCore")
         ]),
-        Target.infraModule(name: "InfraAuth", dependencies: [
+        Target.infraModule(name: "FHKInfrastructure", dependencies: [
             .external(name: "Supabase"),
-            .external(name: "FirebaseAnalytics")
+            .external(name: "FirebaseAnalytics"),
+            .external(name: "FirebaseFirestore"),
+            .external(name: "FirebaseCrashlytics"),
+            .external(name: "FirebaseMessaging"),
+            .external(name: "FirebaseRemoteConfig")
         ]),
         Target.mainApp(dependencies: [
             .target(name: "FHKAuth"),
-            .target(name: "InfraAuth")
+            .target(name: "FHKInfrastructure")
         ]),
         Target.coreModule(name: "FHKTesting", dependencies: [
             .target(name: "FHKCore"),

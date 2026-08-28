@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FHKCore
 
 public enum AuthError: FHKError, Equatable {
     case userNotFound

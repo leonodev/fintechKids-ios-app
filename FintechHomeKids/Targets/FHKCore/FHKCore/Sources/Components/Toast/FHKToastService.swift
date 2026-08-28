@@ -10,7 +10,7 @@ import Combine
 
 @MainActor
 @Observable
-public final class FHKToastService: NSObject {
+public final class FHKToastService: NSObject, ApplicationService {
     public var currentToast: FHKToastInfo?
     public var isVisible: Bool = false
     private var dismissalTask: Task<Void, Never>?

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FHKAuth
+import FHKCore
 import FLibUtils
 import FLibStorage
 
@@ -14,9 +15,8 @@ class FHKAppDelegate: ServicesApplicationDelegate {
     
     override var services: [ApplicationService] {
         [
-            //FirebaseRemoteService(),
-            //PushNotificationService(),
-            //FHKToastService()
+            FHKFirebaseRemoteService(),
+            FHKToastService()
         ]
     }
    

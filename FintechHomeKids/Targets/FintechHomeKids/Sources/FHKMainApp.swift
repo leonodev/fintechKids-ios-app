@@ -12,10 +12,6 @@ struct MainApp: App {
     @State private var authRouter = NavigationRouter<AuthRoute>()
     private let deepLinkRouter = FHKDeepLinkRouter()
     
-    private var fhkToast: FHKToast {
-        inject.fhkToast
-    }
-    
     init() {
         setupDeepLinks()
     }
