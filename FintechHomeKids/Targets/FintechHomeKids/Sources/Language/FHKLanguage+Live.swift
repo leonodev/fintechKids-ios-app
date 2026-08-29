@@ -15,6 +15,7 @@ import FHKCore
 public extension FHKLanguage {
     
     /// Implementación de producción (.live)
+    @MainActor
     static var live: Self {
         let state = LanguageLiveState.shared
         var instance = FHKLanguage()

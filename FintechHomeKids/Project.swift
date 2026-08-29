@@ -10,35 +10,40 @@ let project = Project(
         configurations: [.dev, .qa, .prod]
     ),
     targets: [
-        Target.coreModule(name: "FHKCore", dependencies: [
-            .external(name: "FLibInjections"),
-            .external(name: "FLibUtils"),
-            .external(name: "FLibStorage")
-        ]),
-        Target.coreModule(name: "FHKDesignSystem", dependencies: [
-            .target(name: "FHKCore"),
-            .external(name: "Lottie"),
-            .external(name: "Algorithms")
-        ]),
+        Target.coreModule(name: "FHKCore",
+                          dependencies: [
+                            .external(name: "FLibInjections"),
+                            .external(name: "FLibUtils"),
+                            .external(name: "FLibStorage")
+                          ]),
+        Target.coreModule(name: "FHKDesignSystem",
+                          dependencies: [
+                            .target(name: "FHKCore"),
+                            .target(name: "FHKTesting"),
+                            .external(name: "Lottie"),
+                            .external(name: "Algorithms")
+                          ]),
         Target.domainModule(dependencies: [
             .target(name: "FHKCore")
         ]),
-        Target.infraModule(name: "FHKInfrastructure", dependencies: [
-            .external(name: "Supabase"),
-            .external(name: "FirebaseAnalytics"),
-            .external(name: "FirebaseFirestore"),
-            .external(name: "FirebaseCrashlytics"),
-            .external(name: "FirebaseMessaging"),
-            .external(name: "FirebaseRemoteConfig")
-        ]),
+        Target.infraModule(name: "FHKInfrastructure",
+                           dependencies: [
+                            .external(name: "Supabase"),
+                            .external(name: "FirebaseAnalytics"),
+                            .external(name: "FirebaseFirestore"),
+                            .external(name: "FirebaseCrashlytics"),
+                            .external(name: "FirebaseMessaging"),
+                            .external(name: "FirebaseRemoteConfig")
+                           ]),
         Target.mainApp(dependencies: [
             .target(name: "FHKAuth"),
             .target(name: "FHKInfrastructure")
         ]),
-        Target.coreModule(name: "FHKTesting", dependencies: [
-            .target(name: "FHKCore"),
-            .target(name: "FHKDomain")
-        ])
+        Target.coreModule(name: "FHKTesting",
+                          dependencies: [
+                            .target(name: "FHKCore"),
+                            .target(name: "FHKDomain")
+                          ])
     ]
     + Target.featureModule(name: "FHKAuth"),
     

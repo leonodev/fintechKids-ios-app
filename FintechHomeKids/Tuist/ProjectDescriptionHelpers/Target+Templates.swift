@@ -54,11 +54,13 @@ public extension Target {
     static func featureModule(
         name: String,
         hasExample: Bool = true,
+        hasTests: Bool = true,
         dependencies: [TargetDependency] = []
     ) -> [Target] {
         let basePath = "Targets/Features/\(name)"
         var targets: [Target] = []
 
+        // 1. Production Target
         let mainTarget = Target.target(
             name: name,
             destinations: .iOS,
@@ -71,13 +73,13 @@ public extension Target {
             dependencies: [
                 .target(name: "FHKDomain"),
                 .target(name: "FHKDesignSystem"),
-                .target(name: "FHKCore"),
-                .target(name: "FHKTesting")
+                .target(name: "FHKCore")
             ] + dependencies,
             settings: defaultSettings
         )
         targets.append(mainTarget)
 
+        // 2. Example Target
         if hasExample {
             let exampleTarget = Target.target(
                 name: "\(name)Example",
@@ -95,6 +97,25 @@ public extension Target {
                 settings: defaultSettings
             )
             targets.append(exampleTarget)
+        }
+        
+        // 3. Unit Tests Target
+        if hasTests {
+            let testsTarget = Target.target(
+                name: "\(name)Tests",
+                destinations: .iOS,
+                product: .unitTests, // 💡 Tipo .unitTests para Xcode
+                bundleId: "com.fleon.fintechHomeKids.\(name.lowercased()).tests",
+                deploymentTargets: .iOS("17.0"),
+                infoPlist: .default,
+                sources: ["\(basePath)/Tests/**"],
+                dependencies: [
+                    .target(name: name),
+                    .target(name: "FHKTesting")
+                ],
+                settings: defaultSettings
+            )
+            targets.append(testsTarget)
         }
 
         return targets

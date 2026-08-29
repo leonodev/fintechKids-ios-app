@@ -41,5 +41,9 @@ public class FHKBaseDependencies {
         inject.register(FHKLanguage.self,
                         live: { .live }
         )
+        
+        inject.register(FHKRemoteConfig.self,
+                        live: { .live }
+        )
     }
 }

@@ -8,7 +8,6 @@
 import SwiftUI
 import FHKDesignSystem
 import FLibUtils
-import FHKTesting
 import FHKCore
 
 public struct FHKSplashScreen: View {

@@ -39,4 +39,9 @@ public extension DependenciesInjection {
         get { get(FHKLanguage.self) }
         set { set(newValue, for: FHKLanguage.self) }
     }
+    
+    var fhkFirebaseRemoteConfig: FHKRemoteConfig {
+        get { get(FHKRemoteConfig.self) }
+        set { set(newValue, for: FHKRemoteConfig.self) }
+    }
 }

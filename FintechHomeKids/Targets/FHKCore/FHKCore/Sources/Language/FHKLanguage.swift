@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@MainActor
 public struct FHKLanguage: Sendable {
     public var selectedLanguage: @MainActor @Sendable () -> String = { LanguageType.es.code }
     public var setSelectedLanguage: @MainActor @Sendable (String) -> Void = { _ in }

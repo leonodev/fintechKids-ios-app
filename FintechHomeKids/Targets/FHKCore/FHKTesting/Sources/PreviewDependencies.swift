@@ -48,5 +48,10 @@ public enum FHKPreviewDependencies {
                             preview: { .preview(.en) },
                             testing: { .test }
         )
+        
+        inject.registerMock(FHKRemoteConfig.self,
+                            preview: { .preview },
+                            testing: { .test }
+        )
     }
 }

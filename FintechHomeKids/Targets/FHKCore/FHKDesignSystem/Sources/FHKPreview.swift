@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+@_exported import FHKTesting
 
 public struct FHKPreview<Content: View>: View {
     private let content: () -> Content
@@ -30,4 +31,3 @@ public struct FHKPreview<Content: View>: View {
         .background(FHKColor.indigo)
     }
 }
-
