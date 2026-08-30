@@ -1,0 +1,105 @@
+//
+//  FHKLanguageScreenVM.swift
+//  FintechHomeKids
+//
+//  Created by Fredy Leon on 29/8/26.
+//
+
+import Observation
+import FHKCore
+import FHKDomain
+import FLibUtils
+
+@Observable
+public final class FHKLanguageScreenVM: FHKCore.ViewModel {
+    var viewState: FHKLanguageViewState = .init()
+    var languages: [String] = []
+    
+    public init() {}
+    
+    // Injections Dependency
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
+        inject.fhkFirebaseAnalitycs
+    }
+    
+    private var fhkLanguageRepository: FHKLanguageRepository {
+        inject.fhkLanguageRepository
+    }
+    
+    public enum Action: Equatable {
+        case loadRemoteConfig
+        case changeImageFlag(String)
+        case changeLanguageApp(String)
+        case sendAnalitycOpenScreen
+        case sendAnalitycSelectLanguage(btn: AnalyticsEvent.Button)
+    }
+    
+    @MainActor
+    public func action(_ action: Action) async {
+        switch action {
+            
+        case .loadRemoteConfig:
+            await loadRemoteConfig()
+            
+        case .changeImageFlag(let language):
+            setImageFlag(code: language)
+            
+        case .changeLanguageApp(let language):
+            await changeLanguageApp(language)
+            
+        case .sendAnalitycOpenScreen:
+            await sendAnalitycOpenScreen()
+            
+        case .sendAnalitycSelectLanguage(let btn):
+            await sendAnalitycSelectLanguage(btn: btn)
+        }
+    }
+    
+    public func getBtnLanguage(code: String) -> AnalyticsEvent.Button {
+        Screens.FHKLanguage.getBtnLanguag(lng: code)
+    }
+}
+
+// Private Methods
+private extension FHKLanguageScreenVM {
+    
+    private func loadRemoteConfig() async {
+        let remoteLanguage = await fhkLanguageRepository.fetchConfig()
+        
+        if remoteLanguage.isEmpty {
+            informateError(FHKAppError.remoteConfigFailed)
+            // display screen loaded for selection language
+            viewState.languageState = .loaded
+        } else {
+            languages = remoteLanguage
+            viewState.languageState = .loaded
+        }
+    }
+    
+    private func setImageFlag(code: String?) {
+        let languageCode = code ?? LanguageType.es.code
+        viewState.selectedFlag =  languageCode.languageTypeToImageFlag
+    }
+    
+    private func changeLanguageApp(_ language: String) async {
+        await fhkLanguageRepository.changeLanguageApp(language)
+    }
+    
+    private func informateError(_ error: some FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
+        if error.isShouldTrack {
+            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
+        }
+        
+        // We print the full details to the console (Debug)
+        Logger.error(error.logMessage)
+    }
+    
+    private func sendAnalitycOpenScreen() async {
+        fhkFirebaseAnalitycs.track(.screenView(Screens.FHKLanguage.screen))
+    }
+    
+    private func sendAnalitycSelectLanguage(btn: AnalyticsEvent.Button) async {
+        fhkFirebaseAnalitycs.track(.tapButton(btn))
+    }
+}

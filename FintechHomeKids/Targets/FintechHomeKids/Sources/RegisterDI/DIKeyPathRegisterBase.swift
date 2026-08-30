@@ -45,5 +45,9 @@ public class FHKBaseDependencies {
         inject.register(FHKRemoteConfig.self,
                         live: { .live }
         )
+        
+        inject.register(FHKAnalytics.self,
+                        live: { .live }
+        )
     }
 }

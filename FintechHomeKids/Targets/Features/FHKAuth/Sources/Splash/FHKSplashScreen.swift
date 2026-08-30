@@ -42,7 +42,6 @@ public struct FHKSplashScreen: View {
         }
     }
     
-    
     var loadedView: some View {
         VStack(spacing: 20) {
             Spacer()

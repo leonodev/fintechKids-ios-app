@@ -37,19 +37,3 @@ public extension FHKAnalytics {
         return analytics
     }
 }
-
-// Enums extender with its own screens and buttons
-public enum Screens {}
-public enum Buttons {}
-
-public extension Screens {
-    static let contentView = AnalyticsEvent.Screen(
-        name: "ContentView",
-        screenClass: "ContentView"
-    )
-}
-
-public extension Buttons {
-    static let btnSendTrack = AnalyticsEvent.Button(name: "BTN_DEMO_TRACK")
-}
-

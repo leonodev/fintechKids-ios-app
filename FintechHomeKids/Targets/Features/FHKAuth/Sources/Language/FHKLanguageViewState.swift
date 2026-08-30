@@ -1,0 +1,46 @@
+//
+//  FHKLanguageViewState.swift
+//  FintechHomeKids
+//
+//  Created by Fredy Leon on 29/8/26.
+//
+
+import SwiftUI
+import FLibUtils
+import FHKDesignSystem
+
+public struct FHKLanguageViewState {
+    
+    // Properties Screen View
+    public var selectLanguageNow: String {
+        "select_language_now".localized(.module).capitalizingFirstLetter()
+    }
+    
+    public var continueButtom: String {
+        "continue".localized(.module).capitalizingFirstLetter()
+    }
+    
+    public var version: String {
+        "version".localized(.module)
+    }
+    
+    public var msnLoading: String {
+        "loading".localized(.module).capitalizingFirstLetter()
+    }
+    
+    var selectedFlag: Image = .noneFlag
+    
+    public let allFlags: [Image] = [
+        .spainCircleFlag,
+        .italyCircleFlag,
+        .englandCircleFlag,
+        .franceCircleFlag
+    ]
+
+    public enum State: Equatable {
+        case loading
+        case loaded
+    }
+    
+    public var languageState: State = .loading
+}

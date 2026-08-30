@@ -16,13 +16,13 @@ public enum AuthRoute: NavigationDestination {
     public var title: String? {
         switch self {
         case .login:
-            return "login".localized().capitalizingFirstLetter()
+            return "login".localized(.module).capitalizingFirstLetter()
             
         case .register:
-            return "register".localized().capitalizingFirstLetter()
+            return "register".localized(.module).capitalizingFirstLetter()
             
         case .language:
-            return "language".localized().capitalizingFirstLetter()
+            return "language".localized(.module).capitalizingFirstLetter()
         }
     }
     
@@ -45,8 +45,7 @@ public enum AuthRoute: NavigationDestination {
             //FHKLoginScreen()
             
         case .language:
-            EmptyView()
-            //FHKLanguageScreen()
+            FHKLanguageScreen()
             
         default:
             EmptyView()

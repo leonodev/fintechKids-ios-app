@@ -20,5 +20,10 @@ public class FHKModulesDependencies {
         inject.register(FHKSplashRepository.self,
                         live: { .live }
         )
+        
+        inject.register(FHKLanguageRepository.self,
+                        live: { .live }
+        )
+        
     }
 }
