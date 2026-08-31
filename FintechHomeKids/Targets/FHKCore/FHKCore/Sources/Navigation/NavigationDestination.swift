@@ -16,6 +16,7 @@ public protocol NavigationDestination: Hashable, Identifiable, Sendable {
     func view() -> ContentView
     
     /// Optional title for the navigation bar
+    @MainActor
     var title: String? { get }
     
     /// Indicates whether the view should hide the navigation bar
@@ -27,6 +28,7 @@ public extension NavigationDestination {
     // Genera el ID automáticamente usando el propio Hashable
     var id: Self { self }
     
+    @MainActor
     var title: String? { nil }
     var hidesNavigationBar: Bool { false }
 }

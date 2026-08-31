@@ -13,22 +13,23 @@ public enum AuthRoute: NavigationDestination {
     case login
     case register
     
+    @MainActor
     public var title: String? {
         switch self {
         case .login:
-            return "login".localized(.module).capitalizingFirstLetter()
+            return "login".localized.capitalizingFirstLetter()
             
         case .register:
-            return "register".localized(.module).capitalizingFirstLetter()
+            return "register".localized.capitalizingFirstLetter()
             
         case .language:
-            return "language".localized(.module).capitalizingFirstLetter()
+            return "language".localized.capitalizingFirstLetter()
         }
     }
     
     public var hidesNavigationBar: Bool {
         switch self {
-        case .login:
+        case .login, .language:
             return true
             
         default:

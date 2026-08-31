@@ -19,6 +19,7 @@ public struct FHKLanguageObserverModifier: ViewModifier {
         
         content
             .environment(\.locale, .init(identifier: currentLanguage))
+            .id(currentLanguage)
     }
 }
 

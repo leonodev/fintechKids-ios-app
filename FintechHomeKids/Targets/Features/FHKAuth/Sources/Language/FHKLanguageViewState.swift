@@ -9,23 +9,24 @@ import SwiftUI
 import FLibUtils
 import FHKDesignSystem
 
+@MainActor
 public struct FHKLanguageViewState {
     
     // Properties Screen View
     public var selectLanguageNow: String {
-        "select_language_now".localized(.module).capitalizingFirstLetter()
+        "select_language_now".localized.capitalizingFirstLetter()
     }
     
     public var continueButtom: String {
-        "continue".localized(.module).capitalizingFirstLetter()
+        "continue".localized.capitalizingFirstLetter()
     }
     
     public var version: String {
-        "version".localized(.module)
+        "version".localized
     }
     
     public var msnLoading: String {
-        "loading".localized(.module).capitalizingFirstLetter()
+        "loading".localized.capitalizingFirstLetter()
     }
     
     var selectedFlag: Image = .noneFlag

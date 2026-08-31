@@ -24,7 +24,7 @@ public extension Target {
         .target(
             name: name,
             destinations: .iOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.fleon.fintechHomeKids.\(name.lowercased())",
             deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
@@ -40,7 +40,7 @@ public extension Target {
         .target(
             name: "FHKDomain",
             destinations: .iOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.fleon.fintechHomeKids.domain",
             deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
@@ -64,7 +64,7 @@ public extension Target {
         let mainTarget = Target.target(
             name: name,
             destinations: .iOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.fleon.fintechHomeKids.\(name.lowercased())",
             deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
@@ -126,7 +126,7 @@ public extension Target {
         .target(
             name: name,
             destinations: .iOS,
-            product: .framework,
+            product: .staticFramework,
             bundleId: "com.fleon.fintechHomeKids.infra.\(name.lowercased())",
             deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
