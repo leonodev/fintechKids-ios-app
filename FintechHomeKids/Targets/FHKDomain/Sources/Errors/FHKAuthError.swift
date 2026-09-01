@@ -1,5 +1,5 @@
 //
-//  AuthError.swift
+//  FHKAuthError.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 25/8/26.
@@ -8,7 +8,7 @@
 import Foundation
 import FHKCore
 
-public enum AuthError: FHKError, Equatable {
+public enum FHKAuthError: FHKError, Equatable {
     case userNotFound
     case invalidCredentials
     case accessTokenInvalid

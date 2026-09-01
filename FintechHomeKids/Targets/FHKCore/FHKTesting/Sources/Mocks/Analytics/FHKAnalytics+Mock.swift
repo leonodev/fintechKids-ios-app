@@ -11,4 +11,14 @@ public extension FHKAnalytics {
     static var test: Self {
         Self()
     }
+    
+    static var preview: Self {
+        var preview = Self()
+        
+        preview.track = { info in
+            
+        }
+        
+        return preview
+    }
 }

@@ -49,4 +49,9 @@ public extension DependenciesInjection {
         get { get(FHKAnalytics.self) }
         set { set(newValue, for: FHKAnalytics.self) }
     }
+    
+    var fhkSecurity: FHKSecurity {
+        get { get(FHKSecurity.self) }
+        set { set(newValue, for: FHKSecurity.self) }
+    }
 }

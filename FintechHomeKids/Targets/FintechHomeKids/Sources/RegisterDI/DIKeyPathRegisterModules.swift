@@ -11,6 +11,7 @@ import FLibInjections
 import FLibStorage
 import FHKCore
 import FHKDomain
+import FHKInfrastructure
 
 public class FHKModulesDependencies {
     
@@ -23,6 +24,11 @@ public class FHKModulesDependencies {
         
         inject.register(FHKLanguageRepository.self,
                         live: { .live }
+        )
+        
+        let client = try FHKSupabaseAPI.makeClient()
+        inject.register(FHKAuth.self,
+                        live: { .live(client: client) }
         )
         
     }

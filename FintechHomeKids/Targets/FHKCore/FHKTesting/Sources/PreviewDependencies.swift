@@ -55,6 +55,7 @@ public enum FHKPreviewDependencies {
         )
         
         inject.registerMock(FHKAnalytics.self,
+                            preview: { .preview },
                             testing: { .test }
         )
         
@@ -63,5 +64,12 @@ public enum FHKPreviewDependencies {
                             testing: { .test }
         )
         
+        inject.registerMock(FHKAuth.self,
+                            testing: { .test }
+        )
+        
+        inject.registerMock(FHKSecurity.self,
+                            testing: { .test }
+        )
     }
 }
