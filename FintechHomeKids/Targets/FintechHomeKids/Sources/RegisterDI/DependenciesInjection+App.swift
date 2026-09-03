@@ -18,21 +18,6 @@ public extension DependenciesInjection {
         set { set(newValue, for: FHKSession.self) }
     }
     
-    var fhkLanguage: FHKLanguage {
-        get { get(FHKLanguage.self) }
-        set { set(newValue, for: FHKLanguage.self) }
-    }
-    
-    var fhkRemoteConfig: FHKRemoteConfig {
-        get { get(FHKRemoteConfig.self) }
-        set { set(newValue, for: FHKRemoteConfig.self) }
-    }
-    
-    var fhkAnalitycs: FHKAnalytics {
-        get { get(FHKAnalytics.self) }
-        set { set(newValue, for: FHKAnalytics.self) }
-    }
-    
     var fhkAuth: FHKAuth {
         get { get(FHKAuth.self) }
         set { set(newValue, for: FHKAuth.self) }
@@ -44,8 +29,7 @@ public extension DependenciesInjection {
         do {
             inject.fhkSession = .live
             inject.fhkLanguage = .live
-            inject.fhkRemoteConfig = .live
-            inject.fhkAnalitycs = .live
+           
             
             let client = try FHKSupabaseAPI.makeClient()
             inject.fhkAuth = .live(client: client)

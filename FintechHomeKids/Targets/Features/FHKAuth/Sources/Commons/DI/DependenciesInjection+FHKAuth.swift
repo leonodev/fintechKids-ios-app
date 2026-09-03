@@ -25,6 +25,6 @@ public extension DependenciesInjection {
     // It only records what lives natively in Feature Auth
     static func registerAuthFeature() {
         inject.fhkSplashRepository = .live
-        inject.fhkLanguageRepository = .live
+        inject.fhkLanguageRepository = .live   
     }
 }

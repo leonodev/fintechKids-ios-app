@@ -17,8 +17,8 @@ public extension FHKLanguageRepository {
         
         repository.fetchConfig = {
             do {
-                try await inject.fhkFirebaseRemoteConfig.fetchConfig()
-                return inject.fhkFirebaseRemoteConfig.enabledLanguages()
+                try await inject.fhkRemoteConfig.fetchConfig()
+                return inject.fhkRemoteConfig.enabledLanguages()
             } catch {
                 return []
             }

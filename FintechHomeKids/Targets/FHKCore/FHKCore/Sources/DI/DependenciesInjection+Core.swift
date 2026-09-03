@@ -27,8 +27,24 @@ public extension DependenciesInjection {
         set { inject.set(newValue, for: FHKSecurity.self) }
     }
     
+    var fhkLanguage: FHKLanguage {
+        get { get(FHKLanguage.self) }
+        set { set(newValue, for: FHKLanguage.self) }
+    }
+    
+    var fhkRemoteConfig: FHKRemoteConfig {
+        get { get(FHKRemoteConfig.self) }
+        set { set(newValue, for: FHKRemoteConfig.self) }
+    }
+    
+    var fhkAnalitycs: FHKAnalytics {
+        get { get(FHKAnalytics.self) }
+        set { set(newValue, for: FHKAnalytics.self) }
+    }
+    
     // It only records what lives natively in Core
     static func registerCore() {
         inject.fhkEnvironment = .live
+        
     }
 }

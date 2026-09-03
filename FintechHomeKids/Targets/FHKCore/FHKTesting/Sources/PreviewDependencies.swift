@@ -16,60 +16,11 @@ public enum FHKPreviewDependencies {
     @MainActor
     public static func registerDefaults() {
         #if DEBUG
-        registerBaseMocks()
+        DependenciesInjection.registerAuthPreview()
+        DependenciesInjection.registerCorePreview()
+        DependenciesInjection.registerDesignSystemPreview()
+        DependenciesInjection.registerInfrastructurePreview()
+        DependenciesInjection.registerAppPreview()
         #endif
-    }
-    
-    @MainActor
-    private static func registerBaseMocks() {
-        inject.registerMock(FHKEnvironment.self,
-                            preview: { .preview }
-        )
-        
-        inject.registerMock(FHKStorageManager.self,
-                        testing: { .test }
-        )
-        
-        inject.registerMock(FHKSession.self,
-                        testing: { .test }
-        )
-        
-        inject.registerMock(FHKModal.self,
-                        preview: { .preview },
-                        testing: { .test }
-        )
-        
-        inject.registerMock(FHKSplashRepository.self,
-                            preview: { .preview },
-                            testing: { .test }
-        )
-        
-        inject.registerMock(FHKLanguage.self,
-                            preview: { .preview(.en) },
-                            testing: { .test }
-        )
-        
-        inject.registerMock(FHKRemoteConfig.self,
-                            preview: { .preview },
-                            testing: { .test }
-        )
-        
-        inject.registerMock(FHKAnalytics.self,
-                            preview: { .preview },
-                            testing: { .test }
-        )
-        
-        inject.registerMock(FHKLanguageRepository.self,
-                            preview: { .preview },
-                            testing: { .test }
-        )
-        
-        inject.registerMock(FHKAuth.self,
-                            testing: { .test }
-        )
-        
-        inject.registerMock(FHKSecurity.self,
-                            testing: { .test }
-        )
     }
 }
