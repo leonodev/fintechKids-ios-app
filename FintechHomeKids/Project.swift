@@ -37,7 +37,9 @@ let project = Project(
                            ]),
         Target.mainApp(dependencies: [
             .target(name: "FHKAuth"),
-            .target(name: "FHKInfrastructure")
+            .target(name: "FHKInfrastructure"),
+            .target(name: "FHKCore") // contain FLibInjections, FLibUtils y FLibStorage
+            
         ]),
         Target.coreModule(name: "FHKTesting",
                           dependencies: [

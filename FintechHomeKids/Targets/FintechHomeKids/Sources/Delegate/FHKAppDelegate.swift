@@ -10,6 +10,7 @@ import FHKAuth
 import FHKCore
 import FLibUtils
 import FLibStorage
+import FLibInjections
 
 class FHKAppDelegate: ServicesApplicationDelegate {
     
@@ -20,16 +21,15 @@ class FHKAppDelegate: ServicesApplicationDelegate {
         ]
     }
    
+    @MainActor
     override func application(_ application: UIApplication,
                               didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        do {
-            try FHKBaseDependencies.register()
-            try FHKModulesDependencies.register()
-            Logger.info("All dependencies registered successfully")
-        } catch {
-            fatalError("❌ Critical error during dependency registration: \(error)")
-        }
+        DependenciesInjection.registerCore()
+        DependenciesInjection.registerInfrastructure()
+        DependenciesInjection.registerDesignSystem()
+        DependenciesInjection.registerMainApp()
+        DependenciesInjection.registerAuthFeature()
         
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         Logger.info("All Services Registered => \(servicesResult)")

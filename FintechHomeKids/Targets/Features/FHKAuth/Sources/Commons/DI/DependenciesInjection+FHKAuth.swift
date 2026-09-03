@@ -1,12 +1,14 @@
 //
-//  DIKeyPath+Domain.swift
+//  DependenciesInjection+FHKAuth.swift
 //  FintechHomeKids
 //
-//  Created by Fredy Leon on 27/8/26.
+//  Created by Fredy Leon on 3/9/26.
 //
 
+import Foundation
 import FLibInjections
 import FHKCore
+import FHKDomain
 
 public extension DependenciesInjection {
     
@@ -17,11 +19,12 @@ public extension DependenciesInjection {
     
     var fhkLanguageRepository: FHKLanguageRepository {
         get { get(FHKLanguageRepository.self) }
-        set { set(newValue, for: (FHKLanguageRepository).self) }
+        set { set(newValue, for: FHKLanguageRepository.self) }
     }
     
-    var fhkAuth: FHKAuth {
-        get { get(FHKAuth.self) }
-        set { set(newValue, for: FHKAuth.self) }
+    // It only records what lives natively in Feature Auth
+    static func registerAuthFeature() {
+        inject.fhkSplashRepository = .live
+        inject.fhkLanguageRepository = .live
     }
 }

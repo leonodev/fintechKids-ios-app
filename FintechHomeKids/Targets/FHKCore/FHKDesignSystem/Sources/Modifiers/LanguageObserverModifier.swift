@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FHKCore
 
 public struct FHKLanguageObserverModifier: ViewModifier {
     

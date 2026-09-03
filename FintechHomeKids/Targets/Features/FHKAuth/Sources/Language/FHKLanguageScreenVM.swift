@@ -18,8 +18,8 @@ public final class FHKLanguageScreenVM: FHKCore.ViewModel {
     public init() {}
     
     // Injections Dependency
-    private var fhkFirebaseAnalitycs: FHKAnalytics {
-        inject.fhkFirebaseAnalitycs
+    private var fhkAnalitycs: FHKAnalytics {
+        inject.fhkAnalitycs
     }
     
     private var fhkLanguageRepository: FHKLanguageRepository {
@@ -88,7 +88,7 @@ private extension FHKLanguageScreenVM {
     private func informateError(_ error: some FHKError) {
         // We only send to Firebase if the error is configured to be reported.
         if error.isShouldTrack {
-            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
+            fhkAnalitycs.track(.error(.init(from: error)))
         }
         
         // We print the full details to the console (Debug)
@@ -96,10 +96,10 @@ private extension FHKLanguageScreenVM {
     }
     
     private func sendAnalitycOpenScreen() async {
-        fhkFirebaseAnalitycs.track(.screenView(Screens.FHKLanguage.screen))
+        fhkAnalitycs.track(.screenView(Screens.FHKLanguage.screen))
     }
     
     private func sendAnalitycSelectLanguage(btn: AnalyticsEvent.Button) async {
-        fhkFirebaseAnalitycs.track(.tapButton(btn))
+        fhkAnalitycs.track(.tapButton(btn))
     }
 }
