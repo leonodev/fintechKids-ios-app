@@ -1,6 +1,6 @@
 
 import SwiftUI
-import DesignSystem
+import FHKDesignSystem
 
 @main
 struct DesignSystemExampleApp: App {

@@ -1,71 +1,63 @@
 import ProjectDescription
 
 public extension Target {
-    
-    // Configuración base con los 3 ambientes globales
+
+    // MARK: - Configuración Base
+
     static var defaultSettings: Settings {
         .settings(
             base: [
+                /// Desactiva la búsqueda de cabeceras Objective-C en módulos de Swift puro
                 "DEFINES_MODULE": "YES",
+                
+                /// Evita que scripts de terceros lean o modifiquen archivos fuera de la carpeta del proyecto
                 "ENABLE_USER_SCRIPT_SANDBOXING": "YES",
+                
+                /// Genera autocompletado tipado para String Catalogs (.xcstrings)
                 "LOCALIZED_STRING_CATALOG_GENERATE_SYMBOLS": "YES",
+                
+                /// Genera autocompletado tipado para imágenes y colores (.xcassets)
                 "ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS": "YES",
+                
+                /// Silencia avisos de falta de símbolos en librerías estáticas
                 "OTHER_LIBTOOLFLAGS": "-no_warning_for_no_symbols",
+                
+                /// Permite el uso de @testable import en los targets de pruebas
                 "ENABLE_TESTABILITY": "YES",
+                
+                /// Todos los módulos heredarán Swift 6 por defecto
                 "SWIFT_VERSION": "6.0",
+                
                 "OTHER_LDFLAGS": .array(["$(inherited)", "-ObjC"])
             ],
-            configurations: [.dev, .qa, .prod] // Todos los targets deben conocer Dev, QA y Prod
+            configurations: [.dev, .qa, .prod]
         )
     }
 
-    // 1. Core
-    static func coreModule(name: String, dependencies: [TargetDependency] = []) -> Target {
-        .target(
-            name: name,
-            destinations: .iOS,
-            product: .staticFramework,
-            bundleId: "com.fleon.fintechHomeKids.\(name.lowercased())",
-            deploymentTargets: .iOS("17.0"),
-            infoPlist: .default,
-            sources: ["Targets/FHKCore/\(name)/Sources/**"],
-            resources: ["Targets/FHKCore/\(name)/Resources/**"],
-            dependencies: dependencies,
-            settings: defaultSettings
-        )
-    }
+    // MARK: - Builder Genérico de Módulos
 
-    // 2. Domain
-    static func domainModule(dependencies: [TargetDependency] = []) -> Target {
-        .target(
-            name: "FHKDomain",
-            destinations: .iOS,
-            product: .staticFramework,
-            bundleId: "com.fleon.fintechHomeKids.domain",
-            deploymentTargets: .iOS("17.0"),
-            infoPlist: .default,
-            sources: ["Targets/FHKDomain/Sources/**"],
-            dependencies: dependencies,
-            settings: defaultSettings
-        )
-    }
-
-    // 3. Features
-    static func featureModule(
+    static func module(
         name: String,
-        hasExample: Bool = true,
+        path: String = "Targets",
         hasTests: Bool = true,
-        dependencies: [TargetDependency] = []
+        hasExample: Bool = false,
+        destinations: Destinations = .iOS,
+        product: Product = .staticFramework,
+        bundleIdPrefix: String = "com.fleon.fintechHomeKids",
+        deploymentTarget: DeploymentTargets = .iOS("17.0"),
+        dependencies: [TargetDependency] = [],
+        testDependencies: [TargetDependency] = [.target(name: "FHKTesting")]
     ) -> [Target] {
-        let basePath = "Targets/Features/\(name)"
+        let basePath = "\(path)/\(name)"
         var targets: [Target] = []
 
+        // 1. Target Principal
         let mainTarget = Target.target(
             name: name,
-            destinations: .iOS,
-            product: .staticFramework,
-            bundleId: "com.fleon.fintechHomeKids.\(name.lowercased())",
-            deploymentTargets: .iOS("17.0"),
+            destinations: destinations,
+            product: product,
+            bundleId: "\(bundleIdPrefix).\(name.lowercased())",
+            deploymentTargets: deploymentTarget,
             infoPlist: .default,
             sources: ["\(basePath)/Sources/**"],
             resources: ["\(basePath)/Resources/**"],
@@ -74,77 +66,60 @@ public extension Target {
         )
         targets.append(mainTarget)
 
-        if hasExample {
-            let exampleTarget = Target.target(
-                name: "\(name)Example",
-                destinations: .iOS,
-                product: .app,
-                bundleId: "com.fleon.fintechHomeKids.\(name.lowercased()).example",
-                deploymentTargets: .iOS("17.0"),
-                infoPlist: .extendingDefault(with: [
-                    "BASE_URL": "$(BASE_URL)",
-                    "CFBundleDisplayName": "\(name) Example",
-                    "UILaunchScreen": [:]
-                ]),
-                sources: ["\(basePath)/Example/Sources/**"],
-                dependencies: [.target(name: name)],
-                settings: defaultSettings
-            )
-            targets.append(exampleTarget)
-        }
-        
+        // 2. Target de Tests
         if hasTests {
-            let testsTarget = Target.target(
+            let testTarget = Target.target(
                 name: "\(name)Tests",
-                destinations: .iOS,
-                product: .unitTests, // 💡 Tipo .unitTests para Xcode
-                bundleId: "com.fleon.fintechHomeKids.\(name.lowercased()).tests",
-                deploymentTargets: .iOS("17.0"),
+                destinations: destinations,
+                product: .unitTests,
+                bundleId: "\(bundleIdPrefix).\(name.lowercased()).tests",
+                deploymentTargets: deploymentTarget,
                 infoPlist: .default,
                 sources: ["\(basePath)/Tests/**"],
-                dependencies: [
-                    .target(name: name),
-                    .target(name: "FHKTesting")
-                ],
+                dependencies: [.target(name: name)] + testDependencies,
                 settings: defaultSettings
             )
-            targets.append(testsTarget)
+            targets.append(testTarget)
+        }
+
+        // 3. Target de App de Ejemplo
+        if hasExample {
+            targets.append(
+                moduleExample(
+                    for: name,
+                    basePath: basePath,
+                    bundleIdPrefix: bundleIdPrefix,
+                    deploymentTarget: deploymentTarget,
+                    dependencies: dependencies
+                )
+            )
         }
 
         return targets
     }
 
-    // 4. Infrastructure
-    static func infraModule(name: String, dependencies: [TargetDependency] = []) -> Target {
+    // MARK: - App Principal
+
+    static func app(
+        name: String = "FintechHomeKids",
+        bundleId: String = "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        deploymentTarget: DeploymentTargets = .iOS("17.0"),
+        dependencies: [TargetDependency] = []
+    ) -> Target {
         .target(
             name: name,
             destinations: .iOS,
-            product: .staticFramework,
-            bundleId: "com.fleon.fintechHomeKids.infra.\(name.lowercased())",
-            deploymentTargets: .iOS("17.0"),
-            infoPlist: .default,
-            sources: ["Targets/\(name)/Sources/**"],
-            dependencies: dependencies,
-            settings: defaultSettings
-        )
-    }
-
-    // 5. App Principal
-    static func mainApp(dependencies: [TargetDependency] = []) -> Target {
-        .target(
-            name: "FintechHomeKids",
-            destinations: .iOS,
             product: .app,
-            bundleId: "$(PRODUCT_BUNDLE_IDENTIFIER)",
-            deploymentTargets: .iOS("17.0"),
+            bundleId: bundleId,
+            deploymentTargets: deploymentTarget,
             infoPlist: .extendingDefault(with: [
                 "CFBundleDisplayName": "$(APP_NAME)",
                 "BASE_URL": "$(BASE_URL)",
                 "UILaunchScreen": [:]
             ]),
-            sources: ["Targets/FintechHomeKids/Sources/**"],
+            sources: ["Targets/\(name)/Sources/**"],
             resources: [
-                "Targets/FintechHomeKids/Resources/**",
+                "Targets/\(name)/Resources/**",
                 .glob(pattern: .relativeToRoot("GoogleService-Info.plist"))
             ],
             dependencies: dependencies,
@@ -154,6 +129,38 @@ public extension Target {
                 ]) { $1 },
                 configurations: [.dev, .qa, .prod]
             )
+        )
+    }
+
+    // MARK: - Helper Privado para Apps de Ejemplo
+
+    private static func moduleExample(
+        for moduleName: String,
+        basePath: String,
+        bundleIdPrefix: String,
+        deploymentTarget: DeploymentTargets,
+        dependencies: [TargetDependency]
+    ) -> Target {
+        .target(
+            name: "\(moduleName)Example",
+            destinations: .iOS,
+            product: .app,
+            bundleId: "\(bundleIdPrefix).\(moduleName.lowercased()).example",
+            deploymentTargets: deploymentTarget,
+            infoPlist: .extendingDefault(with: [
+                "CFBundleDisplayName": "\(moduleName) Example",
+                "BASE_URL": "$(BASE_URL)",
+                "UILaunchScreen": [:]
+            ]),
+            sources: ["\(basePath)/Example/Sources/**"],
+            resources: [
+                "\(basePath)/Resources/**",
+                /// Exclusivo de la Micro-App (AppIcon)
+                "\(basePath)/Example/Resources/**",
+                .glob(pattern: .relativeToRoot("GoogleService-Info.plist"))
+            ],
+            dependencies: [.target(name: moduleName)] + dependencies,
+            settings: defaultSettings
         )
     }
 }

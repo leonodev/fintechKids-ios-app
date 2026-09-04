@@ -1,74 +1,103 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project(
+// MARK: - App Principal
+let appTarget = Target.app(
     name: "FintechHomeKids",
-    options: .options(
-        automaticSchemesOptions: .disabled // solo muesta los eschemas de main app y los example
-    ),
-    settings: .settings(
-        configurations: [.dev, .qa, .prod]
-    ),
-    targets: [
-        Target.coreModule(name: "FHKCore",
-                          dependencies: [
-                            .external(name: "FLibInjections"),
-                            .external(name: "FLibUtils"),
-                            .external(name: "FLibStorage")
-                          ]),
-        Target.coreModule(name: "FHKDesignSystem",
-                          dependencies: [
-                            .target(name: "FHKCore"),
-                            .target(name: "FHKTesting"),
-                            .external(name: "Lottie"),
-                            .external(name: "Algorithms")
-                          ]),
-        Target.domainModule(dependencies: [
-            .target(name: "FHKCore")
-        ]),
-        Target.infraModule(name: "FHKInfrastructure",
-                           dependencies: [
-                            .target(name: "FHKDomain"),
-                            .target(name: "FHKCore"),
-                            .external(name: "Supabase"),
-                            .external(name: "FirebaseAnalytics"),
-                            .external(name: "FirebaseFirestore"),
-                            .external(name: "FirebaseCrashlytics"),
-                            .external(name: "FirebaseMessaging"),
-                            .external(name: "FirebaseRemoteConfig")
-                           ]),
-        Target.mainApp(dependencies: [
-            .target(name: "FHKAuth"),
-            .target(name: "FHKInfrastructure"),
-            .target(name: "FHKCore") // contain FLibInjections, FLibUtils y FLibStorage
-            
-        ]),
-        Target.coreModule(name: "FHKTesting",
-                          dependencies: [
-                            .target(name: "FHKCore"),
-                            .target(name: "FHKDomain")
-                          ])
+    dependencies: [
+        .target(name: "FHKAuth"),
+        .target(name: "FHKInfrastructure"),
+        .target(name: "FHKCore")
     ]
-    + Target.featureModule(name: "FHKAuth",
-                           dependencies: [
-                            .target(name: "FHKDomain"),
-                            .target(name: "FHKDesignSystem"),
-                            .target(name: "FHKCore")
-                           ]),
-    
-    // Configuración explícita de Esquemas
-    schemes: [
-        .scheme(
-            name: "FintechHomeKids",
-            shared: true,
-            buildAction: .buildAction(targets: ["FintechHomeKids"]),
-            runAction: .runAction(configuration: .configuration("Dev"), executable: "FintechHomeKids")
-        ),
-        .scheme(
-            name: "FHKAuthExample",
-            shared: true,
-            buildAction: .buildAction(targets: ["FHKAuthExample"]),
-            runAction: .runAction(configuration: .configuration("Dev"), executable: "FHKAuthExample")
-        )
+)
+
+// MARK: - Core, Design System & Testing
+let coreTarget = Target.module(
+    name: "FHKCore",
+    path: "Targets/FHKCore",
+    hasTests: false,
+    dependencies: [
+        .external(name: "FLibInjections"),
+        .external(name: "FLibUtils"),
+        .external(name: "FLibStorage")
+    ]
+)
+
+let designSystemTarget = Target.module(
+    name: "FHKDesignSystem",
+    path: "Targets/FHKCore",
+    hasTests: false,
+    hasExample: true,
+    dependencies: [
+        .target(name: "FHKCore"),
+        .target(name: "FHKTesting"),
+        .external(name: "Lottie"),
+        .external(name: "Algorithms")
+    ]
+)
+
+let testingTarget = Target.module(
+    name: "FHKTesting",
+    path: "Targets/FHKCore",
+    hasTests: false,
+    dependencies: [
+        .target(name: "FHKCore"),
+        .target(name: "FHKDomain")
+    ]
+)
+
+// MARK: - Domain
+let domainTarget = Target.module(
+    name: "FHKDomain",
+    hasTests: false,
+    dependencies: [
+        .target(name: "FHKCore")
+    ]
+)
+
+// MARK: - Infrastructure
+let infrastructureTarget = Target.module(
+    name: "FHKInfrastructure",
+    hasTests: false,
+    dependencies: [
+        .target(name: "FHKDomain"),
+        .target(name: "FHKCore"),
+        .external(name: "Supabase"),
+        .external(name: "FirebaseAnalytics"),
+        .external(name: "FirebaseFirestore"),
+        .external(name: "FirebaseCrashlytics"),
+        .external(name: "FirebaseMessaging"),
+        .external(name: "FirebaseRemoteConfig")
+    ]
+)
+
+// MARK: - Features
+let authFeatureTarget = Target.module(
+    name: "FHKAuth",
+    path: "Targets/Features",
+    hasTests: true,
+    hasExample: true,
+    dependencies: [
+        .target(name: "FHKDomain"),
+        .target(name: "FHKDesignSystem"),
+        .target(name: "FHKCore")
+    ]
+)
+
+// MARK: - Project Assembly
+let project = Project.makeApp(
+    name: "FintechHomeKids",
+    targets: [
+        [appTarget],
+        coreTarget,
+        designSystemTarget,
+        testingTarget,
+        domainTarget,
+        infrastructureTarget,
+        authFeatureTarget
+    ],
+    schemes: Scheme.makeSchemes(appName: "FintechHomeKids") + [
+        Scheme.makeSchemeExample(for: "FHKDesignSystemExample"),
+        Scheme.makeSchemeExample(for: "FHKAuthExample")
     ]
 )
