@@ -1,11 +1,11 @@
 //
-//  FHKRegisterUser.swift
+//  FHKRegisterEntity.swift
 //  FintechHomeKids
 //
-//  Created by Fredy Leon on 31/8/26.
+//  Created by Fredy Leon on 4/9/26.
 //
 
-public struct FHKRegisterUser: Encodable {
+public struct FHKRegisterEntity: Encodable {
     public let email: String
     public let password: String
     public let familyName: String

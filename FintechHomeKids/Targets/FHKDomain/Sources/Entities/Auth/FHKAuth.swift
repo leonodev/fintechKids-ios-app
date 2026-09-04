@@ -14,7 +14,7 @@ public struct FHKAuth: Sendable {
     public var refreshSession: @Sendable (String) async throws -> FHKUserSession = { _ in
         throw FHKAuthError.sessionExpired
     }
-    public var register: @Sendable (FHKRegisterUser) async throws -> FHKUserSession = { _ in
+    public var register: @Sendable (FHKRegisterEntity) async throws -> FHKUserSession = { _ in
         throw FHKAuthError.unknown("Error registering")
     }
     public var setSession: @Sendable(String) async throws -> Void = {  _ in }

@@ -65,7 +65,7 @@ internal struct FHKSupabase: Sendable, FHKSupabaseErrorProtocol {
         }
     }
     
-    public func register(registerEntity: FHKRegisterUser) async throws -> FHKUserSession {
+    public func register(registerEntity: FHKRegisterEntity) async throws -> FHKUserSession {
         do {
             let signUp = try await client.auth.signUp(
                 email: registerEntity.email,

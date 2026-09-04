@@ -22,9 +22,22 @@ public extension DependenciesInjection {
         set { set(newValue, for: FHKLanguageRepository.self) }
     }
     
+    var fhkLoginRepository: FHKLoginRepository {
+        get { get(FHKLoginRepository.self) }
+        set { set(newValue, for: FHKLoginRepository.self) }
+    }
+    
+    var fhkRegisterRepository: FHKRegisterRepository {
+        get { get(FHKRegisterRepository.self) }
+        set { set(newValue, for: FHKRegisterRepository.self) }
+    }
+    
     // It only records what lives natively in Feature Auth
     static func registerAuthFeature() {
         inject.fhkSplashRepository = .live
-        inject.fhkLanguageRepository = .live   
+        inject.fhkLanguageRepository = .live
+        inject.fhkConfiguration = .live
+        inject.fhkLoginRepository = .live
+        inject.fhkRegisterRepository = .live
     }
 }

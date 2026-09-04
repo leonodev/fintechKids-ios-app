@@ -42,9 +42,14 @@ public extension DependenciesInjection {
         set { set(newValue, for: FHKAnalytics.self) }
     }
     
+    var fhkSession: FHKSession {
+        get { get(FHKSession.self) }
+        set { set(newValue, for: FHKSession.self) }
+    }
+    
     // It only records what lives natively in Core
     static func registerCore() {
         inject.fhkEnvironment = .live
-        
+        inject.fhkSession = .live
     }
 }

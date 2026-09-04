@@ -30,6 +30,7 @@ class FHKAppDelegate: ServicesApplicationDelegate {
         DependenciesInjection.registerDesignSystem()
         DependenciesInjection.registerMainApp()
         DependenciesInjection.registerAuthFeature()
+        DependenciesInjection.registerDomain()
         
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         Logger.info("All Services Registered => \(servicesResult)")

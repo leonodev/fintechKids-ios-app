@@ -8,11 +8,7 @@
 import Foundation
 import Supabase
 import FHKCore
-
-public enum EnvironmentType: Sendable {
-    case remote
-    case localhost
-}
+import FHKDomain
 
 public enum FHKSupabaseAPI {
     

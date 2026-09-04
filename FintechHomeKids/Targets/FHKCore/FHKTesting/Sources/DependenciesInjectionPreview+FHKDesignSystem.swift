@@ -18,6 +18,10 @@ public extension DependenciesInjection {
         inject.registerMock(FHKModal.self,
                         preview: { .preview },
                         testing: { .test }
-        )  
+        )
+        
+        inject.registerMock(FHKToast.self,
+                            preview: { .preview }
+        )
     }
 }

@@ -42,8 +42,7 @@ public enum AuthRoute: NavigationDestination {
         switch self {
             
         case .login:
-            EmptyView()
-            //FHKLoginScreen()
+            FHKLoginScreen()
             
         case .language:
             FHKLanguageScreen()
