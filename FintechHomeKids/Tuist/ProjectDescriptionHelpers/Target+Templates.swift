@@ -60,7 +60,6 @@ public extension Target {
         let basePath = "Targets/Features/\(name)"
         var targets: [Target] = []
 
-        // 1. Production Target
         let mainTarget = Target.target(
             name: name,
             destinations: .iOS,
@@ -70,16 +69,11 @@ public extension Target {
             infoPlist: .default,
             sources: ["\(basePath)/Sources/**"],
             resources: ["\(basePath)/Resources/**"],
-            dependencies: [
-                .target(name: "FHKDomain"),
-                .target(name: "FHKDesignSystem"),
-                .target(name: "FHKCore")
-            ] + dependencies,
+            dependencies: dependencies,
             settings: defaultSettings
         )
         targets.append(mainTarget)
 
-        // 2. Example Target
         if hasExample {
             let exampleTarget = Target.target(
                 name: "\(name)Example",
@@ -99,7 +93,6 @@ public extension Target {
             targets.append(exampleTarget)
         }
         
-        // 3. Unit Tests Target
         if hasTests {
             let testsTarget = Target.target(
                 name: "\(name)Tests",
@@ -131,10 +124,7 @@ public extension Target {
             deploymentTargets: .iOS("17.0"),
             infoPlist: .default,
             sources: ["Targets/\(name)/Sources/**"],
-            dependencies: [
-                .target(name: "FHKDomain"),
-                .target(name: "FHKCore")
-            ] + dependencies,
+            dependencies: dependencies,
             settings: defaultSettings
         )
     }

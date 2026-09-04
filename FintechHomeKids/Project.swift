@@ -28,6 +28,8 @@ let project = Project(
         ]),
         Target.infraModule(name: "FHKInfrastructure",
                            dependencies: [
+                            .target(name: "FHKDomain"),
+                            .target(name: "FHKCore"),
                             .external(name: "Supabase"),
                             .external(name: "FirebaseAnalytics"),
                             .external(name: "FirebaseFirestore"),
@@ -47,7 +49,12 @@ let project = Project(
                             .target(name: "FHKDomain")
                           ])
     ]
-    + Target.featureModule(name: "FHKAuth"),
+    + Target.featureModule(name: "FHKAuth",
+                           dependencies: [
+                            .target(name: "FHKDomain"),
+                            .target(name: "FHKDesignSystem"),
+                            .target(name: "FHKCore")
+                           ]),
     
     // Configuración explícita de Esquemas
     schemes: [
