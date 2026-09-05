@@ -47,8 +47,8 @@ public enum AuthRoute: NavigationDestination {
         case .language:
             FHKLanguageScreen()
             
-        default:
-            EmptyView()
+        case .register:
+            FHKRegisterScreen()
         }
     }
 }
