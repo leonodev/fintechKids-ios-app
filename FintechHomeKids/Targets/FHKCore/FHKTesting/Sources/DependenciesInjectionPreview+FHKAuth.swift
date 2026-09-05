@@ -24,6 +24,7 @@ public extension DependenciesInjection {
         )
         
         inject.registerMock(FHKRegisterRepository.self,
+                            preview: { .preview },
                             testing: { .test }
         )
     }
