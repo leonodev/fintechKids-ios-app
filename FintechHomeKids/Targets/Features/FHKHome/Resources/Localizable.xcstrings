@@ -1,0 +1,296 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+      "error_name_member" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "not defined"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "no definido"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "non défini"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "non definito"
+            }
+          }
+        }
+      },
+      "msn_recovery_info_user_error" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "we couldn't retrieve your information from your device."
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "no hemos podido recuperar tu información desde tu dispositivo."
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "nous n'avons pas pu récupérer vos informations depuis votre appareil."
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "non siamo riusciti a recuperare le tue informazioni dal tuo dispositivo."
+            }
+          }
+        }
+      },
+      "msn_fetch_members_error" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "unable to retrieve your family members, please try again later."
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "no ha sido posible obtener los miembros de su familia, inténtalo más tarde."
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "impossible d'obtenir les membres de votre famille, réessayez plus tard."
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "non è stato possibile ottenere i membri della tua famiglia, riprova più tardi."
+            }
+          }
+        }
+      },
+      "msn_fetch_rewards_collect_error" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "we couldn't retrieve the collected rewards, please try again later."
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "no hemos podido recuperar las recompensas cobradas, inténtalo más tarde."
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "nous n'avons pas pu récupérer les récompenses encaissées, réessayez plus tard."
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "non siamo riusciti a recuperare i premi riscossi, riprova più tardi."
+            }
+          }
+        }
+      },
+      "msn_error_fetch_goal_list" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "error fetching your goals list, please try again later."
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "error obteniendo tu lista de metas, por favor inténtalo más tarde."
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "erreur lors de la récupération de vos objectifs, veuillez réessayer plus tard."
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "errore durante il recupero del tuo elenco di obiettivi, riprova più tardi."
+            }
+          }
+        }
+      },
+      "title_members_family" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "my family members"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "miembros de mi familia"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "membres de ma famille"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "membri de la mia famiglia"
+            }
+          }
+        }
+      },
+      "title_rewards_collected" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "tickets pending payment"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "tickets pendientes de pagar"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "tickets en attente de paiement"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "ticket in attesa de pagamento"
+            }
+          }
+        }
+      },
+      "title_pay" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "pay"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "pagar"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "payer"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "paga"
+            }
+          }
+        }
+      },
+      "title_data_unavailable" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "data not available"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "dato no disponible"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "donnée non disponible"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "dato non disponibile"
+            }
+          }
+        }
+      },
+      "msn_goals_in_curse" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "goals currently in progress"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "metas actualmente en curso"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "objectifs actuellement en cours"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "obiettivi attualmente in corso"
+            }
+          }
+        }
+      }
+  },
+  "version" : "1.1"
+}

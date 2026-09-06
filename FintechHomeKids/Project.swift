@@ -84,6 +84,18 @@ let authFeatureTarget = Target.module(
     ]
 )
 
+let homeFeatureTarget = Target.module(
+    name: "FHKHome",
+    path: "Targets/Features",
+    hasTests: true,
+    hasExample: true,
+    dependencies: [
+        .target(name: "FHKDomain"),
+        .target(name: "FHKDesignSystem"),
+        .target(name: "FHKCore")
+    ]
+)
+
 // MARK: - Project Assembly
 let project = Project.makeApp(
     name: "FintechHomeKids",
@@ -94,10 +106,14 @@ let project = Project.makeApp(
         testingTarget,
         domainTarget,
         infrastructureTarget,
-        authFeatureTarget
+        
+        //Features
+        authFeatureTarget,
+        homeFeatureTarget
     ],
     schemes: Scheme.makeSchemes(appName: "FintechHomeKids") + [
         Scheme.makeSchemeExample(for: "FHKDesignSystemExample"),
-        Scheme.makeSchemeExample(for: "FHKAuthExample")
+        Scheme.makeSchemeExample(for: "FHKAuthExample"),
+        Scheme.makeSchemeExample(for: "FHKHomeExample")
     ]
 )

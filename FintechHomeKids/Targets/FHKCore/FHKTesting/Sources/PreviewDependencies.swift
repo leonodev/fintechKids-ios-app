@@ -21,6 +21,7 @@ public enum FHKPreviewDependencies {
         DependenciesInjection.registerDesignSystemPreview()
         DependenciesInjection.registerInfrastructurePreview()
         DependenciesInjection.registerAppPreview()
+        DependenciesInjection.registerHomePreview()
         #endif
     }
 }

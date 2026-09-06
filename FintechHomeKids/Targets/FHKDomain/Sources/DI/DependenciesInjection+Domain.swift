@@ -22,6 +22,21 @@ public extension DependenciesInjection {
         set { set(newValue, for: FHKConfiguration.self) }
     }
     
+    var fhkRewards: FHKRewards {
+        get { get(FHKRewards.self) }
+        set { set(newValue, for: FHKRewards.self) }
+    }
+    
+    var fhkMembers: FHKMembers {
+        get { get(FHKMembers.self) }
+        set { set(newValue, for: FHKMembers.self) }
+    }
+    
+    var fhkGoal: FHKGoal {
+        get { get(FHKGoal.self) }
+        set { set(newValue, for: FHKGoal.self) }
+    }
+    
     // It only records what lives natively in Domain
     static func registerDomain() {
         

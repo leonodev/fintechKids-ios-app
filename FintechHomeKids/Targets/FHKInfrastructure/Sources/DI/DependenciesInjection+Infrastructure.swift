@@ -25,6 +25,9 @@ public extension DependenciesInjection {
             
             let client = try FHKSupabaseAPI.makeClient()
             inject.fhkAuth = .live(client: client)
+            inject.fhkRewards = .live(supabaseClient: client)
+            inject.fhkMembers = .live(supabaseClient: client)
+            inject.fhkGoal = .live(supabaseClient: client)
         } catch {
             fatalError("❌ Critical error during dependency registration: \(error)")
         }
