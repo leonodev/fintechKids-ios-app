@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FLibInjections
 
 public struct FHKSession: Sendable {
     public var isAuthenticated: @MainActor @Sendable () -> Bool = { false }
@@ -29,3 +30,19 @@ public struct FHKSession: Sendable {
         self.logout = logout
     }
 }
+
+public extension DependenciesInjection {
+    
+    var fhkSession: FHKSession {
+        get { get(FHKSession.self,  live: .live, preview: .test, testing: .test) }
+        set { set(newValue, for: FHKSession.self) }
+    }
+}
+
+#if DEBUG
+public extension FHKSession {
+    static var test: Self {
+        Self()
+    }
+}
+#endif

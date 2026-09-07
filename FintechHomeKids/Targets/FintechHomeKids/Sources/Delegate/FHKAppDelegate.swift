@@ -7,7 +7,9 @@
 
 import SwiftUI
 import FHKAuth
+import FHKHome
 import FHKCore
+import FHKInfrastructure
 import FLibUtils
 import FLibStorage
 import FLibInjections
@@ -25,12 +27,10 @@ class FHKAppDelegate: ServicesApplicationDelegate {
     override func application(_ application: UIApplication,
                               didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        DependenciesInjection.registerCore()
-        DependenciesInjection.registerInfrastructure()
-        DependenciesInjection.registerDesignSystem()
-        DependenciesInjection.registerMainApp()
-        DependenciesInjection.registerAuthFeature()
-        DependenciesInjection.registerDomain()
+       
+        
+        // Centralized injection of live variants
+        DICompositionRoot.configure()
         
         let servicesResult = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         Logger.info("All Services Registered => \(servicesResult)")

@@ -175,9 +175,7 @@ extension FHKLanguageScreen {
 
 // Para ver unicamente la pantalla
 #Preview("Design / Isolated UI") {
-    FHKPreview(setup: {
-        FHKPreviewDependencies.registerDefaults()
-    }) {
+    FHKPreview {
         FHKLanguageScreen()
         .environment(NavigationRouter<AuthRoute>())
     }

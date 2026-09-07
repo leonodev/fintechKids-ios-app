@@ -4,15 +4,9 @@ import FLibInjections
 import FHKAuth
 import FHKCore
 import FHKDesignSystem
-import FHKTesting
 
 @main
 struct FHKHomeExampleApp: App {
-    
-    init() {
-        // Inicializa todos los mocks y dependencias por defecto al arrancar la feature
-        FHKPreviewDependencies.registerDefaults()
-    }
     
     var api: FHKEnvironment {
         inject.fhkEnvironment

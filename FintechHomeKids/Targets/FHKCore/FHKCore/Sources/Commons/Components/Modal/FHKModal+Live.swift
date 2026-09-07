@@ -31,19 +31,6 @@ public extension FHKModal {
         
         return modal
     }
-    
-    /// Version by Tests
-    static var test: Self {
-        Self()
-    }
-    
-    /// Version by Previews of SwiftUI
-    static var preview: Self {
-        var modal = Self()
-        modal.isPresented = { true }
-        modal.content = { AnyView(Text("Modal Test")) }
-        return modal
-    }
 }
 
 @Observable

@@ -74,9 +74,7 @@ public struct FHKSplashScreen: View {
 
 // Para ver unicamente la pantalla
 #Preview("Design / Isolated UI") {
-    FHKPreview(setup: {
-        FHKPreviewDependencies.registerDefaults()
-    }) {
+    FHKPreview {
         FHKSplashScreen()
             .environment(NavigationRouter<AuthRoute>())
     }
@@ -84,9 +82,7 @@ public struct FHKSplashScreen: View {
 
 // Para probar el flujo de navegación y la interacción real
 #Preview("Navigation / Full Flow") {
-    FHKPreview(setup: {
-        FHKPreviewDependencies.registerDefaults()
-    }) {
+    FHKPreview {
         NavigationContainer(router: NavigationRouter<AuthRoute>()) {
             FHKSplashScreen()
         }

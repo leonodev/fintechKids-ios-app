@@ -5,7 +5,9 @@
 //  Created by Fredy Leon on 31/8/26.
 //
 
+import FLibInjections
 
+// MARK: - Contract
 public struct FHKAuth: Sendable {
     public var login: @Sendable (LoginEntity) async throws -> FHKUserSession = { _ in
         throw FHKAuthError.userNotFound
@@ -22,3 +24,22 @@ public struct FHKAuth: Sendable {
     
     public init() {}
 }
+
+// MARK: - KeyPath Access
+public extension DependenciesInjection {
+    
+    var fhkAuth: FHKAuth {
+        get { get(FHKAuth.self, preview: .test, testing: .test) }
+        set { set(newValue, for: FHKAuth.self) }
+    }
+}
+
+// MARK: - Mocks & Previews
+#if DEBUG
+public extension FHKAuth {
+    static var test: Self {
+        Self()
+    }
+}
+
+#endif

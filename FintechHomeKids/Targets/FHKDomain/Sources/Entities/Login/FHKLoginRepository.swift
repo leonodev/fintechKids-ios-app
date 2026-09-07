@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import FLibInjections
 
+// MARK: - Contract
 public struct FHKLoginRepository: Sendable {
     public var login: @Sendable (_ loginEntity: LoginEntity) async throws -> FHKUserSession? = { _ in nil }
     public var loginWithBiometrics: @Sendable (_ prompt: String) async throws -> Void = { _ in }
@@ -18,4 +20,13 @@ public struct FHKLoginRepository: Sendable {
     public var hasSavedToken: @Sendable () -> Bool = { false }
 
     public init() {}
+}
+
+// MARK: - KeyPath Access
+public extension DependenciesInjection {
+    
+    var fhkLoginRepository: FHKLoginRepository {
+        get { get(FHKLoginRepository.self) }
+        set { set(newValue, for: FHKLoginRepository.self) }
+    }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FLibInjections
 
 public enum BiometryType {
     case faceID
@@ -20,3 +21,24 @@ public struct FHKSecurity: Sendable {
     
     public init() {}
 }
+
+public extension DependenciesInjection {
+    var fhkSecurity: FHKSecurity {
+        get { inject.get(FHKSecurity.self, preview: .preview, testing: .test) }
+        set { inject.set(newValue, for: FHKSecurity.self) }
+    }
+}
+
+#if DEBUG
+public extension FHKSecurity {
+    static var test: Self {
+        Self()
+    }
+    
+    static var preview: Self {
+        var preview = Self()
+        
+        return preview
+    }
+}
+#endif

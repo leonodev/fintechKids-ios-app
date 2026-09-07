@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FLibInjections
 
 public struct FHKConfiguration: Sendable {
     public var parentMail: @Sendable() -> String? = { nil }
@@ -20,4 +21,12 @@ public struct FHKConfiguration: Sendable {
     
     
     public init() {}
+}
+
+public extension DependenciesInjection {
+    
+    var fhkConfiguration: FHKConfiguration {
+        get { get(FHKConfiguration.self) }
+        set { set(newValue, for: FHKConfiguration.self) }
+    }
 }

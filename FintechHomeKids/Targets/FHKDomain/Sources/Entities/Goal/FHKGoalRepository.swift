@@ -1,14 +1,49 @@
 //
-//  FHKGoalRepository+Mock.swift
+//  FHKGoalRepository.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 6/9/26.
 //
 
-import FHKDomain
 import Foundation
+import FLibInjections
 
-public extension FHKGoalRepository {
+// MARK: - Contract
+public struct FHKGoalRepository: Sendable {
+    
+    public var createGoal: @Sendable
+    (FHKGoalEntity) async throws -> Void = { _ in }
+    
+    public var getGoals: @Sendable
+    (String, Bool) async throws -> [FHKGoalEntity] = { _, _ in [] }
+    
+    public var createGoalMember: @Sendable
+    (FHKGoalMemberEntity) async throws -> Void = { _ in }
+    
+    public var fetchGoalMember: @Sendable
+    (UUID, Bool) async throws -> [FHKGoalMemberEntity] = { _, _ in [] }
+    
+    public var fetchGoalMemberFamily: @Sendable
+    (String, Bool) async throws -> [FHKGoalMemberEntity] = { _, _ in [] }
+    
+    public var clearCache: @Sendable
+    () async -> Void = { }
+    
+    public init() {}
+}
+
+// MARK: - KeyPath Access
+public extension DependenciesInjection {
+    
+    var fhkGoalsRepository: FHKGoalRepository {
+        get { get(FHKGoalRepository.self, preview: .preview(2), testing: .test) }
+        set { set(newValue, for: FHKGoalRepository.self) }
+    }
+}
+
+// MARK: - Mocks & Previews
+#if DEBUG
+extension FHKGoalRepository {
     
     static var test: Self {
         Self()
@@ -57,21 +92,4 @@ public extension FHKGoalMemberEntity {
     }
 }
 
-public extension FHKGoalEntity {
-    static func previewItem(_ count: Int) -> [Self] {
-        var previewItems = [FHKGoalEntity]()
-        
-        for i in 1...count{
-            let item = FHKGoalEntity(id: i,
-                                     expirationDate: Date().toUTC,
-                                     name: "PSP5 - \(i)",
-                                     emailParent: "parent@domain.com",
-                                     value: 35,
-                                     measureType: "coins",
-                                     status: .inCurse)
-            
-            previewItems.append(item)
-        }
-        return previewItems
-    }
-}
+#endif

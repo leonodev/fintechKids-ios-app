@@ -46,7 +46,7 @@ public extension Target {
         bundleIdPrefix: String = "com.fleon.fintechHomeKids",
         deploymentTarget: DeploymentTargets = .iOS("17.0"),
         dependencies: [TargetDependency] = [],
-        testDependencies: [TargetDependency] = [.target(name: "FHKTesting")]
+        testDependencies: [TargetDependency] = []
     ) -> [Target] {
         let basePath = "\(path)/\(name)"
         var targets: [Target] = []

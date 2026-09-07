@@ -173,9 +173,7 @@ public struct FHKRegisterScreen: View {
 
 // Para ver unicamente la pantalla
 #Preview("Design / Isolated UI") {
-    FHKPreview(setup: {
-        FHKPreviewDependencies.registerDefaults()
-    }) {
+    FHKPreview {
         FHKRegisterScreen()
         .environment(NavigationRouter<AuthRoute>())
     }

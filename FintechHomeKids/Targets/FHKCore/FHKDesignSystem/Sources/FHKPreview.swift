@@ -6,20 +6,14 @@
 //
 
 import SwiftUI
-@_exported import FHKTesting
 
 public struct FHKPreview<Content: View>: View {
     private let content: () -> Content
     
     public init(
-        setup: (() -> Void)? = nil,
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.content = content
-        
-        #if DEBUG
-        setup?()
-        #endif
     }
     
     public var body: some View {

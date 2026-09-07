@@ -6,6 +6,7 @@ let appTarget = Target.app(
     name: "FintechHomeKids",
     dependencies: [
         .target(name: "FHKAuth"),
+        .target(name: "FHKHome"),
         .target(name: "FHKInfrastructure"),
         .target(name: "FHKCore")
     ]
@@ -30,19 +31,8 @@ let designSystemTarget = Target.module(
     hasExample: true,
     dependencies: [
         .target(name: "FHKCore"),
-        .target(name: "FHKTesting"),
         .external(name: "Lottie"),
         .external(name: "Algorithms")
-    ]
-)
-
-let testingTarget = Target.module(
-    name: "FHKTesting",
-    path: "Targets/FHKCore",
-    hasTests: false,
-    dependencies: [
-        .target(name: "FHKCore"),
-        .target(name: "FHKDomain")
     ]
 )
 
@@ -103,7 +93,6 @@ let project = Project.makeApp(
         [appTarget],
         coreTarget,
         designSystemTarget,
-        testingTarget,
         domainTarget,
         infrastructureTarget,
         
