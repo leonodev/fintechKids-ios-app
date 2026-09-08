@@ -11,7 +11,7 @@ import FHKDesignSystem
 
 public struct FHKLoginScreen: View {
     @State private var viewModel: FHKLoginScreenVM
-    @Router private var router: NavigationRouter<AuthRoute>
+    @Router private var router: NavigationRouter<RoutesDestination>
     
     public init() {
         self._viewModel = State(initialValue: FHKLoginScreenVM())
@@ -19,7 +19,7 @@ public struct FHKLoginScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: AuthRoute.login.title) {
+        FHKScreenContainer(title: RoutesDestination.login.title.localized.uppercased()) {
             switch viewModel.viewState.loginState {
     
             case .loading:
@@ -36,7 +36,7 @@ public struct FHKLoginScreen: View {
                 
                 switch result {
                 case .success:
-                    //router.navigate(to: .home)
+                    router.navigate(to: .home)
                     print("navigation to home")
                     
                 case .error:
@@ -195,7 +195,7 @@ public struct FHKLoginScreen: View {
 #Preview("Design / Isolated UI") {
     FHKPreview {
         FHKLoginScreen()
-        .environment(NavigationRouter<AuthRoute>())
+            .withPreviewRouter()
     }
 }
 
@@ -203,7 +203,7 @@ public struct FHKLoginScreen: View {
 // Para probar el flujo de navegación y la interacción real
 #Preview("Navigation / Full Flow") {
     FHKPreview {
-        NavigationContainer(router: NavigationRouter<AuthRoute>()) {
+        AppNavigationContainer {
             FHKLoginScreen()
         }
     }

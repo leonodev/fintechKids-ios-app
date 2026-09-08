@@ -13,7 +13,7 @@ import FLibUtils
 
 public struct FHKRegisterScreen: View {
     @State private var viewModel: FHKRegisterScreenVM
-    @Router private var router: NavigationRouter<AuthRoute>
+    @Router private var router: NavigationRouter<RoutesDestination>
     
     public init() {
         self._viewModel = State(initialValue: FHKRegisterScreenVM())
@@ -21,7 +21,7 @@ public struct FHKRegisterScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: AuthRoute.register.title) {
+        FHKScreenContainer(title: RoutesDestination.register.title.localized.uppercased()) {
             switch viewModel.viewState.registerState {
                 
             case .loading:
@@ -175,6 +175,6 @@ public struct FHKRegisterScreen: View {
 #Preview("Design / Isolated UI") {
     FHKPreview {
         FHKRegisterScreen()
-        .environment(NavigationRouter<AuthRoute>())
+            .withPreviewRouter()
     }
 }

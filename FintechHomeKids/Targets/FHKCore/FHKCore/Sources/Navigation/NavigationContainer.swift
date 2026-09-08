@@ -8,12 +8,14 @@
 import Foundation
 import SwiftUI
 
+public typealias AppNavigationContainer<Root: View> = NavigationContainer<RoutesDestination, Root>
+
 public struct NavigationContainer<Destination: NavigationDestination, Root: View>: View {
     var router: NavigationRouter<Destination>
     private let rootView: Root
     
     public init(
-        router: NavigationRouter<Destination>,
+        router: NavigationRouter<Destination> = NavigationRouter(),
         @ViewBuilder root: () -> Root
     ) {
         self.router = router

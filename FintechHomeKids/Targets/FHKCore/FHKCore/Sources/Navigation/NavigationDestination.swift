@@ -17,7 +17,7 @@ public protocol NavigationDestination: Hashable, Identifiable, Sendable {
     
     /// Optional title for the navigation bar
     @MainActor
-    var title: String? { get }
+    var title: String { get }
     
     /// Indicates whether the view should hide the navigation bar
     var hidesNavigationBar: Bool { get }

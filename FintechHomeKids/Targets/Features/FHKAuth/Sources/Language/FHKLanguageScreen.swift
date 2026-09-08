@@ -11,7 +11,7 @@ import FHKDesignSystem
 
 public struct FHKLanguageScreen: View {
     @State private var viewModel: FHKLanguageScreenVM
-    @Router private var router: NavigationRouter<AuthRoute>
+    @Router private var router: NavigationRouter<RoutesDestination>
     
     @Namespace var nameSpaceMenu
     @State private var isExpanded = false
@@ -24,7 +24,7 @@ public struct FHKLanguageScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: AuthRoute.language.title) {
+        FHKScreenContainer(title: RoutesDestination.language.title.localized.uppercased()) {
             switch viewModel.viewState.languageState {
             
             case .loaded:
@@ -177,7 +177,7 @@ extension FHKLanguageScreen {
 #Preview("Design / Isolated UI") {
     FHKPreview {
         FHKLanguageScreen()
-        .environment(NavigationRouter<AuthRoute>())
+            .withPreviewRouter()
     }
 }
 

@@ -9,9 +9,9 @@ import Foundation
 import FHKCore
 
 public struct AuthDeepLinkHandler: DeepLinkHandler {
-    private let router: NavigationRouter<AuthRoute>
+    private let router: NavigationRouter<RoutesDestination>
     
-    public init(router: NavigationRouter<AuthRoute>) {
+    public init(router: NavigationRouter<RoutesDestination>) {
         self.router = router
     }
     

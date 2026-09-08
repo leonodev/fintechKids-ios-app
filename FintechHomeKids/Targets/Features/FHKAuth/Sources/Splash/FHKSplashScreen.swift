@@ -12,7 +12,7 @@ import FHKCore
 
 public struct FHKSplashScreen: View {
     @State private var viewModel: FHKSplashScreenVM
-    @Router private var router: NavigationRouter<AuthRoute>
+    @Router private var router: NavigationRouter<RoutesDestination>
 
     public init() {
         self._viewModel = State(initialValue: FHKSplashScreenVM())
@@ -76,14 +76,14 @@ public struct FHKSplashScreen: View {
 #Preview("Design / Isolated UI") {
     FHKPreview {
         FHKSplashScreen()
-            .environment(NavigationRouter<AuthRoute>())
+            .withPreviewRouter()
     }
 }
 
 // Para probar el flujo de navegación y la interacción real
 #Preview("Navigation / Full Flow") {
     FHKPreview {
-        NavigationContainer(router: NavigationRouter<AuthRoute>()) {
+        AppNavigationContainer {
             FHKSplashScreen()
         }
     }

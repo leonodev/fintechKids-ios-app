@@ -1,6 +1,7 @@
 
 import SwiftUI
 import FHKAuth
+import FHKHome
 import FHKCore
 import FHKDesignSystem
 
@@ -9,11 +10,12 @@ struct MainApp: App {
     @UIApplicationDelegateAdaptor(FHKAppDelegate.self) var delegate
     private let jailbreak: JailbreakManager = .live
     
-    @State private var authRouter = NavigationRouter<AuthRoute>()
+    @State private var appRouter = NavigationRouter<RoutesDestination>()
     private let deepLinkRouter = FHKDeepLinkRouter()
     
     init() {
         setupDeepLinks()
+        RoutesDestination.registerResolver()
     }
     
     var body: some Scene {
@@ -38,7 +40,7 @@ struct MainApp: App {
     
     //Registro de Handlers concretos
     private func setupDeepLinks() {
-        deepLinkRouter.register(handler: AuthDeepLinkHandler(router: authRouter))
+        deepLinkRouter.register(handler: AuthDeepLinkHandler(router: appRouter))
     }
     
     // MARK: - Componentes auxiliares (Security / Toast)
@@ -75,7 +77,7 @@ struct MainApp: App {
     
     // MARK: - Flujo No Autenticado (Splash, Language, Login, Registro)
     var unauthenticatedFlow: some View {
-        NavigationContainer(router: authRouter) {
+        NavigationContainer(router: appRouter) {
             FHKSplashScreen()
         }
     }
