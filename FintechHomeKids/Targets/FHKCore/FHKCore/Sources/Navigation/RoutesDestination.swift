@@ -5,6 +5,7 @@
 //  Created by Fredy Leon on 8/9/26.
 //
 
+import Foundation
 import SwiftUI
 
 public enum RoutesDestination: NavigationDestination {
@@ -17,44 +18,13 @@ public enum RoutesDestination: NavigationDestination {
     case createGoals
     case createTasks
     case profile
+    case members
+    case memberDetail(UUID)
     
     public typealias ContentView = AnyView
     
     @MainActor
     public static var viewResolver: ((RoutesDestination) -> AnyView)?
-    
-    @MainActor
-    public var title: String {
-        switch self {
-        case .language:
-            return "language"
-            
-        case .login:
-            return "login"
-            
-        case .register:
-            return "register"
-            
-        case .home:
-            return "home"
-            
-        case .createMembers:
-            return "title_new_member"
-            
-        case .createRewards:
-            return "title_new_rewards"
-            
-        case .createGoals:
-            return "title_new_goal"
-            
-        case .createTasks:
-            return "title_new_tasks"
-            
-        case .profile:
-            return "home"
-
-        }
-    }
     
     // Título o configuración por defecto si aplica
     public var hidesNavigationBar: Bool {

@@ -50,7 +50,6 @@ public struct NavigationContainer<Destination: NavigationDestination, Root: View
     @ViewBuilder
     private func buildDestination(_ destination: Destination) -> some View {
         destination.view()
-            .navigationTitle(destination.title ?? "")
             .navigationBarBackButtonHidden(destination.hidesNavigationBar)
             .toolbar {
                 renderToolbarItems()

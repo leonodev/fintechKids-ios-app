@@ -436,6 +436,122 @@
           }
         }
       },
+      "access_camera_title_permission" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "access to camera"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "acceso a la camara"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "accès à la caméra"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "Accesso alla fotocamera"
+            }
+          }
+        }
+      },
+      "access_camera_msn_permission" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "we need access to capture photos of your receipts. You may need to send transaction support documents."
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "necesitamos acceso para capturar fotos de tus recibos. es posible que tengas que enviar soportes de…"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "nous avons besoin d'un accès pour capturer vos reçus. Il est possible que vous deviez envoyer des justificatifs de transaction."
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "abbiamo bisogno di accedere per scattare foto alle tue ricevute. Potrebbe essere necessario inviare documenti di supporto per le transazioni."
+            }
+          }
+        }
+      },
+      "access_camera_btn_open_setting_permission" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "go to settings"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "ir a ajustes"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "aller aux réglages"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "vai alle Impostazioni"
+            }
+          }
+        }
+      },
+      "access_camera_btn_open_skin_permission" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "maybe later"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "quizás mas tarde"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "plus tard"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "forse più tardi"
+            }
+          }
+        }
+      }
   },
   "version" : "1.1"
 }

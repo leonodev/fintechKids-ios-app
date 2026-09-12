@@ -19,7 +19,6 @@ public struct ModalWrapper<Destination: NavigationDestination>: View {
     public var body: some View {
         NavigationStack {
             destination.view()
-                .navigationTitle(destination.title ?? "")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button(action: { router.dismiss() }) {

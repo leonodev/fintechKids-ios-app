@@ -24,6 +24,10 @@ public class FHKRegisterViewState {
     public var msnRegisterFail = ""
     
     // Properties View
+    public var register: String {
+        "register".localized.uppercased()
+    }
+    
     public var familyNamePlaceholder: String {
         "family_name".localized.capitalizingFirstLetter()
     }
@@ -45,7 +49,7 @@ public class FHKRegisterViewState {
     }
     
     public var titleRegisterBtn: String {
-        "register".localized().uppercased()
+        "register".localized.uppercased()
     }
     
     public var msnRegisterSuccess: String {
@@ -53,7 +57,7 @@ public class FHKRegisterViewState {
     }
     
     public var titleButtonContinue: String {
-        "continue".localized().uppercased()
+        "continue".localized.uppercased()
     }
     
     public var registerEmailInstruction: String {

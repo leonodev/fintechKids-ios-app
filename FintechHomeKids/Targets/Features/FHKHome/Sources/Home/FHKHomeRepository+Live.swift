@@ -5,6 +5,7 @@
 //  Created by Fredy Leon on 6/9/26.
 //
 
+import Foundation
 import FHKDomain
 import FHKCore
 import FLibInjections
@@ -27,6 +28,16 @@ public extension FHKHomeRepository {
             let membersList = try await inject.fhkMembers.fetchFamilyMembers(email)
             await cache.setMembersCache(membersList)
             return membersList
+        }
+        
+        repository.getMemberById = { memberId in
+            if let member = await cache.getMember(by: memberId) {
+                Logger.info("📦 Member found in local cache: \(memberId)")
+                return member
+            }
+            
+            Logger.warning("⚠️ Member not found in local cache: \(memberId)")
+            return nil
         }
 
         repository.fetchRewardCollected = { email, forceRefresh in
@@ -74,5 +85,9 @@ private final actor HomeLiveCached {
     
     func setRewardsCache(_ list: [FHKRewardCollectedEntity]) {
         self.rewardCollectedCache = CachedData(content: list)
+    }
+    
+    func getMember(by id: UUID) -> FHKMemberEntity? {
+        membersCache?.content.first(where: { $0.id == id })
     }
 }

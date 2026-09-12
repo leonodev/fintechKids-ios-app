@@ -21,7 +21,7 @@ public struct FHKRegisterScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: RoutesDestination.register.title.localized.uppercased()) {
+        FHKScreenContainer(title: viewModel.viewState.register) {
             switch viewModel.viewState.registerState {
                 
             case .loading:
@@ -176,5 +176,15 @@ public struct FHKRegisterScreen: View {
     FHKPreview {
         FHKRegisterScreen()
             .withPreviewRouter()
+    }
+}
+
+
+// Para probar el flujo de navegación y la interacción real
+#Preview("Navigation / Full Flow") {
+    FHKPreview {
+        AppNavigationContainer {
+            FHKRegisterScreen()
+        }
     }
 }

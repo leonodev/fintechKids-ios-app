@@ -20,6 +20,9 @@ public struct FHKHomeRepository: Sendable {
     public var getParentMail:
     @Sendable() async -> String? = { nil }
     
+    public var getMemberById:
+    @Sendable (_ memberId: UUID) async -> FHKMemberEntity? = { _ in nil }
+    
     public init() {}
 }
 
@@ -52,6 +55,12 @@ extension FHKHomeRepository {
         
         homeRepo.getParentMail = {
             "parent@domain.com"
+        }
+        
+        homeRepo.getMemberById = { _ in
+            FHKMemberEntity(emailParent: "parent@domain.com",
+                            memberName: "new member",
+                            familyName: "Members Family")
         }
         
         return homeRepo

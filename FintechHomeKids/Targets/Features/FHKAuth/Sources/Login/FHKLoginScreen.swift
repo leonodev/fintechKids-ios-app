@@ -19,7 +19,7 @@ public struct FHKLoginScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: RoutesDestination.login.title.localized.uppercased()) {
+        FHKScreenContainer(title: viewModel.viewState.login) {
             switch viewModel.viewState.loginState {
     
             case .loading:

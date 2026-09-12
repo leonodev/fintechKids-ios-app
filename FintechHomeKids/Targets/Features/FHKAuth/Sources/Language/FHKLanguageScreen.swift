@@ -24,7 +24,7 @@ public struct FHKLanguageScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: RoutesDestination.language.title.localized.uppercased()) {
+        FHKScreenContainer(title: viewModel.viewState.language) {
             switch viewModel.viewState.languageState {
             
             case .loaded:

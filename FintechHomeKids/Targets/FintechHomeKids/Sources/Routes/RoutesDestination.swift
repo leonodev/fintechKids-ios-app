@@ -34,6 +34,12 @@ extension RoutesDestination {
         case .home:
             FHKHomeScreen()
             
+        case .members:
+            EmptyView()
+            
+        case .memberDetail(let memberID):
+            EmptyView()
+            
         case .createMembers, .createRewards, .createGoals, .createTasks, .profile:
             EmptyView()
         }

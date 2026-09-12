@@ -17,6 +17,10 @@ public struct FHKLoginViewState {
     public var password = ""
     
     // Properties Screen View
+    public var login: String {
+        "login".localized.uppercased()
+    }
+    
     public var emailPlaceholder: String {
         "email".localized
     }

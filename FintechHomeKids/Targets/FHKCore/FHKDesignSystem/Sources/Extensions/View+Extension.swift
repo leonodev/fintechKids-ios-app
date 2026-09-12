@@ -33,6 +33,14 @@ public extension View {
             elseTransform(self)
         }
     }
+    
+    @ViewBuilder func isHidden(_ hidden: Bool) -> some View {
+        if hidden {
+            EmptyView()
+        } else {
+            self
+        }
+    }
 }
 
 public extension View {

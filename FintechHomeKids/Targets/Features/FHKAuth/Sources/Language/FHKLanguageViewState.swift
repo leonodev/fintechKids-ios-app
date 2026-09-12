@@ -13,6 +13,10 @@ import FHKDesignSystem
 public struct FHKLanguageViewState {
     
     // Properties Screen View
+    public var language: String {
+        "language".localized.uppercased()
+    }
+    
     public var selectLanguageNow: String {
         "select_language_now".localized.capitalizingFirstLetter()
     }
