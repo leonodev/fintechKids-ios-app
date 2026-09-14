@@ -291,36 +291,36 @@
           }
         }
       },
-      "title_new_member" : {
+      "title_menu_member" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "add member"
+              "value" : "members"
             }
           },
           "es" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "añadir miembro"
+              "value" : "miembros"
             }
           },
           "fr" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "ajouter un membre"
+              "value" : "membres"
             }
           },
           "it" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "aggiungi membro"
+              "value" : "membros"
             }
           }
         }
       },
-      "title_new_rewards" : {
+      "title_menu_rewards" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
@@ -349,36 +349,36 @@
           }
         }
       },
-      "title_new_goal" : {
+      "title_menu_goal" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "goal new"
+              "value" : "goals"
             }
           },
           "es" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "nueva meta"
+              "value" : "metas"
             }
           },
           "fr" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "nouvel objectif"
+              "value" : "objectifs"
             }
           },
           "it" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "nuovo obiettivo"
+              "value" : "obiettivos"
             }
           }
         }
       },
-      "title_new_tasks" : {
+      "title_menu_tasks" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
@@ -436,118 +436,118 @@
           }
         }
       },
-      "access_camera_title_permission" : {
+      "key_transfer_title" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "access to camera"
+              "value" : "transfer"
             }
           },
           "es" : {
             "stringUnit" : {
-              "state" : "translated",
-              "value" : "acceso a la camara"
+              "state" : "needs_review",
+              "value" : "transferir"
             }
           },
           "fr" : {
             "stringUnit" : {
-              "state" : "translated",
-              "value" : "accès à la caméra"
+              "state" : "needs_review",
+              "value" : "transferts"
             }
           },
           "it" : {
             "stringUnit" : {
-              "state" : "translated",
-              "value" : "Accesso alla fotocamera"
+              "state" : "needs_review",
+              "value" : "trasferimenti"
             }
           }
         }
       },
-      "access_camera_msn_permission" : {
+      "key_payments_title" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "we need access to capture photos of your receipts. You may need to send transaction support documents."
+              "value" : "payments"
             }
           },
           "es" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "necesitamos acceso para capturar fotos de tus recibos. es posible que tengas que enviar soportes de…"
+              "value" : "pagos"
             }
           },
           "fr" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "nous avons besoin d'un accès pour capturer vos reçus. Il est possible que vous deviez envoyer des justificatifs de transaction."
+              "value" : "paiements"
             }
           },
           "it" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "abbiamo bisogno di accedere per scattare foto alle tue ricevute. Potrebbe essere necessario inviare documenti di supporto per le transazioni."
+              "value" : "pagamenti"
             }
           }
         }
       },
-      "access_camera_btn_open_setting_permission" : {
+      "key_loans_title" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "go to settings"
+              "value" : "loans"
             }
           },
           "es" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "ir a ajustes"
+              "value" : "prestamos"
             }
           },
           "fr" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "aller aux réglages"
+              "value" : "prets"
             }
           },
           "it" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "vai alle Impostazioni"
+              "value" : "prestiti"
             }
           }
         }
       },
-      "access_camera_btn_open_skin_permission" : {
+      "key_saving_title" : {
         "extractionState" : "manual",
         "localizations" : {
           "en" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "maybe later"
+              "value" : "savings"
             }
           },
           "es" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "quizás mas tarde"
+              "value" : "ahorros"
             }
           },
           "fr" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "plus tard"
+              "value" : "epargne"
             }
           },
           "it" : {
             "stringUnit" : {
               "state" : "translated",
-              "value" : "forse più tardi"
+              "value" : "risparmi"
             }
           }
         }

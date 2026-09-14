@@ -115,7 +115,8 @@ public extension Target {
             infoPlist: .extendingDefault(with: [
                 "CFBundleDisplayName": "$(APP_NAME)",
                 "BASE_URL": "$(BASE_URL)",
-                "UILaunchScreen": [:]
+                "UILaunchScreen": [:],
+                "NSCameraUsageDescription": "Necesitamos acceso a la cámara para capturar fotos de perfil y escanear códigos."
             ]),
             sources: ["Targets/\(name)/Sources/**"],
             resources: [

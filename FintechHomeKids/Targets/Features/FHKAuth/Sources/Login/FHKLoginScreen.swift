@@ -37,7 +37,6 @@ public struct FHKLoginScreen: View {
                 switch result {
                 case .success:
                     router.navigate(to: .home)
-                    print("navigation to home")
                     
                 case .error:
                     viewModel.fhkModal.show(
@@ -53,10 +52,10 @@ public struct FHKLoginScreen: View {
                 break
             }
         }
-//        .onAppear {
-//            viewModel.viewState.email = "leonfrcol@gmail.com"
-//            viewModel.viewState.password = "1234567890"
-//        }
+        .onAppear {
+            viewModel.viewState.email = "leonfrcol@gmail.com"
+            viewModel.viewState.password = "1234567890"
+        }
     }
     
     var loadingView: some View {

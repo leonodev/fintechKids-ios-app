@@ -9,7 +9,6 @@ import AVFoundation
 import UIKit
 import Combine
 import FLibUtils
-import FHKCore
 
 @MainActor
 public extension FHKPermission {

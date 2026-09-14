@@ -21,6 +21,7 @@ public struct FHKSplashViewState {
     public enum StateAction: Equatable {
         case goToLanguage
         case goToLogin
+        case gotoHome
         case none
     }
     

@@ -33,7 +33,7 @@ public struct FHKPermissionView: View {
     private var headerSection: some View {
         VStack(spacing: 20) {
             
-            Text(provider.title())
+            Text(provider.title().localized.capitalizingFirstLetter())
                 .font(.title.bold())
             Spacer()
             
@@ -42,7 +42,7 @@ public struct FHKPermissionView: View {
                         contentMode: .scaleAspectFit)
             
             Spacer()
-            Text(provider.message())
+            Text(provider.message().localized.capitalizingFirstLetter())
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -55,7 +55,7 @@ public struct FHKPermissionView: View {
     private var actionButtons: some View {
         VStack(spacing: 12) {
             
-            FHKButtonPrimary(title: provider.titleButtonSetting(),
+            FHKButtonPrimary(title: provider.titleButtonSetting().localized.uppercased(),
                              state: .enabled,
                              mode: .solid,
                              action: handleAction)
@@ -69,7 +69,7 @@ public struct FHKPermissionView: View {
 //                    .foregroundColor(.white)
 //                    .cornerRadius(16)
 //            }
-            FHKButtonPrimary(title: provider.titleButtonLater(),
+            FHKButtonPrimary(title: provider.titleButtonLater().localized.uppercased(),
                              textColor: FHKColor.gray,
                              style: .outlined,
                              state: .enabled,

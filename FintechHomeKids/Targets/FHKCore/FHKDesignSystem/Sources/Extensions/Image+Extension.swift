@@ -25,14 +25,14 @@ public extension Image {
     static let fintechkidsCoins = Image("fintechkids_coins", bundle: .module)
     
     // Menus
-    static let menuLoansEnable = Image("loan_gold", bundle: .module)
-    static let menuLoansDisabled = Image("loan_gray", bundle: .module)
-    static let menuPaymentEnable = Image("payment_gold", bundle: .module)
-    static let menuPaymentDisabled = Image("payment_gray", bundle: .module)
-    static let menuSavingsEnable = Image("savings_gold", bundle: .module)
-    static let menuSavingsDisabled = Image("savings_gray", bundle: .module)
-    static let menuTransferEnable = Image("transfer_gold", bundle: .module)
-    static let menuTransferDisabled = Image("transfer_gray", bundle: .module)
+    static let menuLoansEnable = Image("loan_enable", bundle: .module)
+    static let menuLoansDisabled = Image("loan_disable", bundle: .module)
+    static let menuPaymentEnable = Image("payment_enable", bundle: .module)
+    static let menuPaymentDisabled = Image("payment_disable", bundle: .module)
+    static let menuSavingsEnable = Image("savings_enable", bundle: .module)
+    static let menuSavingsDisabled = Image("savings_disable", bundle: .module)
+    static let menuTransferEnable = Image("transfer_enable", bundle: .module)
+    static let menuTransferDisabled = Image("transfer_disable", bundle: .module)
     
     // Images
     static let coinSingle = Image("coin", bundle: .module)
