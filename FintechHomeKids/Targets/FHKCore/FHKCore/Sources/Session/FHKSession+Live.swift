@@ -6,15 +6,17 @@
 //
 
 import Foundation
-import FHKCore
 import FLibInjections
 import FLibStorage
 
 public extension FHKSession {
+    @MainActor
+    fileprivate static let state = SessionState()
     
     static var live: Self {
         let authKey = UserDefaultsKeys.isUserAutenicatedKey
-        let state = SessionState()
+        
+        
         var session = Self()
         
         session.isAuthenticated = {
@@ -52,6 +54,7 @@ public extension FHKSession {
 }
 
 @MainActor
+@Observable
 private final class SessionState {
     var hasAuthentication: Bool = false
 }

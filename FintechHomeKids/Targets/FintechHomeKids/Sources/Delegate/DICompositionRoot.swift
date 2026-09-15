@@ -35,6 +35,7 @@ enum DICompositionRoot {
         inject.fhkConfiguration = .live
         inject.fhkLanguage = .live
         inject.fhkCameraPermission = .live
+        inject.fhkModal = .live
     }
     
     // MARK: - External Services & Supabase
@@ -59,5 +60,6 @@ enum DICompositionRoot {
         inject.fhkLoginRepository = .live
         inject.fhkRegisterRepository = .live
         inject.fhkGoalsRepository = .live
+        inject.fhkProfileRepository = .live
     }
 }

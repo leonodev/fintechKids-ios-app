@@ -128,9 +128,8 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
             }
             
             try await fhkSession.login()
-            viewState.loginState = .finish(result: .success)
 //        } catch let error as FHKSupabaseError {
-//            viewState.loginState = .finish(result: .error)
+//            viewState.loginState = .error
 //            informateError(error)
         } catch {
             viewState.loginState = .finish(result: .error)
@@ -146,7 +145,7 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
             try await fhkLoginRepository.loginWithBiometrics(prompt)
             viewState.loginState = .finish(result: .success)
 //        } catch let error as FHKSupabaseError {
-//            viewState.loginState = .finish(result: .error)
+//            viewState.loginState = .error
 //            informateError(error)
         } catch {
             viewState.loginState = .finish(result: .error)

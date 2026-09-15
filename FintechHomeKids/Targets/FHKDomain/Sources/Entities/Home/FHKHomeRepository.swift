@@ -43,27 +43,27 @@ extension FHKHomeRepository {
     }
     
     static var preview: Self {
-        var homeRepo = Self()
+        var preview = Self()
         
-        homeRepo.fetchMembers = { _, _ in
+        preview.fetchMembers = { _, _ in
             [FHKMemberEntity.previewItem]
         }
         
-        homeRepo.fetchRewardCollected = { _, _ in
+        preview.fetchRewardCollected = { _, _ in
             FHKRewardCollectedEntity.previewItem(2)
         }
         
-        homeRepo.getParentMail = {
+        preview.getParentMail = {
             "parent@domain.com"
         }
         
-        homeRepo.getMemberById = { _ in
+        preview.getMemberById = { _ in
             FHKMemberEntity(emailParent: "parent@domain.com",
                             memberName: "new member",
                             familyName: "Members Family")
         }
         
-        return homeRepo
+        return preview
     }
 }
 

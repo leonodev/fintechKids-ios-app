@@ -40,7 +40,10 @@ extension RoutesDestination {
         case .memberDetail(let memberID):
             EmptyView()
             
-        case .createMembers, .createRewards, .createGoals, .createTasks, .profile:
+        case .profile:
+            FHKProfileScreen()
+            
+        case .createMembers, .createRewards, .createGoals, .createTasks:
             EmptyView()
         }
     }

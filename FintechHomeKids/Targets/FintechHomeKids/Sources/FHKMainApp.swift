@@ -62,11 +62,13 @@ struct MainApp: App {
                 unauthenticatedFlow
             }
         }
+        .onChange(of: inject.fhkSession.isAuthenticated()) { _, _ in
+            appRouter.popToRoot()
+        }
         .task {
             await inject.fhkSession.initializeSession()
         }
         .onAppear {
-            // Pasa el router del flujo activo o maneja el deeplink según corresponda
             setupNotificationService()
         }
         .onOpenURL { url in
@@ -84,23 +86,9 @@ struct MainApp: App {
     
     // MARK: - Flujo Autenticado (Home, Perfil, Tareas)
     var authenticatedFlow: some View {
-        EmptyView()
-        //@comentado
-        //        NavigationContainer(router: homeRouter) {
-        //            // Pantalla inicial del flujo autenticado
-        //            FHKHomeScreen(viewModel: FHKHomeScreenVM())
-        //                // Conectas las rutas del módulo Home/Main
-        //                .navigationDestination(for: HomeRoute.self) { route in
-        //                    switch route {
-        //                    case .profile:
-        //                        FHKProfileScreen(viewModel: FHKProfileScreenVM())
-        //                    case .members:
-        //                        FHKRegisterMembersScreen(viewModel: FHKRegisterMembersScreenVM())
-        //                    case .memberDetail(let member):
-        //                        FHKMemberDetailScreen(viewModel: FHKMemberDetailScreenVM(), member: member)
-        //                    }
-        //                }
-        //        }
+        NavigationContainer(router: appRouter) {
+            FHKHomeScreen()
+        }
     }
     
     var infoAppView: some View {
