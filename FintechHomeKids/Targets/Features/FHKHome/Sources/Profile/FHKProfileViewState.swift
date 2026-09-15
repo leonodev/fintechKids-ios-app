@@ -22,7 +22,7 @@ public struct FHKProfileViewState {
     
     
     public var profile: String {
-        "profile".localized.capitalizingFirstLetter()
+        "profile".localized.uppercased()
     }
     
     public var msnLoading: String {
