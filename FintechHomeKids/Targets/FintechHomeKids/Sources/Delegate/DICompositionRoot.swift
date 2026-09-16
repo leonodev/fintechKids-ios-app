@@ -8,6 +8,7 @@
 import Foundation
 import FHKAuth
 import FHKHome
+import FHKMembers
 import FHKCore
 import FHKInfrastructure
 import FLibStorage
@@ -47,6 +48,7 @@ enum DICompositionRoot {
             inject.fhkRewards = .live(supabaseClient: client)
             inject.fhkMembers = .live(supabaseClient: client)
             inject.fhkGoal = .live(supabaseClient: client)
+            inject.fhkBalanceRepository = .live(supabaseClient: client)
         } catch {
             fatalError("❌ Critical error during dependency registration: \(error)")
         }

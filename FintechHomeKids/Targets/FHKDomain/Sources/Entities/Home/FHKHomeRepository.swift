@@ -21,7 +21,7 @@ public struct FHKHomeRepository: Sendable {
     @Sendable() async -> String? = { nil }
     
     public var getMemberById:
-    @Sendable (_ memberId: UUID) async -> FHKMemberEntity? = { _ in nil }
+    @Sendable (_ memberId: UUID) async throws -> FHKMemberEntity? = { _ in nil }
     
     public init() {}
 }

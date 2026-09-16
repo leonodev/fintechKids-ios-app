@@ -9,6 +9,7 @@ import SwiftUI
 import FHKCore
 import FHKAuth
 import FHKHome
+import FHKMembers
 
 extension RoutesDestination {
     
@@ -38,7 +39,7 @@ extension RoutesDestination {
             EmptyView()
             
         case .memberDetail(let memberID):
-            EmptyView()
+            FHKMemberDetailScreen(memberID)
             
         case .profile:
             FHKProfileScreen()

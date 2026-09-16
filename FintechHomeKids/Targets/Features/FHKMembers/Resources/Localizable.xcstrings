@@ -1,0 +1,93 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+      "loading" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "processing"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "procesando"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "traitement"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "elaborazione"
+            }
+          }
+        }
+      },
+      "msn_error_fetch_balance" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "we couldn't retrieve your current balance, please try again later"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "no hemos podido obtener la información de tu saldo actual, inténtalo más tarde"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "nous n'avons pas pu obtenir votre solde actuel, veuillez réessayer plus tard"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "non siamo riusciti a recuperare il tuo saldo attuale, riprova più tardi"
+            }
+          }
+        }
+      },
+      "msn_error_fetch_member" : {
+        "extractionState" : "manual",
+        "localizations" : {
+          "en" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "we couldn't retrieve member information, please try again later"
+            }
+          },
+          "es" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "no hemos podido obtener la información del miembro actual, inténtalo más tarde"
+            }
+          },
+          "fr" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "nous n'avons pas pu obtenir votre membre actuel, veuillez réessayer plus tard"
+            }
+          },
+          "it" : {
+            "stringUnit" : {
+              "state" : "translated",
+              "value" : "non siamo riusciti a recuperare membro attuale, riprova più tardi"
+            }
+          }
+        }
+      }
+  },
+  "version" : "1.1"
+}
