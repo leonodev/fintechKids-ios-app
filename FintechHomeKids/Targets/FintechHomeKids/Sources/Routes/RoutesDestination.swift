@@ -36,7 +36,7 @@ extension RoutesDestination {
             FHKHomeScreen()
             
         case .members:
-            EmptyView()
+            FHKRegisterMembersScreen()
             
         case .memberDetail(let memberID):
             FHKMemberDetailScreen(memberID)

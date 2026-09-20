@@ -14,25 +14,25 @@ import PostgREST
 public extension FHKBalanceRepository {
     
     static func live(supabaseClient: SupabaseClient) -> Self {
-        var supabase = Self()
+        var repository = Self()
         let balance = FHKSupabaseBalance(supabaseClient: supabaseClient)
         
-        supabase.fetchBalance = { memberId in
+        repository.fetchBalance = { memberId in
             try await balance.fetchBalance(memberId: memberId)
         }
         
-        supabase.updateKidsCoinsBalance = { memberId, amountBalance in
+        repository.updateKidsCoinsBalance = { memberId, amountBalance in
             try await balance.updateKidsCoinsBalance(memberId: memberId, infoBalance: amountBalance)
         }
         
-        supabase.updateTimeBalance = { memberId, timerBalance in
+        repository.updateTimeBalance = { memberId, timerBalance in
             try await balance.updateTimeBalance(memberId: memberId, infoBalance: timerBalance)
         }
         
-        supabase.sendGoldenTicket = { data in
+        repository.sendGoldenTicket = { data in
             try await balance.sendGoldenTicket(data: data)
         }
         
-        return supabase
+        return repository
     }
 }

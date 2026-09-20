@@ -52,10 +52,10 @@ public struct FHKMemberDetailScreen: View {
                 
                 HStack {
                     FHKCoinBadge(amount: "\(viewModel.viewState.balance?.coinsObtained ?? 0)",
-                                 size: FHKSize.size16)
+                                 size: FHKSize.size20)
                     
                     FHKTimeBadge(amount: "\(viewModel.viewState.balance?.timeObtained ?? "0")",
-                                 size: FHKSize.size16)
+                                 size: FHKSize.size20)
                 }
                 
                 Spacer()
@@ -64,12 +64,14 @@ public struct FHKMemberDetailScreen: View {
                                  state: .enabled,
                                  mode: .glass(.clearWithInteractive),
                                  action: {
+                    //@comentado
                    // router.navigate(to: .tasks(isFromChildSelection: true, member))
                 })
                 .padding()
             }
         }
         .refreshable {
+            //@comentado
             //await viewModel.action(.fetchBalance(memberId: member.id))
         }
     }

@@ -49,6 +49,7 @@ enum DICompositionRoot {
             inject.fhkMembers = .live(supabaseClient: client)
             inject.fhkGoal = .live(supabaseClient: client)
             inject.fhkBalanceRepository = .live(supabaseClient: client)
+            inject.fhkRegisterMembersRepository = .live(supabaseClient: client)
         } catch {
             fatalError("❌ Critical error during dependency registration: \(error)")
         }
