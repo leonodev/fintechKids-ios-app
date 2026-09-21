@@ -10,6 +10,7 @@ import FHKCore
 import FHKAuth
 import FHKHome
 import FHKMembers
+import FHKGoals
 
 extension RoutesDestination {
     
@@ -44,7 +45,13 @@ extension RoutesDestination {
         case .profile:
             FHKProfileScreen()
             
-        case .createMembers, .createRewards, .createGoals, .createTasks:
+        case .listGoals:
+            FHKGoalListScreen()
+            
+        case .createGoals:
+            FHKGoalCreateScreen()
+            
+        case .createMembers, .createRewards, .createTasks:
             EmptyView()
         }
     }

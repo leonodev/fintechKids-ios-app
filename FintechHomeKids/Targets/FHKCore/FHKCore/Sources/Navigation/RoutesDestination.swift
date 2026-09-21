@@ -15,6 +15,7 @@ public enum RoutesDestination: NavigationDestination {
     case home
     case createMembers
     case createRewards
+    case listGoals
     case createGoals
     case createTasks
     case profile

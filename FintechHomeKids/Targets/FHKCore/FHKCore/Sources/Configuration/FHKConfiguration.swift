@@ -12,7 +12,6 @@ public struct FHKConfiguration: Sendable {
     public var parentMail: @Sendable() -> String? = { nil }
     public var familyName: @Sendable() -> String? = { nil }
     public var approvePin: @Sendable() -> String? = { nil }
-    public var environmentType: @Sendable() -> EnvironmentType = { .remote }
     
     public var refreshParentMail: @Sendable() -> Void = { }
     public var refreshFamilyName: @Sendable() -> Void = { }
@@ -26,7 +25,39 @@ public struct FHKConfiguration: Sendable {
 public extension DependenciesInjection {
     
     var fhkConfiguration: FHKConfiguration {
-        get { get(FHKConfiguration.self) }
+        get { get(FHKConfiguration.self, preview: .preview, testing: .test) }
         set { set(newValue, for: FHKConfiguration.self) }
     }
 }
+
+#if DEBUG
+extension FHKConfiguration {
+    
+    static var test: Self {
+        Self()
+    }
+    
+    
+    static var preview: Self {
+     var preview = Self()
+        
+        preview.parentMail = {
+            "parent@email.com"
+        }
+        
+        preview.familyName = {
+            "Family Name Test"
+        }
+        
+        preview.approvePin = {
+            "0000"
+        }
+        
+        preview.getEnvironment = {
+            .remote
+        }
+        
+     return preview
+    }
+}
+#endif

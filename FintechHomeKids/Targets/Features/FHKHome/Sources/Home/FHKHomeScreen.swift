@@ -224,8 +224,7 @@ public struct FHKHomeScreen: View {
                     //router.navigate(to: .tasks(isFromChildSelection: false, nil))
                     
                 case .goals:
-                    print("Go to goals")
-                    //router.navigate(to: .goals)
+                    router.navigate(to: .listGoals)
                     
                 case .rewards:
                     print("Go to rewards")
@@ -272,6 +271,15 @@ private extension FHKHomeScreen {
     FHKPreview {
         FHKHomeScreen()
             .withPreviewRouter()
+    }
+}
+
+// Para probar el flujo de navegación y la interacción real
+#Preview("Navigation / Full Flow") {
+    FHKPreview {
+        AppNavigationContainer {
+            FHKHomeScreen()
+        }
     }
 }
 

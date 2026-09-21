@@ -10,6 +10,7 @@ import FLibInjections
 import FLibStorage
 
 public extension FHKConfiguration {
+    
     static var live: Self {
         let state = LiveState()
         
@@ -26,7 +27,7 @@ public extension FHKConfiguration {
             state.readApprovePin()
         }
         
-        config.environmentType = {
+        config.getEnvironment = {
             state.getEnvironment()
         }
         
