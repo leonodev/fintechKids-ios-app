@@ -32,3 +32,26 @@ public struct FHKRewardEntity: DomainModelProtocol {
         self.emailParent = emailParent
     }
 }
+
+
+#if DEBUG
+public extension FHKRewardEntity {
+    static func previewItem(_ count: Int) -> [Self] {
+        var previewItems = [Self]()
+        
+        for i in 1...count {
+            let item = FHKRewardEntity(id: i,
+                                       createdAt: Date().toUTC,
+                                       name: "Go to Karting \(i)",
+                                       timeRequiered: "6 hours",
+                                       coinsRequiered: 300,
+                                       emailParent: "parent@domain.com")
+            
+            previewItems.append(item)
+        }
+        
+        return previewItems
+    }
+}
+
+#endif

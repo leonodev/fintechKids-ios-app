@@ -1,21 +1,23 @@
 //
-//  FHKRewards.swift
+//  FHKRewardRepository.swift
 //  FintechHomeKids
 //
-//  Created by Fredy Leon on 24/9/26.
+//  Created by Fredy Leon on 21/9/26.
 //
 
+import Foundation
 import FLibInjections
 
-public struct FHKRewards: Sendable {
+// MARK: - Contract
+public struct FHKRewardRepository: Sendable {
     public var createReward:
     @Sendable(FHKRewardEntity) async throws -> Void = { _ in }
     
-    public var fetchRewards:
-    @Sendable(String) async throws -> [FHKRewardEntity] = { _ in [] }
     
-    public var fetchRewardCollected:
-    @Sendable(String) async throws -> [FHKRewardCollectedEntity] = { _ in [] }
+    public var fetchRewards:
+    @Sendable(String, Bool) async throws -> [FHKRewardEntity] = { _, _ in [] }
+    
+    public var clearCache: @Sendable() async -> Void = { }
     
     public init() {}
 }
@@ -23,15 +25,15 @@ public struct FHKRewards: Sendable {
 // MARK: - KeyPath Access
 public extension DependenciesInjection {
     
-    var fhkRewards: FHKRewards {
-        get { get(FHKRewards.self, preview: .preview, testing: .test) }
-        set { set(newValue, for: FHKRewards.self) }
+    var fhkRewardRepository: FHKRewardRepository {
+        get { get(FHKRewardRepository.self, preview: .preview, testing: .test) }
+        set { set(newValue, for: FHKRewardRepository.self) }
     }
 }
 
 // MARK: - Mocks & Previews
 #if DEBUG
-extension FHKRewards {
+extension FHKRewardRepository {
     static var test: Self {
         Self()
     }
@@ -41,13 +43,11 @@ extension FHKRewards {
         
         preview.createReward = { _ in }
         
-        preview.fetchRewards = { _ in
+        preview.fetchRewards = { _, _ in
             FHKRewardEntity.previewItem(2)
         }
         
-        preview.fetchRewardCollected = { _ in
-            FHKRewardCollectedEntity.previewItem(2)
-        }
+        preview.clearCache = { }
         
         return preview
     }

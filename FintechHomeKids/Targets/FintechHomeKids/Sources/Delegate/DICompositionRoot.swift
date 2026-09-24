@@ -9,6 +9,7 @@ import Foundation
 import FHKAuth
 import FHKHome
 import FHKMembers
+import FHKRewards
 import FHKCore
 import FHKInfrastructure
 import FLibStorage
@@ -64,5 +65,6 @@ enum DICompositionRoot {
         inject.fhkRegisterRepository = .live
         inject.fhkGoalsRepository = .live
         inject.fhkProfileRepository = .live
+        inject.fhkRewardRepository = .live
     }
 }

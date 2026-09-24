@@ -11,6 +11,7 @@ import FHKAuth
 import FHKHome
 import FHKMembers
 import FHKGoals
+import FHKRewards
 
 extension RoutesDestination {
     
@@ -50,6 +51,9 @@ extension RoutesDestination {
             
         case .createGoals:
             FHKGoalCreateScreen()
+            
+        case .listRewards:
+            FHKRewardListScreen()
             
         case .createMembers, .createRewards, .createTasks:
             EmptyView()

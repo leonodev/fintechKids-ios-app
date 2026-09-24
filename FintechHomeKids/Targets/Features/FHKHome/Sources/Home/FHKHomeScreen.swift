@@ -227,8 +227,7 @@ public struct FHKHomeScreen: View {
                     router.navigate(to: .listGoals)
                     
                 case .rewards:
-                    print("Go to rewards")
-                    //router.navigate(to: .rewards)
+                    router.navigate(to: .listRewards)
                 }
                 print(index)
             })
