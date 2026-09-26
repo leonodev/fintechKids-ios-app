@@ -55,7 +55,10 @@ extension RoutesDestination {
         case .listRewards:
             FHKRewardListScreen()
             
-        case .createMembers, .createRewards, .createTasks:
+        case .createRewards:
+            FHKRewardCreateScreen()
+            
+        case .createMembers, .createTasks:
             EmptyView()
         }
     }

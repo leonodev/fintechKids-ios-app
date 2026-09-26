@@ -32,6 +32,7 @@ public struct FHKRewardListScreen: View {
                 loadedView
             }
         }
+        .observeLanguage()
         .onAppear {
             Task {
                 // Upon entering the screen, we let the repository decide (cache vs back)
@@ -56,6 +57,7 @@ public struct FHKRewardListScreen: View {
                 }
             }
             .refreshable {
+                //@comment
                // await viewModel.action(.fetchGoals(force: true))
             }
             
@@ -66,8 +68,7 @@ public struct FHKRewardListScreen: View {
     
     var buttonCreteGoal: some View {
         Button {
-            //@comentado
-            //router.navigate(to: .createReward)
+            router.navigate(to: .createRewards)
         } label: {
             FHKButtomPlus()
         }

@@ -31,15 +31,15 @@ public struct FHKRewardListViewState {
     }
     
     public var msnRewardsEmpty: String {
-        "msn_rewards_empty".localized().capitalizingFirstLetter()
+        "msn_rewards_empty".localized.capitalizingFirstLetter()
     }
     
     public var msnLoading: String {
-        "msn_rewards_loading".localized().capitalizingFirstLetter()
+        "msn_rewards_loading".localized.capitalizingFirstLetter()
     }
     
     public var titleHours: String {
-        "title_hours".localized().capitalizingFirstLetter()
+        "title_hours".localized.capitalizingFirstLetter()
     }
 }
 
