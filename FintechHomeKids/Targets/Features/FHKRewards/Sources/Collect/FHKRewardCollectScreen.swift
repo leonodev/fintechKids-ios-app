@@ -435,9 +435,7 @@ public struct FHKRewardCollectScreen: View {
                 
                 if case .changeByRewards = collectEntity.receiveRewardType,
                    let info = viewModel.viewState.goldenTicket {
-//                    router.navigate(to: .presentGoldenTicket(info), style: .fullScreenCover)
-                    
-                    router.navigate(to: .presentGoldenTicket, style: .fullScreenCover)
+                    router.navigate(to: .presentGoldenTicket(payload: info.asPayload), style: .fullScreenCover)
                 }
             })
         }

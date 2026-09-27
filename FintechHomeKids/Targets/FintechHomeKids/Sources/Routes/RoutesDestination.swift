@@ -7,11 +7,13 @@
 
 import SwiftUI
 import FHKCore
+import FHKDomain
 import FHKAuth
 import FHKHome
 import FHKMembers
 import FHKGoals
 import FHKRewards
+import FHKDesignSystem
 
 extension RoutesDestination {
     
@@ -58,8 +60,11 @@ extension RoutesDestination {
         case .createRewards:
             FHKRewardCreateScreen()
             
-        case .presentGoldenTicket:
-            FHKRewardGoldenTicketScreen()
+        case .presentGoldenTicket(let payload):
+            if let ticket = payload.value(as: FHKGoldenTicketEntity.self) {
+                FHKRewardGoldenTicketScreen(ticketEntity: ticket)
+            }
+            FHKRoutingErrorView()
             
         case .createMembers, .createTasks:
             EmptyView()

@@ -22,7 +22,7 @@ public enum RoutesDestination: NavigationDestination {
     case profile
     case members
     case memberDetail(UUID)
-    case presentGoldenTicket
+    case presentGoldenTicket(payload: AnyHashableSendable)
     
     public typealias ContentView = AnyView
     

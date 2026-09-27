@@ -12,14 +12,11 @@ import FHKDomain
 import FLibUtils
 
 public struct FHKRewardGoldenTicketScreen: View {
-    // @Comentado, pasar de alguna manera la info
-    var ticketEntity: FHKGoldenTicketEntity = FHKGoldenTicketEntity(
-        recipientName: "recipientName",
-        taskDescription: "taskDescription",
-        reward: "reward",
-        ticketCode: "ticketCode")
+    var ticketEntity: FHKGoldenTicketEntity
     
-    public init() {}
+    public init(ticketEntity: FHKGoldenTicketEntity) {
+        self.ticketEntity = ticketEntity
+    }
     
     public var body: some View {
         FHKScreenContainer {
