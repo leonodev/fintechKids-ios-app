@@ -58,6 +58,9 @@ extension RoutesDestination {
         case .createRewards:
             FHKRewardCreateScreen()
             
+        case .presentGoldenTicket:
+            FHKRewardGoldenTicketScreen()
+            
         case .createMembers, .createTasks:
             EmptyView()
         }

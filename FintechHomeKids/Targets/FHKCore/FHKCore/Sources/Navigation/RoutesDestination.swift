@@ -22,6 +22,7 @@ public enum RoutesDestination: NavigationDestination {
     case profile
     case members
     case memberDetail(UUID)
+    case presentGoldenTicket
     
     public typealias ContentView = AnyView
     
@@ -31,7 +32,7 @@ public enum RoutesDestination: NavigationDestination {
     // Título o configuración por defecto si aplica
     public var hidesNavigationBar: Bool {
         switch self {
-        case .login, .language, .home: return true
+        case .login, .language, .home, .presentGoldenTicket: return true
         default: return false
         }
     }
