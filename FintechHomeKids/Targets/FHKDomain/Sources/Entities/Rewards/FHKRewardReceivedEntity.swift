@@ -26,3 +26,45 @@ public struct FHKRewardReceivedEntity: Sendable, Equatable, Hashable {
         self.rewardType = rewardType
     }
 }
+
+#if DEBUG
+public extension FHKRewardReceivedEntity {
+    
+    static var previewItemCoinAsignedToGoal: Self {
+        FHKRewardReceivedEntity(task: FHKTaskEntity.previewItem,
+                                receiveRewardType: .assignToGoal,
+                                rewardType: .coins)
+    }
+    
+    static var previewItemCoinChangeByRewards: Self {
+        FHKRewardReceivedEntity(task: FHKTaskEntity.previewItem,
+                                receiveRewardType: .changeByRewards,
+                                rewardType: .coins)
+    }
+    
+    static var previewItemCoinSaveSavings: Self {
+        FHKRewardReceivedEntity(task: FHKTaskEntity.previewItem,
+                                receiveRewardType: .sendToSavings,
+                                rewardType: .coins)
+    }
+    
+    static var previewItemTimeAsignedToGoal: Self {
+        FHKRewardReceivedEntity(task: FHKTaskEntity.previewItem,
+                                receiveRewardType: .assignToGoal,
+                                rewardType: .time)
+    }
+    
+    static var previewItemTimeChangeByRewards: Self {
+        FHKRewardReceivedEntity(task: FHKTaskEntity.previewItem,
+                                receiveRewardType: .changeByRewards,
+                                rewardType: .time)
+    }
+    
+    static var previewItemTimeSaveSavings: Self {
+        FHKRewardReceivedEntity(task: FHKTaskEntity.previewItem,
+                                receiveRewardType: .sendToSavings,
+                                rewardType: .time)
+    }
+    
+}
+#endif

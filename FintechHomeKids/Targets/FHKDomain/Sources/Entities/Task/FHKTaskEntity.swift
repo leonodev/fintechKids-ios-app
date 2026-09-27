@@ -32,3 +32,18 @@ public struct FHKTaskEntity: DomainModelProtocol {
         self.emailParent = emailParent
     }
 }
+
+
+#if DEBUG
+public extension FHKTaskEntity {
+    
+    static var previewItem: Self {
+        FHKTaskEntity(createdAt: Date().toUTC,
+                      name: "Task Preview",
+                      description: "Preview Description",
+                      timeGranted: "2 hours",
+                      coinsGranted: 30,
+                      emailParent: "email@test.com")
+    }
+}
+#endif

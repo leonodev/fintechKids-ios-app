@@ -32,3 +32,16 @@ public struct FHKMemberEntity: DomainModelProtocol {
         self.avatarName = avatarName
     }
 }
+
+
+#if DEBUG
+public extension FHKMemberEntity {
+    
+    static var previewItem: Self {
+        
+        FHKMemberEntity(emailParent: "Email@test.com",
+                        memberName: "Name premiew",
+                        familyName: "Family premiew")
+    }
+}
+#endif

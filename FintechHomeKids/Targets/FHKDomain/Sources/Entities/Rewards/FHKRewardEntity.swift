@@ -33,6 +33,13 @@ public struct FHKRewardEntity: DomainModelProtocol {
     }
 }
 
+public extension FHKRewardEntity {
+    /// Return cost of rewards in hours 
+    var requiredHours: Int {
+        timeRequiered.asHours
+    }
+}
+
 
 #if DEBUG
 public extension FHKRewardEntity {

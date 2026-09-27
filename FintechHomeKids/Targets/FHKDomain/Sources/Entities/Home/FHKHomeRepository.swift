@@ -67,13 +67,4 @@ extension FHKHomeRepository {
     }
 }
 
-
-public extension FHKMemberEntity {
-    static var previewItem: Self {
-        FHKMemberEntity(emailParent: "parent@domain.com",
-                        memberName: "New Member",
-                        familyName: "Family Dummy")
-    }
-}
-
 #endif

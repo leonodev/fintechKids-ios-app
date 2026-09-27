@@ -17,22 +17,12 @@ public struct FHKRewardCollectScreen: View {
     @State private var isAcceptConditions: Bool = false
     @State private var selectedGoalID: Int?
     
-    //@comentado
-    var collectEntity: FHKRewardReceivedEntity = FHKRewardReceivedEntity(task: FHKTaskEntity(
-        createdAt: "createdAt",
-        name: "name",
-        description: "description",
-        timeGranted: "timeGranted",
-        coinsGranted: 30,
-        emailParent: "emailParent"), receiveRewardType: .assignToGoal, rewardType: .coins)
+    let collectEntity: FHKRewardReceivedEntity
+    let memberEntity: FHKMemberEntity
     
-    var memberEntity: FHKMemberEntity = FHKMemberEntity(id: UUID(),
-                                                        emailParent: "emailParent",
-                                                        memberName: "memberName",
-                                                        familyName: "familyName",
-                                                        avatarName: "avatarName")
-    
-    public init() {
+    public init(collectEntity: FHKRewardReceivedEntity, memberEntity: FHKMemberEntity) {
+        self.collectEntity = collectEntity
+        self.memberEntity = memberEntity
         self._viewModel = State(initialValue: FHKRewardCollectScreenVM())
     }
     
@@ -310,11 +300,9 @@ public struct FHKRewardCollectScreen: View {
                             VStack(alignment: .leading) {
                                 FHKDescriptionCardView(title: reward.name.uppercased(),
                                                        description: "")
-//                                let taskHours = collectEntity.task.timeGranted.asHours
-//                                let isValid = taskHours >= reward.requiredHours
-//                                makeRewardItemView(item: reward,
-//                                                   type: .time,
-//                                                   isRewardValid: isValid)
+                                let taskHours = collectEntity.task.timeGranted.asHours
+                                let isValid = taskHours >= reward.requiredHours
+                                makeRewardItemView(item: reward, type: .time, isRewardValid: isValid)
                             }
                         })
                         .padding()
@@ -475,7 +463,8 @@ public struct FHKRewardCollectScreen: View {
 // Para ver unicamente la pantalla
 #Preview("Design / Isolated UI") {
     FHKPreview {
-        FHKRewardCollectScreen()
+        FHKRewardCollectScreen(collectEntity: FHKRewardReceivedEntity.previewItemCoinAsignedToGoal,
+                               memberEntity: FHKMemberEntity.previewItem)
             .withPreviewRouter()
     }
 }
