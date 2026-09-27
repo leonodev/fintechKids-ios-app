@@ -16,7 +16,9 @@ public enum RoutesDestination: NavigationDestination {
     case createMembers
     case listRewards
     case createRewards
+    case collectReward(collectEntity: AnyHashableSendable, memberEntity: AnyHashableSendable)
     case listGoals
+    case startTask(taskEntity: AnyHashableSendable, memberEntity: AnyHashableSendable)
     case createGoals
     case createTasks
     case profile
