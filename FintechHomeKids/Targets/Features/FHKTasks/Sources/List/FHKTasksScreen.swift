@@ -14,10 +14,12 @@ public struct FHKTasksScreen: View {
     @State private var viewModel: FHKTasksScreenVM
     @Router private var router: NavigationRouter<RoutesDestination>
     var member: FHKMemberEntity?
-    var isFromChildSelection: Bool = false
+    var isFromChildSelection: Bool
     
-    public init() {
+    public init(member: FHKMemberEntity?, isFromChildSelection: Bool) {
         self._viewModel = State(initialValue: FHKTasksScreenVM())
+        self.member = member
+        self.isFromChildSelection = isFromChildSelection
     }
     
     public var body: some View {
@@ -50,11 +52,13 @@ public struct FHKTasksScreen: View {
                 LazyVStack(alignment: .center, spacing: 10) {
                     ForEach(viewModel.viewState.taskList) { task in
                         FHKCardView { _ in
+                            
                             guard let member = self.member, isFromChildSelection else {
                                 return
                             }
                             
-                            router.navigate(to: .startTask(taskEntity: task.asPayload, memberEntity: member.asPayload))
+                            router.navigate(to: .startTask(taskEntity: task.asPayload,
+                                                           memberEntity: member.asPayload))
                         } content: {
                             VStack(alignment: .leading, spacing: 0) {
  
@@ -135,7 +139,8 @@ public struct FHKTasksScreen: View {
 // Para ver unicamente la pantalla
 #Preview("Design / Isolated UI") {
     FHKPreview {
-        FHKTasksScreen()
+        FHKTasksScreen(member: FHKMemberEntity.previewItem,
+                       isFromChildSelection: true)
             .withPreviewRouter()
     }
 }

@@ -1,0 +1,93 @@
+//
+//  FHKTaskCreateScreenVM.swift
+//  FintechHomeKids
+//
+//  Created by Fredy Leon on 28/9/26.
+//
+
+import Foundation
+import Observation
+import FHKCore
+import FLibInjections
+import FHKDomain
+import FLibUtils
+
+@Observable
+final class FHKTaskCreateScreenVM: FHKCore.ViewModel {
+    var viewState: FHKTaskCreateViewState = .init()
+    
+    // Properties Injected
+    private var fhkTasksRepository: FHKTasksRepository {
+        inject.fhkTasksRepository
+    }
+    
+    private var fhkConfiguration: FHKConfiguration {
+        inject.fhkConfiguration
+    }
+    
+    private var fhkFirebaseAnalitycs: FHKAnalytics {
+        inject.fhkAnalitycs
+    }
+    
+    public var fhkModal: FHKModal {
+        inject.fhkModal
+    }
+    
+    public enum Action: Equatable {
+        case createTask
+    }
+    
+    @MainActor
+    public func action(_ action: Action) async {
+        switch action {
+            
+        case .createTask:
+            await createNewTask()
+        }
+    }
+}
+
+private extension FHKTaskCreateScreenVM {
+    
+    func createNewTask() async {
+        viewState.taskCreateState = .loading
+        
+        do {
+            guard let emailParent = fhkConfiguration.parentMail() else {
+                informateError(FHKAppError.readUserMailKeychainFailed)
+                viewState.taskCreateState = .finish(result: .error)
+                return
+            }
+            
+            guard let mesuareDuration = viewState.selectedDuration else {
+                return
+            }
+            
+            let task = FHKTaskEntity(createdAt: Date().toUTC,
+                                     name: viewState.taskName,
+                                     description: viewState.taskDescription,
+                                     timeGranted: "\(viewState.rewardsTime) \(mesuareDuration)",
+                                     coinsGranted: Int(viewState.rewardsKidsCoin) ?? 0,
+                                     emailParent: emailParent)
+            
+            try await fhkTasksRepository.createTask(task)
+            viewState.taskCreateState = .finish(result: .success)
+        } catch {
+            informateError(FHKTaskError.createTaskFailed)
+            viewState.taskCreateState = .finish(result: .error)
+        }
+    }
+    
+    func informateError(_ error: any FHKError) {
+        // We only send to Firebase if the error is configured to be reported.
+        if error.isShouldTrack {
+            fhkFirebaseAnalitycs.track(.error(.init(from: error)))
+        }
+        
+        // We show the user the localized message (UX)
+        viewState.msnUserError = error.msnLocalizedKey.localized
+        
+        // We print the full details to the console (Debug)
+        Logger.error(error.logMessage)
+    }
+}

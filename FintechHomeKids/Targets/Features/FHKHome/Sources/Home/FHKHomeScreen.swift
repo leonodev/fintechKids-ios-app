@@ -220,8 +220,7 @@ public struct FHKHomeScreen: View {
                     router.navigate(to: .members)
                     
                 case .tasks:
-                    print("Go to tasks")
-                    //router.navigate(to: .tasks(isFromChildSelection: false, nil))
+                    router.navigate(to: .tasks(member: nil, isFromChildSelection: false))
                     
                 case .goals:
                     router.navigate(to: .listGoals)

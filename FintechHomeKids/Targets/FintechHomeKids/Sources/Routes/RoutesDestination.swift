@@ -67,19 +67,25 @@ extension RoutesDestination {
         case .presentGoldenTicket(let payload):
             if let ticket = payload.value(as: FHKGoldenTicketEntity.self) {
                 FHKRewardGoldenTicketScreen(ticketEntity: ticket)
+            } else {
+                FHKRoutingErrorView()
             }
-            FHKRoutingErrorView()
+            
+        case .tasks(let memberEntity, let isFromChildSelection):
+            let member = memberEntity?.value(as: FHKMemberEntity.self)
+            FHKTasksScreen(member: member, isFromChildSelection: isFromChildSelection)
+            
             
         case .startTask(let taskEntity, let memberEntity):
             if let task = taskEntity.value(as: FHKTaskEntity.self),
-                let member = taskEntity.value(as: FHKMemberEntity.self) {
+                let member = memberEntity.value(as: FHKMemberEntity.self) {
                 FHKTaskStartScreen(task: task, member: member)
+            } else {
+                FHKRoutingErrorView()
             }
-            FHKRoutingErrorView()
             
         case .createTasks:
-            EmptyView()
-            //FHKTaskCreateScreen(viewModel: TaskCreateScreenVM())
+            FHKTaskCreateScreen()
             
         case .createMembers:
             EmptyView()

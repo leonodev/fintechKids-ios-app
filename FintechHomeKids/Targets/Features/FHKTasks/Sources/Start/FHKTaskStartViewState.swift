@@ -17,8 +17,7 @@ public struct FHKTaskStartViewState {
     var approvePIN = ""
     var selectedRewardType: FHKWorkType?
     // Propiedad computada
-    
-    // Properties Observable
+
     public var titleDescription: String {
         "title_task_description".localized.capitalizingFirstLetter()
     }

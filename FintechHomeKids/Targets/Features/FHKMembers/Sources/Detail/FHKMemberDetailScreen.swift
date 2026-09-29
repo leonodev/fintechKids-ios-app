@@ -64,8 +64,8 @@ public struct FHKMemberDetailScreen: View {
                                  state: .enabled,
                                  mode: .glass(.clearWithInteractive),
                                  action: {
-                    //@comentado
-                   // router.navigate(to: .tasks(isFromChildSelection: true, member))
+                    router.navigate(to: .tasks(member: viewModel.viewState.member?.asPayload,
+                                               isFromChildSelection: true))
                 })
                 .padding()
             }
