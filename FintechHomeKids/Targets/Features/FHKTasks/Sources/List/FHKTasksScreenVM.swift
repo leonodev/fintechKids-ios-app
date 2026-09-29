@@ -31,7 +31,6 @@ final class FHKTasksScreenVM: FHKCore.ViewModel {
     
     public enum Action: Equatable {
         case fetchTasks(force: Bool = false)
-        case createTask
     }
     
     @MainActor
@@ -40,41 +39,12 @@ final class FHKTasksScreenVM: FHKCore.ViewModel {
             
         case .fetchTasks(let force):
             await fetchTasksList(force: force)
-            
-        case .createTask:
-            await createNewTask()
         }
     }
 }
 
 private extension FHKTasksScreenVM {
-    
-    func createNewTask() async {
-        viewState.taskState = .loading
-        
-        do {
-            guard let emailParent = fhkConfiguration.parentMail() else {
-                viewState.taskState = .finish(result: .error)
-                return
-            }
-            
-            //@comentado
-            let task = FHKTaskEntity(createdAt: Date().toUTC,
-                                     name: "Limpiar",
-                                     description: "my description",
-                                     timeGranted: "1 days",
-                                     coinsGranted: 10,
-                                     emailParent: emailParent)
-            
-            try await fhkTasksRepository.createTask(task)
-            await fetchTasksList(force: true)
-            viewState.taskState = .finish(result: .success)
-        } catch {
-            informateError(FHKTaskError.createTaskFailed)
-            viewState.taskState = .finish(result: .error)
-        }
-    }
-    
+
     func fetchTasksList(force: Bool) async {
         viewState.taskState = .loading
         
