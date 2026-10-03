@@ -57,4 +57,26 @@ public enum RoutesDestination: NavigationDestination {
                 .background(Color(.systemGroupedBackground))
         )
     }
+    
+    public var namedDeepLinkable: String {
+        switch self {
+        case .language: return "language"
+        case .login: return "login"
+        case .register: return "register"
+        case .home: return "home"
+        case .createMembers: return "createMembers"
+        case .listRewards: return "listRewards"
+        case .createRewards: return "createRewards"
+        case .collectReward: return "collectReward"
+        case .listGoals: return "listGoals"
+        case .tasks: return "tasks"
+        case .startTask: return "startTask"
+        case .createGoals: return "createGoals"
+        case .createTasks: return "createTasks"
+        case .profile: return "profile"
+        case .members: return "members"
+        case .memberDetail: return "memberDetail"
+        case .presentGoldenTicket: return "presentGoldenTicket"
+        }
+    }
 }

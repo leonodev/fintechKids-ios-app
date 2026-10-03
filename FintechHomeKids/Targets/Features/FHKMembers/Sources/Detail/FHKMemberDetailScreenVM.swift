@@ -32,6 +32,7 @@ final class FHKMemberDetailScreenVM: FHKCore.ViewModel {
     
     public enum Action: Equatable {
         case getMemberBy(memberId: UUID)
+        case getBalanceMember(memberId: UUID)
     }
     
     @MainActor
@@ -39,13 +40,16 @@ final class FHKMemberDetailScreenVM: FHKCore.ViewModel {
         switch action {
             
         case .getMemberBy(let memberId):
-            await getMember(memberId: memberId)
+            await getMemberInformation(memberId: memberId)
+            
+        case .getBalanceMember(let memberId):
+            await getBalanceMember(memberId)
         }
     }
 }
 
 private extension FHKMemberDetailScreenVM {
-    func getMember(memberId: UUID) async {
+    func getMemberInformation(memberId: UUID) async {
         
         async let member = getInfoMember(memberId)
         async let balance = getBalanceMember(memberId)
@@ -67,6 +71,7 @@ private extension FHKMemberDetailScreenVM {
         }
     }
     
+    @discardableResult
     func getBalanceMember(_ memberId: UUID) async -> FHKBalanceEntity? {
         do {
             let balanceMember = try await fhkBalanceRepository.fetchBalance(memberId)

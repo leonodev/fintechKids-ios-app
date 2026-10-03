@@ -2,6 +2,7 @@
 import SwiftUI
 import FHKAuth
 import FHKHome
+import FHKRewards
 import FHKCore
 import FHKDesignSystem
 
@@ -14,8 +15,14 @@ struct MainApp: App {
     private let deepLinkRouter = FHKDeepLinkRouter()
     
     init() {
-        setupDeepLinks()
+        // Registramos el View Resolver antes de crear vistas
         RoutesDestination.registerResolver()
+        
+        // Registramos los Handlers concretos de Deep Links
+        setupDeepLinks()
+        
+        // Conectamos el Router con el servicio de Notificaciones
+        setupNotificationService()
     }
     
     var body: some Scene {
@@ -36,11 +43,6 @@ struct MainApp: App {
                 await inject.fhkStorage.clearKeychainIfNewInstallation()
             }
         }
-    }
-    
-    //Registro de Handlers concretos
-    private func setupDeepLinks() {
-        deepLinkRouter.register(handler: AuthDeepLinkHandler(router: appRouter))
     }
     
     // MARK: - Componentes auxiliares (Security / Toast)
@@ -109,12 +111,19 @@ struct MainApp: App {
         .zIndex(999)
     }
     
+    //Registro de Handlers concretos
+    private func setupDeepLinks() {
+        deepLinkRouter.register(handler: AuthDeepLinkHandler(router: appRouter))
+        deepLinkRouter.register(handler: FHKRewardDeepLinkHandler(router: appRouter))
+        
+        delegate.pushNotificationService.updateRouter(deepLinkRouter)
+    }
     
+    @MainActor
     private func setupNotificationService() {
-        //@comentado
-//        if let pushService = delegate.services.first(where: {
-//            $0 is PushNotificationService }) as? PushNotificationService {
-//            pushService.updateRouter(deepLinkRouter)
-//        }
+        guard let pushService = delegate.services.first(where: { $0 is FHKPushNotificationService }) as? FHKPushNotificationService else {
+            return
+        }
+        pushService.updateRouter(deepLinkRouter)
     }
 }

@@ -16,10 +16,14 @@ import FLibInjections
 
 class FHKAppDelegate: ServicesApplicationDelegate {
     
+    let firebaseService = FHKFirebaseRemoteService()
+    let toastService = FHKToastService()
+    let pushNotificationService = FHKPushNotificationService()
+
     override var services: [ApplicationService] {
-        [
-            FHKFirebaseRemoteService(),
-            FHKToastService()
+        [firebaseService,
+         toastService,
+         pushNotificationService
         ]
     }
    

@@ -1,0 +1,12 @@
+{
+  "Simulator Target Bundle": "com.fleon.fintechKids.dev",
+  "aps": {
+    "alert": {
+      "title": "¡Meta Alcanzada! 🏆",
+      "body": "Tenemos nuevas recompensa. Toca aquí para ver los detalles."
+    },
+    "badge": 1,
+    "sound": "default"
+  },
+  "link": "fhkApp://listRewards"
+}

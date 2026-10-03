@@ -21,7 +21,7 @@ public struct FHKRewardListViewState {
         case finish(result: FHKActionResult)
     }
     
-    public var rewardListState: State = .empty
+    public var rewardListState: State = .loading
     public var rewardList: [FHKRewardEntity] = []
     public var goalList: [FHKGoalEntity] = []
     public var msnUserError: String = ""

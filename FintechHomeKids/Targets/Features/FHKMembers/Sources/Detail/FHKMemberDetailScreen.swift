@@ -71,8 +71,7 @@ public struct FHKMemberDetailScreen: View {
             }
         }
         .refreshable {
-            //@comentado
-            //await viewModel.action(.fetchBalance(memberId: member.id))
+            await viewModel.action(.getBalanceMember(memberId: memberID))
         }
     }
 }

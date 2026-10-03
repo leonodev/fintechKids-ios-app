@@ -57,8 +57,7 @@ public struct FHKRewardListScreen: View {
                 }
             }
             .refreshable {
-                //@comment
-               // await viewModel.action(.fetchGoals(force: true))
+                await viewModel.action(.fetchRewards(force: true))
             }
             
             buttonCreteGoal

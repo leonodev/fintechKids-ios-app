@@ -34,3 +34,9 @@ public final class FHKDeepLinkRouter: Sendable {
         handler.handle(url: url)
     }
 }
+
+extension FHKDeepLinkRouter: DeepLinkHandler {
+    public func canHandle(url: URL) -> Bool {
+        handlers.contains(where: { $0.canHandle(url: url) })
+    }
+}
