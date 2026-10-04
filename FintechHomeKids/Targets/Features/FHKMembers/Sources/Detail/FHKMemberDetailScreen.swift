@@ -47,31 +47,47 @@ public struct FHKMemberDetailScreen: View {
     }
     
     var loadedView: some View {
-        ScrollView {
-            LazyVStack(alignment: .center, spacing: 0) {
-                
-                HStack {
-                    FHKCoinBadge(amount: "\(viewModel.viewState.balance?.coinsObtained ?? 0)",
-                                 size: FHKSize.size20)
-                    
-                    FHKTimeBadge(amount: "\(viewModel.viewState.balance?.timeObtained ?? "0")",
-                                 size: FHKSize.size20)
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .center, spacing: 0) {
+                    AvatarView(
+                        image: viewModel.viewState.member?.avatarName.getAvatar ?? AvatarType.boy_1.image,
+                        size: FHKSize.size116
+                    )
+                    .padding(.bottom)
+
+                    HStack {
+                        FHKCoinBadge(
+                            amount: "\(viewModel.viewState.balance?.coinsObtained ?? 0)",
+                            size: FHKSize.size20
+                        )
+
+                        FHKTimeBadge(
+                            amount: "\(viewModel.viewState.balance?.timeObtained ?? "0")",
+                            size: FHKSize.size20
+                        )
+                    }
+                    .padding(.vertical)
                 }
-                
-                Spacer()
-                
-                FHKButtonPrimary(title: "Ver Tareas",
-                                 state: .enabled,
-                                 mode: .glass(.clearWithInteractive),
-                                 action: {
-                    router.navigate(to: .tasks(member: viewModel.viewState.member?.asPayload,
-                                               isFromChildSelection: true))
-                })
-                .padding()
+                .frame(maxWidth: .infinity)
             }
-        }
-        .refreshable {
-            await viewModel.action(.getBalanceMember(memberId: memberID))
+            .refreshable {
+                await viewModel.action(.getBalanceMember(memberId: memberID))
+            }
+
+            
+            FHKButtonPrimary(
+                title: "Ver Tareas",
+                state: .enabled,
+                mode: .glass(.clearWithInteractive),
+                action: {
+                    router.navigate(to: .tasks(
+                        member: viewModel.viewState.member?.asPayload,
+                        isFromChildSelection: true
+                    ))
+                }
+            )
+            .padding()
         }
     }
 }
