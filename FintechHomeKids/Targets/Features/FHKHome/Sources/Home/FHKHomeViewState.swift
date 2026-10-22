@@ -115,16 +115,16 @@ private extension FHKHomeViewState {
     func getIconMenuHome(option: String, isEnable: Bool = true) -> Image {
         switch option {
         case "payments":
-            isEnable ? .menuPaymentEnable : .menuPaymentDisabled
+            isEnable ? .paidEnable : .paidDisable
             
         case "transfers":
-            isEnable ?  .menuTransferEnable : .menuTransferDisabled
+            isEnable ?  .transferMemberEnable : .transferMemberDisable
             
         case "loans":
-            isEnable ?  .menuLoansEnable : .menuLoansDisabled
+            isEnable ?  .loansMemberEnable : .loansMemberDisable
             
         case "savings":
-            isEnable ?  .menuSavingsEnable : .menuSavingsDisabled
+            isEnable ?  .savingsEnable : .savingsDisabled
             
         default:
             Image("")

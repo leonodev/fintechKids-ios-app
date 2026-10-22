@@ -17,11 +17,14 @@ public struct FHKPreview<Content: View>: View {
     }
     
     public var body: some View {
-        VStack {
-            Spacer()
+        ZStack {
+            // Fondo global que ignora safe areas
+            FHKColor.indigo
+                .ignoresSafeArea()
+            
+            // El contenido de la pantalla libre para gestionar sus propias safe areas
             content()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(FHKColor.indigo)
     }
 }

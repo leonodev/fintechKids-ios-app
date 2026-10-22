@@ -82,12 +82,12 @@ public struct FHKRewardListScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.rewardList) { reward in
-                        FHKCardView { _ in
+                        CardView { _ in
                             print("Navegando a ....: ")
                         } content: {
                             
                             VStack(alignment: .leading) {
-                                FHKDescriptionCardView(title: reward.name.uppercased(), description: "")
+                                DescriptionCardView(title: reward.name.uppercased(), description: "")
                                 
                                 Text("Para alcanzar esta meta, necesitas:")
                                     .font(.PangramSans.bold(FHKSize.size12))

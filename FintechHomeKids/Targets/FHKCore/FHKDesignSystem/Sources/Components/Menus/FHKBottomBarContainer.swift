@@ -13,6 +13,10 @@ public struct FHKBottomBarContainer<Content: View>: View {
     public let onSelect: (FHKMenuTabBar.Item) -> Void
     public let floatingButton: Content
     
+    private var hasFloatingButton: Bool {
+        !(Content.self is EmptyView.Type)
+    }
+    
     public init(
         items: [FHKMenuTabBar.Item],
         selectedIndex: Binding<Int>,
@@ -28,20 +32,27 @@ public struct FHKBottomBarContainer<Content: View>: View {
     public var body: some View {
         ZStack(alignment: .bottom) {
             HStack(spacing: 0) {
-                tabGroup(for: 0..<2)
-                
-                Spacer()
-                    .frame(width: FHKSize.size64)
-                
-                tabGroup(for: 2..<4)
+                if hasFloatingButton {
+                    
+                    tabGroup(for: 0..<2)
+                    
+                    Spacer()
+                        .frame(width: FHKSize.size64)
+                    
+                    tabGroup(for: 2..<4)
+                } else {
+                    tabGroup(for: 0..<items.count)
+                }
             }
             .padding(.all, FHKSpace.space12)
-            .background(FHKColor.wine)
+            .background(FHKColor.stone)
             .cornerRadius(FHKSize.size24)
             .shadow(color: FHKColor.shadowColor, radius: FHKSize.size04, x: 0, y: FHKSize.size04)
             
-            floatingButton
-                .offset(y: -FHKSpace.space24)
+            if hasFloatingButton {
+                floatingButton
+                    .offset(y: -FHKSpace.space60)
+            }
         }
     }
     
@@ -56,26 +67,29 @@ public struct FHKBottomBarContainer<Content: View>: View {
                         onSelect(item)
                     }
                 }) {
-                    VStack(spacing: FHKSpace.space04) {
+                    VStack(spacing: 0) {
                         item.icon
                             .renderingMode(.original)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: FHKSize.size24, height: FHKSize.size24)
+                            .frame(width: FHKSize.size72,
+                                   height: FHKSize.size72)
                         
                         Text(item.title)
-                            .font(.PangramSans.medium(FHKSize.size12))
+                            .font((selectedIndex == index)
+                                   ? .PangramSans.bold(FHKSize.size14)
+                                   : .PangramSans.medium(FHKSize.size12))
+                                  
                             .foregroundColor(
-                                item.isDisabled ? FHKColor.gray :
-                                (selectedIndex == index ? FHKColor.basicWhite : FHKColor.lunarSand)
+                                item.isDisabled
+                                ? FHKColor.gray
+                                : FHKColor.basicBlack
                             )
                     }
                     .frame(maxWidth: .infinity)
                 }
                 .disabled(item.isDisabled)
             } else {
-                // Si el índice no existe (como en la preview), pintamos un espacio invisible
-                // idéntico para mantener la simetría y el diseño visual intacto.
                 Spacer()
                     .frame(maxWidth: .infinity)
             }
@@ -83,25 +97,40 @@ public struct FHKBottomBarContainer<Content: View>: View {
     }
 }
 
+// Initializer para cuando NO se proporciona el floatingButton
+extension FHKBottomBarContainer where Content == EmptyView {
+    public init(
+        items: [FHKMenuTabBar.Item],
+        selectedIndex: Binding<Int>,
+        onSelect: @escaping (FHKMenuTabBar.Item) -> Void
+    ) {
+        self.items = Array(items.prefix(4))
+        self._selectedIndex = selectedIndex
+        self.onSelect = onSelect
+        self.floatingButton = EmptyView()
+    }
+}
+
+// MARK: - Previews
 struct FHKBottomBarContainerPreview: View {
     @State private var selectedIndex = 0
     @State var isOpen: Bool = false
     let items: [FHKMenuTabBar.Item] = [
         .init(title: "Payments",
-              activeIcon: .menuLoansEnable,
-              lockedIcon: .menuLoansDisabled),
+              activeIcon: .loansEnable,
+              lockedIcon: .loansDisabled),
         
         .init(title: "Transfer",
-              activeIcon: .menuTransferEnable,
-              lockedIcon: .menuTransferDisabled),
+              activeIcon: .transferMemberEnable,
+              lockedIcon: .transferMemberDisable),
         
         .init(title: "Loans",
-              activeIcon: .menuLoansEnable,
-              lockedIcon: .menuLoansDisabled),
+              activeIcon: .loansEnable,
+              lockedIcon: .loansDisabled),
         
         .init(title: "Saving",
-              activeIcon: .menuSavingsEnable,
-              lockedIcon: .menuSavingsDisabled,
+              activeIcon: .savingsEnable,
+              lockedIcon: .savingsDisabled,
               isDisabled: true)
     ]
     
@@ -112,49 +141,38 @@ struct FHKBottomBarContainerPreview: View {
               menuType: .members,
               identifier: "members"),
         
-            .init(title: "tasks",
-                  image: .init(systemName: "house"),
-                  color: FHKColor.indigo,
-                  menuType: .tasks,
-                  identifier: "tasks"),
+        .init(title: "tasks",
+              image: .init(systemName: "house"),
+              color: FHKColor.indigo,
+              menuType: .tasks,
+              identifier: "tasks"),
         
-            .init(title: "goals",
-                  image: .init(systemName: "note.text.badge.plus"),
-                  color: FHKColor.fuchsiaPink,
-                  menuType: .goals,
-                  identifier: "goals"),
+        .init(title: "goals",
+              image: .init(systemName: "note.text.badge.plus"),
+              color: FHKColor.fuchsiaPink,
+              menuType: .goals,
+              identifier: "goals"),
         
-            .init(title: "rewards",
-                  image: .init(systemName: "gamecontroller"),
-                  color: FHKColor.ultraPurple,
-                  menuType: .rewards,
-                  identifier: "rewards")
+        .init(title: "rewards",
+              image: .init(systemName: "gamecontroller"),
+              color: FHKColor.ultraPurple,
+              menuType: .rewards,
+              identifier: "rewards")
     ]
     
     var body: some View {
-        VStack {
-            Color.clear
-                .safeAreaInset(edge: .bottom) {
-                    ZStack {
-                        VStack {
-                            Spacer()
-                            
-                            FHKBottomBarContainer(items: items, selectedIndex: $selectedIndex) { item in
-                                print("Click en \(item.title)")
-                            } floatingButton: {
-                                HStack {
-                                    Spacer()
-                                    
-                                    FloatMenu(options: options, isOpen: $isOpen,
-                                              callback: { menu in
-                                    })
-                                    
-                                    Spacer()
-                                }
-                            }
-                        }
-                    }
-                }
+        VStack(spacing: 40) {
+            // OPCIÓN 1: SIN Floating Button
+            FHKBottomBarContainer(items: items, selectedIndex: $selectedIndex) { item in
+                print("Click en \(item.title)")
+            }
+            
+            // OPCIÓN 2: CON Floating Button
+            FHKBottomBarContainer(items: items, selectedIndex: $selectedIndex) { item in
+                print("Click en \(item.title)")
+            } floatingButton: {
+                FloatMenu(options: options, isOpen: $isOpen, callback: { _ in })
+            }
         }
     }
 }

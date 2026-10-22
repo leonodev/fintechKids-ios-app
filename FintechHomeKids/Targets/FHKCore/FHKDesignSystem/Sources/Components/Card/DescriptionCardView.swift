@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct FHKDescriptionCardView: View {
+public struct DescriptionCardView: View {
     let title: String
     let description: String
     let isEnable: Bool
@@ -42,10 +42,10 @@ public struct FHKDescriptionCardView: View {
 #Preview {
     VStack {
         VStack(spacing: 50) {
-            FHKDescriptionCardView(title: "Title enable",
+            DescriptionCardView(title: "Title enable",
                                    description: "Description enable")
             
-            FHKDescriptionCardView(title: "Title disabled",
+            DescriptionCardView(title: "Title disabled",
                                    description: "Description disabled",
                                    isEnable: false)
         }

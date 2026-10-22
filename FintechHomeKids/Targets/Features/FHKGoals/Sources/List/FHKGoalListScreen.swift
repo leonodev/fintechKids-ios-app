@@ -75,11 +75,11 @@ public struct FHKGoalListScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.goalList) { goal in
-                        FHKCardView { _ in
+                        CardView { _ in
                             print("Navegando a ....: ")
                         } content: {
                             VStack(alignment: .leading) {
-                                FHKDescriptionCardView(title: goal.name.uppercased(), description: "")
+                                DescriptionCardView(title: goal.name.uppercased(), description: "")
                                 
                                 ZStack(alignment: .topTrailing) {
                                     HStack(spacing: 0) {

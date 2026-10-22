@@ -169,11 +169,11 @@ public struct FHKHomeScreen: View {
                     switch viewModel.viewState.goalMemberState {
                         
                     case .skeleton:
-                        FHKGoalCardView.skeletons(count: 3)
+                        GoalCardView.skeletons(count: 3)
                         
                     case .loaded, .disabled:
                         ForEach(viewModel.goalMemberList) { goal in
-                            FHKGoalCardView(id: goal.goalId,
+                            GoalCardView(id: goal.goalId,
                                             state: viewModel.viewState.goalMemberState,
                                             current: Double(goal.accumulatedValue),
                                             total: Double(goal.rewardsSystemValue),
@@ -185,15 +185,12 @@ public struct FHKHomeScreen: View {
                         }
                         
                     case .error:
-                        FHKGoalCardView.error(msn: viewModel.viewState.titleDataUnavailable)
+                        GoalCardView.error(msn: viewModel.viewState.titleDataUnavailable)
                     }
                 }
             }
-            .frame(height: FHKSize.size132)
+            .frame(height: FHKSize.size180)
             .padding(.horizontal, FHKSpace.space08)
-            
-            GradientDivider()
-                .isHidden(viewModel.goalMemberList.isEmpty)
         }
         .padding(.top, FHKSpace.space16)
     }
@@ -248,7 +245,8 @@ private extension FHKHomeScreen {
                         avatarName: viewModel.getAvatarMember(member: member)
                       ),
                       action: { _ in
-            router.navigate(to: .memberDetail(member.id))
+            let myGoals = viewModel.getListGoalForMember(memberId: member.id)
+            router.navigate(to: .memberDetail(member.id, myGoals: myGoals.asPayload))
         })
     }
     

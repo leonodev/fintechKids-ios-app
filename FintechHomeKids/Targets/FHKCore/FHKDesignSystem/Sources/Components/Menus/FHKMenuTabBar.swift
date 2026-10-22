@@ -82,20 +82,20 @@ struct FHKMenuTabBarPreview: View {
     @State private var selectedIndex = 0
     let items: [FHKMenuTabBar.Item] = [
         .init(title: "Payments",
-              activeIcon: .menuLoansEnable,
-              lockedIcon: .menuLoansDisabled),
+              activeIcon: .loansEnable,
+              lockedIcon: .loansDisabled),
         
         .init(title: "Transfer",
-              activeIcon: .menuTransferEnable,
-              lockedIcon: .menuTransferDisabled),
+              activeIcon: .transferMemberEnable,
+              lockedIcon: .transferMemberDisable),
         
         .init(title: "Loans",
-              activeIcon: .menuLoansEnable,
-              lockedIcon: .menuLoansDisabled),
+              activeIcon: .loansEnable,
+              lockedIcon: .loansDisabled),
         
         .init(title: "Saving",
-              activeIcon: .menuSavingsEnable,
-              lockedIcon: .menuSavingsDisabled,
+              activeIcon: .savingsEnable,
+              lockedIcon: .savingsDisabled,
               isDisabled: true)
     ]
     

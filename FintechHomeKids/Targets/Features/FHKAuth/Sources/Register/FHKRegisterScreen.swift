@@ -108,7 +108,7 @@ public struct FHKRegisterScreen: View {
     }
     
     var credentialsField: some View {
-        FHKCardView(action: {_ in },
+        CardView(action: {_ in },
                       content: {
             
             VStack(alignment: .leading) {

@@ -70,7 +70,7 @@ public struct FHKRewardCollectScreen: View {
             switch (collectEntity.receiveRewardType, collectEntity.rewardType) {
                 
             case (.sendToSavings, .time):
-                FHKTimeBadge(amount: "\(viewModel.viewState.balance?.timeObtained ?? "0")", size: FHKSize.size24)
+                FHKTimeBadge(amount: "\(viewModel.viewState.balance?.timeObtained ?? "0")")
                 msnInformativeView // Helper para el mensaje
                 bannerPathView // Banner
                 checkConditionView
@@ -79,7 +79,7 @@ public struct FHKRewardCollectScreen: View {
                 continueButtonView
                 
             case (.sendToSavings, .coins):
-                FHKCoinBadge(amount: "\(viewModel.viewState.balance?.coinsObtained ?? 0)", size: FHKSize.size24)
+                FHKCoinBadge(amount: "\(viewModel.viewState.balance?.coinsObtained ?? 0)")
                 msnInformativeView
                 bannerPathView // Banner
                 checkConditionView
@@ -148,7 +148,7 @@ public struct FHKRewardCollectScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.goalList) { goal in
-                        FHKCardView(data: goal,
+                        CardView(data: goal,
                                     isSelected: selectedGoalID == goal.id,
                                     action: { _ in
                             if !viewModel.viewState.isGoalCompleted(goalId: goal.id) {
@@ -198,9 +198,9 @@ public struct FHKRewardCollectScreen: View {
     @ViewBuilder
     private func goalContentCardView(goal: FHKGoalEntity, isContentDisabled: Bool) -> some View {
         VStack(alignment: .leading) {
-            FHKDescriptionCardView(title: goal.name.uppercased(),
-                                   description: "",
-                                   isEnable: !isContentDisabled)
+            DescriptionCardView(title: goal.name.uppercased(),
+                                description: "",
+                                isEnable: !isContentDisabled)
             
             ZStack(alignment: .topTrailing) {
                 HStack(spacing: 0) {
@@ -291,15 +291,15 @@ public struct FHKRewardCollectScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.rewardCollectList) { reward in
-                        FHKCardView(data: reward,
+                        CardView(data: reward,
                                     isSelected: true,
                                     action: { item in
                                         print(item?.name ?? "-")
                                     },
                                     content: {
                             VStack(alignment: .leading) {
-                                FHKDescriptionCardView(title: reward.name.uppercased(),
-                                                       description: "")
+                                DescriptionCardView(title: reward.name.uppercased(),
+                                                    description: "")
                                 let taskHours = collectEntity.task.timeGranted.asHours
                                 let isValid = taskHours >= reward.requiredHours
                                 makeRewardItemView(item: reward, type: .time, isRewardValid: isValid)
@@ -322,10 +322,10 @@ public struct FHKRewardCollectScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.rewardCollectList) { reward in
-                        FHKCardView { _ in } content: {
+                        CardView { _ in } content: {
                             VStack(alignment: .leading) {
-                                FHKDescriptionCardView(title: reward.name.uppercased(),
-                                                       description: "")
+                                DescriptionCardView(title: reward.name.uppercased(),
+                                                    description: "")
                                 let taskCoins = collectEntity.task.coinsGranted
                                 let isValid = taskCoins >= reward.coinsRequiered
                                 makeRewardItemView(item: reward,
@@ -431,7 +431,7 @@ public struct FHKRewardCollectScreen: View {
     
     private var bannerPathView: some View {
         VStack {
-            FHKCardView { _ in } content: {
+            CardView { _ in } content: {
                 viewModel.viewState.imageBanner(type: collectEntity.rewardType)
                     .scaledToFit()
             }

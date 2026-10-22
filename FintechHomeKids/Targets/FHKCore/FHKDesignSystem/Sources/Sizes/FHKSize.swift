@@ -11,6 +11,7 @@ public struct FHKSize {
     public static let size04: CGFloat = 4
     public static let size08: CGFloat = 8
     public static let size12: CGFloat = 12
+    public static let size14: CGFloat = 14
     public static let size16: CGFloat = 16
     public static let size20: CGFloat = 20
     public static let size24: CGFloat = 24

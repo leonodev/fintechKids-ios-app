@@ -95,7 +95,7 @@ public struct FHKProfileScreen: View {
     }
     
     var loadedHeaderView: some View {
-        FHKCardView { _ in } content: {
+        CardView { _ in } content: {
             VStack {
                 HStack {
                     Spacer()
@@ -156,7 +156,7 @@ public struct FHKProfileScreen: View {
     }
     
     var loadedFooterView: some View {
-        FHKCardView { _ in } content: {
+        CardView { _ in } content: {
             VStack(alignment: .leading, spacing: FHKSpace.space16) {
                 
                 Text(viewModel.viewState.titleSettingLanguages)
@@ -165,7 +165,7 @@ public struct FHKProfileScreen: View {
                     .padding(.bottom)
  
                 ForEach(viewModel.viewState.languages, id: \.code) { lang in
-                    FHKCardView(
+                    CardView(
                         data: lang.code,
                         isSelected: selectedLanguageCode == lang.code,
                         action: { code in

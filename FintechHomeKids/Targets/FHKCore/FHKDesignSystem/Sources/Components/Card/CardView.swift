@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct FHKCardView<Content: View, T>: View {
+public struct CardView<Content: View, T>: View {
     let content: Content
     let data: T?
     let action: (T?) -> Void
@@ -41,7 +41,7 @@ public struct FHKCardView<Content: View, T>: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            FHKColor.lunarSand.opacity(0.08)
+            FHKColor.lunarSand.opacity(0.2)
         )
         .cornerRadius(20)
         .overlay(
@@ -56,7 +56,7 @@ public struct FHKCardView<Content: View, T>: View {
 
 #Preview {
     VStack {
-        FHKCardView { _ in
+        CardView { _ in
             print("Navegando al perfil del usuario: ")
         } content: {
             HStack {
@@ -66,5 +66,5 @@ public struct FHKCardView<Content: View, T>: View {
         }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(Color.blue)
 }

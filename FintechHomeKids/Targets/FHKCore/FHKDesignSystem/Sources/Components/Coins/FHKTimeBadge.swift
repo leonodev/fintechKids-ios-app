@@ -9,43 +9,39 @@ import SwiftUI
 
 public struct FHKTimeBadge: View {
     let amount: String
-    let size: CGFloat
     
-    public init(amount: String,
-                size: CGFloat = FHKSize.size12
-    ) {
+    public init(amount: String) {
         self.amount = amount
-        self.size = size
     }
     
     public var body: some View {
-        HStack(spacing: FHKSpace.space16) {
-            Image(systemName: "watch.analog")
+        HStack {
+            Image.clock
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: size, height: size)
+                .frame(width: FHKSize.size56, height: FHKSize.size56)
             
             VStack(alignment: .leading) {
-                Text("\(amount)")
-                    .font(.PangramSans.bold(size))
+                Text("title_time".localized.uppercased())
+                    .font(.PangramSans.light(FHKSize.size12))
+                    .foregroundStyle(FHKColor.basicBlack)
                 
-                Text("Tu tiempo actual")
-                    .font(.PangramSans.bold(size / 2))
-                    .foregroundStyle(FHKColor.stone)
+                Text("\(amount)")
+                    .font(.PangramSans.bold(FHKSize.size20))
+                    .foregroundStyle(FHKColor.basicBlack)
             }
         }
-        .padding(.vertical, size / 2)
-        .padding(.horizontal, size)
+        .padding(.vertical, FHKSpace.space16)
+        .padding(.horizontal, FHKSpace.space16)
         .foregroundColor(FHKColor.yellow)
-        .background(Color.blue)
-        .clipShape(Capsule())
+        .background(FHKColor.lunarSand)
+        .cornerRadius(FHKSize.size16)
     }
 }
 
 #Preview {
     VStack {
-        FHKTimeBadge(amount: "2 hours",
-                     size: 40)
+        FHKTimeBadge(amount: "2 Hour")
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(FHKColor.indigo)

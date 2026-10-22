@@ -32,8 +32,8 @@ public struct FHKScreenContainer<Content: View>: View {
                 // Fondo Base: Degradado
                 LinearGradient(
                     stops: [
-                        .init(color: FHKColor.indigo, location: 0.1),
-                        .init(color: .indigo, location: 0.9)
+                        .init(color: FHKColor.basicWhite, location: 0.1),
+                        .init(color: FHKColor.stone, location: 0.9)
                     ],
                     startPoint: .top,
                     endPoint: .bottom

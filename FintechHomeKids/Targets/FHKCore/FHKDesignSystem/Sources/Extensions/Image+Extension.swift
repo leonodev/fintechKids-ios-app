@@ -25,18 +25,37 @@ public extension Image {
     static let fintechkidsCoins = Image("fintechkids_coins", bundle: .module)
     
     // Menus
-    static let menuLoansEnable = Image("loan_enable", bundle: .module)
-    static let menuLoansDisabled = Image("loan_disable", bundle: .module)
-    static let menuPaymentEnable = Image("payment_enable", bundle: .module)
-    static let menuPaymentDisabled = Image("payment_disable", bundle: .module)
-    static let menuSavingsEnable = Image("savings_enable", bundle: .module)
-    static let menuSavingsDisabled = Image("savings_disable", bundle: .module)
-    static let menuTransferEnable = Image("transfer_enable", bundle: .module)
-    static let menuTransferDisabled = Image("transfer_disable", bundle: .module)
+
+    static let paidEnable = Image("paid_enable", bundle: .module)
+    static let paidDisable = Image("paid_disable", bundle: .module)
+    
+    static let loansEnable = Image("loans_enable", bundle: .module)
+    static let loansDisabled = Image("loans_disable", bundle: .module)
+    
+    static let savingsEnable = Image("savings_enable", bundle: .module)
+    static let savingsDisabled = Image("savings_disable", bundle: .module)
+    
     
     // Images
     static let coinSingle = Image("coin", bundle: .module)
+    static let clock = Image("clock", bundle: .module)
     
+    static let loansMemberEnable = Image("loans_member_enable", bundle: .module)
+    static let loansMemberDisable = Image("loans_member_disable", bundle: .module)
+    
+    static let transferMemberEnable = Image("transfer_member_enable", bundle: .module)
+    static let transferMemberDisable = Image("transfer_member_disable", bundle: .module)
+    
+    static let expansiveMemberEnable = Image("expansive_member_enable", bundle: .module)
+    static let expansiveMemberDisable = Image("expansive_member_disable", bundle: .module)
+    
+    static let movementsMemberEnable = Image("movements_member_enable", bundle: .module)
+    static let movementsMemberDisable = Image("movements_member_disable", bundle: .module)
+    
+    
+    
+    
+    static let headerDetail = Image("header_detail", bundle: .module)
 }
 
 extension Image {

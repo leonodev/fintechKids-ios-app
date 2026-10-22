@@ -51,7 +51,7 @@ public struct FHKTasksScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 10) {
                     ForEach(viewModel.viewState.taskList) { task in
-                        FHKCardView { _ in
+                        CardView { _ in
                             
                             guard let member = self.member, isFromChildSelection else {
                                 return
@@ -64,8 +64,8 @@ public struct FHKTasksScreen: View {
  
                                 // only display lotties if entry from member profile
                                 if isFromChildSelection {
-                                    FHKDescriptionCardView(title: task.name,
-                                                           description: task.description)
+                                    DescriptionCardView(title: task.name,
+                                                        description: task.description)
                                     
                                     makeLottiesView(task: task)
                                 } else {
@@ -76,8 +76,8 @@ public struct FHKTasksScreen: View {
                                             .foregroundStyle(FHKColor.yellow)
                                             .padding(.trailing, FHKSpace.space08)
                                         
-                                        FHKDescriptionCardView(title: task.name,
-                                                               description: task.description)
+                                        DescriptionCardView(title: task.name,
+                                                            description: task.description)
                                     }
                                 }
                             }

@@ -43,8 +43,9 @@ extension RoutesDestination {
         case .members:
             FHKRegisterMembersScreen()
             
-        case .memberDetail(let memberID):
-            FHKMemberDetailScreen(memberID)
+        case .memberDetail(let memberID, let myGoals):
+            let goalsMember = myGoals.value(as: [FHKGoalMemberEntity].self) ?? []
+            FHKMemberDetailScreen(memberID, myGoals: goalsMember)
             
         case .profile:
             FHKProfileScreen()
