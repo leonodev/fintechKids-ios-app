@@ -90,6 +90,10 @@ final class FHKHomeScreenVM: FHKCore.ViewModel {
     func getListGoalForMember(memberId: UUID) -> [FHKGoalMemberEntity] {
         goalMemberList.filter {$0.memberId == memberId}
     }
+    
+    func getListRewardForMember(memberId: UUID) -> [FHKRewardCollectedEntity] {
+        rewardsCollectedList.filter {$0.member.id == memberId}
+    }
 }
 
 private extension FHKHomeScreenVM {

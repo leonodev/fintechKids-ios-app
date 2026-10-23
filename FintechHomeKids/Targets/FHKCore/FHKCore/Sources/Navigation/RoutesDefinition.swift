@@ -24,7 +24,7 @@ public enum RoutesDestination: NavigationDestination {
     case createTasks
     case profile
     case members
-    case memberDetail(UUID, myGoals: AnyHashableSendable)
+    case memberDetail(UUID, myGoals: AnyHashableSendable, rewards: AnyHashableSendable)
     case presentGoldenTicket(payload: AnyHashableSendable)
     
     public typealias ContentView = AnyView

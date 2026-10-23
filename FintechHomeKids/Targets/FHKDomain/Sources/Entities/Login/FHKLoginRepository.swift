@@ -26,7 +26,36 @@ public struct FHKLoginRepository: Sendable {
 public extension DependenciesInjection {
     
     var fhkLoginRepository: FHKLoginRepository {
-        get { get(FHKLoginRepository.self) }
+        get { get(FHKLoginRepository.self, preview: .preview, testing: .test) }
         set { set(newValue, for: FHKLoginRepository.self) }
     }
 }
+
+// MARK: - Mocks & Previews
+#if DEBUG
+extension FHKLoginRepository {
+    static var test: Self {
+        Self()
+    }
+    
+    static var preview: Self {
+        var preview = Self()
+        
+        preview.hasSavedToken = { true }
+        
+        preview.login = { _ in
+            FHKUserSession(id: UUID(),
+                           email: "parent@domian.com",
+                           accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+                           refreshToken: "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkZy",
+                           expiresAt: Date(),
+                           infoAditional: InfoAditional(pinApproved: "0000",
+                                                        familyName: "Dummy Family")
+               )
+        }
+        
+        return preview
+    }
+}
+
+#endif

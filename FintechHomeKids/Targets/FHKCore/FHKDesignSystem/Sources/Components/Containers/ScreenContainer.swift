@@ -53,6 +53,7 @@ public struct FHKScreenContainer<Content: View>: View {
                 
                 content()
                     .frame(width: geometry.size.width, height: geometry.size.height)
+                    .background(FHKColor.indigo)
             }
         }
         .navigationBarHidden(!showNavigationBar)

@@ -43,9 +43,10 @@ extension RoutesDestination {
         case .members:
             FHKRegisterMembersScreen()
             
-        case .memberDetail(let memberID, let myGoals):
+        case .memberDetail(let memberID, let myGoals, let rewardPending):
             let goalsMember = myGoals.value(as: [FHKGoalMemberEntity].self) ?? []
-            FHKMemberDetailScreen(memberID, myGoals: goalsMember)
+            let rewards = rewardPending.value(as: [FHKRewardCollectedEntity].self) ?? []
+            FHKMemberDetailScreen(memberID, myGoals: goalsMember, myRewardPending: rewards)
             
         case .profile:
             FHKProfileScreen()
@@ -63,8 +64,15 @@ extension RoutesDestination {
             FHKRewardCreateScreen()
             
         case .collectReward(let collectEntity, let memberEntity):
-            EmptyView()
-            
+            if let collect = collectEntity.value(as: FHKRewardReceivedEntity.self),
+               let member = memberEntity.value(as: FHKMemberEntity.self) {
+                
+                FHKRewardCollectScreen(collectEntity: collect,
+                                       memberEntity: member)
+            } else {
+                FHKRoutingErrorView()
+            }
+   
         case .presentGoldenTicket(let payload):
             if let ticket = payload.value(as: FHKGoldenTicketEntity.self) {
                 FHKRewardGoldenTicketScreen(ticketEntity: ticket)

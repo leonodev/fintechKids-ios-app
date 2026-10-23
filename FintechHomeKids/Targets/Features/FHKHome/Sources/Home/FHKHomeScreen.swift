@@ -246,8 +246,11 @@ private extension FHKHomeScreen {
                       ),
                       action: { _ in
             let myGoals = viewModel.getListGoalForMember(memberId: member.id)
-            router.navigate(to: .memberDetail(member.id, myGoals: myGoals.asPayload))
+            router.navigate(to: .memberDetail(member.id,
+                                              myGoals: myGoals.asPayload,
+                                              rewards: viewModel.getListRewardForMember(memberId: member.id).asPayload))
         })
+        
     }
     
     func getRewardCollectCardLoaded(ticket: FHKRewardCollectedEntity) -> FHKRewardCollectCard {

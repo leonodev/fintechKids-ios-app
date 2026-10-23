@@ -17,11 +17,15 @@ public struct FHKMemberDetailScreen: View {
     @Router private var router: NavigationRouter<RoutesDestination>
     private var memberID: UUID
     private var myGoals: [FHKGoalMemberEntity]
+    private var myRewardPending: [FHKRewardCollectedEntity]
     
-    public init(_ memberID: UUID, myGoals: [FHKGoalMemberEntity] = []) {
+    public init(_ memberID: UUID,
+                myGoals: [FHKGoalMemberEntity] = [],
+                myRewardPending: [FHKRewardCollectedEntity] = []) {
         self._viewModel = State(initialValue: FHKMemberDetailScreenVM())
         self.memberID = memberID
         self.myGoals = myGoals
+        self.myRewardPending = myRewardPending
     }
     
     public var body: some View {
@@ -203,16 +207,15 @@ public struct FHKMemberDetailScreen: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack {
-                    ForEach(myGoals) { goal in
+                    ForEach(myRewardPending) { reward in
                         
-                        let gradient = viewModel.viewState.cardGradients[goal.goalId % viewModel.viewState.cardGradients.count]
-                        
-                        RewardCardView(id: 1,
+                        let gradient = viewModel.viewState.cardGradients[reward.id % viewModel.viewState.cardGradients.count]
+
+                        RewardCardView(id: reward.id,
                                        state: .loaded,
-                                       title: "Go to Park",
+                                       title: reward.nameTask,
                                        bgGradient: gradient
                         )
-                        
                         .padding(.horizontal, FHKSpace.space08)
                     }
                 }
