@@ -10,9 +10,12 @@ import SwiftUI
 public extension FHKToast {
     
     @MainActor
+    private static let service = FHKToastService()
+    
+    @MainActor
     static var live: Self {
         var manager = Self()
-        let service = FHKToastService()
+        
         manager.currentToast = { @MainActor in service.currentToast }
         manager.isVisible    = { @MainActor in service.isVisible }
         
