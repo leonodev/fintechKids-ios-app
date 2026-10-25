@@ -29,7 +29,6 @@ public struct FHKScreenContainer<Content: View>: View {
         GeometryReader { geometry in
             
             ZStack {
-                // Fondo Base: Degradado
                 LinearGradient(
                     stops: [
                         .init(color: FHKColor.basicWhite, location: 0.1),
@@ -45,19 +44,21 @@ public struct FHKScreenContainer<Content: View>: View {
                     backgroundImage
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        // Forzamos a la imagen a medir exactamente lo mismo que la pantalla del iPhone
                         .frame(width: geometry.size.width, height: geometry.size.height)
-                        .clipped() // <--- Truco Clave: Recorta todo lo que se desborde para que no empuje las vistas
+                        .clipped()
                         .ignoresSafeArea()
                 }
                 
                 content()
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    .background(FHKColor.indigo)
+                    .background(FHKColor.lunarSand)
             }
         }
         .navigationBarHidden(!showNavigationBar)
         .navigationTitle(title ?? "")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarColorScheme(.light, for: .navigationBar)
+        .toolbarBackground(Color.clear, for: .navigationBar)
+        .toolbar(.visible, for: .navigationBar)
     }
 }

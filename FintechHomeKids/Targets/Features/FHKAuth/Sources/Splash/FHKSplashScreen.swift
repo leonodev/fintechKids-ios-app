@@ -69,7 +69,7 @@ public struct FHKSplashScreen: View {
         }
         .onAppear {
             Task {
-                await viewModel.action(.readLanguageCurrent)
+               await viewModel.action(.readLanguageCurrent)
             }
         }
     }

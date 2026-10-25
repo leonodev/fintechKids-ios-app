@@ -77,11 +77,11 @@ public struct FHKLoginScreen: View {
                     
                     Text(viewModel.viewState.wellcome)
                         .font(.PangramSans.bold(FHKSize.size28))
-                        .foregroundColor(FHKColor.lunarSand)
+                        .foregroundColor(FHKColor.indigo)
                     
                     Text(viewModel.viewState.startSesionYourAccount)
                         .font(.PangramSans.bold(FHKSize.size16))
-                        .foregroundColor(FHKColor.lunarSand.opacity(0.6))
+                        .foregroundColor(FHKColor.indigo.opacity(0.6))
                 }
                 .padding(.bottom, FHKSpace.space20)
                 
@@ -107,7 +107,7 @@ public struct FHKLoginScreen: View {
                         Image(systemName: viewModel.biometryIconName)
                             .resizable()
                             .frame(width: FHKSize.size44, height: FHKSize.size44)
-                            .foregroundStyle(FHKColor.basicWhite)
+                            .foregroundStyle(FHKColor.indigo)
                     })
                     .padding(.vertical, FHKSpace.space08)
                 }
@@ -119,7 +119,7 @@ public struct FHKLoginScreen: View {
                     }, label: {
                         Text(viewModel.viewState.youForgotYourPassword)
                             .font(.PangramSans.bold(FHKSize.size16))
-                            .foregroundColor(FHKColor.lunarSand)
+                            .foregroundColor(FHKColor.indigo)
                     })
                 }
                 .padding(.trailing, FHKSpace.space04)
@@ -140,12 +140,12 @@ public struct FHKLoginScreen: View {
                     HStack {
                         Text(viewModel.viewState.youNotHaveAccount)
                             .font(.PangramSans.extraboldItalic(FHKSize.size16))
-                            .foregroundColor(FHKColor.silver.opacity(0.8))
+                            .foregroundColor(FHKColor.indigo.opacity(0.8))
                         
                         Text(viewModel.viewState.register)
                             .underline()
                             .font(.PangramSans.bold(FHKSize.size16))
-                            .foregroundColor(FHKColor.pastelPink)
+                            .foregroundColor(FHKColor.indigo)
                             .padding(.bottom, 2)
                     }
                     .padding(.top, FHKSpace.space16)

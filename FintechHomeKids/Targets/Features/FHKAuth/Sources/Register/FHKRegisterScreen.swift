@@ -103,7 +103,7 @@ public struct FHKRegisterScreen: View {
             .lineSpacing(4)
             .multilineTextAlignment(.leading)
             .font(.PangramSans.bold(FHKSize.size16))
-            .foregroundColor(FHKColor.lunarSand.opacity(0.5))
+            .foregroundColor(FHKColor.indigo.opacity(0.5))
             .padding()
     }
     

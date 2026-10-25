@@ -57,7 +57,7 @@ extension FHKLanguageScreen {
                        loopMode: .loop,
                        contentMode: .scaleAspectFit)
             .accessibilityHidden(true)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: 300, maxHeight: 300)
             
             VStack {
                 HStack(alignment: .top) {
@@ -68,9 +68,9 @@ extension FHKLanguageScreen {
                     
                     HStack {
                         Text(viewModel.viewState.selectLanguageNow)
-                            .foregroundStyle(FHKColor.basicWhite)
+                            .foregroundStyle(FHKColor.indigo)
                             .multilineTextAlignment(.center)
-                            .font(.PangramSans.bold(FHKSize.size28))
+                            .font(.PangramSans.bold(FHKSize.size24))
                             .padding(.top, FHKSize.size44)
                             .accessibilityIdentifier("select_language_title_id")
                     }
@@ -94,9 +94,11 @@ extension FHKLanguageScreen {
                 })
                 .padding()
                 
-                Text(viewModel.viewState.version)
+                Text(viewModel.viewState.version.capitalizingFirstLetter())
                     .accessibilityLabel(viewModel.viewState.version)
-                    .foregroundStyle(FHKColor.basicWhite)
+                    .foregroundStyle(FHKColor.indigo)
+                    .font(.PangramSans.bold(FHKSize.size20))
+                
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

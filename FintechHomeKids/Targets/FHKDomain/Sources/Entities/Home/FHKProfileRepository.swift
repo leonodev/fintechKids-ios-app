@@ -25,7 +25,7 @@ public struct FHKProfileRepository: Sendable {
     @Sendable() async -> String = { LanguageType.en.code }
     
     public var setNewLanguage:
-    @Sendable @MainActor(String) -> Void = { _ in }
+    @Sendable @MainActor (String) -> Void = { _ in }
     
     public var getFamilyName:
     @Sendable() async -> String? = { nil }

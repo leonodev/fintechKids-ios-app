@@ -53,8 +53,8 @@ public struct FHKTextField: View {
             // Placeholder Animado (Floating Label)
             Text(placeholder)
                 .font(.PangramSans.bold(isFloating ? FHKSize.size12 : FHKSize.size20))
-                .foregroundColor(FHKColor.lunarSand.opacity(isFloating ? 1.0 : 0.4))
-                .padding(.horizontal, isFloating ? 8 : 0) // Añadimos un poco de "aire" a los lados
+                .foregroundColor(FHKColor.gray.opacity(isFloating ? 1.0 : 0.4))
+                .padding(.horizontal, isFloating ? 8 : 0)
                 .background {
                     if isFloating {
                         RoundedRectangle(cornerRadius: 4)
@@ -73,13 +73,13 @@ public struct FHKTextField: View {
                             .focused($isFocused)
                             .autocapitalization(.none)
                             .font(.PangramSans.bold(FHKSize.size20))
-                            .foregroundColor(FHKColor.lunarSand)
+                            .foregroundColor(FHKColor.indigo)
                             .accessibilityIdentifier(identifier)
                     } else {
                         SecureField("", text: $text)
                             .focused($isFocused)
                             .font(.PangramSans.bold(FHKSize.size20))
-                            .foregroundColor(FHKColor.lunarSand)
+                            .foregroundColor(FHKColor.indigo)
                             .accessibilityIdentifier(identifier)
                     }
                 }
@@ -88,7 +88,7 @@ public struct FHKTextField: View {
                 if isSecure {
                     Button(action: { isTextVisible.toggle() }) {
                         Image(systemName: isTextVisible ? "eye.slash.fill" : "eye.fill")
-                            .foregroundColor(FHKColor.lunarSand.opacity(0.7))
+                            .foregroundColor(FHKColor.indigo.opacity(0.7))
                             .font(.system(size: 18))
                     }
                 }
