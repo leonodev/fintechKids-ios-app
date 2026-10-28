@@ -75,7 +75,7 @@ public struct FHKLoginScreen: View {
                 // Titles
                 VStack(spacing: 4) {
                     
-                    Text(viewModel.viewState.wellcome)
+                    Text(viewModel.viewState.welcome)
                         .font(.PangramSans.bold(FHKSize.size28))
                         .foregroundColor(FHKColor.indigo)
                     

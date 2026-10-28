@@ -20,7 +20,7 @@ let appTarget = Target.app(
 let coreTarget = Target.module(
     name: "FHKCore",
     path: "Targets/FHKCore",
-    hasTests: false,
+    hasTests: true,
     dependencies: [
         .external(name: "FLibInjections"),
         .external(name: "FLibUtils"),
@@ -75,7 +75,8 @@ let authFeatureTarget = Target.module(
         .target(name: "FHKDomain"),
         .target(name: "FHKDesignSystem"),
         .target(name: "FHKCore")
-    ]
+    ],
+    testPlanPath: "Targets/Features/FHKAuth/FHKAuth.xctestplan"
 )
 
 let homeFeatureTarget = Target.module(
@@ -158,6 +159,7 @@ let project = Project.makeApp(
         tasksFeatureTarget
     ],
     schemes: Scheme.makeSchemes(appName: "FintechHomeKids") + [
+        Scheme.makeSchemeTestplan(for: "FHKAuth", testPlanName: "FHKAuth"),
         Scheme.makeSchemeExample(for: "FHKDesignSystemExample"),
         Scheme.makeSchemeExample(for: "FHKAuthExample"),
         Scheme.makeSchemeExample(for: "FHKHomeExample"),

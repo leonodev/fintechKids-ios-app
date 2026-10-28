@@ -17,9 +17,8 @@ public extension FHKSplashRepository {
         var repository = Self()
 
         repository.readLanguageCurrent = {
-            try await storage.readUserDefaults(
-                String.self,
-                forKey: UserDefaultsKeys.languageKey
+            try await storage.readUserDefaults(String.self,
+                                               forKey: UserDefaultsKeys.languageKey
             )
         }
 

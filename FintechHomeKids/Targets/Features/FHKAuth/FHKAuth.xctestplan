@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "F92976F1-59F8-441C-BD2F-E3B871D1C9C1",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testInteropMode" : "complete",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:FintechHomeKids.xcodeproj",
+        "identifier" : "2D6A5FF23D21A00779C5858D",
+        "name" : "FHKAuthTests"
+      }
+    }
+  ],
+  "version" : 1
+}

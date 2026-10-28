@@ -49,4 +49,20 @@ public extension Scheme {
             analyzeAction: .analyzeAction(configuration: "Dev")
         )
     }
+    
+    static func makeSchemeTestplan(for name: String, testPlanName: String) -> Scheme {
+        return Scheme.scheme(
+            name: name,
+            shared: true,
+            buildAction: .buildAction(targets: [.target(name)]),
+            testAction: .testPlans(
+                [.path("Targets/Features/\(name)/\(testPlanName).xctestplan")],
+                configuration: "Dev"
+            ),
+            runAction: .runAction(
+                configuration: "Dev",
+                executable: .executable(.target(name))
+            )
+        )
+    }
 }

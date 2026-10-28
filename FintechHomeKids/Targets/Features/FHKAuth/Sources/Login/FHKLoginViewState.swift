@@ -29,7 +29,7 @@ public struct FHKLoginViewState {
         "password".localized
     }
     
-    public var wellcome: String {
+    public var welcome: String {
         "welcome".localized.capitalizingFirstLetter()
     }
     

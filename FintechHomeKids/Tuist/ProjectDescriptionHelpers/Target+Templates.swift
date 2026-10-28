@@ -46,7 +46,8 @@ public extension Target {
         bundleIdPrefix: String = "com.fleon.fintechHomeKids",
         deploymentTarget: DeploymentTargets = .iOS("17.0"),
         dependencies: [TargetDependency] = [],
-        testDependencies: [TargetDependency] = []
+        testDependencies: [TargetDependency] = [],
+        testPlanPath: String? = nil
     ) -> [Target] {
         let basePath = "\(path)/\(name)"
         var targets: [Target] = []
@@ -76,6 +77,7 @@ public extension Target {
                 deploymentTargets: deploymentTarget,
                 infoPlist: .default,
                 sources: ["\(basePath)/Tests/**"],
+                resources: makeTestResources(basePath: basePath, testPlanPath: testPlanPath),
                 dependencies: [.target(name: name)] + testDependencies,
                 settings: defaultSettings
             )
@@ -164,4 +166,11 @@ public extension Target {
             settings: defaultSettings
         )
     }
+}
+
+private func makeTestResources(basePath: String, testPlanPath: String?) -> ResourceFileElements {
+    if let testPlanPath {
+        return ["\(basePath)/Tests/**", .glob(pattern: .relativeToRoot(testPlanPath))]
+    }
+    return ["\(basePath)/Tests/**"]
 }
