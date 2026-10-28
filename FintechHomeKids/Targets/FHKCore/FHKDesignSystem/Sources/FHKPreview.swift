@@ -19,7 +19,7 @@ public struct FHKPreview<Content: View>: View {
     public var body: some View {
         ZStack {
             // Fondo global que ignora safe areas
-            FHKColor.indigo
+            FHKColor.lunarSand
                 .ignoresSafeArea()
             
             // El contenido de la pantalla libre para gestionar sus propias safe areas

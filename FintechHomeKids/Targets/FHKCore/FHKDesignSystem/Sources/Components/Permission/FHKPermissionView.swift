@@ -27,14 +27,14 @@ public struct FHKPermissionView: View {
             
             actionButtons
         }
-        .padding(32)
+        .padding(FHKSpace.space32)
     }
     
     private var headerSection: some View {
         VStack(spacing: 20) {
             
             Text(provider.title().localized.capitalizingFirstLetter())
-                .font(.title.bold())
+                .font(.PangramSans.bold(FHKSize.size20))
             Spacer()
             
             LottieView(animationName: Lotties.camera,
@@ -98,3 +98,13 @@ public struct FHKPermissionView: View {
         }
     }
 }
+
+
+// Para ver unicamente la pantalla
+#Preview("Design / Isolated UI") {
+    FHKPreview {
+        FHKPermissionView(provider: FHKPermission.preview)
+        .withPreviewRouter()
+    }
+}
+

@@ -55,11 +55,11 @@ public struct FHKButtonAppearance {
     var font: Font {
         switch type {
         case .primary:
-            return .PangramSans.bold(FHKSize.size20)
-        case .secondary:
             return .PangramSans.bold(FHKSize.size16)
-        case .terciary:
+        case .secondary:
             return .PangramSans.bold(FHKSize.size12)
+        case .terciary:
+            return .PangramSans.bold(FHKSize.size08)
         }
         
     }
@@ -69,7 +69,7 @@ public struct FHKButtonAppearance {
         switch state {
      
         case .disabled:
-            return FHKColor.pastelPink
+            return FHKColor.gray
             
         case .skeleton:
             return .clear

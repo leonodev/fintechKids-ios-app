@@ -75,7 +75,7 @@ public struct FHKButtonPrimary: View {
         FHKButtonPrimary(title: "Button Primary",
                          textColor: nil,
                          state: .enabled,
-                         mode: .glass(.clear),
+                         mode: .solid,
                          action: {
             
         })

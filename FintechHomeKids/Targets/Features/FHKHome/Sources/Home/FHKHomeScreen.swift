@@ -37,7 +37,6 @@ public struct FHKHomeScreen: View {
                     /// section goals list
                     goalMemberFamilyView
                 }
-                .background(FHKColor.indigo)
                 .refreshable {
                     loadAllInformation(isForce: true)
                 }
@@ -51,7 +50,6 @@ public struct FHKHomeScreen: View {
                 }
             }
             .ignoresSafeArea(edges: .bottom)
-            .background(FHKColor.indigo)
             .onAppear {
                 loadAllInformation(isForce: false)
                 if viewModel.fhkCameraPermission.status() != .authorized {
@@ -77,8 +75,8 @@ public struct FHKHomeScreen: View {
         HStack {
             Text(viewModel.viewState.titleMemberFamily)
                 .font(.PangramSans.bold(FHKSize.size12))
-                .colorDegradeStyle(startColor: FHKColor.pastelPink,
-                                   endColor: .gray.opacity(0.8))
+                .colorDegradeStyle(startColor: FHKColor.indigo,
+                                   endColor: .blue.opacity(0.8))
                 .isHidden(viewModel.familyMembersList.isEmpty)
                 .accessibilityIdentifier("title_home_screen_id")
             
@@ -123,8 +121,8 @@ public struct FHKHomeScreen: View {
                 .font(.PangramSans.bold(FHKSize.size12))
                 .padding(.leading, FHKSpace.space08)
                 .padding(.top, FHKSpace.space16)
-                .colorDegradeStyle(startColor: FHKColor.pastelPink,
-                                   endColor: .gray.opacity(0.8))
+                .colorDegradeStyle(startColor: FHKColor.indigo,
+                                   endColor: .purple.opacity(0.8))
                 .isHidden(viewModel.rewardsCollectedList.isEmpty)
             
             ScrollView(.horizontal, showsIndicators: false) {
@@ -160,8 +158,8 @@ public struct FHKHomeScreen: View {
                 .font(.PangramSans.bold(FHKSize.size16))
                 .padding(.leading, FHKSpace.space08)
                 .padding(.top, FHKSpace.space16)
-                .colorDegradeStyle(startColor: FHKColor.pastelPink,
-                                   endColor: .gray.opacity(0.8))
+                .colorDegradeStyle(startColor: FHKColor.indigo,
+                                   endColor: .orange.opacity(0.8))
                 .isHidden(viewModel.goalMemberList.isEmpty)
                      
             ScrollView(.horizontal, showsIndicators: false) {

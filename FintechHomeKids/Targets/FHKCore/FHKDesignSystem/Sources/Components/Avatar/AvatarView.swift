@@ -38,7 +38,7 @@ public struct AvatarView: View {
             .clipShape(Circle())
             .overlay(
                 Circle()
-                    .stroke(FHKColor.lunarSand.opacity(0.8), lineWidth: 3)
+                    .stroke(FHKColor.indigo.opacity(0.8), lineWidth: 3)
             )
             .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
     }

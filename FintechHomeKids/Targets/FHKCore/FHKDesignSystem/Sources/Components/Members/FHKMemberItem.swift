@@ -72,7 +72,7 @@ private extension FHKMemberItem {
             Text(nameMember.capitalized)
                 .font(.PangramSans.medium(FHKSize.size16))
                 .foregroundColor(state == .loaded
-                                 ? FHKColor.basicWhite
+                                 ? FHKColor.indigo
                                  : FHKColor.gray.opacity(0.4))
                 .padding(.leading, FHKSize.size04)
         }
