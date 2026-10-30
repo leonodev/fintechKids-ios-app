@@ -18,14 +18,14 @@ public struct FHKSplashViewState {
         "title_kids".localized
     }
     
-    public enum StateAction: Equatable {
+    public enum StateAction: Equatable, Sendable {
         case goToLanguage
         case goToLogin
         case gotoHome
         case none
     }
     
-    public enum State: Equatable {
+    public enum State: Equatable, Sendable {
         case loaded(nav: StateAction)
     }
     

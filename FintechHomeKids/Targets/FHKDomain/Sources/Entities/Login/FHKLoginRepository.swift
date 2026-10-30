@@ -33,7 +33,7 @@ public extension DependenciesInjection {
 
 // MARK: - Mocks & Previews
 #if DEBUG
-extension FHKLoginRepository {
+public extension FHKLoginRepository {
     static var test: Self {
         Self()
     }

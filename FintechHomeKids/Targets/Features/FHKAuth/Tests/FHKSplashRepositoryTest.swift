@@ -12,32 +12,26 @@ import FHKDomain
 internal import FHKCore
 internal import FLibStorage
 
-@MainActor
 @Suite("SplashRepository")
 struct FHKSplashRepositoryTest {
     
-    //<verbo/resultado>_<condición>()
     @Test("Return language previous selected and saved",
           .tags(.language))
     func readPreviewLanguageSelected_thenReturnLanguage() async throws {
-        let splashSpy = CallTracker()
 
         try await inject.withOverrides { 
-            await configureDefaultMocks()
+            configureDefaultMocks()
             
             let sut = FHKSplashRepository.live
             let language = try await sut.readLanguageCurrent()
-            splashSpy.increment()
             
             #expect(language == "EN")
-            #expect(splashSpy.isCalled)
-            #expect(splashSpy.callCount == 1)
         }
     }
     
     @Test("Return nil if user not selected language previously",
           .tags(.language))
-    func test_when_language_no_has_selected_then_return_nil() async throws {
+    func readUnselectedLanguage_thenReturnNil() async throws {
         let splashSpy = CallTracker()
         
         try await inject.withOverrides {

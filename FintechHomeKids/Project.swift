@@ -158,7 +158,8 @@ let project = Project.makeApp(
         rewardsFeatureTarget,
         tasksFeatureTarget
     ],
-    schemes: Scheme.makeSchemes(appName: "FintechHomeKids") + [
+    schemes:
+        Scheme.makeSchemes(appName: "FintechHomeKids") + [
         Scheme.makeSchemeTestplan(for: "FHKAuth", testPlanName: "FHKAuth"),
         Scheme.makeSchemeExample(for: "FHKDesignSystemExample"),
         Scheme.makeSchemeExample(for: "FHKAuthExample"),
