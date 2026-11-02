@@ -55,7 +55,7 @@ public struct GoalCardView: View {
                         .fill(state == .loaded
                               ? Color.blue.opacity(0.1)
                               : FHKColor.gray.opacity(0.5))
-                        .frame(width: FHKSize.size80, height: FHKSize.size80)
+                        .frame(width: FHKSize.size60, height: FHKSize.size60)
                     
                     Image(systemName: "scooter")
                         .resizable()
@@ -63,22 +63,22 @@ public struct GoalCardView: View {
                         .foregroundStyle(state == .loaded
                                          ? Color.blue
                                          : FHKColor.gray.opacity(0.5))
-                        .frame(width: FHKSize.size64, height: FHKSize.size64)
+                        .frame(width: FHKSize.size48, height: FHKSize.size48)
                 }
                 Spacer()
                 Text(title)
-                    .font(.PangramSans.bold(FHKSize.size24))
+                    .font(.PangramSans.extraboldItalic(FHKSize.size12))
                     .foregroundColor(state == .loaded
                                      ? FHKColor.basicBlack
                                      : FHKColor.gray.opacity(0.5)
                     )
+                    .padding(.leading)
                 circleIcon(systemName: "trophy.fill")
-                Spacer()
                
             }
  
             Text(title)
-                .font(.PangramSans.bold(FHKSize.size16))
+                .font(.PangramSans.slimExtralight(FHKSize.size16))
                 .foregroundColor(state == .loaded
                                  ? FHKColor.basicBlack.opacity(0.7)
                                  : FHKColor.gray.opacity(0.5)
@@ -92,7 +92,7 @@ public struct GoalCardView: View {
                                isDisabled: state == .disabled)
         }
         .padding(FHKSpace.space16)
-        .background(FHKColor.purpleLightColor)
+        .background(FHKColor.gray.opacity(0.2))
         .cornerRadius(FHKSize.size24)
         .onTapGesture {
             action(id)
@@ -104,19 +104,19 @@ public struct GoalCardView: View {
         VStack(spacing: FHKSpace.space12) {
             Image(systemName: "xmark.icloud.fill")
                 .font(.system(size: FHKSize.size48))
-                .foregroundColor(.gray.opacity(0.6))
+                .foregroundColor(FHKColor.error.opacity(0.9))
 
             Text(msnError)
                 .font(.PangramSans.medium(FHKSize.size16))
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.gray.opacity(0.9))
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: FHKSize.size20)
-                .fill(.white.opacity(0.1))
+                .fill(.gray.opacity(0.1))
                 .background(
                     RoundedRectangle(cornerRadius: FHKSize.size20)
-                        .stroke(.white.opacity(0.2), lineWidth: 1)
+                        .stroke(.gray.opacity(0.2), lineWidth: 1)
                 )
         )
         .clipShape(RoundedRectangle(cornerRadius: FHKSize.size20))
@@ -127,19 +127,19 @@ public struct GoalCardView: View {
         VStack(alignment: .leading, spacing: FHKSpace.space12) {
             HStack {
                 Circle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color.gray.opacity(0.9))
                     .frame(width: FHKSize.size32, height: FHKSize.size32)
                     .blinkCircleSkeleton()
                 
                 Spacer()
                 Circle()
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color.gray.opacity(0.9))
                     .frame(width: FHKSize.size32, height: FHKSize.size32)
                     .blinkCircleSkeleton()
             }
         
             RoundedRectangle(cornerRadius: FHKSize.size04)
-                .fill(Color.gray.opacity(0.3))
+                .fill(Color.gray.opacity(0.9))
                 .frame(width: FHKSize.size152, height: FHKSize.size16)
                 .blinkTextSkeleton()
             
@@ -149,7 +149,7 @@ public struct GoalCardView: View {
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color.gray.opacity(0.3))
+                            .fill(Color.gray.opacity(0.9))
                             .frame(height: FHKSize.size12)
                             .blinkTextSkeleton()
                     }
@@ -158,7 +158,7 @@ public struct GoalCardView: View {
                 
                 // Cálculo de lo que falta
                 RoundedRectangle(cornerRadius: FHKSize.size04)
-                    .fill(Color.gray.opacity(0.3))
+                    .fill(Color.gray.opacity(0.9))
                     .frame(width: FHKSize.size52, height: FHKSize.size12)
                     .blinkTextSkeleton()
                     
@@ -174,7 +174,7 @@ public struct GoalCardView: View {
         ZStack {
             Circle()
                 .fill(state == .loaded
-                      ? FHKColor.basicWhite.opacity(0.5)
+                      ? FHKColor.wine.opacity(0.5)
                       : FHKColor.gray.opacity(0.5)
                 )
                 .frame(width: FHKSize.size32, height: FHKSize.size32)
@@ -182,7 +182,7 @@ public struct GoalCardView: View {
             Image(systemName: systemName)
                 .font(.PangramSans.bold(FHKSize.size20))
                 .foregroundColor(state == .loaded
-                                 ? FHKColor.purpleBackground.opacity(0.7)
+                                 ? FHKColor.lunarSand.opacity(0.7)
                                  : FHKColor.gray
                 )
         }
@@ -194,11 +194,11 @@ public extension GoalCardView {
     static func skeletons(count: Int) -> some View {
         ForEach(0..<count, id: \.self) { _ in
             GoalCardView(id: 0,
-                            state: .skeleton,
-                            current: 0,
-                            total: 0,
-                            title: "",
-                            workType: "")
+                         state: .skeleton,
+                         current: 0,
+                         total: 0,
+                         title: "",
+                         workType: "")
         }
     }
     
@@ -228,7 +228,7 @@ public extension GoalCardView {
         
         GoalCardView(
             id: 3,
-            state: .disabled,
+            state: .loaded,
             current: 3,
             total: 5,
             title: "Read a Book",
@@ -239,5 +239,5 @@ public extension GoalCardView {
     }
     .padding()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.basicWhite)
 }

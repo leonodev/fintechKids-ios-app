@@ -57,6 +57,10 @@ public extension FHKHomeRepository {
             inject.fhkConfiguration.parentMail()
         }
         
+        repository.getFamilyName = {
+            inject.fhkConfiguration.familyName()
+        }
+        
         return repository
     }
 }

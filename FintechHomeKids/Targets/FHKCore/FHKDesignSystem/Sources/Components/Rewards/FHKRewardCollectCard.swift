@@ -71,20 +71,20 @@ private extension FHKRewardCollectCard {
                     .font(.PangramSans.bold(FHKSize.size16))
                     .foregroundColor(state == .disabled
                                      ? FHKColor.silver.opacity(0.5)
-                                     : FHKColor.lunarSand)
+                                     : FHKColor.wine)
                 
                 Group {
                     Text(taskName)
                         .font(.PangramSans.bold(FHKSize.size16))
                         .foregroundColor(state == .disabled
                                          ? FHKColor.silver.opacity(0.5)
-                                         : FHKColor.lunarSand)
+                                         : FHKColor.indigo)
                         .padding(.top, FHKSize.size12)
                     
                     Text("\(rewardName)")
                         .font(.PangramSans.bold(FHKSize.size16))
                         .if(state == .loaded, transform: { view in
-                            view.colorDegradeStyle()
+                            view.foregroundStyle(FHKColor.purpleBackground.opacity(0.9))
                         }, else: { view in
                             view.foregroundStyle(FHKColor.silver.opacity(0.5))
                         })
@@ -131,9 +131,9 @@ private extension FHKRewardCollectCard {
             view.cardBackgroundGlassStyle()
         }, else: { view in
             view
-                .background(FHKColor.gray.opacity(0.2))
+                .background(FHKColor.gray.opacity(0.9))
                 .clipShape(RewardCollectedIPaperShape())
-                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 3)
+                .shadow(color: .black.opacity(0.5), radius: 5, x: 2, y: 3)
         })
     }
     
@@ -217,16 +217,16 @@ private extension FHKRewardCollectCard {
         VStack(spacing: FHKSpace.space12) {
             Image(systemName: "xmark.icloud.fill")
                 .font(.system(size: FHKSize.size48))
-                .foregroundColor(.gray.opacity(0.6))
+                .foregroundColor(.red.opacity(0.6))
 
             Text(msnError)
                 .font(.PangramSans.medium(FHKSize.size16))
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(.gray.opacity(0.9))
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: FHKSize.size20)
-                .fill(.white.opacity(0.1))
+                .fill(.black.opacity(0.1))
                 .background(
                     RoundedRectangle(cornerRadius: FHKSize.size20)
                         .stroke(.white.opacity(0.2), lineWidth: 1)
@@ -324,13 +324,13 @@ public extension FHKRewardCollectCard {
                 case .loaded, .disabled:
                     ForEach(rewardsCollected) { ticket in
                         FHKRewardCollectCard(state: rewardsState,
-                                          style: .punched,
-                                          id: 1,
-                                          memberName: ticket.member.memberName,
-                                          avatarName: ticket.member.avatarName,
-                                          taskName: ticket.nameTask,
-                                          rewardName: ticket.nameReward,
-                                          titleBtnPay: "PAGAR")
+                                             style: .glass,
+                                             id: 1,
+                                             memberName: ticket.member.memberName,
+                                             avatarName: ticket.member.avatarName,
+                                             taskName: ticket.nameTask,
+                                             rewardName: ticket.nameReward,
+                                             titleBtnPay: "PAGAR")
                     }
                     
                 case .error(let msn):
@@ -340,7 +340,7 @@ public extension FHKRewardCollectCard {
         }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }
 
 internal struct DummyCollectedEntity: Identifiable, Equatable {

@@ -20,6 +20,9 @@ public struct FHKHomeRepository: Sendable {
     public var getParentMail:
     @Sendable() async -> String? = { nil }
     
+    public var getFamilyName:
+    @Sendable() async -> String? = { nil }
+    
     public var getMemberById:
     @Sendable (_ memberId: UUID) async throws -> FHKMemberEntity? = { _ in nil }
     
@@ -51,6 +54,10 @@ extension FHKHomeRepository {
         
         preview.fetchRewardCollected = { _, _ in
             FHKRewardCollectedEntity.previewItem(2)
+        }
+        
+        preview.getFamilyName = {
+            "Ocampo"
         }
         
         preview.getParentMail = {

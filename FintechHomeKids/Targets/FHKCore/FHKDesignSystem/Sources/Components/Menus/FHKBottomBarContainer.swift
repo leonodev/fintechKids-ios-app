@@ -72,8 +72,8 @@ public struct FHKBottomBarContainer<Content: View>: View {
                             .renderingMode(.original)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: FHKSize.size72,
-                                   height: FHKSize.size72)
+                            .frame(width: FHKSize.size64,
+                                   height: FHKSize.size64)
                         
                         Text(item.title)
                             .font((selectedIndex == index)

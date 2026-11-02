@@ -30,7 +30,7 @@ struct CardBackgroundGlassModifier: ViewModifier {
 
 extension View {
     func cardBackgroundGlassStyle(
-        color: Color = .white,
+        color: Color = .gray,
         cornerRadius: CGFloat = FHKSize.size20
     ) -> some View {
         self.modifier(CardBackgroundGlassModifier(cornerRadius: cornerRadius, backgroundColor: color))

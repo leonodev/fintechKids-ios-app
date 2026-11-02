@@ -18,6 +18,7 @@ public class FHKHomeViewState {
     var options: [FloatMenu.Option]
     var menuTabBarItems: [FHKMenuTabBar.Item] = []
     var parentEmail: String?
+    var nameFamily: String?
 
     public var errorNameMember: String {
         "error_name_member".localized.capitalizingFirstLetter()
@@ -57,6 +58,11 @@ public class FHKHomeViewState {
     
     public var msnGoalsInCurse: String {
         "msn_goals_in_curse".localized.uppercased()
+    }
+    
+    public var titleNameFamily: String {
+        let title = "title_family".localized.capitalizingFirstLetter()
+        return "\(title): \(String(nameFamily ?? "").capitalizingFirstLetter())"
     }
     
     public var stateItemMemberComponent: ComponentState = .skeleton

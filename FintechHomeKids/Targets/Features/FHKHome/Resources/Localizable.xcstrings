@@ -135,25 +135,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "payments"
+            "value" : "pay"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "pagos"
+            "value" : "pagar"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "paiements"
+            "value" : "payer"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "pagamenti"
+            "value" : "paga"
           }
         }
       }

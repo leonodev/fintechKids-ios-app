@@ -58,6 +58,11 @@ final class FHKHomeScreenVM: FHKCore.ViewModel {
         viewState.parentEmail = email
     }
     
+    func getFamilyName() async {
+        let familyName = await fhkHomeRepository.getFamilyName()
+        viewState.nameFamily = familyName
+    }
+    
     @MainActor
     func action(_ action: Action) async {
         switch action {

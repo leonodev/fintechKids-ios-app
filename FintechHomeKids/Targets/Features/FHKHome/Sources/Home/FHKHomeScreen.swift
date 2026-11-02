@@ -28,14 +28,21 @@ public struct FHKHomeScreen: View {
             VStack {
                 
                 ScrollView {
-                    /// section title bar and icon profile
-                    headerView
+                    
+                    VStack {
+                        HeaderBannerView {
+                            /// section title bar and icon profile
+                            headerView
+                        }
+                    }
+                    
                     /// section members of family
                     membersView
                     /// section rewards list
                     rewardsCollectedView
                     /// section goals list
                     goalMemberFamilyView
+                    
                 }
                 .refreshable {
                     loadAllInformation(isForce: true)
@@ -50,6 +57,7 @@ public struct FHKHomeScreen: View {
                 }
             }
             .ignoresSafeArea(edges: .bottom)
+            .ignoresSafeArea(edges: .top)
             .onAppear {
                 loadAllInformation(isForce: false)
                 if viewModel.fhkCameraPermission.status() != .authorized {
@@ -63,6 +71,7 @@ public struct FHKHomeScreen: View {
     private func loadAllInformation(isForce: Bool) {
         Task {
             await viewModel.getParentMail()
+            await viewModel.getFamilyName()
             async let fetchMembers: () = viewModel.action(.fetchMemberFamily(force: isForce))
             async let fetchRewards: () = viewModel.action(.fetchRewardsCollected(force: isForce))
             async let fetchGoalMembers: () = viewModel.action(.fetchMemberGoals(force: isForce))
@@ -73,12 +82,10 @@ public struct FHKHomeScreen: View {
     
     var headerView: some View {
         HStack {
-            Text(viewModel.viewState.titleMemberFamily)
-                .font(.PangramSans.bold(FHKSize.size12))
-                .colorDegradeStyle(startColor: FHKColor.indigo,
-                                   endColor: .blue.opacity(0.8))
-                .isHidden(viewModel.familyMembersList.isEmpty)
-                .accessibilityIdentifier("title_home_screen_id")
+            
+            Text(viewModel.viewState.titleNameFamily)
+                .font(.PangramSans.bold(FHKSize.size20))
+                .foregroundStyle(FHKColor.purpleBackground)
             
             Spacer()
             
@@ -87,27 +94,37 @@ public struct FHKHomeScreen: View {
                     router.navigate(to: .profile)
                 }
         }
-        .padding(.horizontal)
+        .padding(.trailing)
     }
     
     var membersView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: FHKSpace.space16) {
-                switch viewModel.viewState.familyState {
-                case .skeleton:
-                    FHKMemberItem.skeletons(count: 3)
-                    
-                case .loaded, .disabled:
-                    ForEach(viewModel.familyMembersList) { member in
-                        getMemberLoaded(member: member)
-                            .isHidden(viewModel.familyMembersList.isEmpty)
+            VStack {
+                Text(viewModel.viewState.titleMemberFamily)
+                    .font(.PangramSans.slimSemiboldItalic(FHKSize.size20))
+                    .colorDegradeStyle(startColor: FHKColor.wine,
+                                       endColor: FHKColor.indigo.opacity(0.8))
+                
+                    .isHidden(viewModel.familyMembersList.isEmpty)
+                    .accessibilityIdentifier("title_home_screen_id")
+                
+                LazyHStack(spacing: FHKSpace.space16) {
+                    switch viewModel.viewState.familyState {
+                    case .skeleton:
+                        FHKMemberItem.skeletons(count: 3)
+                        
+                    case .loaded, .disabled:
+                        ForEach(viewModel.familyMembersList) { member in
+                            getMemberLoaded(member: member)
+                                .isHidden(viewModel.familyMembersList.isEmpty)
+                        }
+                        
+                    case .error:
+                        FHKMemberItem(state: .defaultDataError)
                     }
-                    
-                case .error:
-                    FHKMemberItem(state: .defaultDataError)
                 }
+                .fixedSize(horizontal: false, vertical: true)
             }
-            .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.horizontal)
     }
@@ -118,11 +135,11 @@ public struct FHKHomeScreen: View {
                 .isHidden(viewModel.rewardsCollectedList.isEmpty)
             
             Text(viewModel.viewState.titleRewardsCollected)
-                .font(.PangramSans.bold(FHKSize.size12))
+                .font(.PangramSans.slimSemiboldItalic(FHKSize.size20))
                 .padding(.leading, FHKSpace.space08)
                 .padding(.top, FHKSpace.space16)
-                .colorDegradeStyle(startColor: FHKColor.indigo,
-                                   endColor: .purple.opacity(0.8))
+                .colorDegradeStyle(startColor: FHKColor.wine,
+                                   endColor: FHKColor.indigo.opacity(0.8))
                 .isHidden(viewModel.rewardsCollectedList.isEmpty)
             
             ScrollView(.horizontal, showsIndicators: false) {
@@ -155,11 +172,11 @@ public struct FHKHomeScreen: View {
                 .isHidden(viewModel.goalMemberList.isEmpty)
             
             Text(viewModel.viewState.msnGoalsInCurse)
-                .font(.PangramSans.bold(FHKSize.size16))
+                .font(.PangramSans.slimSemiboldItalic(FHKSize.size20))
                 .padding(.leading, FHKSpace.space08)
                 .padding(.top, FHKSpace.space16)
-                .colorDegradeStyle(startColor: FHKColor.indigo,
-                                   endColor: .orange.opacity(0.8))
+                .colorDegradeStyle(startColor: FHKColor.wine,
+                                   endColor: FHKColor.indigo.opacity(0.8))
                 .isHidden(viewModel.goalMemberList.isEmpty)
                      
             ScrollView(.horizontal, showsIndicators: false) {
@@ -190,7 +207,6 @@ public struct FHKHomeScreen: View {
             .frame(height: FHKSize.size180)
             .padding(.horizontal, FHKSpace.space08)
         }
-        .padding(.top, FHKSpace.space16)
     }
     
     var botomBarView: some View {
