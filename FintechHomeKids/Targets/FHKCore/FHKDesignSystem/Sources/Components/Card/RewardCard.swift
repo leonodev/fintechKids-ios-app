@@ -10,13 +10,13 @@ import SwiftUI
 public extension LinearGradient {
     
     static let cardBlue = LinearGradient(
-        colors: [Color.blue, Color.cyan],
+        colors: [FHKColor.purpleBackground.opacity(0.3), FHKColor.purpleBackground],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
     
     static let cardYellow = LinearGradient(
-        colors: [Color.orange, Color.yellow],
+        colors: [Color.orange.opacity(0.5), Color.yellow],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
@@ -60,16 +60,16 @@ public struct RewardCardView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: FHKSpace.space16, style: .continuous)
                     .fill(state == .loaded
-                          ? Color.blue.opacity(0.1)
-                          : FHKColor.gray.opacity(0.5))
+                          ? FHKColor.indigo.opacity(0.2)
+                          : FHKColor.indigo.opacity(0.3))
                     .frame(width: FHKSize.size60, height: FHKSize.size60)
                 
                 Image(systemName: "scooter")
                     .resizable()
                     .scaledToFit()
                     .foregroundStyle(state == .loaded
-                                     ? Color.blue
-                                     : FHKColor.gray.opacity(0.5))
+                                     ? FHKColor.lunarSand
+                                     : FHKColor.lunarSand.opacity(0.3))
                     .frame(width: FHKSize.size48, height: FHKSize.size48)
             }
             Spacer()
@@ -78,8 +78,8 @@ public struct RewardCardView: View {
                 .font(.PangramSans.bold(FHKSize.size20))
                 .multilineTextAlignment(.center)
                 .foregroundColor(state == .loaded
-                                 ? FHKColor.basicBlack
-                                 : FHKColor.gray.opacity(0.5)
+                                 ? FHKColor.indigo
+                                 : FHKColor.indigo.opacity(0.2)
                 )
             
             HStack {
@@ -89,8 +89,8 @@ public struct RewardCardView: View {
                     .font(.PangramSans.bold(FHKSize.size16))
                     .multilineTextAlignment(.center)
                     .foregroundColor(state == .loaded
-                                     ? FHKColor.basicBlack.opacity(0.7)
-                                     : FHKColor.gray.opacity(0.5)
+                                     ? FHKColor.indigo.opacity(0.7)
+                                     : FHKColor.indigo.opacity(0.2)
                     )
             }    
         }
@@ -108,20 +108,20 @@ public struct RewardCardView: View {
         VStack(spacing: FHKSpace.space12) {
             Image(systemName: "xmark.icloud.fill")
                 .font(.system(size: FHKSize.size48))
-                .foregroundColor(.gray.opacity(0.6))
+                .foregroundColor(.red.opacity(0.6))
 
             Text(msnError)
                 .multilineTextAlignment(.center)
                 .font(.PangramSans.medium(FHKSize.size16))
-                .foregroundColor(.white.opacity(0.4))
+                .foregroundColor(FHKColor.indigo.opacity(0.7))
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: FHKSize.size20)
-                .fill(.white.opacity(0.1))
+                .fill(.gray.opacity(0.2))
                 .background(
                     RoundedRectangle(cornerRadius: FHKSize.size20)
-                        .stroke(.white.opacity(0.2), lineWidth: 1)
+                        .stroke(.gray.opacity(0.2), lineWidth: 1)
                 )
         )
         .clipShape(RoundedRectangle(cornerRadius: FHKSize.size20))
@@ -183,7 +183,7 @@ public struct RewardCardView: View {
                 .font(.PangramSans.bold(FHKSize.size20))
                 .foregroundColor(state == .loaded
                                  ? FHKColor.purpleBackground.opacity(0.7)
-                                 : FHKColor.gray
+                                 : FHKColor.indigo.opacity(0.2)
                 )
         }
     }
@@ -238,5 +238,5 @@ public extension RewardCardView {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }

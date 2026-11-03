@@ -41,12 +41,16 @@ public struct CardView<Content: View, T>: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            FHKColor.lunarSand.opacity(0.2)
+            LinearGradient(
+                colors: [FHKColor.indigo.opacity(0.5), FHKColor.purpleBackground.opacity(0.7)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         )
-        .cornerRadius(20)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(isSelected ? Color.purple : Color.clear, lineWidth: 2)
+                .stroke(isSelected ? FHKColor.fuchsiaPink : Color.clear, lineWidth: 2)
         )
         .onTapGesture {
             action(data)
@@ -66,5 +70,5 @@ public struct CardView<Content: View, T>: View {
         }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.blue)
+    .background(Color.white)
 }

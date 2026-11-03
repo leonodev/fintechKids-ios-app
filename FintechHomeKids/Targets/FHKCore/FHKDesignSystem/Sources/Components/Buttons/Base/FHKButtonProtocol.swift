@@ -69,7 +69,7 @@ public struct FHKButtonAppearance {
         switch state {
      
         case .disabled:
-            return FHKColor.gray
+            return FHKColor.indigo.opacity(0.4)
             
         case .skeleton:
             return .clear

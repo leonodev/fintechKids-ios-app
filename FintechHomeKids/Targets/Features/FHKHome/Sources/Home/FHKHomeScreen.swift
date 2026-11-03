@@ -26,16 +26,12 @@ public struct FHKHomeScreen: View {
         
         FHKScreenContainer {
             VStack {
+                HeaderBannerView {
+                    /// section title bar and icon profile
+                    headerView
+                }
                 
                 ScrollView {
-                    
-                    VStack {
-                        HeaderBannerView {
-                            /// section title bar and icon profile
-                            headerView
-                        }
-                    }
-                    
                     /// section members of family
                     membersView
                     /// section rewards list
@@ -99,7 +95,7 @@ public struct FHKHomeScreen: View {
     
     var membersView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            VStack {
+            VStack(alignment: .leading) {
                 Text(viewModel.viewState.titleMemberFamily)
                     .font(.PangramSans.slimSemiboldItalic(FHKSize.size20))
                     .colorDegradeStyle(startColor: FHKColor.wine,

@@ -45,7 +45,7 @@ public extension FHKRewardCollectedEntity {
         var previewItems = [Self]()
         
         for i in 1...count {
-            let item = FHKRewardCollectedEntity(id: 1,
+            let item = FHKRewardCollectedEntity(id: i,
                                                 createdDate: Date().toUTC,
                                                 member: FHKMemberEntity.previewItem,
                                                 parentEmail: "parent@domain.com",

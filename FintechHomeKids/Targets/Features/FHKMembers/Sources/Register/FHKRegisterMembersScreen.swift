@@ -19,6 +19,11 @@ public struct FHKRegisterMembersScreen: View {
         self._viewModel = State(initialValue: FHKRegisterMembersScreenVM())
     }
     
+    // convenience by preview
+    init(viewModel: FHKRegisterMembersScreenVM) {
+        self._viewModel = State(initialValue: viewModel)
+    }
+    
     public var body: some View {
         FHKScreenContainer(title: viewModel.viewState.membersTitle) {
             switch viewModel.viewState.registerMembersState {
@@ -86,7 +91,7 @@ public struct FHKRegisterMembersScreen: View {
         Text(viewModel.viewState.familyMemberDescription)
             .lineSpacing(4)
             .font(.PangramSans.bold(FHKSize.size16))
-            .foregroundColor(FHKColor.lunarSand.opacity(0.5))
+            .foregroundColor(FHKColor.indigo.opacity(0.5))
             .padding(.vertical)
     }
     
@@ -96,7 +101,7 @@ public struct FHKRegisterMembersScreen: View {
             HStack {
                 Text(viewModel.viewState.titleBtnAddMember)
                     .font(.PangramSans.bold(FHKSize.size16))
-                    .foregroundColor(FHKColor.lunarSand)
+                    .foregroundColor(FHKColor.indigo)
                     .padding(.vertical)
                     .padding(.leading)
                 
@@ -104,10 +109,10 @@ public struct FHKRegisterMembersScreen: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: FHKSize.size20, height: FHKSize.size20)
-                    .foregroundColor(FHKColor.lunarSand)
+                    .foregroundColor(FHKColor.indigo)
                     .padding(.trailing)
             }
-            .background(FHKColor.lunarSand.opacity(0.2))
+            .background(FHKColor.purpleBackground.opacity(0.3))
             .cornerRadius(FHKSize.size16)
             .onTapGesture {
                 
@@ -121,7 +126,7 @@ public struct FHKRegisterMembersScreen: View {
                                 Spacer()
                                 Text(viewModel.viewState.titleAddNewMember)
                                     .font(.PangramSans.bold(FHKSize.size24))
-                                    .foregroundColor(FHKColor.lunarSand.opacity(0.9))
+                                    .foregroundColor(FHKColor.indigo.opacity(0.9))
                                     .padding(.top, FHKSize.size08)
                                     .padding(.bottom, FHKSize.size24)
                                 Spacer()
@@ -227,7 +232,7 @@ internal struct NewMemberContentView: View {
         VStack(alignment: .leading) {
             
             Text(viewModel.viewState.titleSelectAvatar)
-                .foregroundColor(FHKColor.lunarSand)
+                .foregroundColor(FHKColor.indigo)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: FHKSpace.space16) {
@@ -262,10 +267,30 @@ internal struct NewMemberContentView: View {
     }
 }
 
-// Para ver unicamente la pantalla
 #Preview("Design / Isolated UI") {
     FHKPreview {
         FHKRegisterMembersScreen()
+            .withPreviewRouter()
+    }
+}
+
+
+#Preview("Design / With Members UI") {
+    struct PreviewWrapper: View {
+        @State private var vm = FHKRegisterMembersScreenVM()
+        
+        var body: some View {
+            FHKRegisterMembersScreen(viewModel: vm)
+                .onAppear {
+                    vm.familyMembers = [
+                        FHKMemberEntity.previewItem
+                    ]
+                }
+        }
+    }
+    
+    return FHKPreview {
+        PreviewWrapper()
             .withPreviewRouter()
     }
 }

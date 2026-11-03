@@ -23,7 +23,7 @@ public struct LoadingView: View {
             .padding(.bottom, FHKSize.size20)
             
             Text(msn)
-                .foregroundStyle(FHKColor.lunarSand.opacity(0.8))
+                .foregroundStyle(FHKColor.indigo.opacity(0.8))
                 .font(Font.PangramSans.semibold(FHKSize.size20))
                 .padding(.bottom, FHKSize.size20)
         }
@@ -37,5 +37,4 @@ public struct LoadingView: View {
         LoadingView(msn: "Procesando")
         Spacer()
     }
-    .background(FHKColor.indigo)
 }

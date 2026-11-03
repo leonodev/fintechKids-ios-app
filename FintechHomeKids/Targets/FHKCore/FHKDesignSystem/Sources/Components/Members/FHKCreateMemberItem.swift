@@ -35,7 +35,7 @@ public struct FHKCreateMemberItem: View {
                 
                 Text(name)
                     .font(.PangramSans.medium(16))
-                    .foregroundColor(.white)
+                    .foregroundColor(FHKColor.indigo)
                     .padding(.leading, 04)
                 
                 FHKCoinBadge(amount: amount)
@@ -45,19 +45,19 @@ public struct FHKCreateMemberItem: View {
             
             AvatarView(image: avatarName.getAvatar, size: FHKSize.size44)
                 .clipShape(Circle())
-                .overlay(Circle().stroke(Color.white.opacity(0.2), lineWidth: 1))
+                .overlay(Circle().stroke(FHKColor.indigo.opacity(0.2), lineWidth: 1))
             
             Button(action: action) {
                 Image(systemName: iconName)
                     .resizable()
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(FHKColor.yellow)
+                    .foregroundColor(FHKColor.fuchsiaPink)
                     .frame(width: FHKSize.size24, height: FHKSize.size24)
             }
         }
         .accessibilityIdentifier(identifier)
         .padding()
-        .background(Color.white.opacity(0.05))
+        .background(FHKColor.indigo.opacity(0.05))
         .cornerRadius(12)
     }
 }
@@ -73,7 +73,7 @@ public struct FHKCreateMemberItem: View {
                 
             })
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(FHKColor.indigo)
+            .background(FHKColor.lunarSand)
         }
         
     }

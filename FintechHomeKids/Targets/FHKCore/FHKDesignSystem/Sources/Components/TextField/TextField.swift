@@ -53,7 +53,7 @@ public struct FHKTextField: View {
             // Placeholder Animado (Floating Label)
             Text(placeholder)
                 .font(.PangramSans.bold(isFloating ? FHKSize.size12 : FHKSize.size20))
-                .foregroundColor(FHKColor.gray.opacity(isFloating ? 1.0 : 0.4))
+                .foregroundColor(FHKColor.indigo.opacity(isFloating ? 1.0 : 0.4))
                 .padding(.horizontal, isFloating ? 8 : 0)
                 .background {
                     if isFloating {
@@ -131,7 +131,7 @@ public struct FHKTextField: View {
         Spacer()
     }
     .padding()
-    .background(FHKColor.indigo.opacity(0.9))
+    .background(FHKColor.lunarSand.opacity(0.9))
     
 }
 

@@ -105,12 +105,12 @@ public struct FHKProfileScreen: View {
                         
                         Text(emailParent)
                             .font(.PangramSans.bold(FHKSize.size20))
-                            .foregroundColor(FHKColor.lunarSand.opacity(0.6))
+                            .foregroundColor(FHKColor.indigo.opacity(0.6))
                             .padding(.top)
                         
                         Text("\(viewModel.viewState.titleFamily) \(familyName)")
                             .font(.PangramSans.bold(FHKSize.size16))
-                            .foregroundColor(FHKColor.basicWhite)
+                            .foregroundColor(FHKColor.indigo)
                             .padding(.bottom, FHKSpace.space08)
                     }
                     Spacer()
@@ -127,24 +127,24 @@ public struct FHKProfileScreen: View {
             VStack {
                 HStack(spacing: FHKSpace.space08) {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
-                        .foregroundColor(.white)
+                        .foregroundColor(.indigo)
                         .font(.system(size: 16, weight: .bold))
                     
                     Text(viewModel.viewState.titleCloseSession)
                         .font(.PangramSans.bold(FHKSize.size12))
-                        .foregroundColor(FHKColor.basicWhite)
+                        .foregroundColor(FHKColor.indigo)
                 }
             }
             
             .padding(.horizontal, FHKSpace.space16)
             .padding(.vertical, FHKSpace.space08)
             .background(
-                FHKColor.lunarSand.opacity(0.12)
+                FHKColor.indigo.opacity(0.12)
             )
             .cornerRadius(20)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(FHKColor.basicWhite.opacity(0.2), lineWidth: 1)
+                    .stroke(FHKColor.indigo.opacity(0.2), lineWidth: 1)
             )
             .padding(.trailing)
         }
@@ -156,46 +156,46 @@ public struct FHKProfileScreen: View {
     }
     
     var loadedFooterView: some View {
-        CardView { _ in } content: {
-            VStack(alignment: .leading, spacing: FHKSpace.space16) {
-                
-                Text(viewModel.viewState.titleSettingLanguages)
-                    .font(.PangramSans.bold(FHKSize.size16))
-                    .foregroundColor(FHKColor.lunarSand)
-                    .padding(.bottom)
- 
-                ForEach(viewModel.viewState.languages, id: \.code) { lang in
-                    CardView(
-                        data: lang.code,
-                        isSelected: selectedLanguageCode == lang.code,
-                        action: { code in
-                            if let newCode = code {
-                                selectedLanguageCode = newCode
-                                Task {
-                                    await viewModel.action(.changeLanguageApp(selectedLanguageCode))
-                                }
+        
+        VStack(alignment: .leading, spacing: FHKSpace.space16) {
+            
+            Text(viewModel.viewState.titleSettingLanguages)
+                .font(.PangramSans.bold(FHKSize.size16))
+                .foregroundColor(FHKColor.indigo)
+                .padding(.bottom)
+            
+            ForEach(viewModel.viewState.languages, id: \.code) { lang in
+                CardView(
+                    data: lang.code,
+                    isSelected: selectedLanguageCode == lang.code,
+                    action: { code in
+                        if let newCode = code {
+                            selectedLanguageCode = newCode
+                            Task {
+                                await viewModel.action(.changeLanguageApp(selectedLanguageCode))
                             }
-                        },
-                        content: {
-                            HStack {
-                                lang.img
-                                    .resizable()
-                                    .frame(width: FHKSize.size32, height: FHKSize.size32)
-                                    .padding(.trailing, FHKSpace.space16)
-                                
-                                Text(lang.name)
-                                    .font(.PangramSans.bold(FHKSize.size16))
-                                    .foregroundColor(FHKColor.lunarSand.opacity(0.6))
-                                
-                                Spacer()
-                            }
-                            .frame(maxWidth: .infinity)
                         }
-                    )
-                    .frame(maxWidth: .infinity)
-                }
+                    },
+                    content: {
+                        HStack {
+                            lang.img
+                                .resizable()
+                                .frame(width: FHKSize.size32, height: FHKSize.size32)
+                                .padding(.trailing, FHKSpace.space16)
+                            
+                            Text(lang.name)
+                                .font(.PangramSans.bold(FHKSize.size16))
+                                .foregroundColor(FHKColor.lunarSand)
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                )
+                .frame(maxWidth: .infinity)
             }
         }
+        
         .padding()
     }
     

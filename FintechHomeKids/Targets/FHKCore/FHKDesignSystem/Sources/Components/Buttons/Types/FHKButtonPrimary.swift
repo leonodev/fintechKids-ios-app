@@ -60,7 +60,7 @@ public struct FHKButtonPrimary: View {
                  Color.clear
                     .glassEffect(appearance.modeGlass(variant: glassVariant))
             } else {
-                Color.white.opacity(0.2)
+                Color.indigo.opacity(0.2)
                     .background(.ultraThinMaterial)
             }
         } else {
@@ -74,7 +74,7 @@ public struct FHKButtonPrimary: View {
     VStack {
         FHKButtonPrimary(title: "Button Primary",
                          textColor: nil,
-                         state: .enabled,
+                         state: .disabled,
                          mode: .solid,
                          action: {
             

@@ -235,7 +235,8 @@ public struct FHKMemberDetailScreen: View {
 #Preview("Design / Isolated UI") {
     FHKPreview {
         FHKMemberDetailScreen(UUID(),
-                              myGoals: FHKGoalMemberEntity.previewItem(2))
+                              myGoals: FHKGoalMemberEntity.previewItem(2),
+                              myRewardPending: FHKRewardCollectedEntity.previewItem(2))
             .withPreviewRouter()
     }
 }

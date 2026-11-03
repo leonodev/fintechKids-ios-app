@@ -280,25 +280,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "do you want to remove member (%@)?"
+            "value" : "do you want to remove"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿deseas eliminar al miembro (%@)?"
+            "value" : "¿deseas eliminar a"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "voulez-vous supprimer le membre (%@) ?"
+            "value" : "voulez-vous supprimer"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "vuoi eliminare il membro (%@)?"
+            "value" : "vuoi eliminare"
           }
         }
       }
@@ -650,8 +650,36 @@
           }
         }
       }
+    },
+    "title_add_new_member" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "new member"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nuevo miembro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nouveau membre"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nuovo membri"
+          }
+        }
+      }
     }
-
   },
   "version" : "1.1"
 }

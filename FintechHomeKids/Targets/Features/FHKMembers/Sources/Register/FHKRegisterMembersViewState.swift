@@ -19,7 +19,7 @@ public struct FHKRegisterMembersViewState {
     
     // Properties View
     public var membersTitle: String {
-        "add_new_member".localized.uppercased()
+        "title_add_new_member".localized.uppercased()
     }
     
     public var msnLoading: String {
@@ -80,7 +80,7 @@ public struct FHKRegisterMembersViewState {
     
     public func msnRemoveMember(name: String) -> String {
         let msnInfo = "msn_want_remove_member".localized
-        let msnComplete = "\(msnInfo)\(name)"
+        let msnComplete = "\(msnInfo): \(name)?"
         return msnComplete.capitalizingFirstLetter()
     }
  
