@@ -16,6 +16,9 @@ public struct FHKTasksRepository: Sendable {
     public var getTasks:
     @Sendable(String, Bool) async throws -> [FHKTaskEntity] = { _, _ in  []}
     
+    public var getParentMail:
+    @Sendable() async -> String? = { nil }
+    
     public var clearCache:
     @Sendable() async -> Void = {}
     
@@ -48,6 +51,10 @@ extension FHKTasksRepository {
         }
         
         preview.clearCache = { }
+        
+        preview.getParentMail = {
+            "parent@domain.com"
+        }
         
         return preview
     }

@@ -23,7 +23,7 @@ public struct FHKTasksScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.taskTitle) {
+        FHKScreenContainer {
             switch viewModel.viewState.taskState {
                 
             case .loading:
@@ -36,10 +36,53 @@ public struct FHKTasksScreen: View {
         .observeLanguage()
         .onAppear {
             Task {
+                await viewModel.getParentMail()
                 // Upon entering the screen, we let the repository decide (cache vs back)
                 await viewModel.action(.fetchTasks(force: false))
             }
         }
+    }
+    
+    var headerChildView: some View {
+        HStack {
+            Spacer()
+            
+            VStack(alignment: .leading) {
+                Text(viewModel.viewState.taskAvailableTitle)
+                    .font(.PangramSans.extraboldItalic(FHKSize.size16))
+                    .foregroundStyle(FHKColor.purpleBackground)
+                
+                Text(viewModel.viewState.taskAvailableDescription)
+                    .font(.PangramSans.bold(FHKSize.size12))
+                    .foregroundStyle(FHKColor.indigo)
+            }
+            
+            if let imgAvatar =  member?.avatarName.getAvatar {
+                AvatarView(image: imgAvatar, size: FHKSize.size48)
+            }
+        }
+    }
+    
+    var headerParentView: some View {
+        HStack {
+            Spacer()
+            
+            VStack(alignment: .leading) {
+                Text(viewModel.viewState.taskTitle)
+                    .font(.PangramSans.extraboldItalic(FHKSize.size20))
+                    .foregroundStyle(FHKColor.purpleBackground)
+                
+                Text(viewModel.viewState.taskCreateDescription)
+                    .font(.PangramSans.bold(FHKSize.size12))
+                    .foregroundStyle(FHKColor.indigo)
+            }
+            
+            Spacer()
+            AvatarView(name: viewModel.viewState.parentEmail ?? "--", size: FHKSize.size52)
+            
+            
+        }
+        .padding(.leading, FHKSpace.space48)
     }
     
     var loadingView: some View {
@@ -47,97 +90,118 @@ public struct FHKTasksScreen: View {
     }
     
     var loadedView: some View {
-        ZStack(alignment: .bottomTrailing) {
-            ScrollView {
-                LazyVStack(alignment: .center, spacing: 10) {
-                    ForEach(viewModel.viewState.taskList) { task in
-                        CardView { _ in
-                            
-                            guard let member = self.member, isFromChildSelection else {
-                                return
-                            }
-                            
-                            router.navigate(to: .startTask(taskEntity: task.asPayload,
-                                                           memberEntity: member.asPayload))
-                        } content: {
-                            VStack(alignment: .leading, spacing: 0) {
- 
-                                // only display lotties if entry from member profile
-                                if isFromChildSelection {
-                                    DescriptionCardView(title: task.name,
-                                                        description: task.description)
+        VStack {
+            HeaderBannerView {
+                /// section title bar and icon profile
+                if isFromChildSelection {
+                    headerChildView
+                } else {
+                    headerParentView
+                }
+            }
+            .frame(height: FHKSize.size32)
+            
+            ZStack(alignment: .bottomTrailing) {
+                
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 10) {
+                        
+                        Text(viewModel.viewState.taskCreatedParentDescription)
+                            .font(.PangramSans.extraboldItalic(FHKSize.size14))
+                            .foregroundColor(FHKColor.indigo.opacity(0.5))
+                            .padding(.horizontal)
+   
+                        ForEach(viewModel.viewState.taskList) { task in
+                            CardView { _ in
+                                
+                                guard let member = self.member, isFromChildSelection else {
+                                    return
+                                }
+                                
+                                router.navigate(to: .startTask(taskEntity: task.asPayload,
+                                                               memberEntity: member.asPayload))
+                            } content: {
+                                HStack(spacing: 0) {
                                     
-                                    makeLottiesView(task: task)
-                                } else {
-                                    HStack {
-                                        Image(systemName: "paperclip")
-                                            .resizable()
-                                            .frame(width: FHKSize.size32, height: FHKSize.size32)
-                                            .foregroundStyle(FHKColor.yellow)
-                                            .padding(.trailing, FHKSpace.space08)
-                                        
+                                    // only display lotties if entry from member profile
+                                    if isFromChildSelection {
                                         DescriptionCardView(title: task.name,
                                                             description: task.description)
+                                        
+                                        makeLottiesView(task: task)
+                                    } else {
+                                        HStack {
+                                            Image(systemName: "square.and.pencil.circle")
+                                                .resizable()
+                                                .frame(width: FHKSize.size32, height: FHKSize.size32)
+                                                .foregroundStyle(FHKColor.yellow)
+                                                .padding(.trailing, FHKSpace.space08)
+                                            
+                                            DescriptionCardView(title: task.name,
+                                                                description: task.description)
+                                        }
                                     }
                                 }
                             }
+                            .padding()
                         }
-                        .padding()
                     }
                 }
-            }
-            .refreshable {
-                await viewModel.action(.fetchTasks(force: true))
-            }
-
-            // only display lotties if entry from member profile
-            if !isFromChildSelection {
-                Button {
-                    router.navigate(to: .createTasks)
-                } label: {
-                    FHKButtomPlus()
+                .refreshable {
+                    await viewModel.action(.fetchTasks(force: true))
                 }
-                .padding(25)
+                
+                // only display lotties if entry from member profile
+                if !isFromChildSelection {
+                    Button {
+                        router.navigate(to: .createTasks)
+                    } label: {
+                        FHKButtomPlus()
+                    }
+                    .padding(25)
+                }
             }
         }
     }
     
     @ViewBuilder
     private func makeLottiesView(task: FHKTaskEntity) -> some View {
-        HStack(spacing: -30) {
+        HStack(spacing: 0) {
             VStack {
                 LottieView(animationName: Lotties.coin,
                            loopMode: .loop,
                            contentMode: .scaleAspectFit)
-                    .frame(height: 150)
+                .frame(height: FHKSize.size120)
                    
                 Text("\(task.coinsGranted)")
                     .font(.PangramSans.bold(FHKSize.size24))
-                    .foregroundColor(FHKColor.warning.opacity(0.7))
+                    .foregroundColor(FHKColor.warning)
                     .padding(.horizontal, FHKSpace.space08)
                     .padding(.top, -40)
             }
             .padding(.top, -30)
             
+            Spacer()
             VStack {
                 LottieView(animationName: Lotties.hours,
                            loopMode: .loop,
                            contentMode: .scaleAspectFit)
-                    .frame(height: 100)
-                    .padding(.top, -15)
+                    .frame(height: 80)
+                    .padding(.top, -20)
                     
                 Text("\(task.timeGranted)")
                     .font(.PangramSans.bold(FHKSize.size24))
-                    .foregroundColor(FHKColor.stone.opacity(0.7))
+                    .foregroundColor(FHKColor.indigo.opacity(0.6))
                     .padding(.horizontal, FHKSpace.space08)
                     .padding(.top, -20)
             }
+            
         }
     }
 }
 
 // Para ver unicamente la pantalla
-#Preview("Design / Isolated UI") {
+#Preview("Design / Children UI") {
     FHKPreview {
         FHKTasksScreen(member: FHKMemberEntity.previewItem,
                        isFromChildSelection: true)
@@ -145,3 +209,10 @@ public struct FHKTasksScreen: View {
     }
 }
 
+#Preview("Design / Perents UI") {
+    FHKPreview {
+        FHKTasksScreen(member: FHKMemberEntity.previewItem,
+                       isFromChildSelection: false)
+            .withPreviewRouter()
+    }
+}

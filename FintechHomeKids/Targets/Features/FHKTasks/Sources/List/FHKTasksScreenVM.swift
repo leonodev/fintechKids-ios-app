@@ -41,6 +41,11 @@ final class FHKTasksScreenVM: FHKCore.ViewModel {
             await fetchTasksList(force: force)
         }
     }
+    
+    func getParentMail() async {
+        let email = await fhkTasksRepository.getParentMail()
+        viewState.parentEmail = email
+    }
 }
 
 private extension FHKTasksScreenVM {

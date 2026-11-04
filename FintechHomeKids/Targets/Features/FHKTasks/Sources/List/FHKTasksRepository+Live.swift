@@ -37,6 +37,10 @@ public extension FHKTasksRepository {
             await cache.clearCache()
         }
         
+        tasksRepository.getParentMail = {
+            inject.fhkConfiguration.parentMail()
+        }
+        
         return tasksRepository
     }
 }

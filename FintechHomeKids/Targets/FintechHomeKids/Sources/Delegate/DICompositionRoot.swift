@@ -66,5 +66,6 @@ enum DICompositionRoot {
         inject.fhkGoalsRepository = .live
         inject.fhkProfileRepository = .live
         inject.fhkRewardRepository = .live
+        inject.fhkTasksRepository = .live
     }
 }
