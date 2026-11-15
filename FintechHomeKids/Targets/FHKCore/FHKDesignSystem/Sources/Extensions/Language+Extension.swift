@@ -33,6 +33,27 @@ public extension String {
             return targetBundle.localizedString(forKey: self, value: self, table: table)
         }
     
+    @MainActor
+    func localizedWithParams(
+        arguments: CVarArg...,
+        bundle: Bundle? = nil,
+        table: String = "Localizable",
+        comment: String = ""
+    ) -> String {
+        let baseBundle = bundle ?? .module
+        let currentLanguage = inject.fhkLanguage.selectedLanguage()
+        
+        let targetBundle: Bundle
+        if let path = baseBundle.path(forResource: currentLanguage, ofType: "lproj"),
+           let langBundle = Bundle(path: path) {
+            targetBundle = langBundle
+        } else {
+            targetBundle = baseBundle
+        }
+        
+        let format = targetBundle.localizedString(forKey: self, value: self, table: table)
+        return String(format: format, arguments: arguments)
+    }
     
     func capitalizingFirstLetter() -> String {
         return prefix(1).uppercased() + dropFirst()

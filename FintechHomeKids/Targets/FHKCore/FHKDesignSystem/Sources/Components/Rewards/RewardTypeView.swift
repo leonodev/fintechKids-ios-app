@@ -34,7 +34,7 @@ public struct FHKRewardTypeView: View {
         var colorIcon: Color {
             switch self {
             case .coins:
-                FHKColor.yellow
+                FHKColor.purpleBackground
                 
             case .time:
                 FHKColor.fuchsiaPink
@@ -62,7 +62,7 @@ public struct FHKRewardTypeView: View {
             
             Text(value)
                 .font(.PangramSans.bold(FHKSize.size16))
-                .foregroundColor(FHKColor.lunarSand.opacity(0.6))
+                .foregroundColor(FHKColor.indigo.opacity(0.6))
         }
     }
 }

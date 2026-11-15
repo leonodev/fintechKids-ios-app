@@ -23,44 +23,46 @@ public struct FHKHomeScreen: View {
     }
     
     public var body: some View {
-        
-        FHKScreenContainer {
-            VStack {
-                HeaderBannerView {
-                    /// section title bar and icon profile
+        FHKScreenContainer(
+            headerContent: {
+                VStack(alignment: .leading) {
                     headerView
-                }
-                
-                ScrollView {
+                    
                     /// section members of family
                     membersView
-                    /// section rewards list
-                    rewardsCollectedView
-                    /// section goals list
-                    goalMemberFamilyView
+                }
+            },
+            content: {
+                VStack {
+                    ScrollView {
+                        /// section rewards list
+                        rewardsCollectedView
+                        
+                        /// section goals list
+                        goalMemberFamilyView
+                    }
+                    .refreshable {
+                        loadAllInformation(isForce: true)
+                    }
+                    .fullScreenCover(isPresented: $showPermissions) {
+                        FHKPermissionView(provider: viewModel.fhkCameraPermission)
+                    }
                     
+                    Spacer()
+                    if !viewModel.viewState.menuTabBarItems.isEmpty {
+                        botomBarView
+                    }
                 }
-                .refreshable {
-                    loadAllInformation(isForce: true)
-                }
-                .fullScreenCover(isPresented: $showPermissions) {
-                    FHKPermissionView(provider: viewModel.fhkCameraPermission)
-                }
-                
-                Spacer()
-                if !viewModel.viewState.menuTabBarItems.isEmpty {
-                    botomBarView
-                }
-            }
-            .ignoresSafeArea(edges: .bottom)
-            .ignoresSafeArea(edges: .top)
-            .onAppear {
-                loadAllInformation(isForce: false)
-                if viewModel.fhkCameraPermission.status() != .authorized {
-                    showPermissions = true
+                .ignoresSafeArea(edges: .bottom)
+                .ignoresSafeArea(edges: .top)
+                .onAppear {
+                    loadAllInformation(isForce: false)
+                    if viewModel.fhkCameraPermission.status() != .authorized {
+                        showPermissions = true
+                    }
                 }
             }
-        }
+        )
         .observeLanguage()
     }
     
@@ -78,14 +80,13 @@ public struct FHKHomeScreen: View {
     
     var headerView: some View {
         HStack {
-            
-            Text(viewModel.viewState.titleNameFamily)
+            Text("\(viewModel.viewState.titleNameFamily) (\(viewModel.familyMembersList.count))")
                 .font(.PangramSans.bold(FHKSize.size20))
                 .foregroundStyle(FHKColor.purpleBackground)
             
             Spacer()
             
-            AvatarView(name: viewModel.viewState.parentEmail ?? "--", size: FHKSize.size52)
+            AvatarView(name: viewModel.viewState.parentEmail ?? "--", size: FHKSize.size48)
                 .onTapGesture {
                     router.navigate(to: .profile)
                 }
@@ -96,14 +97,7 @@ public struct FHKHomeScreen: View {
     var membersView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             VStack(alignment: .leading) {
-                Text(viewModel.viewState.titleMemberFamily)
-                    .font(.PangramSans.slimSemiboldItalic(FHKSize.size20))
-                    .colorDegradeStyle(startColor: FHKColor.wine,
-                                       endColor: FHKColor.indigo.opacity(0.8))
-                
-                    .isHidden(viewModel.familyMembersList.isEmpty)
-                    .accessibilityIdentifier("title_home_screen_id")
-                
+
                 LazyHStack(spacing: FHKSpace.space16) {
                     switch viewModel.viewState.familyState {
                     case .skeleton:
@@ -122,18 +116,14 @@ public struct FHKHomeScreen: View {
                 .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .padding(.horizontal)
     }
     
     var rewardsCollectedView: some View {
         VStack(alignment: .leading) {
-            GradientDivider()
-                .isHidden(viewModel.rewardsCollectedList.isEmpty)
-            
-            Text(viewModel.viewState.titleRewardsCollected)
+            Text("\(viewModel.viewState.titleRewardsCollected) (\(viewModel.rewardsCollectedList.count))")
                 .font(.PangramSans.slimSemiboldItalic(FHKSize.size20))
                 .padding(.leading, FHKSpace.space08)
-                .padding(.top, FHKSpace.space16)
+                //.padding(.top, FHKSpace.space16)
                 .colorDegradeStyle(startColor: FHKColor.wine,
                                    endColor: FHKColor.indigo.opacity(0.8))
                 .isHidden(viewModel.rewardsCollectedList.isEmpty)
@@ -156,21 +146,17 @@ public struct FHKHomeScreen: View {
                     }
                 }
             }
-            .frame(height: FHKSize.size132)
             .padding(.horizontal, FHKSpace.space08)
         }
-        .padding(.top, FHKSpace.space16)
+        .padding(.top, FHKSpace.space96)
     }
     
     var goalMemberFamilyView: some View {
-        VStack(alignment: .leading) {
-            GradientDivider()
-                .isHidden(viewModel.goalMemberList.isEmpty)
-            
-            Text(viewModel.viewState.msnGoalsInCurse)
+        VStack(alignment: .leading, spacing: 0) {
+            Text("\(viewModel.viewState.msnGoalsInCurse) (\(viewModel.goalMemberList.count))")
                 .font(.PangramSans.slimSemiboldItalic(FHKSize.size20))
                 .padding(.leading, FHKSpace.space08)
-                .padding(.top, FHKSpace.space16)
+                .padding(.top, FHKSpace.space32)
                 .colorDegradeStyle(startColor: FHKColor.wine,
                                    endColor: FHKColor.indigo.opacity(0.8))
                 .isHidden(viewModel.goalMemberList.isEmpty)

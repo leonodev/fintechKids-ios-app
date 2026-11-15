@@ -20,6 +20,7 @@ public struct FHKRewardCreateViewState {
     // Properties Observable
     public var name = ""
     public var timeRequired = ""
+    public var quantityTimeSelected = ""
     public var coinsRequired = ""
     
     public var selectedDurationType: FHKDurationType?

@@ -23,16 +23,26 @@ public struct FHKTasksScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer {
-            switch viewModel.viewState.taskState {
-                
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                /// section title bar and icon profile
+                if isFromChildSelection {
+                    headerChildView
+                } else {
+                    headerParentView
+                }
+            },
+            content: {
+                switch viewModel.viewState.taskState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onAppear {
             Task {
@@ -45,8 +55,7 @@ public struct FHKTasksScreen: View {
     
     var headerChildView: some View {
         HStack {
-            Spacer()
-            
+
             VStack(alignment: .leading) {
                 Text(viewModel.viewState.taskAvailableTitle)
                     .font(.PangramSans.extraboldItalic(FHKSize.size16))
@@ -56,8 +65,10 @@ public struct FHKTasksScreen: View {
                     .font(.PangramSans.bold(FHKSize.size12))
                     .foregroundStyle(FHKColor.indigo)
             }
+            .padding(.leading, FHKSpace.space56)
             
             if let imgAvatar =  member?.avatarName.getAvatar {
+                Spacer()
                 AvatarView(image: imgAvatar, size: FHKSize.size48)
             }
         }
@@ -91,16 +102,6 @@ public struct FHKTasksScreen: View {
     
     var loadedView: some View {
         VStack {
-            HeaderBannerView {
-                /// section title bar and icon profile
-                if isFromChildSelection {
-                    headerChildView
-                } else {
-                    headerParentView
-                }
-            }
-            .frame(height: FHKSize.size32)
-            
             ZStack(alignment: .bottomTrailing) {
                 
                 ScrollView {
@@ -122,19 +123,18 @@ public struct FHKTasksScreen: View {
                                                                memberEntity: member.asPayload))
                             } content: {
                                 HStack(spacing: 0) {
-                                    
-                                    // only display lotties if entry from member profile
                                     if isFromChildSelection {
                                         DescriptionCardView(title: task.name,
                                                             description: task.description)
-                                        
+                                        .frame(minWidth: FHKSize.size100)
+                                       
                                         makeLottiesView(task: task)
                                     } else {
                                         HStack {
                                             Image(systemName: "square.and.pencil.circle")
                                                 .resizable()
                                                 .frame(width: FHKSize.size32, height: FHKSize.size32)
-                                                .foregroundStyle(FHKColor.yellow)
+                                                .foregroundStyle(FHKColor.indigo)
                                                 .padding(.trailing, FHKSpace.space08)
                                             
                                             DescriptionCardView(title: task.name,
@@ -167,33 +167,30 @@ public struct FHKTasksScreen: View {
     @ViewBuilder
     private func makeLottiesView(task: FHKTaskEntity) -> some View {
         HStack(spacing: 0) {
-            VStack {
+            Spacer()
+            VStack(spacing: 0) {
                 LottieView(animationName: Lotties.coin,
                            loopMode: .loop,
                            contentMode: .scaleAspectFit)
-                .frame(height: FHKSize.size120)
+                .frame(height: FHKSize.size60)
                    
                 Text("\(task.coinsGranted)")
                     .font(.PangramSans.bold(FHKSize.size24))
                     .foregroundColor(FHKColor.warning)
-                    .padding(.horizontal, FHKSpace.space08)
-                    .padding(.top, -40)
             }
-            .padding(.top, -30)
             
-            Spacer()
-            VStack {
+            
+           
+            VStack(spacing: 0) {
                 LottieView(animationName: Lotties.hours,
                            loopMode: .loop,
                            contentMode: .scaleAspectFit)
-                    .frame(height: 80)
-                    .padding(.top, -20)
+                .frame(height: FHKSize.size60)
                     
                 Text("\(task.timeGranted)")
                     .font(.PangramSans.bold(FHKSize.size24))
                     .foregroundColor(FHKColor.indigo.opacity(0.6))
-                    .padding(.horizontal, FHKSpace.space08)
-                    .padding(.top, -20)
+                   
             }
             
         }

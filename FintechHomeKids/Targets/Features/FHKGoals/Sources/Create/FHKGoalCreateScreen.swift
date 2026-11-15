@@ -20,16 +20,21 @@ public struct FHKGoalCreateScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.goalTitle) {
-            switch viewModel.viewState.goalState {
-                
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.goalTitle)
+            },
+            content: {
+                switch viewModel.viewState.goalState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onChange(of: viewModel.viewState.goalState) { _, state in
             switch state {

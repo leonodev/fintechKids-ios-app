@@ -34,7 +34,7 @@ public struct FHKCoinBadge: View {
         .padding(.vertical, FHKSpace.space16)
         .padding(.horizontal, FHKSpace.space16)
         .foregroundColor(FHKColor.yellow)
-        .background(FHKColor.lunarSand)
+        .background(FHKColor.indigo.opacity(0.05))
         .cornerRadius(FHKSize.size16)
     }
 }
@@ -44,5 +44,5 @@ public struct FHKCoinBadge: View {
         FHKCoinBadge(amount: "1,250")
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }

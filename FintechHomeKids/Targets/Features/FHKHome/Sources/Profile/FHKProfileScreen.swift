@@ -24,24 +24,29 @@ public struct FHKProfileScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: viewModel.viewState.profile) {
-            switch viewModel.viewState.profileState {
-                
-            case .loading:
-                loadingView
-                
-            default:
-                ScrollView {
-                    VStack {
-                        loadedHeaderView
-                        
-                        closeSessionView
-                        
-                        loadedFooterView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.profile)
+            },
+            content: {
+                switch viewModel.viewState.profileState {
+                    
+                case .loading:
+                    loadingView
+                    
+                default:
+                    ScrollView {
+                        VStack {
+                            loadedHeaderView
+                            
+                            closeSessionView
+                            
+                            loadedFooterView
+                        }
                     }
                 }
             }
-        }
+        )
         .observeLanguage()
         .onAppear {
             Task {

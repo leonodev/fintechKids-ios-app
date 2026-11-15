@@ -12,5 +12,5 @@ extension String {
     @MainActor
     var localized: String {
         self.localized(.module)
-    }
+    }  
 }

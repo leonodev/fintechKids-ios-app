@@ -27,16 +27,21 @@ public struct FHKRewardCollectScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.rewardsCollectTitle) {
-            switch viewModel.viewState.collectState {
-               
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.rewardsCollectTitle)
+            },
+            content: {
+                switch viewModel.viewState.collectState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onChange(of: viewModel.viewState.collectState) { _, state in
             switch state {
@@ -111,7 +116,7 @@ public struct FHKRewardCollectScreen: View {
                          textColor: FHKColor.lunarSand,
                          style: .outlined,
                          state: isAcceptConditions ? .enabled : .disabled,
-                         mode: .glass(.clear),
+                         mode: .solid,
                          action: {
             Task {
                 switch collectEntity.rewardType {
@@ -227,7 +232,7 @@ public struct FHKRewardCollectScreen: View {
                         current: Double(progress.accumulatedValue),
                         total: Double(progress.rewardsSystemValue),
                         workType: goal.measureType,
-                        color: FHKColor.lunarSand.opacity(0.7),
+                        color: FHKColor.indigo.opacity(0.7),
                         isDisabled: isContentDisabled
                     )
                     .padding(.vertical, 8)
@@ -240,13 +245,13 @@ public struct FHKRewardCollectScreen: View {
                 .font(.PangramSans.bold(FHKSize.size24))
                 .foregroundColor(isContentDisabled
                                  ? FHKColor.gray.opacity(0.5)
-                                 : FHKColor.lunarSand.opacity(0.7))
+                                 : FHKColor.indigo.opacity(0.7))
                 
                 Text(viewModel.viewState.getMassageGoalCard(measureType: goal.measureType))
                     .font(.PangramSans.bold(FHKSize.size16))
                     .foregroundColor(isContentDisabled
                                      ? FHKColor.gray.opacity(0.5)
-                                     : FHKColor.gray)
+                                     : FHKColor.indigo.opacity(0.6))
                     .padding(.top, 8)
             }
             .padding(.top, -50)
@@ -265,7 +270,7 @@ public struct FHKRewardCollectScreen: View {
                     Text(msn)
                         .multilineTextAlignment(.center)
                         .font(.PangramSans.bold(FHKSize.size20))
-                        .foregroundColor(FHKColor.gray)
+                        .foregroundColor(FHKColor.indigo)
                         .padding(.horizontal)
                 }
             }
@@ -291,21 +296,27 @@ public struct FHKRewardCollectScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.rewardCollectList) { reward in
-                        CardView(data: reward,
-                                    isSelected: true,
-                                    action: { item in
-                                        print(item?.name ?? "-")
-                                    },
-                                    content: {
-                            VStack(alignment: .leading) {
-                                DescriptionCardView(title: reward.name.uppercased(),
-                                                    description: "")
-                                let taskHours = collectEntity.task.timeGranted.asHours
-                                let isValid = taskHours >= reward.requiredHours
-                                makeRewardItemView(item: reward, type: .time, isRewardValid: isValid)
-                            }
-                        })
-                        .padding()
+                        
+                        let taskHours = collectEntity.task.timeGranted.asHours
+                        let isValid = taskHours >= reward.requiredHours
+                        
+                        if isValid {
+                            CardView(data: reward,
+                                        isSelected: true,
+                                        action: { item in
+                                            print(item?.name ?? "-")
+                                        },
+                                        content: {
+                                VStack(alignment: .leading) {
+                                    DescriptionCardView(title: reward.name.uppercased(),
+                                                        description: "")
+                                    
+                                    
+                                   makeRewardItemView(item: reward, type: .time)
+                                }
+                            })
+                            .padding()
+                        }
                     }
                 }
                 .padding(.top)
@@ -322,18 +333,21 @@ public struct FHKRewardCollectScreen: View {
             ScrollView {
                 LazyVStack(alignment: .center, spacing: 0) {
                     ForEach(viewModel.viewState.rewardCollectList) { reward in
-                        CardView { _ in } content: {
-                            VStack(alignment: .leading) {
-                                DescriptionCardView(title: reward.name.uppercased(),
-                                                    description: "")
-                                let taskCoins = collectEntity.task.coinsGranted
-                                let isValid = taskCoins >= reward.coinsRequiered
-                                makeRewardItemView(item: reward,
-                                                   type: .coins,
-                                                   isRewardValid: isValid)
+                        let taskCoins = collectEntity.task.coinsGranted
+                        let isValid = taskCoins >= reward.coinsRequiered
+                        
+                        if isValid {
+                            CardView { _ in } content: {
+                                VStack(alignment: .leading) {
+                                    DescriptionCardView(title: reward.name.uppercased(),
+                                                        description: "")
+                                    
+                                    
+                                    makeRewardItemView(item: reward, type: .coins)
+                                }
                             }
+                            .padding()
                         }
-                        .padding()
                     }
                 }
                 .padding(.top)
@@ -347,38 +361,30 @@ public struct FHKRewardCollectScreen: View {
     @ViewBuilder
     private func makeRewardItemView(
         item: FHKRewardEntity,
-        type: FHKWorkType,
-        isRewardValid: Bool
+        type: FHKWorkType
     ) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: FHKSpace.space08) {
                 
                 Text(type == .time ? "\(item.timeRequiered)" : "\(item.coinsRequiered) KidsCoins" )
                     .font(.PangramSans.bold(FHKSize.size24))
-                    .foregroundColor(isRewardValid
-                                     ? FHKColor.warning
-                                     : FHKColor.pastelPink.opacity(0.4))
+                    .foregroundColor(FHKColor.warning)
               
-                Text(isRewardValid
-                     ? viewModel.viewState.msnChangeRewardEnable
-                     : viewModel.viewState.msnChangeRewardDisabled)
+                Text(viewModel.viewState.msnChangeRewardEnable)
                 .multilineTextAlignment(.leading)
                 .font(.PangramSans.bold(FHKSize.size16))
-                .foregroundColor(isRewardValid
-                                 ? FHKColor.success
-                                 : FHKColor.warning)
+                .foregroundColor(FHKColor.success)
             }
             .padding(.top, FHKSpace.space08)
             
             Spacer()
             
             LottieView(animationName: Lotties.party,
-                       loopMode: isRewardValid ? .loop : .playOnce)
+                       loopMode: .loop)
             .frame(width: 100, height: 100)
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            guard isRewardValid else { return }
             let collectValue = type == .time
             ? item.timeRequiered
             : "\(item.coinsRequiered) KidsCoins"
@@ -455,7 +461,7 @@ public struct FHKRewardCollectScreen: View {
     private func msnInformative(msn: String) -> some View {
         Text(msn)
             .font(.PangramSans.bold(FHKSize.size16))
-            .foregroundColor(FHKColor.lunarSand.opacity(0.9))
+            .foregroundColor(FHKColor.indigo.opacity(0.9))
             .padding(.top, FHKSize.size16)
     }
 }

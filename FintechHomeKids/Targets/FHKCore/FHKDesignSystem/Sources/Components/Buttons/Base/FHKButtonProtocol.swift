@@ -69,7 +69,7 @@ public struct FHKButtonAppearance {
         switch state {
      
         case .disabled:
-            return FHKColor.indigo.opacity(0.4)
+            return FHKColor.lunarSand.opacity(0.4)
             
         case .skeleton:
             return .clear
@@ -101,14 +101,16 @@ public struct FHKButtonAppearance {
         switch (state, type) {
         case (.enabled, .primary):
             return LinearGradient(
-                gradient: Gradient(colors: [FHKColor.ultraPurple, FHKColor.fuchsiaPink]),
+                gradient: Gradient(colors: [
+                    FHKColor.indigo,
+                    FHKColor.ultraPurple]),
                 startPoint: .top,
                 endPoint: .bottom
             )
             
         case (.enabled, .secondary):
             return LinearGradient(
-                gradient: Gradient(colors: [FHKColor.ultraPurple, FHKColor.wine]),
+                gradient: Gradient(colors: [FHKColor.indigo, FHKColor.wine]),
                 startPoint: .top,
                 endPoint: .bottom
             )

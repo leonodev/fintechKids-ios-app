@@ -30,6 +30,10 @@ public struct FHKRewardListViewState {
         "title_rewards".localized.uppercased()
     }
     
+    public var descriptionRewardWin: String {
+        "description_reward_win".localized.uppercased()
+    }
+    
     public var msnRewardsEmpty: String {
         "msn_rewards_empty".localized.capitalizingFirstLetter()
     }

@@ -42,7 +42,7 @@ public struct CardView<Content: View, T>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             LinearGradient(
-                colors: [FHKColor.indigo.opacity(0.5), FHKColor.purpleBackground.opacity(0.7)],
+                colors: [FHKColor.gray.opacity(0.1), FHKColor.gray.opacity(0.2)],
                 startPoint: .top,
                 endPoint: .bottom
             )

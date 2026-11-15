@@ -19,16 +19,21 @@ public struct FHKRewardCreateScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.rewardsCreateTitle) {
-            switch viewModel.viewState.createState {
-               
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.rewardsCreateTitle)
+            },
+            content: {
+                switch viewModel.viewState.createState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onChange(of: viewModel.viewState.createState) { _, state in
             switch state {
@@ -63,7 +68,7 @@ public struct FHKRewardCreateScreen: View {
         VStack {
             Text(viewModel.viewState.msnCreateRewardInstruction)
                 .font(.PangramSans.bold(FHKSize.size16))
-                .foregroundColor(FHKColor.lunarSand.opacity(0.5))
+                .foregroundColor(FHKColor.indigo.opacity(0.5))
                 .padding(.bottom, FHKSpace.space32)
             
             FHKTextField(text: $viewModel.viewState.name,
@@ -78,8 +83,9 @@ public struct FHKRewardCreateScreen: View {
                 title: "",
                 options: viewModel.viewState.workDurationType,
                 selection: $viewModel.viewState.selectedDurationType,
-                onSelectionChanged: { value in
-                    print("Se seleccionó: \(value)")
+                onSelectionChanged: { option in
+                    viewModel.viewState.quantityTimeSelected = option.value
+                    print("Selected: \(option)")
                 }
             )
             .padding(.top, -FHKSpace.space24)
@@ -104,8 +110,9 @@ public struct FHKRewardCreateScreen: View {
                     await viewModel.action(.createReward(reward: infoReward))
                 }
             })
+            .padding()
         }
-        .padding()
+        .padding(.horizontal)
     }
     
     var resultModalSuccess: some View {
@@ -140,9 +147,10 @@ extension FHKRewardCreateScreen {
             return nil
         }
         
+        let timeFullSelected = "\(viewModel.viewState.timeRequired) \(viewModel.viewState.quantityTimeSelected)"
         return FHKRewardEntity(createdAt: Date().toUTC,
                                name: viewModel.viewState.name,
-                               timeRequiered: viewModel.viewState.timeRequired,
+                               timeRequiered: timeFullSelected,
                                coinsRequiered: viewModel.viewState.coinsRequired.toIntOrZero,
                                emailParent: emailParent)
     }

@@ -23,16 +23,16 @@ public struct DescriptionCardView: View {
             Text(title)
                 .font(.PangramSans.bold(FHKSize.size16))
                 .foregroundColor(isEnable
-                                 ? FHKColor.pastelPink.opacity(0.8)
-                                 : FHKColor.gray.opacity(0.5)
+                                 ? FHKColor.indigo.opacity(0.8)
+                                 : FHKColor.gray
                 )
             
             if !description.isEmpty {
                 Text(description)
                     .font(.PangramSans.bold(FHKSize.size12))
                     .foregroundColor(isEnable
-                                     ? FHKColor.basicWhite.opacity(0.8)
-                                     : FHKColor.gray.opacity(0.5)
+                                     ? FHKColor.indigo.opacity(0.8)
+                                     : FHKColor.gray
                     )
             }
         }
@@ -51,5 +51,5 @@ public struct DescriptionCardView: View {
         }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }

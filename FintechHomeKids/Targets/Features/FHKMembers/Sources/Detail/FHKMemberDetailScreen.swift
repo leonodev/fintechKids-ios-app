@@ -29,16 +29,22 @@ public struct FHKMemberDetailScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer {
-            switch viewModel.viewState.memberState {
-                
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                // section content avatar
+                headerContentView
+            },
+            content: {
+                switch viewModel.viewState.memberState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onAppear {
             Task {
@@ -54,17 +60,12 @@ public struct FHKMemberDetailScreen: View {
     var loadedView: some View {
         VStack(spacing: 0) {
             VStack {
-                HeaderBannerView {
-                    
-                    // section content avatar
-                    headerContentView
-                    
-                    // section card balance
-                    balanceView
-                    
-                    // section button task
-                    buttonTaskView
-                }
+                // section card balance
+                balanceView
+                
+                // section button task
+                buttonTaskView
+                
                 
                 ScrollView {
                     VStack {
@@ -74,7 +75,7 @@ public struct FHKMemberDetailScreen: View {
                         rewardsView
                     }
                 }
-                .padding(.top, -120)
+                .padding(.top, 20)
                 .frame(maxWidth: .infinity)
             }
             .refreshable {
@@ -131,16 +132,16 @@ public struct FHKMemberDetailScreen: View {
     
     private var balanceView: some View {
         CardView { _ in } content: {
-            HStack {
+            HStack(spacing: FHKSpace.space16) {
                 
+               
                 FHKCoinBadge(
                     amount: "\(viewModel.viewState.balance?.coinsObtained ?? 0)")
                 
-                Spacer()
                 
                 FHKTimeBadge(
                     amount: "\(viewModel.viewState.balance?.timeObtained ?? "0")")
-                
+               
             }
         }
     }
@@ -148,9 +149,9 @@ public struct FHKMemberDetailScreen: View {
     private var buttonTaskView: some View {
         FHKButtonPrimary(
             title: viewModel.viewState.titleViewTask.uppercased(),
-            textColor: FHKColor.basicBlack,
+            textColor: FHKColor.indigo,
             state: .enabled,
-            mode: .glass(.clearWithInteractive),
+            mode: .glass(.clear),
             action: {
                 router.navigate(to: .tasks(
                     member: viewModel.viewState.member?.asPayload,
@@ -164,7 +165,7 @@ public struct FHKMemberDetailScreen: View {
     private var goalsView: some View {
         VStack {
             HStack {
-                Text(viewModel.viewState.titleMyGoals.uppercased())
+                Text("\(viewModel.viewState.titleMyGoals.uppercased()) (\(myGoals.count))")
                     .font(.PangramSans.light(FHKSize.size20))
                     .foregroundStyle(FHKColor.basicBlack)
                     .padding(.leading, FHKSpace.space12)
@@ -196,7 +197,7 @@ public struct FHKMemberDetailScreen: View {
     private var rewardsView: some View {
         VStack {
             HStack {
-                Text(viewModel.viewState.titleMyRewards.uppercased())
+                Text("\(viewModel.viewState.titleMyRewards.uppercased()) (\(myRewardPending.count))")
                     .font(.PangramSans.light(FHKSize.size20))
                     .foregroundStyle(FHKColor.basicBlack)
                     .padding(.top, FHKSpace.space24)

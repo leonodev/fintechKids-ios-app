@@ -19,16 +19,21 @@ public struct FHKTaskCreateScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.titleCreateNewTask) {
-            switch viewModel.viewState.taskCreateState {
-                
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.titleCreateNewTask)
+            },
+            content: {
+                switch viewModel.viewState.taskCreateState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onChange(of: viewModel.viewState.taskCreateState) { _, state in
             switch state {
@@ -70,11 +75,10 @@ public struct FHKTaskCreateScreen: View {
                 
                 FHKTextField(text: $viewModel.viewState.taskName,
                              placeholder: viewModel.viewState.taskNamePlaceholder)
-                .padding(.top, FHKSize.size04)
                 
                 Text(viewModel.viewState.titleDescriptionTask)
                     .font(.PangramSans.bold(FHKSize.size16))
-                    .foregroundColor(FHKColor.lunarSand.opacity(0.9))
+                    .foregroundColor(FHKColor.indigo.opacity(0.9))
                     .padding(.top, FHKSize.size16)
                     .padding(.horizontal, FHKSpace.space08)
                 
@@ -93,12 +97,12 @@ public struct FHKTaskCreateScreen: View {
                 
                 Text(viewModel.viewState.titleRewardsType)
                     .font(.PangramSans.bold(FHKSize.size16))
-                    .foregroundColor(FHKColor.basicWhite)
+                    .foregroundColor(FHKColor.indigo)
                     .padding()
                 
                 Text(viewModel.viewState.titleInTime)
                     .font(.PangramSans.bold(FHKSize.size16))
-                    .foregroundColor(FHKColor.basicWhite)
+                    .foregroundColor(FHKColor.indigo)
                     .padding(.horizontal)
                 
                 FHKTextField(text: $viewModel.viewState.rewardsTime,
@@ -108,7 +112,7 @@ public struct FHKTaskCreateScreen: View {
                 
                 Text(viewModel.viewState.titleInCoins)
                     .font(.PangramSans.bold(FHKSize.size16))
-                    .foregroundColor(FHKColor.basicWhite)
+                    .foregroundColor(FHKColor.indigo)
                     .padding(.horizontal)
                     .padding(.top)
                 
@@ -122,7 +126,7 @@ public struct FHKTaskCreateScreen: View {
                                  mode: .solid,
                                  action: {
                     Task {
-                         await viewModel.action(.createTask)
+                        await viewModel.action(.createTask)
                     }
                 })
                 .padding(.horizontal)

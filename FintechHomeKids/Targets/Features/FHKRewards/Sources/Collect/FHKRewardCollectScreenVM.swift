@@ -301,12 +301,12 @@ private extension FHKRewardCollectScreenVM {
 
 extension Array where Element == FHKGoalEntity {
     func filteredGoalsWithCoins(lessThan min: Int) -> [FHKGoalEntity] {
-        self.filter { $0.measureType == FHKWorkType.coins.value && $0.value >= min }
+        self.filter { $0.measureType == FHKWorkType.coins.value /*&& $0.value >= min*/ }
     }
 }
 
 extension Array where Element == FHKGoalEntity {
     func filteredGoalsWithTime(lessThan limit: Int) -> [FHKGoalEntity] {
-        self.filter { $0.measureType.isTimeUnit && limit >=  $0.value }
+        self.filter { $0.measureType.isTimeUnit /*&& limit >=  $0.value*/ }
     }
 }

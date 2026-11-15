@@ -40,7 +40,7 @@ public struct FHKRadioGroupField<T: Equatable>: View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.PangramSans.bold(FHKSize.size16))
-                .foregroundColor(FHKColor.basicWhite)
+                .foregroundColor(FHKColor.indigo)
             
             VStack(spacing: 0) {
                 ForEach(options) { option in
@@ -93,7 +93,7 @@ public struct FHKRadioGroupField<T: Equatable>: View {
                     }
                 
                     Text(option.label)
-                        .foregroundColor(.white)
+                        .foregroundColor(FHKColor.indigo)
                     
                     Spacer()
                 }
@@ -127,5 +127,5 @@ public struct FHKRadioGroupField<T: Equatable>: View {
         .padding()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }

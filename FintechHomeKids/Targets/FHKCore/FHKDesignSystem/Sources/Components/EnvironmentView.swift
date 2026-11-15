@@ -58,8 +58,6 @@ public struct EnvironmentView: View {
                     .shadow(color: .black.opacity(0.1), radius: 5, x: 2, y: 2)
                 )
                 .padding(.leading, 0)
-            
-            Spacer()
         #else
             EmptyView()
         #endif

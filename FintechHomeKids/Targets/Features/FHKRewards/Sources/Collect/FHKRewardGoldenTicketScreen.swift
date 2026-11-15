@@ -19,18 +19,22 @@ public struct FHKRewardGoldenTicketScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer {
-            VStack {
-                Text("msn_congratulations_reward_golden_ticket".localized().capitalizingFirstLetter())
-                    .font(.PangramSans.bold(FHKSize.size16))
-                    .foregroundColor(FHKColor.lunarSand)
-                    .padding()
-                
-                GoldenTicketView(recipientName: ticketEntity.recipientName,
-                                 taskDescription: ticketEntity.taskDescription,
-                                 reward: ticketEntity.reward,
-                                 ticketCode: "\(ticketEntity.ticketCode)")
+        FHKScreenContainer(
+            headerContent: {},
+            content: {
+                VStack {
+                    Text("msn_congratulations_reward_golden_ticket".localized().capitalizingFirstLetter())
+                        .font(.PangramSans.bold(FHKSize.size16))
+                        .foregroundColor(FHKColor.lunarSand)
+                        .padding()
+                    
+                    GoldenTicketView(recipientName: ticketEntity.recipientName,
+                                     taskDescription: ticketEntity.taskDescription,
+                                     reward: ticketEntity.reward,
+                                     ticketCode: "\(ticketEntity.ticketCode)")
+                }
             }
-        }
+        )
+        .observeLanguage()
     }
 }

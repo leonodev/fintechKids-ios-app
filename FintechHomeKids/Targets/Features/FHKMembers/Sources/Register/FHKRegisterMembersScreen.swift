@@ -25,16 +25,21 @@ public struct FHKRegisterMembersScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.membersTitle) {
-            switch viewModel.viewState.registerMembersState {
-                
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.membersTitle)
+            },
+            content: {
+                switch viewModel.viewState.registerMembersState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .onChange(of: viewModel.viewState.registerMembersState) { _, state in
             switch state {
             case .finish(let result):

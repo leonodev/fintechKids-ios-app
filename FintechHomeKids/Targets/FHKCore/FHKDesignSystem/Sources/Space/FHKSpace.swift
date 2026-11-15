@@ -40,5 +40,13 @@ public struct FHKSpace {
     public static let space120: CGFloat = 120
     public static let space124: CGFloat = 124
     public static let space128: CGFloat = 128
+    public static let space132: CGFloat = 132
+    public static let space136: CGFloat = 136
+    public static let space140: CGFloat = 140
+    public static let space144: CGFloat = 144
+    public static let space148: CGFloat = 148
+    public static let space152: CGFloat = 152
+    public static let space156: CGFloat = 156
+    public static let space160: CGFloat = 160
     public static let space256: CGFloat = 256
 }

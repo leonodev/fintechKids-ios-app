@@ -36,7 +36,7 @@ public struct FHKMemberDetailState {
     
     let cardGradients: [LinearGradient] = [
             .cardBlue,
-            .cardYellow
+            .cardCyan
         ]
     
     public enum State: Equatable {

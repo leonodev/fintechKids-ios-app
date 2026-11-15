@@ -20,19 +20,24 @@ public struct FHKGoalListScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.goalListTitle) {
-            switch viewModel.viewState.goalListState {
-               
-            case .empty:
-                emptyView
-                
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.goalListTitle)
+            },
+            content: {
+                switch viewModel.viewState.goalListState {
+                    
+                case .empty:
+                    emptyView
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onAppear {
             Task {
@@ -100,7 +105,7 @@ public struct FHKGoalListScreen: View {
                                         
                                         Text("\(goal.measureType.capitalized)")
                                             .font(.PangramSans.bold(FHKSize.size24))
-                                            .foregroundColor(FHKColor.lunarSand.opacity(0.7))
+                                            .foregroundColor(FHKColor.indigo.opacity(0.7))
                                         
                                         Text(viewModel.viewState.getMassageGoalCard(measureType: goal.measureType))
                                             .font(.PangramSans.bold(FHKSize.size16))
@@ -114,7 +119,7 @@ public struct FHKGoalListScreen: View {
                         .padding()
                     }
                 }
-                .padding(.top)
+                //.padding(.top)
             }
             .refreshable {
                 await viewModel.action(.fetchGoals(force: true))

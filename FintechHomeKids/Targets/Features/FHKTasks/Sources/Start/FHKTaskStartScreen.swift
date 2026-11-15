@@ -24,15 +24,23 @@ public struct FHKTaskStartScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.titleStart) {
-            switch viewModel.viewState.startTaskState {
-            case .loaded, .confirmation, .validation:
-                loadedView
-                
-            case .loading:
-                loadingView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.titleStart)
+                    .font(.PangramSans.bold(FHKSize.size16))
+                    .foregroundStyle(FHKColor.indigo)
+                    .padding(.top)
+            },
+            content: {
+                switch viewModel.viewState.startTaskState {
+                case .loaded, .confirmation, .validation:
+                    loadedView
+                    
+                case .loading:
+                    loadingView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onChange(of: viewModel.viewState.startTaskState) { _, state in
             switch state {
@@ -60,17 +68,22 @@ public struct FHKTaskStartScreen: View {
     }
     
     var loadedView: some View {
-        VStack(alignment: .leading) {
-            descriptionView
-            Spacer()
+        VStack {
             
-            buttonTimerView
-            Spacer()
+            VStack(alignment: .leading) {
+                descriptionView
+                Spacer()
+                
+                buttonTimerView
+                Spacer()
+                
+                buttonsControlView
+                .padding()
+            }
+            .padding(.horizontal, 24)
             
-            buttonsControlView
-            .padding()
         }
-        .padding(.horizontal, 24)
+        
     }
     
     var loadingView: some View {
@@ -81,16 +94,16 @@ public struct FHKTaskStartScreen: View {
         VStack(alignment: .leading) {
             Text("\(viewModel.viewState.titleDescription):")
                 .font(.PangramSans.bold(FHKSize.size24))
-                .foregroundColor(FHKColor.warning)
+                .foregroundColor(FHKColor.indigo)
             
             Text("\(task.name)")
                 .multilineTextAlignment(.leading)
-                .font(.PangramSans.bold(FHKSize.size24))
-                .foregroundColor(FHKColor.stone.opacity(0.7))
+                .font(.PangramSans.bold(FHKSize.size20))
+                .foregroundColor(FHKColor.indigo.opacity(0.7))
             
             Text("\(viewModel.viewState.titleStart):")
                 .font(.PangramSans.bold(FHKSize.size24))
-                .foregroundColor(FHKColor.warning)
+                .foregroundColor(FHKColor.indigo)
                 .padding(.top)
             
             HStack(spacing: FHKSize.size08) {
@@ -98,7 +111,7 @@ public struct FHKTaskStartScreen: View {
                                   type: .time)
                 Text("/")
                     .font(.PangramSans.bold(FHKSize.size24))
-                    .foregroundColor(FHKColor.gray)
+                    .foregroundColor(FHKColor.indigo)
                 
                 FHKRewardTypeView(value: "\(task.coinsGranted)",
                                   type: .coins)
@@ -125,6 +138,7 @@ public struct FHKTaskStartScreen: View {
     var buttonsControlView: some View {
         HStack {
             FHKButtonPrimary(title: viewModel.viewState.titleCancel,
+                             textColor: FHKColor.indigo,
                              state: .enabled,
                              mode: .glass(.clearWithInteractive),
                              action: {
@@ -145,7 +159,7 @@ public struct FHKTaskStartScreen: View {
             
             Text(viewModel.viewState.titleHowReceiveReward)
                 .font(.PangramSans.bold(FHKSize.size20))
-                .foregroundColor(FHKColor.lunarSand)
+                .foregroundColor(FHKColor.indigo)
                 .padding(.top)
             
             HStack(spacing: FHKSize.size08) {
@@ -153,7 +167,7 @@ public struct FHKTaskStartScreen: View {
                                   type: .time)
                 Text("/")
                     .font(.PangramSans.bold(FHKSize.size24))
-                    .foregroundColor(FHKColor.gray)
+                    .foregroundColor(FHKColor.indigo)
                 
                 FHKRewardTypeView(value: "\(task.coinsGranted)",
                                   type: .coins)

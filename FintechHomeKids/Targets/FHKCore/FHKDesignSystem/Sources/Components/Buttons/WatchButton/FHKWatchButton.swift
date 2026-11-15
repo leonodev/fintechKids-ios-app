@@ -34,8 +34,8 @@ public struct FHKWatchButton: View {
     public var body: some View {
         VStack(spacing: FHKSpace.space20) {
             Text(formatTime(elapsedTime))
-                .font(.PangramSans.bold(FHKSize.size48))
-                .foregroundColor(FHKColor.pastelPink)
+                .font(.PangramSans.bold(FHKSize.size52))
+                .foregroundColor(FHKColor.indigo)
                 .padding()
 
             Button(action: {
@@ -67,7 +67,7 @@ public struct FHKWatchButton: View {
                     onStop?(0)
                 }
                 .font(.PangramSans.bold(FHKSize.size28))
-                .foregroundColor(FHKColor.basicWhite)
+                .foregroundColor(FHKColor.indigo)
                 .padding(.top, FHKSpace.space08)
             }
         }
@@ -109,5 +109,5 @@ public struct FHKWatchButton: View {
                        resetTitle: "reset")
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }

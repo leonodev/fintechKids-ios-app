@@ -12,9 +12,7 @@ import FHKDesignSystem
 public struct FHKLanguageScreen: View {
     @State private var viewModel: FHKLanguageScreenVM
     @Router private var router: NavigationRouter<RoutesDestination>
-    
-    @Namespace var nameSpaceMenu
-    @State private var isExpanded = false
+    @State private var isLanguageSelected = false
     
     private let flagAnimation = Animation.spring(response: 0.4, dampingFraction: 0.8, blendDuration: 0.15)
 
@@ -23,17 +21,21 @@ public struct FHKLanguageScreen: View {
     }
     
     public var body: some View {
-        
-        FHKScreenContainer(title: viewModel.viewState.language) {
-            switch viewModel.viewState.languageState {
-            
-            case .loaded:
-                loadedView
-                
-            case .loading:
-                loadingView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.language)
+            },
+            content: {
+                switch viewModel.viewState.languageState {
+                    
+                case .loaded:
+                    loadedView
+                    
+                case .loading:
+                    loadingView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onAppear {
             Task {
@@ -52,56 +54,81 @@ public struct FHKLanguageScreen: View {
 extension FHKLanguageScreen {
     
     private var loadedView: some View {
-        ZStack {
+        VStack {
+            // view title
+            HStack(alignment: .top) {
+                EnvironmentView()
+                    .padding(.top, FHKSize.size08)
+                
+                Spacer()
+                
+                HStack {
+                    Text(viewModel.viewState.selectLanguageNow)
+                        .foregroundStyle(FHKColor.indigo)
+                        .multilineTextAlignment(.center)
+                        .font(.PangramSans.bold(FHKSize.size24))
+                        .padding(.top, FHKSize.size44)
+                        .accessibilityIdentifier("select_language_title_id")
+                }
+                
+                Spacer()
+            }
+            
+            // view flags
+            HStack(spacing: FHKSpace.space16) {
+                ForEach(Array(menuOptions.enumerated()), id: \.offset) { _, img in
+                    languageItemView(for: img)
+                }
+            }
+            
+            // view banner
             LottieView(animationName: Lotties.language,
                        loopMode: .loop,
                        contentMode: .scaleAspectFit)
             .accessibilityHidden(true)
             .frame(maxWidth: 300, maxHeight: 300)
             
-            VStack {
-                HStack(alignment: .top) {
-                    EnvironmentView()
-                        .padding(.top, FHKSize.size08)
-                    
-                    Spacer()
-                    
-                    HStack {
-                        Text(viewModel.viewState.selectLanguageNow)
-                            .foregroundStyle(FHKColor.indigo)
-                            .multilineTextAlignment(.center)
-                            .font(.PangramSans.bold(FHKSize.size24))
-                            .padding(.top, FHKSize.size44)
-                            .accessibilityIdentifier("select_language_title_id")
-                    }
-                    
-                    Spacer()
-                    
-                    VStack {
-                        menuLanguageView
-                        Spacer()
-                    }
-                    .frame(width: FHKSize.size60)
-                }
-                .padding(.trailing, FHKSize.size08)
+            Spacer()
+            
+            // View Bottons
+            FHKButtonPrimary(title: viewModel.viewState.continueButtom,
+                             state: isLanguageSelected ? .enabled : .disabled,
+                             mode: .solid,
+                             identifier: "btn_language_continue_id",
+                             action: {
+                // set language selected
+                setNewLanguage()
                 
-                FHKButtonPrimary(title: viewModel.viewState.continueButtom,
-                                 state: .enabled,
-                                 mode: .solid,
-                                 identifier: "btn_language_continue_id",
-                                 action: {
-                    router.navigate(to: .login)
-                })
+                // send analytic by language
+                sendAnalytics()
+                
+                // navigate to login screen
+                router.navigate(to: .login)
+            })
+            .padding()
+            
+            // View Version
+            Text(viewModel.viewState.version.capitalizingFirstLetter())
+                .accessibilityLabel(viewModel.viewState.version)
+                .foregroundStyle(FHKColor.indigo)
+                .font(.PangramSans.bold(FHKSize.size20))
                 .padding()
-                
-                Text(viewModel.viewState.version.capitalizingFirstLetter())
-                    .accessibilityLabel(viewModel.viewState.version)
-                    .foregroundStyle(FHKColor.indigo)
-                    .font(.PangramSans.bold(FHKSize.size20))
-                
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func setNewLanguage() {
+        Task {
+            let selectedCode = viewModel.viewState.selectedFlag.imageToCode
+            await viewModel.action(.changeLanguageApp(selectedCode))
+        }
+    }
+    
+    private func sendAnalytics() {
+        Task {
+            let selectedCode = viewModel.viewState.selectedFlag.imageToCode
+            let btnAnatilycs = viewModel.getBtnLanguage(code: selectedCode)
+            await viewModel.action(.sendAnalitycSelectLanguage(btn: btnAnatilycs))
         }
     }
     
@@ -111,67 +138,51 @@ extension FHKLanguageScreen {
             // Get the language code from the flag name (ES, IT, EN, FR)"
             let code = flag.imageToCode
             
-            // Only include the flag if its code is in the Remote Config list and it is not the selected flag"
-            return viewModel.languages.contains(code) && flag != viewModel.viewState.selectedFlag
+            return viewModel.languages.contains(code)
         }
     }
+}
+
+// MARK: config view language
+extension FHKLanguageScreen {
     
-    var menuLanguageView: some View {
-        HStack {
-            Spacer()
-    
-            VStack(alignment: .trailing) {
-                menuClosedView
-                if isExpanded {
-                    menuOpenedView
-                }
-            }
-            .padding(.all, FHKSize.size12)
-            .padding(.trailing, FHKSize.size12)
-        }
-    }
-    
-    var menuClosedView: some View {
-        viewModel.viewState.selectedFlag
+    @ViewBuilder
+    private func languageItemView(for img: Image) -> some View {
+        let languageCode = img.imageToCode
+        let selectedCode = viewModel.viewState.selectedFlag.imageToCode
+        let isSelected = (languageCode == selectedCode)
+        
+        img
             .resizable()
-            .accessibilityIdentifier("menu_selected_language_id")
-            .accessibilityLabel("Idioma actual: \(viewModel.viewState.selectedFlag.imageToCode)")
-            .accessibilityHint("Toca para cambiar el idioma")
-            .accessibilityAddTraits(.isButton) // Indica que es interactivo
+            .accessibilityIdentifier("option_language_id")
+            .accessibilityLabel("Cambiar a \(languageCode)")
+            .accessibilityHint("Toca para seleccionar este idioma")
+            .accessibilityAddTraits(.isButton)
             .frame(width: FHKSize.size52, height: FHKSize.size52)
+            .background(
+                RoundedRectangle(cornerRadius: FHKSize.size12)
+                    .fill(isSelected ? FHKColor.indigo.opacity(0.1) : Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: FHKSize.size28)
+                    .stroke(isSelected ? FHKColor.wine.opacity(0.7) : Color.clear, lineWidth: 4)
+            )
+            .scaleEffect(isSelected ? 1.05 : 1.0)
+            .contentShape(Rectangle())
             .onTapGesture {
                 withAnimation(flagAnimation) {
-                    isExpanded = true
+                    viewModel.viewState.selectedFlag = img
+                    isLanguageSelected = true
+                    
+                    Task {
+                        let btnAnatilycs = viewModel.getBtnLanguage(code: languageCode)
+
+                        await viewModel.action(.changeImageFlag(languageCode))
+//                        await viewModel.action(.changeLanguageApp(languageCode))
+//                        await viewModel.action(.sendAnalitycSelectLanguage(btn: btnAnatilycs))
+                    }
                 }
             }
-    }
-    
-    var menuOpenedView: some View {
-        Group {
-            ForEach(Array(menuOptions.enumerated()), id: \.offset) { _, img in
-                img
-                    .resizable()
-                    .accessibilityLabel("Cambiar a \(img.imageToCode)")
-                    .accessibilityAddTraits(.isButton)
-                    .frame(width: FHKSize.size48, height: FHKSize.size48)
-                    .onTapGesture {
-                        withAnimation(flagAnimation) {
-                            viewModel.viewState.selectedFlag = img
-                            
-                            Task {
-                                let codeLanguage = img.imageToCode
-                                let btnAnatilycs = viewModel.getBtnLanguage(code: codeLanguage)
-
-                                await viewModel.action(.changeImageFlag(codeLanguage))
-                                await viewModel.action(.changeLanguageApp(codeLanguage))
-                                await viewModel.action(.sendAnalitycSelectLanguage(btn: btnAnatilycs))
-                            }
-                            isExpanded = false
-                        }
-                    }
-                    .accessibilityIdentifier("option_language_id")
-            }
-        }
     }
 }
 

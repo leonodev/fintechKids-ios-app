@@ -15,8 +15,8 @@ public extension LinearGradient {
         endPoint: .bottomTrailing
     )
     
-    static let cardYellow = LinearGradient(
-        colors: [Color.orange.opacity(0.5), Color.yellow],
+    static let cardCyan = LinearGradient(
+        colors: [Color.cyan.opacity(0.7), Color.cyan.opacity(0.5)],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
@@ -220,7 +220,7 @@ public extension RewardCardView {
                 id: 2,
                 state: .loaded,
                 title: "Read a Book",
-                bgGradient: .cardBlue,
+                bgGradient: .cardCyan,
             )
             
             RewardCardView(

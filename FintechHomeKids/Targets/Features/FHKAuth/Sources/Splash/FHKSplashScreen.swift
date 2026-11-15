@@ -20,13 +20,13 @@ public struct FHKSplashScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer {
+        FHKScreenContainer(headerContent: {}, content: {
             switch viewModel.viewState.splashState {
-                 
+                
             default:
                 loadedView
             }
-        }
+        })
         .observeLanguage()
         .onChange(of: viewModel.viewState.splashState) { _, state in
             switch state {

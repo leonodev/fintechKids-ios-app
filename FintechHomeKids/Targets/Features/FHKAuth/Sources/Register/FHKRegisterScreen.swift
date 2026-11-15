@@ -21,16 +21,21 @@ public struct FHKRegisterScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: viewModel.viewState.register) {
-            switch viewModel.viewState.registerState {
-                
-            case .loading:
-                loadingView
-                
-            case .loaded, .finish:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.register)
+            },
+            content: {
+                switch viewModel.viewState.registerState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .loaded, .finish:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onChange(of: viewModel.viewState.registerState) { _, state in
             switch state {

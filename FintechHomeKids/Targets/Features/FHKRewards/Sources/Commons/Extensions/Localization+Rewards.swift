@@ -14,4 +14,11 @@ extension String {
     var localized: String {
         self.localized(.module)
     }
+    
+    @MainActor
+    func localizedWithArg(
+        arguments: CVarArg...,
+        bundle: Bundle = .module) -> String {
+            self.localizedWithParams(arguments: arguments, bundle: bundle)
+        }
 }

@@ -84,43 +84,47 @@ public struct FHKRewardCollectViewState {
     
     public func msnAssigCollectTaskToGoal(collectModel: FHKRewardReceivedEntity,
                                           goal: FHKGoalEntity) -> String {
-        //We obtain what the child has already accumulated in this goal
-        let currentMemberGoal = goalMemberList.first(where: { $0.goalId == goal.id })
-        let accumulated = currentMemberGoal?.accumulatedValue ?? 0
-        
-        // We calculate how much it REALLY needs to reach the top
-        let spaceAvailable = goal.value - accumulated
-        
-        // We obtain the total value of the earned task
+//        //We obtain what the child has already accumulated in this goal
+//        let currentMemberGoal = goalMemberList.first(where: { $0.goalId == goal.id })
+//        let accumulated = currentMemberGoal?.accumulatedValue ?? 0
+//        
+//        // We calculate how much it REALLY needs to reach the top
+//        let spaceAvailable = goal.value - accumulated
+//        
+//        // We obtain the total value of the earned task
+//        let valueTask = getValueTask(type: collectModel.rewardType, task: collectModel.task)
+//        let type = getDescriptionType(type: collectModel.rewardType)
+//        
+//        var valueCalculated: String = ""
+//
+//        // SCENARIO A: The entire task fits in the goal (or there is extra space in the goal)
+//        if valueTask <= spaceAvailable {
+//            let msnAllYour = "msn_your".localized // "tus"
+//            let msnPartOneReachGoal = "msn_part_one_reach_goal".localized // "ganadas para alcanzar esta meta"
+//            
+//            valueCalculated = "\(msnAllYour) \(valueTask) \(type) \(msnPartOneReachGoal)"
+//        }
+//        // SCENARIO B: The task is worth MORE than what is needed to reach the goal (There is a surplus)
+//        else {
+//            // What we will take from the task to complete the goal
+//            let valueToUse = spaceAvailable
+//            // The excess goes to the balance (savings/coins)
+//            let surplus = valueTask - spaceAvailable
+// 
+//            let msnOfYour = "msn_of_your".localized // "de tus"
+//            let msnCloseReachingGoal = "msn_close_reaching_goal".localized // "para alcanzar esta meta"
+//            let msnRemaining = "msn_remaining_time".localized
+//            let msnRemainingTime = "\(msnRemaining)\(surplus) \(type)".capitalizingFirstLetter() // "tus X restantes serán depositadas..."
+//        
+//            valueCalculated = "\(valueTask) \(type)"
+//        }
+//
         let valueTask = getValueTask(type: collectModel.rewardType, task: collectModel.task)
         let type = getDescriptionType(type: collectModel.rewardType)
         
-        var valueCalculated: String = ""
-
-        // SCENARIO A: The entire task fits in the goal (or there is extra space in the goal)
-        if valueTask <= spaceAvailable {
-            let msnAllYour = "msn_your".localized // "tus"
-            let msnPartOneReachGoal = "msn_part_one_reach_goal".localized // "ganadas para alcanzar esta meta"
-            
-            valueCalculated = "\(msnAllYour) \(valueTask) \(type) \(msnPartOneReachGoal)"
-        }
-        // SCENARIO B: The task is worth MORE than what is needed to reach the goal (There is a surplus)
-        else {
-            // What we will take from the task to complete the goal
-            let valueToUse = spaceAvailable
-            // The excess goes to the balance (savings/coins)
-            let surplus = valueTask - spaceAvailable
- 
-            let msnOfYour = "msn_of_your".localized // "de tus"
-            let msnCloseReachingGoal = "msn_close_reaching_goal".localized // "para alcanzar esta meta"
-            let msnRemaining = "msn_remaining_time".localized
-            let msnRemainingTime = "\(msnRemaining)\(surplus) \(type)".capitalizingFirstLetter() // "tus X restantes serán depositadas..."
-        
-            valueCalculated = "\(valueToUse) \(msnOfYour) \(valueTask) \(type) \(msnCloseReachingGoal)? \n \(msnRemainingTime)"
-        }
-        
-        let msnAssignCollectTaskGoal = "msn_assign_collect_task_goal".localized
-        return "\(msnAssignCollectTaskGoal) \(valueCalculated)".capitalizingFirstLetter()
+        let typeWithValueCalculated = "\(valueTask) \(type)"
+        let msnAssignCollectTaskGoal = "msn_assign_collect_task_goal".localizedWithArg(arguments: typeWithValueCalculated)
+        return msnAssignCollectTaskGoal
     }
     
     public func getValueTask(type: FHKWorkType, task: FHKTaskEntity) -> Int {

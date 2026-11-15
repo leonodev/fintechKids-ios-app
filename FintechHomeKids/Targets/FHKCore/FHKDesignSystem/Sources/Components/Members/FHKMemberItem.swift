@@ -53,7 +53,7 @@ public struct FHKMemberItem: View {
 private extension FHKMemberItem {
     
     var loadedView: some View {
-        VStack(spacing: FHKSpace.space12) {
+        VStack(spacing: FHKSpace.space04) {
             AvatarView(image: state == .loaded
                        ? avatarName.getAvatar
                        : AvatarType.boy_disabled.image,
@@ -70,7 +70,7 @@ private extension FHKMemberItem {
                 
 
             Text(nameMember.capitalized)
-                .font(.PangramSans.medium(FHKSize.size16))
+                .font(.PangramSans.bold(FHKSize.size16))
                 .foregroundColor(state == .loaded
                                  ? FHKColor.indigo
                                  : FHKColor.gray.opacity(0.4))
@@ -136,10 +136,10 @@ extension FHKMemberItem {
             FHKMemberItem(id: UUID(),
                           avatarName: AvatarType.boy_1.name,
                           nameMember: "Juan",
-                          state: .disabled,
+                          state: .loaded,
                           action: { _ in })
         }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }

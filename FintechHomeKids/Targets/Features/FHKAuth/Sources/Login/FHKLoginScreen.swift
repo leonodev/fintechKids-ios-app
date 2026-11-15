@@ -19,16 +19,21 @@ public struct FHKLoginScreen: View {
     
     public var body: some View {
         
-        FHKScreenContainer(title: viewModel.viewState.login) {
-            switch viewModel.viewState.loginState {
-    
-            case .loading:
-                loadingView
-              
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.login)
+            },
+            content: {
+                switch viewModel.viewState.loginState {
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onChange(of: viewModel.viewState.loginState) { _, state in
             switch state {

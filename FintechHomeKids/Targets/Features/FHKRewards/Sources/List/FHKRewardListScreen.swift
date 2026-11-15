@@ -19,19 +19,24 @@ public struct FHKRewardListScreen: View {
     }
     
     public var body: some View {
-        FHKScreenContainer(title: viewModel.viewState.rewardsTitle) {
-            switch viewModel.viewState.rewardListState {
-               
-            case .empty:
-                emptyView
-                
-            case .loading:
-                loadingView
-                
-            case .finish, .loaded:
-                loadedView
+        FHKScreenContainer(
+            headerContent: {
+                Text(viewModel.viewState.rewardsTitle)
+            },
+            content: {
+                switch viewModel.viewState.rewardListState {
+                    
+                case .empty:
+                    emptyView
+                    
+                case .loading:
+                    loadingView
+                    
+                case .finish, .loaded:
+                    loadedView
+                }
             }
-        }
+        )
         .observeLanguage()
         .onAppear {
             Task {
@@ -89,9 +94,9 @@ public struct FHKRewardListScreen: View {
                             VStack(alignment: .leading) {
                                 DescriptionCardView(title: reward.name.uppercased(), description: "")
                                 
-                                Text("Para alcanzar esta meta, necesitas:")
+                                Text(viewModel.viewState.descriptionRewardWin)
                                     .font(.PangramSans.bold(FHKSize.size12))
-                                    .foregroundColor(FHKColor.lunarSand)
+                                    .foregroundColor(FHKColor.indigo)
                                     .padding(.top, FHKSpace.space04)
                                 
                                 HStack(spacing: 0) {
@@ -108,7 +113,7 @@ public struct FHKRewardListScreen: View {
                                         
                                         Text("\(reward.coinsRequiered) KidsCoins")
                                             .font(.PangramSans.bold(FHKSize.size24))
-                                            .foregroundColor(FHKColor.lunarSand.opacity(0.7))
+                                            .foregroundColor(FHKColor.indigo.opacity(0.7))
                                     }
                                     .padding(.top, 16)
                                 }
@@ -117,7 +122,6 @@ public struct FHKRewardListScreen: View {
                         .padding()
                     }
                 }
-                .padding(.top)
             }
             .refreshable {
                 await viewModel.action(.fetchRewards(force: true))

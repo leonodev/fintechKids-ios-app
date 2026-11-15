@@ -23,7 +23,7 @@ public struct HeaderBannerView<Content: View>: View {
     }
     
     public var body: some View {
-        VStack(spacing: FHKSize.size12) {
+        VStack(spacing: 0) {
             content
         }
         .padding(.horizontal, FHKSpace.space20)
@@ -46,13 +46,33 @@ public struct HeaderBannerView<Content: View>: View {
     }
 }
 
-// Para ver unicamente la pantalla
 #Preview("Design / Isolated UI") {
     FHKPreview {
-        HeaderBannerView {
+        VStack(alignment: .leading, spacing: 0) {
+            HeaderBannerView {
+                VStack(spacing: 4) {
+                    Text("Title main")
+                        .foregroundColor(FHKColor.indigo)
+                        .font(.headline)
+                    
+                    Text("Subtitle main")
+                        .foregroundColor(FHKColor.indigo.opacity(0.5))
+                        .font(.caption)
+                }
+            }
             
+            // Tu contenido debajo del banner
+            Text("Description Text")
+                .foregroundColor(FHKColor.lunarSand)
+                .font(.headline)
+                .padding(.horizontal, FHKSpace.space20)
+                .padding(.top, FHKSize.size12)
+            
+            Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(FHKColor.indigo)
+        .ignoresSafeArea(edges: .top)
         .withPreviewRouter()
     }
 }
-

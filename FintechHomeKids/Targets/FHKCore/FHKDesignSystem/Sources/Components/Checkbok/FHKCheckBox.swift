@@ -31,7 +31,7 @@ public struct FHKCheckBox: View {
                         .frame(width: checkBoxSize, height: checkBoxSize)
                         .overlay(
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .stroke(FHKColor.gray, lineWidth: isChecked ? 0 : 2)
+                                .stroke(FHKColor.indigo, lineWidth: isChecked ? 0 : 2)
                         )
  
                     if isChecked {
@@ -44,7 +44,7 @@ public struct FHKCheckBox: View {
                 
                 Text(label)
                     .font(.PangramSans.extraboldItalic(FHKSize.size16))
-                    .foregroundColor(FHKColor.lunarSand)
+                    .foregroundColor(FHKColor.indigo)
                 
                 Spacer()
             }
@@ -71,6 +71,6 @@ public struct FHKCheckBox: View {
     }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(FHKColor.indigo)
+        .background(FHKColor.lunarSand)
     
 }

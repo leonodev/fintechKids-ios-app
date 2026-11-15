@@ -23,7 +23,7 @@ public struct FHKEditorField: View {
                 .padding(FHKSize.size08)
                 .frame(height: FHKSize.size120)
                 .background(Color.purple.opacity(0.05))
-                .foregroundColor(FHKColor.lunarSand)
+                .foregroundColor(FHKColor.indigo)
                 .cornerRadius(FHKSize.size12)
                 .overlay(
                     RoundedRectangle(cornerRadius: FHKSize.size12)
@@ -37,7 +37,7 @@ public struct FHKEditorField: View {
             
             Text("\(text.count)/\(maxLength)")
                 .font(.caption)
-                .foregroundColor(text.count >= maxLength ? FHKColor.error : FHKColor.lunarSand)
+                .foregroundColor(text.count >= maxLength ? FHKColor.error : FHKColor.indigo)
         }
     }
 }
@@ -48,5 +48,5 @@ public struct FHKEditorField: View {
         FHKEditorField(text: $sampleText, maxLength: 120)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(FHKColor.indigo)
+    .background(FHKColor.lunarSand)
 }
