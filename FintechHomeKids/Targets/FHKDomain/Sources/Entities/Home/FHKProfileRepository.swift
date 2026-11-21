@@ -30,6 +30,9 @@ public struct FHKProfileRepository: Sendable {
     public var getFamilyName:
     @Sendable() async -> String? = { nil }
     
+    public var clearTokens:
+    @Sendable() throws -> Void = { }
+    
     public init() {}
 }
 
@@ -66,6 +69,10 @@ extension FHKProfileRepository {
         preview.setNewLanguage = { _ in }
         preview.getFamilyName = {
             return "Family Name"
+        }
+        
+        preview.clearTokens = {
+            
         }
         
         return preview

@@ -10,7 +10,7 @@ import FLibInjections
 
 // MARK: - Contract
 public struct FHKRegisterRepository: Sendable {
-    public var register: @Sendable (_ registerEntity: FHKRegisterEntity) async throws -> FHKUserSession = { _ in
+    public var register: @Sendable (_ registerEntity: FHKRegisterEntity) async throws -> FHKRegisterResponse = { _ in
         throw NSError(domain: "FHKRegisterRepository.register no implementado", code: 0)
     }
     
@@ -39,12 +39,19 @@ extension FHKRegisterRepository {
         var preview = Self()
         
         preview.register = { _ in
-            return FHKUserSession(id: UUID(),
-                                  email: "user@domain.com",
-                                  accessToken: "345345FDFDFTOKENTEST",
-                                  refreshToken: "345345FDFDFREFRESHTOKENTEST",
-                                  expiresAt: Date(),
-                                  infoAditional: InfoAditional(pinApproved: "123", familyName: "FamilyTest"))
+            return FHKRegisterResponse(id: 1,
+                                       createdAt: Date().toUTC,
+                                       nameFamily: "Leon",
+                                       emailParent: "user@example.com",
+                                       approvePin: "1234",
+                                       isActive: true,
+                                       updatedAt: Date().toUTC)
+//            return FHKUserSession(id: UUID(),
+//                                  email: "user@domain.com",
+//                                  accessToken: "345345FDFDFTOKENTEST",
+//                                  refreshToken: "345345FDFDFREFRESHTOKENTEST",
+//                                  expiresAt: Date(),
+//                                  infoAditional: InfoAditional(pinApproved: "123", familyName: "FamilyTest"))
         }
         
         return preview

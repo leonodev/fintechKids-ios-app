@@ -43,7 +43,6 @@ public extension FHKSession {
         
         session.logout = {
             try await inject.fhkStorage.saveUserDefaults(false, forKey: authKey)
-            try inject.fhkStorage.clearAllKeychain()
             await MainActor.run {
                 state.hasAuthentication = false
             }

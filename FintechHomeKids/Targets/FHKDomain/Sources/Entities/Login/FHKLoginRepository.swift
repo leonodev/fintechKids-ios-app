@@ -10,7 +10,7 @@ import FLibInjections
 
 // MARK: - Contract
 public struct FHKLoginRepository: Sendable {
-    public var login: @Sendable (_ loginEntity: LoginEntity) async throws -> FHKUserSession? = { _ in nil }
+    public var login: @Sendable (_ loginEntity: FHKLoginEntity) async throws -> FHKUserSession? = { _ in nil }
     public var loginWithBiometrics: @Sendable (_ prompt: String) async throws -> Void = { _ in }
     public var saveAuthToken: @Sendable (_ token: String,
                                          _ requiresBiometry: Bool) throws -> Void = { _, _ in }

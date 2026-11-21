@@ -6,6 +6,7 @@
 //
 
 import FLibUtils
+import FHKDesignSystem
 
 @MainActor
 public struct FHKSplashViewState {
@@ -18,6 +19,14 @@ public struct FHKSplashViewState {
         "title_kids".localized
     }
     
+    public var msnLoading: String {
+        "loading".localized.capitalizingFirstLetter()
+    }
+    
+    public var latestVersion: String = ""
+    public var releaseNotes: String = ""
+    public var storeUrl: String = ""
+    
     public enum StateAction: Equatable, Sendable {
         case goToLanguage
         case goToLogin
@@ -26,7 +35,9 @@ public struct FHKSplashViewState {
     }
     
     public enum State: Equatable, Sendable {
+        case loading
         case loaded(nav: StateAction)
+        case versionApp(state: VersionAppState)
     }
     
     public var splashState: State = .loaded(nav: .none)

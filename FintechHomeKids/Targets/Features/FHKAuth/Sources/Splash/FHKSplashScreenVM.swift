@@ -8,6 +8,7 @@
 import Observation
 import FHKCore
 import FHKDomain
+import FHKDesignSystem
 
 @Observable
 public final class FHKSplashScreenVM: FHKCore.ViewModel {
@@ -30,14 +31,22 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
     
     public enum Action: Equatable {
         case readLanguageCurrent
+        case checkVersion
+        case tryCheckVersion
     }
     
     @MainActor
     public func action(_ action: Action) async {
         switch action {
-            
+          
         case .readLanguageCurrent:
             await readLanguageCurrent()
+            
+        case .checkVersion:
+            await checkVersion()
+            
+        case .tryCheckVersion:
+            await tryCheckVersion()
         }
     }
     
@@ -48,6 +57,44 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
             viewState.splashState = getStateUser(hasLanguageSelected: isLanguageSelected != nil)
         } catch {
             viewState.splashState = .loaded(nav: .goToLanguage)
+        }
+    }
+    
+    @MainActor
+    private func checkVersion() async {
+        do {
+            let checkVersion = try await fhkSplashRepository.checkVersion()
+            
+            if let versionInfo = checkVersion {
+                await validateStateVersionApp(info: versionInfo)
+            } else {
+                viewState.splashState = .versionApp(state: .error)
+            }
+        } catch {
+            viewState.splashState = .versionApp(state: .error)
+        }
+    }
+    
+    @MainActor
+    private func tryCheckVersion() async {
+        viewState.splashState = .loading
+        await checkVersion()
+    }
+    
+    private func validateStateVersionApp(info: FHKAppVersionEntity) async {
+        let currentStateApp = VersionAppState.evaluate(
+            currentVersion: info.currentVersion, // "1.0.0"
+            latestVersion: info.latestVersion,   // "1.2.0"
+            forceUpdate: info.forceUpdate        // true o false desde el backend
+        )
+        
+        if currentStateApp == .upToDate {
+            await readLanguageCurrent()
+        } else {
+            viewState.splashState = .versionApp(state: currentStateApp)
+            viewState.latestVersion = info.latestVersion
+            viewState.releaseNotes = info.releaseNotes ?? "-"
+            viewState.storeUrl = info.storeUrl ?? "-"
         }
     }
     

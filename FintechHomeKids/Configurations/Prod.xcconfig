@@ -1,6 +1,8 @@
 #include "Base.xcconfig"
 
-PP_NAME = FHK
+APP_NAME = FHK
 PRODUCT_BUNDLE_IDENTIFIER = com.fleon.fintechKids
-BASE_URL = https:${SLASH}${SLASH}pro.supabase.co
+//BASE_URL = https:${SLASH}${SLASH}pro.supabase.co
+BASE_URL = https:${SLASH}${SLASH}fintechkids-backend.onrender.com
 APP_ICON_NAME = AppIcon-Pro
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) PROD

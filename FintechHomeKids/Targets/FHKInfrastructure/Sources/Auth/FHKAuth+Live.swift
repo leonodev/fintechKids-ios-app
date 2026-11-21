@@ -54,7 +54,7 @@ internal struct FHKSupabase: Sendable, FHKSupabaseErrorProtocol {
         self.client = client
     }
     
-    public func login(loginEntity: LoginEntity) async throws -> FHKUserSession {
+    public func login(loginEntity: FHKLoginEntity) async throws -> FHKUserSession {
         do {
             let session = try await client.auth.signIn(email: loginEntity.email,
                                                        password: loginEntity.password)

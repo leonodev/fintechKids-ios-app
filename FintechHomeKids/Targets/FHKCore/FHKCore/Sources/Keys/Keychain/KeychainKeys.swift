@@ -13,10 +13,12 @@ public extension KeychainKeys {
     static let userKey = "user_key"
     static let familyNameKey = "family_name"
     static let approvePinKey = "approve_pin"
+    static let accessTokenKey = "fhk_access_token"
+    static let refreshTokenKey = "fhk_refresh_token"
 }
 
 public enum KeychainKey: String, CaseIterable, Sendable {
-    case authToken
+    //case authToken
     case refreshToken
     case userCredentials
     case appSettings

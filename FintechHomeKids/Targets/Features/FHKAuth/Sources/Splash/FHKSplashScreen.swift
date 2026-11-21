@@ -23,6 +23,18 @@ public struct FHKSplashScreen: View {
         FHKScreenContainer(headerContent: {}, content: {
             switch viewModel.viewState.splashState {
                 
+            case .loading:
+                loadingView
+                
+            case .versionApp(let state):
+                switch state {
+                case .error:
+                    serviceUnavailableView()
+                    
+                default:
+                    updateView(state: state)
+                }
+                
             default:
                 loadedView
             }
@@ -39,7 +51,7 @@ public struct FHKSplashScreen: View {
             case .loaded(nav: .gotoHome):
                 router.navigate(to: .home)
                 
-            case .loaded(nav: .none):
+            default:
                 break
             }
         }
@@ -62,14 +74,46 @@ public struct FHKSplashScreen: View {
             
             Spacer()
             
+            Text(viewModel.viewState.msnLoading)
+                .font(.PangramSans.bold(FHKSize.size16))
+                .foregroundStyle(FHKColor.indigo)
+            
             LottieView(animationName: Lotties.progressBar,
                        loopMode: .loop,
                        contentMode: .scaleAspectFit,
             identifier: "lottie_progress_bar_id")
+            
+            
         }
         .onAppear {
             Task {
-               await viewModel.action(.readLanguageCurrent)
+                await viewModel.action(.checkVersion)
+            }
+        }
+    }
+    
+    var loadingView: some View {
+        LoadingView(msn: viewModel.viewState.msnLoading)
+    }
+    
+    func updateView(state: VersionAppState) -> AppUpdateView {
+        AppUpdateView(
+            state: state,
+            latestVersion: viewModel.viewState.latestVersion,
+            releaseNotes: viewModel.viewState.releaseNotes,
+            storeUrl: viewModel.viewState.storeUrl,
+            onContinueWithoutUpdating: {
+                Task {
+                    await viewModel.action(.readLanguageCurrent)
+                }
+            }
+        )
+    }
+    
+    func serviceUnavailableView() -> ServiceUnavailableView {
+        ServiceUnavailableView {
+            Task {
+                await viewModel.action(.tryCheckVersion)
             }
         }
     }

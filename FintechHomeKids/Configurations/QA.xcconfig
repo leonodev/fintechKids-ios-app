@@ -2,5 +2,7 @@
 
 APP_NAME = FHK (QA)
 PRODUCT_BUNDLE_IDENTIFIER = com.fleon.fintechKids.qa
-BASE_URL = https:${SLASH}${SLASH}-qa.supabase.co
+//BASE_URL = https:${SLASH}${SLASH}-qa.supabase.co
+BASE_URL = https:${SLASH}${SLASH}fintechkids-backend-stage.onrender.com
 APP_ICON_NAME = AppIcon-Qa
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) QA

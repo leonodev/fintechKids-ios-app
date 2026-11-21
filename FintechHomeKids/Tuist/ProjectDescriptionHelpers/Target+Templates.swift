@@ -59,7 +59,10 @@ public extension Target {
             product: product,
             bundleId: "\(bundleIdPrefix).\(name.lowercased())",
             deploymentTargets: deploymentTarget,
-            infoPlist: .default,
+            infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": "$(MARKETING_VERSION)",
+                "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)"
+            ]),
             sources: ["\(basePath)/Sources/**"],
             resources: ["\(basePath)/Resources/**"],
             dependencies: dependencies,
@@ -75,7 +78,10 @@ public extension Target {
                 product: .unitTests,
                 bundleId: "\(bundleIdPrefix).\(name.lowercased()).tests",
                 deploymentTargets: deploymentTarget,
-                infoPlist: .default,
+                infoPlist: .extendingDefault(with: [
+                    "CFBundleShortVersionString": "$(MARKETING_VERSION)",
+                    "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)"
+                ]),
                 sources: ["\(basePath)/Tests/**"],
                 resources: makeTestResources(basePath: basePath, testPlanPath: testPlanPath),
                 dependencies: [.target(name: name)] + testDependencies,
@@ -115,6 +121,8 @@ public extension Target {
             bundleId: bundleId,
             deploymentTargets: deploymentTarget,
             infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": "$(MARKETING_VERSION)",
+                "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)",
                 "CFBundleDisplayName": "$(APP_NAME)",
                 "BASE_URL": "$(BASE_URL)",
                 "UILaunchScreen": [:],
@@ -151,6 +159,8 @@ public extension Target {
             bundleId: "\(bundleIdPrefix).\(moduleName.lowercased()).example",
             deploymentTargets: deploymentTarget,
             infoPlist: .extendingDefault(with: [
+                "CFBundleShortVersionString": "$(MARKETING_VERSION)",
+                "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)",
                 "CFBundleDisplayName": "\(moduleName) Example",
                 "BASE_URL": "$(BASE_URL)",
                 "UILaunchScreen": [:]

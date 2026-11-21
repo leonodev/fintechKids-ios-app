@@ -9,7 +9,7 @@ import FLibInjections
 
 // MARK: - Contract
 public struct FHKAuth: Sendable {
-    public var login: @Sendable (LoginEntity) async throws -> FHKUserSession = { _ in
+    public var login: @Sendable (FHKLoginEntity) async throws -> FHKUserSession = { _ in
         throw FHKAuthError.userNotFound
     }
     public var logout: @Sendable () async throws -> Void = {}

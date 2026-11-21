@@ -85,7 +85,7 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
         viewState.loginState = .loading
         
         do {
-            let loginEntity = LoginEntity(email: viewState.email, password: viewState.password)
+            let loginEntity = FHKLoginEntity(email: viewState.email, password: viewState.password)
             let userSession = try await fhkLoginRepository.login(loginEntity)
             
             guard let tokenAccess = userSession?.accessToken, !tokenAccess.isEmpty else {

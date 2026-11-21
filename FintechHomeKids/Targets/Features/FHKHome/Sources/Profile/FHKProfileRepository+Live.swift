@@ -30,6 +30,10 @@ public extension FHKProfileRepository {
             try storage.deleteKeychain(key)
         }
         
+        repository.clearTokens = {
+            try configuration.deleteTokens()
+        }
+        
         repository.getEmailParent = {
             return configuration.parentMail()
         }

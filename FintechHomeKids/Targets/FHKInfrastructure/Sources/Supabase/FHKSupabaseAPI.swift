@@ -12,7 +12,7 @@ import FHKDomain
 
 public enum FHKSupabaseAPI {
     
-    public static func makeClient(_ environment: EnvironmentType = .remote) throws -> SupabaseClient {
+    public static func makeClient(_ environment: FHKEnvironmentType = .current) throws -> SupabaseClient {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 10.0
         configuration.timeoutIntervalForResource = 30.0
@@ -27,7 +27,7 @@ public enum FHKSupabaseAPI {
         }
 
         guard let url = URL(string: urlString) else {
-            throw FHKAppError.invalidURL(urlString)
+            throw FHKAppError(.urlInvalid)
         }
         
         let anonKey = try inject.fhkSecurity.getAnonKey()

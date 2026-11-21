@@ -5,7 +5,7 @@
 //  Created by Fredy Leon on 31/8/26.
 //
 
-public struct LoginEntity: Encodable {
+public struct FHKLoginEntity: Sendable, Encodable {
     public let email: String
     public let password: String
 

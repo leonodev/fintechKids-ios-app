@@ -11,11 +11,20 @@ import FLibInjections
 import FLibStorage
 
 public extension FHKRegisterRepository {
+    
     static var live: Self {
         var repo = Self()
-        
+
         repo.register = { registerEntity in
-            try await inject.fhkAuth.register(registerEntity)
+            
+            let responseDto: FHKRegisterResponse = try await FHKAPI.Builder()
+                            .setPath(.register)
+                            .setBody(body: registerEntity.toDto())
+                            .setMethod(.POST)
+                            .build()
+                            .execute()
+            
+            return responseDto
         }
         
         repo.saveFamilyInfoKeychain = { familyName in

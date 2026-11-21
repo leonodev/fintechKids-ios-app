@@ -2,5 +2,7 @@
 
 APP_NAME = FHK (Dev)
 PRODUCT_BUNDLE_IDENTIFIER = com.fleon.fintechKids.dev
-BASE_URL = https:${SLASH}${SLASH}chaukyiczbxkkbnxgahi.supabase.co
+//BASE_URL = https:${SLASH}${SLASH}chaukyiczbxkkbnxgahi.supabase.co
+BASE_URL = https:${SLASH}${SLASH}fintechkids-backend-dev.onrender.com
 APP_ICON_NAME = AppIcon-Dev
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) DEV

@@ -20,7 +20,7 @@ public extension FHKLoginRepository {
         var repository = Self()
         
         repository.hasSavedToken = {
-            storage.exists(key: KeychainKey.authToken.rawValue)
+            storage.exists(key: KeychainKeys.accessTokenKey)
         }
         
         repository.login = { loginEntity in
@@ -34,7 +34,7 @@ public extension FHKLoginRepository {
             
             guard let savedToken = try storage.readKeychain(
                 String.self,
-                for: KeychainKey.authToken.rawValue,
+                for: KeychainKeys.accessTokenKey,
                 prompt: prompt
             ) else {
                 throw FHKAppError.biometryNotAvailable
@@ -49,7 +49,7 @@ public extension FHKLoginRepository {
         }
         
         repository.saveAuthToken = { token, requiresBiometry in
-            try storage.saveKeychain(token, for: KeychainKey.authToken.rawValue, requireBiometry: requiresBiometry)
+            try storage.saveKeychain(token, for: KeychainKeys.accessTokenKey, requireBiometry: requiresBiometry)
         }
         
         repository.savePinApproveTask = { pin in

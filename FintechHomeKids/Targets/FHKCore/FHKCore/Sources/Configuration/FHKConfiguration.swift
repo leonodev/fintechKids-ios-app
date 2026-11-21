@@ -15,9 +15,13 @@ public struct FHKConfiguration: Sendable {
     
     public var refreshParentMail: @Sendable() -> Void = { }
     public var refreshFamilyName: @Sendable() -> Void = { }
-    public var setEnvironment: @Sendable(EnvironmentType) -> Void = { _ in }
-    public var getEnvironment: @Sendable() -> EnvironmentType = { .remote }
-    
+    public var setEnvironment: @Sendable(FHKEnvironmentType) -> Void = { _ in }
+    public var getEnvironment: @Sendable() -> FHKEnvironmentType = { .current }
+    public var accessToken: @Sendable() -> String? = { nil }
+    public var refreshToken: @Sendable() -> String? = { nil }
+    public var deleteTokens: @Sendable() throws -> Void = { }
+    public var versionAPP: @Sendable() -> String = { "" }
+    public var buildNumberApp: @Sendable() -> String = { "" }
     
     public init() {}
 }
@@ -54,7 +58,27 @@ extension FHKConfiguration {
         }
         
         preview.getEnvironment = {
-            .remote
+            .production
+        }
+        
+        preview.accessToken = {
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        }
+        
+        preview.refreshToken = {
+            "lYWQ6dXNlcnMiLCJpYXQiOjE3MzE5MjM0MDB9"
+        }
+        
+        preview.deleteTokens = {
+            
+        }
+        
+        preview.versionAPP = {
+            "1.0.1"
+        }
+        
+        preview.buildNumberApp = {
+            "1"
         }
         
      return preview

@@ -20,7 +20,7 @@ public struct LoadingView: View {
                        loopMode: .loop,
                        contentMode: .scaleAspectFit)
             .frame(height: 200)
-            .padding(.bottom, FHKSize.size20)
+            .padding(.top, FHKSize.size20)
             
             Text(msn)
                 .foregroundStyle(FHKColor.indigo.opacity(0.8))

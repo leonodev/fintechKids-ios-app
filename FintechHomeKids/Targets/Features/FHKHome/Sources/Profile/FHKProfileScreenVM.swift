@@ -81,7 +81,7 @@ private extension FHKProfileScreenVM {
         
         do {
             try await fhkProfileRepository.logout()
-            try fhkProfileRepository.deleteKeychain(KeychainKey.authToken.rawValue)
+            try fhkProfileRepository.clearTokens()
             try await fhkSession.logout()
         } catch {
             viewState.profileState = .error

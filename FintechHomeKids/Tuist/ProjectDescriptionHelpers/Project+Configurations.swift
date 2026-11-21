@@ -1,7 +1,15 @@
-
 import ProjectDescription
 
 public extension SettingsDictionary {
+    
+    /// Versión centralizada de la App para Dev, QA y Prod
+    static var appVersionSettings: SettingsDictionary {
+        [
+            "MARKETING_VERSION": "1.0.0",
+            "CURRENT_PROJECT_VERSION": "1"
+        ]
+    }
+    
     static var releasePentestingSettings: SettingsDictionary {
         [
             /// Habilita el motor de postprocesado de ofuscacion del compilador
@@ -47,7 +55,7 @@ public extension Configuration {
     static var dev: Configuration {
         .debug(
             name: "Dev",
-            settings: .debugPentestingSettings,
+            settings: .debugPentestingSettings.merging(.appVersionSettings),
             xcconfig: .relativeToRoot("Configurations/Dev.xcconfig")
         )
     }
@@ -55,7 +63,7 @@ public extension Configuration {
     static var qa: Configuration {
         .release(
             name: "QA",
-            settings: .releasePentestingSettings,
+            settings: .releasePentestingSettings.merging(.appVersionSettings),
             xcconfig: .relativeToRoot("Configurations/QA.xcconfig")
         )
     }
@@ -63,7 +71,7 @@ public extension Configuration {
     static var prod: Configuration {
         .release(
             name: "Prod",
-            settings: .releasePentestingSettings,
+            settings: .releasePentestingSettings.merging(.appVersionSettings),
             xcconfig: .relativeToRoot("Configurations/Prod.xcconfig")
         )
     }
