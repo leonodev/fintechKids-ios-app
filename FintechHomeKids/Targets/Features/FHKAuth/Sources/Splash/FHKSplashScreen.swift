@@ -75,7 +75,7 @@ public struct FHKSplashScreen: View {
             Spacer()
             
             Text(viewModel.viewState.msnLoading)
-                .font(.PangramSans.bold(FHKSize.size16))
+                .font(.PangramSans.bold(FHKSize.size24))
                 .foregroundStyle(FHKColor.indigo)
             
             LottieView(animationName: Lotties.progressBar,

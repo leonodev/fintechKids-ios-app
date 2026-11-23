@@ -1,5 +1,5 @@
 //
-//  FHKAppError.swift
+//  FHKNetworkError.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 30/8/26.
@@ -7,7 +7,8 @@
 
 import FLibUtils
 
-public enum FHKAppError: FHKError {
+public enum FHKAppError: FHKError, Sendable, Equatable {
+    // Storage & Device
     case readUserMailKeychainFailed
     case saveTokenAccessKeychainFailed
     case saveUserMailKeychainFailed
@@ -16,52 +17,86 @@ public enum FHKAppError: FHKError {
     case biometryNotAvailable
     case biometryCancelAuthentication
     case biometryAuthenticationFailed
+    
+    // Network & Transport
     case invalidURL(String)
+    case notConnectedInternet
+    case timeout
+    case unauthorized
+    case sslError
+    case cancelled
+    case decodingError
+    case encodingError
+    case emptyResponse
+    case unknown
+    
+    // Backend Controlled Errors
+    case backend(FHKBackendErrorCode, detail: String?)
+    case apiError(statusCode: Int, detail: String?)
     
     public var logMessage: String {
         switch self {
-    
         case .readUserMailKeychainFailed:
             return "Security: failed to read user email from secure keychain storage"
-        
         case .saveTokenAccessKeychainFailed:
             return "Security: failure saving access token to keychain"
-        
         case .saveUserMailKeychainFailed:
             return "Security: failed to save user email in secure keychain storage"
-            
         case .userDefaultsFailed:
             return "Error: UserDefaults"
-            
         case .remoteConfigFailed:
             return "System: error getting remote configuration from server"
-            
         case .biometryNotAvailable:
             return "Biometry: hardware or permissions are not available on this device"
-            
         case .biometryCancelAuthentication:
             return "Biometry: user explicitly cancelled the biometric authentication"
-            
         case .biometryAuthenticationFailed:
             return "Biometry: the biometric authentication failed"
-            
         case .invalidURL(let url):
-            return "Invalid Supabase URL: \(url)"
+            return "Invalid URL: \(url)"
+        case .notConnectedInternet:
+            return "Not detected internet connection"
+        case .timeout:
+            return "The application took longer than usual"
+        case .unauthorized:
+            return "You are not authorized to access this resource"
+        case .sslError:
+            return "An error has occurred with the certificates"
+        case .cancelled:
+            return "Network request was cancelled"
+        case .decodingError:
+            return "Failed to decode server JSON response"
+        case .encodingError:
+            return "Failed to encode request payload"
+        case .emptyResponse:
+            return "Server returned an empty response body"
+        case .unknown:
+            return "Unexpected network error"
+        case .backend(let code, let detail):
+            return "Backend Error [\(code.rawValue)]: \(detail ?? "No detail")"
+        case .apiError(let statusCode, let detail):
+            return "API Error (\(statusCode)): \(detail ?? "Unknown detail")"
         }
     }
     
     public var msnLocalizedKey: String {
         switch self {
-            
         case .saveTokenAccessKeychainFailed, .readUserMailKeychainFailed:
             return "msn_proccessing_information_secure"
-        
         case .biometryNotAvailable:
             return "msn_biometry_not_available_error"
-            
         case .biometryAuthenticationFailed:
             return "msn_biometry_not_failed_error"
- 
+        case .notConnectedInternet:
+            return "msn_not_connection_internet_error"
+        case .timeout:
+            return "timeout_internet_error"
+        case .unauthorized:
+            return "unauthorized_error"
+        case .sslError:
+            return "ssl_certificates_error"
+        case .backend(let code, _):
+            return code.localizedKey
         default:
             return ""
         }
@@ -72,32 +107,47 @@ public enum FHKAppError: FHKError {
         switch self {
         case .readUserMailKeychainFailed:
             return "read_user_mail_keychain_failed"
-            
         case .saveTokenAccessKeychainFailed:
             return "save_token_access_keychain_failed"
-            
         case .saveUserMailKeychainFailed:
             return "save_user_mail_keychain_failed"
-            
         case .userDefaultsFailed:
             return "user_defaults_failed"
-            
         case .remoteConfigFailed:
             return "remote_config_failed"
-            
         case .invalidURL:
             return "invalid_url"
-            
+        case .notConnectedInternet:
+            return "not_connected_internet_failed"
+        case .timeout:
+            return "timeout_failed"
+        case .unauthorized:
+            return "unauthorized_failed"
+        case .sslError:
+            return "ssl_certificates_failed"
+        case .cancelled:
+            return "request_cancelled"
+        case .decodingError:
+            return "decoding_error"
+        case .encodingError:
+            return "encoding_error"
+        case .emptyResponse:
+            return "empty_response"
+        case .backend(let code, _):
+            return code.rawValue.lowercased()
+        case .apiError(let statusCode, _):
+            return "api_error_\(statusCode)"
+        case .unknown:
+            return "unknown_error"
         default:
-            return ""
+            return nil
         }
     }
     
     public var isShouldTrack: Bool {
         switch self {
-        case .biometryNotAvailable, .biometryAuthenticationFailed, .biometryCancelAuthentication:
+        case .biometryNotAvailable, .biometryAuthenticationFailed, .biometryCancelAuthentication, .cancelled:
             return false
-            
         default:
             return true
         }

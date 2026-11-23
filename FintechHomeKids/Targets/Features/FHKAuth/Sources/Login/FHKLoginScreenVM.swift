@@ -144,9 +144,6 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
         do {
             try await fhkLoginRepository.loginWithBiometrics(prompt)
             viewState.loginState = .finish(result: .success)
-//        } catch let error as FHKSupabaseError {
-//            viewState.loginState = .error
-//            informateError(error)
         } catch {
             viewState.loginState = .finish(result: .error)
             informateError(FHKAppError.biometryAuthenticationFailed)

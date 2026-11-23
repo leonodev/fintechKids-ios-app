@@ -57,9 +57,6 @@ final class FHKRegisterScreenVM: FHKCore.ViewModel {
             
             viewState.registerState = .finish(result: .success)
             Logger.info("USER REGISTERED SUCCESS \(response)")
-//        } catch let error as FHKSupabaseError {
-//            viewState.registerState = .finish(result: .error)
-//            informateError(error)
         } catch {
             viewState.registerState = .finish(result: .error)
             informateError(FHKRegisterError.registerUserFailed)

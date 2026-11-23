@@ -12,6 +12,7 @@ public enum RoutesDestination: NavigationDestination {
     case language
     case login
     case register
+    case forgotPassword
     case home
     case createMembers
     case listRewards
@@ -63,6 +64,7 @@ public enum RoutesDestination: NavigationDestination {
         case .language: return "language"
         case .login: return "login"
         case .register: return "register"
+        case .forgotPassword: return "forgotPassword"   
         case .home: return "home"
         case .createMembers: return "createMembers"
         case .listRewards: return "listRewards"

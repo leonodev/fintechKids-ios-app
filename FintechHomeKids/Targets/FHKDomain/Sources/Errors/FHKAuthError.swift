@@ -15,6 +15,8 @@ public enum FHKAuthError: FHKError, Equatable {
     case pinApproveInvalid
     case familyNameInvalid
     case sessionExpired
+    case forgotPassword
+    case resetPassword
     case unknown(String)
     
     public var logMessage: String {
@@ -37,6 +39,12 @@ public enum FHKAuthError: FHKError, Equatable {
         case .familyNameInvalid:
             return "Error: Family name invalid"
             
+        case .forgotPassword:
+            return "Error: forgot password invalid"
+            
+        case .resetPassword:
+            return "Error: reset password invalid"
+            
         case .unknown(let message):
             return "Error: \(message)"
         }
@@ -47,7 +55,7 @@ public enum FHKAuthError: FHKError, Equatable {
         case .userNotFound, .invalidCredentials:
             return "invalid_credentials_error"
             
-        case .accessTokenInvalid, .pinApproveInvalid, .sessionExpired:
+        case .accessTokenInvalid, .pinApproveInvalid, .sessionExpired, .forgotPassword, .resetPassword:
             return "msn_generic_error"
             
         case .familyNameInvalid, .unknown:
@@ -75,6 +83,12 @@ public enum FHKAuthError: FHKError, Equatable {
             
         case .familyNameInvalid:
             return "family_name_missing"
+            
+        case .forgotPassword:
+            return "forgot_password_failed"
+            
+        case .resetPassword:
+            return "reset_password_failed"
             
         case .unknown:
             return "unknown_error"

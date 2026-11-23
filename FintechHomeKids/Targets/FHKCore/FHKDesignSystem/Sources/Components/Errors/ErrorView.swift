@@ -30,12 +30,12 @@ public struct ErrorView: View {
             Spacer()
             
             Text(title)
-                .foregroundStyle(FHKColor.lunarSand)
-                .font(Font.PangramSans.bold(FHKSize.size32))
+                .foregroundStyle(FHKColor.indigo)
+                .font(Font.PangramSans.bold(FHKSize.size28))
             Spacer()
             
             Text(msnError)
-                .foregroundStyle(FHKColor.lunarSand.opacity(0.5))
+                .foregroundStyle(FHKColor.indigo.opacity(0.8))
                 .font(Font.PangramSans.light(FHKSize.size20))
                 .padding(.bottom, FHKSize.size20)
             
@@ -50,7 +50,7 @@ public struct ErrorView: View {
             FHKButtonPrimary(title: titleBtn,
                              textColor: FHKColor.lunarSand.opacity(0.8),
                              state: .enabled,
-                             mode: .glass(.clear),
+                             mode: .solid,
                              action: {
                 onActionPressed()
             })

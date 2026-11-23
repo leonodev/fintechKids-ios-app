@@ -120,7 +120,7 @@ public struct FHKLoginScreen: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        // Action to recover password
+                        router.navigate(to: .forgotPassword)
                     }, label: {
                         Text(viewModel.viewState.youForgotYourPassword)
                             .font(.PangramSans.bold(FHKSize.size16))

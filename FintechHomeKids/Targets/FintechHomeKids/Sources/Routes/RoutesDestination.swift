@@ -37,6 +37,9 @@ extension RoutesDestination {
         case .register:
             FHKRegisterScreen()
             
+        case .forgotPassword:
+            FHKForgotScreen()
+            
         case .home:
             FHKHomeScreen()
             

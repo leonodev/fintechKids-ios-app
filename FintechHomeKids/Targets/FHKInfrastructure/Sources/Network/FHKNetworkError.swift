@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import FHKCore
 
-public struct FHKAppError: Error, LocalizedError, Sendable, Equatable {
+public struct FHKNetworkError: Error, LocalizedError, Sendable, Equatable {
     
     public enum ErrorType: Sendable, Equatable {
         case urlInvalid
@@ -21,6 +22,8 @@ public struct FHKAppError: Error, LocalizedError, Sendable, Equatable {
         case encodingError
         case apiError(statusCode: Int)
         case unauthorized
+        case cancelled
+        case sslError
         case unknown
     }
     
@@ -101,8 +104,29 @@ public struct FHKAppError: Error, LocalizedError, Sendable, Equatable {
             default:
                 return "Server error (HTTP \(statusCode))."
             }
+        case .cancelled:
+            return "Operation Canceled."
+        case .sslError:
+            return "A secure SSL connection could not be established with the server."
         case .unknown:
             return "An unexpected error occurred."
+        }
+    }
+}
+
+public extension FHKNetworkError {
+    func toAppError() -> FHKAppError {
+        switch self.type {
+        case .notConnectedInternet:
+            return .notConnectedInternet
+        case .timeout:
+            return .timeout
+        case .unauthorized:
+            return .unauthorized
+        case .sslError:
+            return .sslError
+        default:
+            return .apiError(statusCode: self.statusCode ?? 0, detail: self.backendDetail)
         }
     }
 }

@@ -95,7 +95,7 @@ public class FHKRegisterViewState {
     var isPasswordValid: Bool {
         !password.isEmpty &&
         !confirmPassword.isEmpty &&
-        password.count > 6 &&
+        password.count > UserDefaultValues.minCharactersPassword &&
         password == confirmPassword
     }
     

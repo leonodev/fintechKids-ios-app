@@ -27,7 +27,7 @@ public enum FHKSupabaseAPI {
         }
 
         guard let url = URL(string: urlString) else {
-            throw FHKAppError(.urlInvalid)
+            throw FHKNetworkError(.urlInvalid)
         }
         
         let anonKey = try inject.fhkSecurity.getAnonKey()

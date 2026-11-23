@@ -34,4 +34,6 @@ public enum Lotties {
     public static let partyCheck: String = "party_check"
     public static let toys: String = "toys"
     public static let verticalCoins: String = "vertical_coins"
+    public static let forgotPassword: String = "forgot_password"
+    public static let checkSuccess: String = "check_success"
 }

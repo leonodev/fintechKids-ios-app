@@ -13,6 +13,17 @@ public enum Method: String, Sendable {
     case GET, POST, PUT, PATCH, DELETE
 }
 
+/// DTO privado para decodificar respuestas controladas de FHKBackend: {"error_code": "...", "detail": "..."}
+private struct FastAPIControlledErrorDto: Decodable, Sendable {
+    let errorCode: FHKBackendErrorCode?
+    let detail: String?
+
+    enum CodingKeys: String, CodingKey {
+        case errorCode = "error_code"
+        case detail
+    }
+}
+
 public struct FHKAPI: Sendable {
     public let environmentType: FHKEnvironmentType
     public let path: FHKPath?
@@ -62,7 +73,7 @@ public struct FHKAPI: Sendable {
                 let jsonData = try JSONEncoder().encode(body)
                 copy.body = jsonData
             } catch {
-                print("Error to encode request body: \(error)")
+                Logger.error("Error encoding request body (\(T.self)): \(error)")
             }
             return copy
         }
@@ -84,7 +95,6 @@ public struct FHKAPI: Sendable {
         
         public func setHeaderParams(_ headerParams: [String: String]) -> Builder {
             var copy = self
-            // Conserva las cabeceras por defecto y sobrescribe/agrega las nuevas
             copy.headerParams.merge(headerParams) { _, new in new }
             return copy
         }
@@ -124,25 +134,28 @@ public struct FHKAPI: Sendable {
         }
     }
     
-    // MARK: - Default Headers (Content-Type, Accept & Token opcional)
+    // MARK: - Default Headers (Content-Type, Accept & Token automático)
     public static func defaultHeaders(bearerToken: String? = nil) -> [String: String] {
         var headers: [String: String] = [
             "Content-Type": "application/json",
             "Accept": "application/json"
         ]
         
-        if let token = inject.fhkConfiguration.accessToken(), !token.isEmpty {
+        if let token = bearerToken ?? inject.fhkConfiguration.accessToken(), !token.isEmpty {
             headers["Authorization"] = "Bearer \(token)"
         }
             
         return headers
     }
     
-    // MARK: - Execute (Swift 6 Async/Await + Typed Throws + Retry)
+    // MARK: - Execute (Swift 6 Async/Await + Typed Throws + Smart Retry)
     public func execute<T: Decodable & Sendable>(retries: Int = 1) async throws(FHKAppError) -> T {
+        let baseURL = getBaseURLAPI()
+        let pathString = self.path?.rawValue ?? ""
+        
         guard let url = self.path,
-              let serverUrl = URL(string: "\(getBaseURLAPI())\(url.rawValue)") else {
-            throw FHKAppError(.urlInvalid)
+              let serverUrl = URL(string: "\(baseURL)\(url.rawValue)") else {
+            throw FHKAppError.invalidURL("\(baseURL)\(pathString)")
         }
         
         let session = URLSession(configuration: makeSessionConfiguration())
@@ -150,7 +163,7 @@ public struct FHKAPI: Sendable {
         Logger.request(requestURL)
         
         var currentAttempt = 0
-        var lastError: FHKAppError = FHKAppError(.invalidResponse)
+        var lastError: FHKAppError = .unknown
         
         while currentAttempt <= retries {
             do {
@@ -159,28 +172,37 @@ public struct FHKAPI: Sendable {
                 Logger.response(response, data: data)
                 
                 guard let responseStatus = response as? HTTPURLResponse else {
-                    throw FHKAppError(.unknown)
+                    throw FHKAppError.unknown
                 }
                 
                 guard 200...299 ~= responseStatus.statusCode else {
-                    throw FHKAppError(.apiError(statusCode: responseStatus.statusCode), responseData: data)
+                    throw parseBackendError(statusCode: responseStatus.statusCode, data: data)
                 }
                 
                 guard !data.isEmpty else {
-                    throw FHKAppError(.dataEmpty)
+                    throw FHKAppError.emptyResponse
                 }
                 
                 let decodedResponse = try JSONDecoder().decode(T.self, from: data)
                 return decodedResponse
                 
             } catch let appError as FHKAppError {
+                // Cortar de inmediato (sin reintentar) errores no recuperables o de negocio 4xx
+                if shouldAbortImmediately(appError) {
+                    throw appError
+                }
+                
                 lastError = appError
-                // Si es un error de negocio HTTP (400, 401, 403, 404, 422), no reintentamos
                 if currentAttempt >= retries {
                     throw appError
                 }
             } catch {
-                let processed = processError(error: error) ?? FHKAppError(.invalidResponse)
+                let processed = processError(error: error, requestURL: serverUrl.absoluteString)
+                
+                if shouldAbortImmediately(processed) {
+                    throw processed
+                }
+                
                 lastError = processed
                 if currentAttempt >= retries {
                     throw processed
@@ -194,6 +216,34 @@ public struct FHKAPI: Sendable {
     }
     
     // MARK: - Helpers Privados
+    private func parseBackendError(statusCode: Int, data: Data) -> FHKAppError {
+        if let parsed = try? JSONDecoder().decode(FastAPIControlledErrorDto.self, from: data),
+           let code = parsed.errorCode {
+            return .backend(code, detail: parsed.detail)
+        }
+        
+        if statusCode == 401 {
+            return .unauthorized
+        }
+        
+        let fallbackDetail = String(data: data, encoding: .utf8)
+        return .apiError(statusCode: statusCode, detail: fallbackDetail)
+    }
+    
+    private func shouldAbortImmediately(_ error: FHKAppError) -> Bool {
+        switch error {
+        case .unauthorized, .cancelled, .sslError, .decodingError, .encodingError, .invalidURL:
+            return true
+        case .apiError(let code, _):
+            return (400...499).contains(code)
+        case .backend(let code, _):
+            // Solo reintentar si el backend respondió 500 INTERNAL_SERVER_ERROR
+            return code != .internalServerError
+        default:
+            return false
+        }
+    }
+    
     private func makeSessionConfiguration() -> URLSessionConfiguration {
         let config = URLSessionConfiguration.default
         config.multipathServiceType = .interactive
@@ -201,7 +251,7 @@ public struct FHKAPI: Sendable {
         return config
     }
     
-    private func processError(error: Error) -> FHKAppError? {
+    private func processError(error: Error, requestURL: String) -> FHKAppError {
         if let appError = error as? FHKAppError {
             return appError
         }
@@ -209,29 +259,41 @@ public struct FHKAPI: Sendable {
         if let urlError = error as? URLError {
             switch urlError.code {
             case .timedOut:
-                return FHKAppError(.timeout)
+                return .timeout
             case .notConnectedToInternet, .networkConnectionLost:
-                return FHKAppError(.notConnectedInternet)
+                return .notConnectedInternet
             case .badURL:
-                return FHKAppError(.urlInvalid)
-            case .cannotFindHost, .cannotConnectToHost:
-                return FHKAppError(.cannotFindHost)
-            case .badServerResponse:
-                return FHKAppError(.badServerResponse)
+                return .invalidURL(requestURL)
+            case .cannotFindHost, .cannotConnectToHost, .badServerResponse:
+                return .apiError(statusCode: urlError.errorCode, detail: urlError.localizedDescription)
+            case .secureConnectionFailed,
+                 .serverCertificateHasBadDate,
+                 .serverCertificateUntrusted,
+                 .serverCertificateHasUnknownRoot,
+                 .serverCertificateNotYetValid,
+                 .clientCertificateRejected,
+                 .clientCertificateRequired:
+                return .sslError
+            case .cancelled:
+                return .cancelled
             default:
-                return FHKAppError(.unknown)
+                return .unknown
             }
         }
         
         if error is DecodingError {
-            return FHKAppError(.decodingError)
+            return .decodingError
         }
         
         if error is EncodingError {
-            return FHKAppError(.encodingError)
+            return .encodingError
         }
         
-        return nil
+        if error is CancellationError {
+            return .cancelled
+        }
+        
+        return .unknown
     }
     
     private func getRequest(serverURL: URL) -> URLRequest {

@@ -83,9 +83,9 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
     
     private func validateStateVersionApp(info: FHKAppVersionEntity) async {
         let currentStateApp = VersionAppState.evaluate(
-            currentVersion: info.currentVersion, // "1.0.0"
-            latestVersion: info.latestVersion,   // "1.2.0"
-            forceUpdate: info.forceUpdate        // true o false desde el backend
+            currentVersion: info.currentVersion,
+            latestVersion: info.latestVersion,
+            forceUpdate: info.forceUpdate
         )
         
         if currentStateApp == .upToDate {
