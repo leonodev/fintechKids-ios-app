@@ -15,7 +15,7 @@ public extension FHKRegisterRepository {
     static var live: Self {
         var repo = Self()
 
-        repo.register = { registerEntity in
+        repo.register = { registerEntity throws(FHKAppError) in
             
             let responseDto: FHKRegisterResponse = try await FHKAPI.Builder()
                             .setPath(.register)
@@ -27,8 +27,8 @@ public extension FHKRegisterRepository {
             return responseDto
         }
         
-        repo.saveFamilyInfoKeychain = { familyName in
-            try inject.fhkStorage.saveKeychain(familyName, for: KeychainKeys.familyNameKey)
+        repo.saveFamilyInfoKeychain = { familyName throws(FHKAppError) in
+            try inject.fhkStorage .saveSecureKeychain(familyName, for: KeychainKeys.familyNameKey)
         }
         
         return repo

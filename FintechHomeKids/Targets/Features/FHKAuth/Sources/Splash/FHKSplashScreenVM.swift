@@ -55,8 +55,14 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
         do {
             let isLanguageSelected = try await fhkSplashRepository.readLanguageCurrent()
             viewState.splashState = getStateUser(hasLanguageSelected: isLanguageSelected != nil)
-        } catch {
+        } catch let appError {
+            // If the Task was cancelled when the view was closed, we exit silently.
+            if appError == .cancelled { return }
+            
             viewState.splashState = .loaded(nav: .goToLanguage)
+            
+            // If you want to react to a specific case from the backend:
+            if case .backend(.recoveryCodeExpired, _) = appError {/* Here */}
         }
     }
     
@@ -70,8 +76,14 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
             } else {
                 viewState.splashState = .versionApp(state: .error)
             }
-        } catch {
+        } catch let appError {
+            // If the Task was cancelled when the view was closed, we exit silently.
+            if appError == .cancelled { return }
+            
             viewState.splashState = .versionApp(state: .error)
+            
+            // If you want to react to a specific case from the backend:
+            if case .backend(.recoveryCodeExpired, _) = appError {/* Here */}
         }
     }
     

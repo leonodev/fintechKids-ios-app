@@ -1274,13 +1274,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please review the entered fields and try again."
+            "value" : "Please review the entered code and try again."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Por favor revisa los campos ingresados e inténtalo de nuevo."
+            "value" : "Por favor revisa el código ingresado e inténtalo de nuevo."
           }
         },
         "fr" : {
@@ -1583,6 +1583,35 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riprova"
+          }
+        }
+      }
+    },
+    "timeout_internet_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The request took too long to respond. Please check your connection and try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La solicitud tardó demasiado en responder. Revisa tu conexión e inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La requête a pris trop de temps à répondre. Vérifiez votre connexion et réessayez."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La richiesta ha impiegato troppo tempo a rispondere. Controlla la connessione e riprova."
           }
         }
       }

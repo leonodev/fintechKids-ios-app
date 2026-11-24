@@ -7,10 +7,11 @@
 
 import Foundation
 import FLibInjections
+import FHKCore
 
 public struct FHKSplashRepository: Sendable {
-    public var readLanguageCurrent: @Sendable () async throws -> String? = { nil }
-    public var checkVersion: @Sendable () async throws -> FHKAppVersionEntity? = { nil }
+    public var readLanguageCurrent: @Sendable () async throws(FHKAppError) -> String? = { nil }
+    public var checkVersion: @Sendable () async throws(FHKAppError) -> FHKAppVersionEntity? = { nil }
     
     public init() {}
 }

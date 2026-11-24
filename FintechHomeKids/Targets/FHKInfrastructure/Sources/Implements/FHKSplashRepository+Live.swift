@@ -17,13 +17,11 @@ public extension FHKSplashRepository {
         let configuration = inject.fhkConfiguration
         var repository = Self()
 
-        repository.readLanguageCurrent = {
-            try await storage.readUserDefaults(String.self,
-                                               forKey: UserDefaultsKeys.languageKey
-            )
+        repository.readLanguageCurrent = { () throws(FHKAppError) in
+            try await storage.readDefaults(String.self, forKey: UserDefaultsKeys.languageKey)
         }
         
-        repository.checkVersion = {
+        repository.checkVersion = { () throws(FHKAppError) in
             let responseDto: FHKAppVersionDto = try await FHKAPI.Builder()
                             .setPath(.appVersion)
                             .setMethod(.GET)

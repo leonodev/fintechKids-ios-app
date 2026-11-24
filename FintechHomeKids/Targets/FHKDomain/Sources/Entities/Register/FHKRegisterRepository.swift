@@ -7,14 +7,15 @@
 
 import Foundation
 import FLibInjections
+import FHKCore
 
 // MARK: - Contract
 public struct FHKRegisterRepository: Sendable {
-    public var register: @Sendable (_ registerEntity: FHKRegisterEntity) async throws -> FHKRegisterResponse = { _ in
-        throw NSError(domain: "FHKRegisterRepository.register no implementado", code: 0)
+    public var register: @Sendable (_ registerEntity: FHKRegisterEntity) async throws(FHKAppError) -> FHKRegisterResponse = { _ in
+        throw FHKAppError.unknown
     }
     
-    public var saveFamilyInfoKeychain: @Sendable (_ familyName: String) throws -> Void = { _ in }
+    public var saveFamilyInfoKeychain: @Sendable (_ familyName: String) throws(FHKAppError) -> Void = { _ in }
 
     public init() {}
 }
@@ -46,12 +47,6 @@ extension FHKRegisterRepository {
                                        approvePin: "1234",
                                        isActive: true,
                                        updatedAt: Date().toUTC)
-//            return FHKUserSession(id: UUID(),
-//                                  email: "user@domain.com",
-//                                  accessToken: "345345FDFDFTOKENTEST",
-//                                  refreshToken: "345345FDFDFREFRESHTOKENTEST",
-//                                  expiresAt: Date(),
-//                                  infoAditional: InfoAditional(pinApproved: "123", familyName: "FamilyTest"))
         }
         
         return preview

@@ -57,9 +57,15 @@ final class FHKRegisterScreenVM: FHKCore.ViewModel {
             
             viewState.registerState = .finish(result: .success)
             Logger.info("USER REGISTERED SUCCESS \(response)")
-        } catch {
+        } catch let appError {
+            // If the Task was cancelled when the view was closed, we exit silently.
+            if appError == .cancelled { return }
+            
             viewState.registerState = .finish(result: .error)
-            informateError(FHKRegisterError.registerUserFailed)
+            informateError(appError)
+            
+            // If you want to react to a specific case from the backend:
+            if case .backend(.recoveryCodeExpired, _) = appError {/* Here */}
         }
     }
     
@@ -69,8 +75,9 @@ final class FHKRegisterScreenVM: FHKCore.ViewModel {
             fhkAnalitycs.track(.error(.init(from: error)))
         }
         
-        // We show the user the localized message (UX)
-        viewState.msnRegisterFail = error.msnLocalizedKey.localized
+        // We display the translated message (with a safe fallback in case the key is empty)
+        let key = error.msnLocalizedKey.isEmpty ? "error_server_generic" : error.msnLocalizedKey
+        viewState.msnRegisterFail = key.localized
         
         // We print the full details to the console (Debug)
         Logger.error(error.logMessage)
