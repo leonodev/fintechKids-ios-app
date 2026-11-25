@@ -85,56 +85,67 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
         viewState.loginState = .loading
         
         do {
-            let loginEntity = FHKLoginEntity(email: viewState.email, password: viewState.password)
-            let userSession = try await fhkLoginRepository.login(loginEntity)
+            let loginEntity = FHKLoginParams(email: viewState.email, password: viewState.password)
+            let login = try await fhkLoginRepository.login(loginEntity)
             
-            guard let tokenAccess = userSession?.accessToken, !tokenAccess.isEmpty else {
+            guard !login.accessToken.isEmpty else {
                 informateError(FHKLoginError.accessTokenInvalid)
                 return
             }
             
             // We saved the Session Token PROTECTED by Face ID for the future
-            guard saveSessionToken(tokenAccess: tokenAccess,
+            guard saveSessionToken(tokenAccess: login.accessToken,
                                    isHasBiometry: isBiometryAvailable) else {
                 return
             }
             
-            guard let pinToApprovedTask = userSession?.infoAditional?.pinApproved, !pinToApprovedTask.isEmpty else {
-                informateError(FHKLoginError.pinApproveInvalid)
-                return
-            }
+//            guard let pinToApprovedTask = userSession?.infoAditional?.pinApproved, !pinToApprovedTask.isEmpty else {
+//                informateError(FHKLoginError.pinApproveInvalid)
+//                return
+//            }
+//            
+//            guard let familyName = userSession?.infoAditional?.familyName, !familyName.isEmpty else {
+//                informateError(FHKLoginError.familyNameInvalid)
+//                return
+//            }
             
-            guard let familyName = userSession?.infoAditional?.familyName, !familyName.isEmpty else {
-                informateError(FHKLoginError.familyNameInvalid)
-                return
-            }
+//            do {
+//                try fhkRegisterRepository.saveFamilyInfoKeychain(familyName)
+//            } catch {
+//                informateError(FHKLoginError.familyNameInvalid)
+//                return
+//            }
             
-            do {
-                try fhkRegisterRepository.saveFamilyInfoKeychain(familyName)
-            } catch {
-                informateError(FHKLoginError.familyNameInvalid)
-                return
-            }
-            
-            do {
-                try await fhkLoginRepository.savePinApproveTask(pinToApprovedTask)
-            } catch {
-                informateError(FHKLoginError.pinApproveInvalid)
-                return
-            }
+//            do {
+//                try await fhkLoginRepository.savePinApproveTask(pinToApprovedTask)
+//            } catch {
+//                informateError(FHKLoginError.pinApproveInvalid)
+//                return
+//            }
             
             guard await saveUserIntoKeychain() else {
                 return
             }
             
-            try await fhkSession.login()
+            //try await fhkSession.login()
 //        } catch let error as FHKSupabaseError {
 //            viewState.loginState = .error
 //            informateError(error)
-        } catch {
+        } catch let appError {
+            // If the Task was cancelled when the view was closed, we exit silently.
+            if appError == .cancelled { return }
+            
             viewState.loginState = .finish(result: .error)
-            informateError(FHKLoginError.loginUserFailed)
+            informateError(appError)
+            
+            // If you want to react to a specific case from the backend:
+            if case .backend(.recoveryCodeExpired, _) = appError {/* Here */}
         }
+        
+//        catch {
+//            viewState.loginState = .finish(result: .error)
+//            informateError(FHKLoginError.loginUserFailed)
+//        }
     }
     
     @MainActor
@@ -192,8 +203,9 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
             fhkAnalitycs.track(.error(.init(from: error)))
         }
         
-        // We show the user the localized message (UX)
-        viewState.msnLoginFail = error.msnLocalizedKey.localized
+        // We display the translated message (with a safe fallback in case the key is empty)
+        let key = error.msnLocalizedKey.isEmpty ? "error_server_generic" : error.msnLocalizedKey
+        viewState.msnLoginFail = key.localized
         
         // We print the full details to the console (Debug)
         Logger.error(error.logMessage)

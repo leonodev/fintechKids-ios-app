@@ -20,8 +20,8 @@ public struct FHKResetPasswordRequestDto: Encodable, Sendable {
 }
 
 public extension FHKResetPasswordRequestDto {
-    func toDomain() -> FHKResetPasswordEntity {
-        FHKResetPasswordEntity(
+    func toDomain() -> FHKResetPasswordParams {
+        FHKResetPasswordParams(
             email: self.emailParent,
             recoveryCode: self.recoveryCode,
             newPassword: self.newPassword
@@ -29,7 +29,7 @@ public extension FHKResetPasswordRequestDto {
     }
 }
 
-public extension FHKResetPasswordEntity {
+public extension FHKResetPasswordParams {
     func toDto() -> FHKResetPasswordRequestDto {
         FHKResetPasswordRequestDto(
             emailParent: self.email,

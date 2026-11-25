@@ -21,8 +21,8 @@ public struct FHKResetPasswordResponseDto: Decodable, Sendable {
 }
 
 public extension FHKResetPasswordResponseDto {
-    func toDomain() -> FHKResetPasswordResponseEntity {
-        FHKResetPasswordResponseEntity(
+    func toDomain() -> FHKResetPasswordEntity {
+        FHKResetPasswordEntity(
             message: message,
             email: emailParent,
             updatedAt: updatedAt

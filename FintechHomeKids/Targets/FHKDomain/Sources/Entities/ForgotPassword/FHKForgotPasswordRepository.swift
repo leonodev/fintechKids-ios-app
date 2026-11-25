@@ -13,10 +13,9 @@ public struct FHKForgotPasswordRepository: Sendable {
     
     public var forgot: @Sendable (String) async throws(FHKAppError) -> FHKForgotPasswordEntity = { _ in
         throw FHKAppError.unknown
-        //FHKAuthError.forgotPassword
     }
     
-    public var reset: @Sendable (_ entity: FHKResetPasswordEntity) async throws(FHKAppError) -> FHKResetPasswordResponseEntity = { _ in
+    public var reset: @Sendable (_ entity: FHKResetPasswordParams) async throws(FHKAppError) -> FHKResetPasswordEntity = { _ in
         throw FHKAppError.unknown
     }
     

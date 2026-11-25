@@ -5,14 +5,20 @@
 //  Created by Fredy Leon on 22/11/2026.
 //
 
+import Foundation
+
 public struct FHKResetPasswordEntity: Sendable, Equatable {
+    public let message: String
     public let email: String
-    public let recoveryCode: String
-    public let newPassword: String
-    
-    public init(email: String, recoveryCode: String, newPassword: String) {
+    public let updatedAt: String
+
+    public init(
+        message: String,
+        email: String,
+        updatedAt: String
+    ) {
+        self.message = message
         self.email = email
-        self.recoveryCode = recoveryCode
-        self.newPassword = newPassword
+        self.updatedAt = updatedAt
     }
 }

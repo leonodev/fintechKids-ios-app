@@ -7,15 +7,19 @@
 
 import Foundation
 import FLibInjections
+import FHKCore
 
 // MARK: - Contract
 public struct FHKLoginRepository: Sendable {
-    public var login: @Sendable (_ loginEntity: FHKLoginEntity) async throws -> FHKUserSession? = { _ in nil }
-    public var loginWithBiometrics: @Sendable (_ prompt: String) async throws -> Void = { _ in }
-    public var saveAuthToken: @Sendable (_ token: String,
-                                         _ requiresBiometry: Bool) throws -> Void = { _, _ in }
-    public var saveUserIntoKeychain: @Sendable (_ email: String) async throws -> Void = { _ in }
-    public var savePinApproveTask: @Sendable (_ pin: String) async throws -> Void = { _ in }
+    
+    public var login: @Sendable (_ loginParams: FHKLoginParams) async throws(FHKAppError) -> FHKLoginEntity = { _ in throw  FHKAppError.unknown }
+    
+    public var loginWithBiometrics: @Sendable (_ prompt: String) async throws(FHKAppError) -> Void = { _ in }
+    
+    public var saveAuthToken: @Sendable (_ token: String, _ requiresBiometry: Bool) throws(FHKAppError) -> Void = { _, _ in }
+    
+    public var saveUserIntoKeychain: @Sendable (_ email: String) async throws(FHKAppError) -> Void = { _ in }
+    public var savePinApproveTask: @Sendable (_ pin: String) async throws(FHKAppError) -> Void = { _ in }
     public var refreshParentMail: @Sendable () -> Void = {}
     public var hasSavedToken: @Sendable () -> Bool = { false }
 
@@ -44,14 +48,11 @@ public extension FHKLoginRepository {
         preview.hasSavedToken = { true }
         
         preview.login = { _ in
-            FHKUserSession(id: UUID(),
-                           email: "parent@domian.com",
-                           accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+            FHKLoginEntity(accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
                            refreshToken: "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkZy",
-                           expiresAt: Date(),
-                           infoAditional: InfoAditional(pinApproved: "0000",
-                                                        familyName: "Dummy Family")
-               )
+                           tokenType: "bearer",
+                           expiresInMinutes: 1
+            )
         }
         
         return preview

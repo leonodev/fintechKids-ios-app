@@ -73,7 +73,7 @@ final class FHKForgotScreenVM: FHKCore.ViewModel {
         viewState.forgotState = .loading
         
         do {
-            let entityReset = FHKResetPasswordEntity(
+            let entityReset = FHKResetPasswordParams(
                 email: viewState.email,
                 recoveryCode: viewState.code,
                 newPassword: viewState.newPassword

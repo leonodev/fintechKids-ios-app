@@ -111,9 +111,6 @@ public struct FHKForgotScreen: View {
                              identifier: "tfd_reset_password_code_id"
                 )
                 .padding(.horizontal)
-                .onAppear {
-                    viewModel.viewState.code = "0000"
-                }
                 
                 FHKTextField(text: $viewModel.viewState.newPassword,
                              placeholder: viewModel.viewState.passwordPlaceholder,
@@ -121,9 +118,6 @@ public struct FHKForgotScreen: View {
                              identifier: "tfd_new_password_id"
                 )
                 .padding(.horizontal)
-                .onAppear {
-                    viewModel.viewState.newPassword = "12312312"
-                }
                 
                 FHKTextField(text: $viewModel.viewState.confirmPassword,
                              placeholder: viewModel.viewState.confirmPasswordPlaceholder,
@@ -131,9 +125,6 @@ public struct FHKForgotScreen: View {
                              identifier: "tfd_confirm_password_id"
                 )
                 .padding(.horizontal)
-                .onAppear {
-                    viewModel.viewState.confirmPassword = "12312312"
-                }
                 
                 Spacer()
                 

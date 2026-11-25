@@ -23,41 +23,46 @@ public extension FHKLoginRepository {
             storage.exists(key: KeychainKeys.accessTokenKey)
         }
         
-        repository.login = { loginEntity in
-            try await supabase.login(loginEntity)
+        repository.login = { loginParams throws(FHKAppError) in
+            let responseDto: FHKLoginResponseDto = try await FHKAPI.Builder()
+                .setPath(.login)
+                .setBody(body: loginParams.toDto())
+                .setMethod(.POST)
+                .build()
+                .execute()
+            
+            return responseDto.toDomain()
         }
         
-        repository.loginWithBiometrics = { prompt in
+        repository.loginWithBiometrics = { prompt throws(FHKAppError) in
+            
             guard storage.isBiometryAvailable() else {
                 throw FHKAppError.biometryNotAvailable
             }
             
-            guard let savedToken = try storage.readKeychain(
+            guard let savedToken = try storage.readSecureKeychain(
                 String.self,
                 for: KeychainKeys.accessTokenKey,
                 prompt: prompt
             ) else {
                 throw FHKAppError.biometryNotAvailable
             }
-            
-            try await supabase.setSession(savedToken)
-            
-            let isAuthenticated = await supabase.isUserAuthenticated()
-            if !isAuthenticated {
-                throw FHKAppError.biometryNotAvailable
-            }
         }
         
-        repository.saveAuthToken = { token, requiresBiometry in
-            try storage.saveKeychain(token, for: KeychainKeys.accessTokenKey, requireBiometry: requiresBiometry)
+        repository.saveAuthToken = { token, requiresBiometry throws(FHKAppError) in
+            try storage.saveSecureKeychain(
+                token,
+                for: KeychainKeys.accessTokenKey,
+                requireBiometry: requiresBiometry
+            )
         }
         
-        repository.savePinApproveTask = { pin in
-            try storage.saveKeychain(pin, for: KeychainKeys.approvePinKey)
+        repository.savePinApproveTask = { pin throws(FHKAppError) in
+            try storage.saveSecureKeychain(pin, for: KeychainKeys.approvePinKey)
         }
         
-        repository.saveUserIntoKeychain = { email in
-            try storage.saveKeychain(email, for: KeychainKeys.userKey)
+        repository.saveUserIntoKeychain = { email throws(FHKAppError) in
+            try storage.saveSecureKeychain(email, for: KeychainKeys.userKey)
             configuration.refreshParentMail()
         }
         
