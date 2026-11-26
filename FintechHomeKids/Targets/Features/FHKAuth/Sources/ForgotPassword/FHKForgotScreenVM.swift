@@ -51,7 +51,8 @@ final class FHKForgotScreenVM: FHKCore.ViewModel {
         viewState.forgotState = .loading
         
         do {
-            let forgotInfo = try await fhkForgotPasswordRepository.forgot(viewState.email)
+            let params = FHKForgotPasswordParams(emailParent: viewState.email)
+            let forgotInfo = try await fhkForgotPasswordRepository.forgot(params)
             
             viewState.debugRecoveryCode = forgotInfo.debugRecoveryCode
             viewState.forgotState = .loaded(.resetPassword)

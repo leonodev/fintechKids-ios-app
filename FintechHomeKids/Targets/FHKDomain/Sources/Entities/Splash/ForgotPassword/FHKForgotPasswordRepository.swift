@@ -11,7 +11,7 @@ import FHKCore
 // MARK: - Contract
 public struct FHKForgotPasswordRepository: Sendable {
     
-    public var forgot: @Sendable (String) async throws(FHKAppError) -> FHKForgotPasswordEntity = { _ in
+    public var forgot: @Sendable (_ params: FHKForgotPasswordParams) async throws(FHKAppError) -> FHKForgotPasswordEntity = { _ in
         throw FHKAppError.unknown
     }
     
@@ -43,7 +43,7 @@ extension FHKForgotPasswordRepository {
     static var preview: Self {
         var preview = Self()
         
-        preview.forgot = { email in
+        preview.forgot = { _ in
             FHKForgotPasswordEntity(message: "A 6-digit verification code has been generated and sent to the registered email.",
                                     email: "parent@email.com",
                                     expiresInMinutes: 15,

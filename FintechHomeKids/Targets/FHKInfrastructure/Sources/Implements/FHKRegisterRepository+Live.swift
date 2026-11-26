@@ -15,11 +15,10 @@ public extension FHKRegisterRepository {
     static var live: Self {
         var repo = Self()
 
-        repo.register = { registerEntity throws(FHKAppError) in
-            
+        repo.register = { registerParams throws(FHKAppError) in
             let responseDto: FHKRegisterResponseDto = try await FHKAPI.Builder()
                             .setPath(.register)
-                            .setBody(body: registerEntity.toDto())
+                            .setBody(body: registerParams.toDto())
                             .setMethod(.POST)
                             .build()
                             .execute()

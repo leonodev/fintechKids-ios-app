@@ -1,5 +1,5 @@
 //
-//  FHKRegisterDto.swift
+//  FHKRegisterRequestDto.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 16/11/2026.
@@ -7,7 +7,7 @@
 
 import FHKDomain
 
-public struct FHKRegisterDto: Encodable, Sendable {
+public struct FHKRegisterRequestDto: Encodable, Sendable {
     public let emailParent: String
     public let password: String
     public let nameFamily: String
@@ -33,7 +33,7 @@ public struct FHKRegisterDto: Encodable, Sendable {
     }
 }
 
-public extension FHKRegisterDto {
+public extension FHKRegisterRequestDto {
     func toDomain() -> FHKRegisterParams {
         return FHKRegisterParams(email: self.emailParent,
                                  password: self.password,
@@ -43,8 +43,8 @@ public extension FHKRegisterDto {
 }
 
 public extension FHKRegisterParams {
-    func toDto() -> FHKRegisterDto {
-        return FHKRegisterDto(emailParent: self.email,
+    func toDto() -> FHKRegisterRequestDto {
+        return FHKRegisterRequestDto(emailParent: self.email,
                               password: self.password,
                               nameFamily: self.familyName,
                               approvePin: self.approvePIN)

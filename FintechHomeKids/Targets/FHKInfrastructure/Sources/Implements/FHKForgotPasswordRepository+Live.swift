@@ -15,12 +15,10 @@ public extension FHKForgotPasswordRepository {
     static var live: Self {
         var repo = Self()
         
-        repo.forgot = { emailParent throws(FHKAppError) in
-            let requestBody = FHKForgotPasswordRequestDto(emailParent: emailParent)
-            
+        repo.forgot = { forgotParams throws(FHKAppError) in
             let responseDto: FHKForgotPasswordResponseDto = try await FHKAPI.Builder()
                             .setPath(.forgotPassword)
-                            .setBody(body: requestBody)
+                            .setBody(body: forgotParams.toDto())
                             .setMethod(.POST)
                             .build()
                             .execute()

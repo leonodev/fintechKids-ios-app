@@ -33,12 +33,8 @@ public extension FHKForgotPasswordResponseDto {
     }
 }
 
-public extension FHKForgotPasswordEntity {
-    func toDto() -> FHKForgotPasswordResponseDto {
-        FHKForgotPasswordResponseDto(message: self.message,
-                                     emailParent: self.email,
-                                     expiresInMinutes: self.expiresInMinutes,
-                                     debugRecoveryCode: self.debugRecoveryCode
-        )
+public extension FHKForgotPasswordParams {
+    func toDto() -> FHKForgotPasswordRequestDto {
+        FHKForgotPasswordRequestDto(emailParent: self.emailParent)
     }
 }

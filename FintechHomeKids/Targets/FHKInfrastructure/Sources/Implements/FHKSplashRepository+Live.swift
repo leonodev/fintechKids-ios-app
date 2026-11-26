@@ -22,7 +22,7 @@ public extension FHKSplashRepository {
         }
         
         repository.checkVersion = { params throws(FHKAppError) in
-            let responseDto: FHKAppVersionDto = try await FHKAPI.Builder()
+            let responseDto: FHKVersionResponseDto = try await FHKAPI.Builder()
                             .setPath(.appVersion)
                             .setMethod(.GET)
                             .setUrlParams(params.toDto())

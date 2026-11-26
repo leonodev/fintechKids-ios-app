@@ -1,5 +1,5 @@
 //
-//  FHKAppVersionDto.swift
+//  FHKVersionRequestDto.swift
 //  FintechHomeKids
 //
 //  Created by Fredy Leon on 19/11/2026.
@@ -8,7 +8,7 @@
 import Foundation
 import FHKDomain
 
-public struct FHKAppVersionDto: Decodable, Sendable {
+public struct FHKVersionResponseDto: Decodable, Sendable {
     public let platform: String
     public let currentVersion: String
     public let latestVersion: String
@@ -34,7 +34,7 @@ public struct FHKAppVersionDto: Decodable, Sendable {
     }
 }
 
-public extension FHKAppVersionDto {
+public extension FHKVersionResponseDto {
     func toDomain() -> FHKAppVersionEntity {
         FHKAppVersionEntity(
             platform: platform,
@@ -47,6 +47,14 @@ public extension FHKAppVersionDto {
             storeUrl: storeUrl,
             releaseNotes: releaseNotes,
             message: message
+        )
+    }
+}
+
+public extension FHKAppVersionParams {
+    func toDto() -> FHKVersionRequestDto {
+        FHKVersionRequestDto(platform: self.platform,
+                             currentVersion: self.currentVersion
         )
     }
 }

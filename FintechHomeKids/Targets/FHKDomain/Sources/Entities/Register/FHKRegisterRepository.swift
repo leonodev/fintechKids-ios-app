@@ -11,7 +11,7 @@ import FHKCore
 
 // MARK: - Contract
 public struct FHKRegisterRepository: Sendable {
-    public var register: @Sendable (_ registerEntity: FHKRegisterParams) async throws(FHKAppError) -> FHKRegisterEntity = { _ in
+    public var register: @Sendable (_ registerParams: FHKRegisterParams) async throws(FHKAppError) -> FHKRegisterEntity = { _ in
         throw FHKAppError.unknown
     }
     
