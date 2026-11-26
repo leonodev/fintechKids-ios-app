@@ -23,7 +23,7 @@ public struct FHKRewardGoldenTicketScreen: View {
             headerContent: {},
             content: {
                 VStack {
-                    Text("msn_congratulations_reward_golden_ticket".localized().capitalizingFirstLetter())
+                    Text("msn_congratulations_reward_golden_ticket".localized.capitalizingFirstLetter())
                         .font(.PangramSans.bold(FHKSize.size16))
                         .foregroundColor(FHKColor.lunarSand)
                         .padding()

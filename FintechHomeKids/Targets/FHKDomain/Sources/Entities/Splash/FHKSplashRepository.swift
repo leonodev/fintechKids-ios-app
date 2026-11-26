@@ -11,7 +11,8 @@ import FHKCore
 
 public struct FHKSplashRepository: Sendable {
     public var readLanguageCurrent: @Sendable () async throws(FHKAppError) -> String? = { nil }
-    public var checkVersion: @Sendable () async throws(FHKAppError) -> FHKAppVersionEntity? = { nil }
+    public var checkVersion: @Sendable (_ params: FHKAppVersionParams) async throws(FHKAppError) -> FHKAppVersionEntity? = { _ in throw FHKAppError.unknown
+    }
     
     public init() {}
 }
@@ -30,7 +31,7 @@ public extension FHKSplashRepository {
         var repository = Self()
         repository.readLanguageCurrent = { "es" }
         
-        repository.checkVersion = {
+        repository.checkVersion = { _ in
             FHKAppVersionEntity(platform: "IOS",
                                 currentVersion: "1.0.0",
                                 latestVersion: "1.2.0",
@@ -51,7 +52,7 @@ public extension FHKSplashRepository {
         
         repository.readLanguageCurrent = { "en" }
         
-        repository.checkVersion = {
+        repository.checkVersion = { _ in
             FHKAppVersionEntity(platform: "IOS",
                                 currentVersion: "1.0.0",
                                 latestVersion: "1.2.0",

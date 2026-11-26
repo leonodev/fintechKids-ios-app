@@ -113,6 +113,31 @@ public struct FHKAPI: Sendable {
             return copy
         }
         
+        public func setUrlParams<T: Encodable>(_ params: T) -> Builder {
+            var copy = self
+            do {
+                let data = try JSONEncoder().encode(params)
+                if let jsonDict = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    var parsedParams: [String: String] = [:]
+                    for (key, value) in jsonDict {
+                        if let str = value as? String {
+                            parsedParams[key] = str
+                        } else if let num = value as? NSNumber {
+                            if CFGetTypeID(num) == CFBooleanGetTypeID() {
+                                parsedParams[key] = num.boolValue ? "true" : "false"
+                            } else {
+                                parsedParams[key] = num.stringValue
+                            }
+                        }
+                    }
+                    copy.urlParams.merge(parsedParams) { _, new in new }
+                }
+            } catch {
+                Logger.error("Error encoding URL params (\(T.self)): \(error)")
+            }
+            return copy
+        }
+        
         public func set(urlParam: String, value: String?) -> Builder {
             var copy = self
             if let value = value {

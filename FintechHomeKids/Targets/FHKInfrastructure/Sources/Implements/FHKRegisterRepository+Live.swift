@@ -17,14 +17,14 @@ public extension FHKRegisterRepository {
 
         repo.register = { registerEntity throws(FHKAppError) in
             
-            let responseDto: FHKRegisterResponse = try await FHKAPI.Builder()
+            let responseDto: FHKRegisterResponseDto = try await FHKAPI.Builder()
                             .setPath(.register)
                             .setBody(body: registerEntity.toDto())
                             .setMethod(.POST)
                             .build()
                             .execute()
             
-            return responseDto
+            return responseDto.toDomain()
         }
         
         repo.saveFamilyInfoKeychain = { familyName throws(FHKAppError) in

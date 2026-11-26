@@ -11,7 +11,7 @@ import FHKCore
 
 // MARK: - Contract
 public struct FHKRegisterRepository: Sendable {
-    public var register: @Sendable (_ registerEntity: FHKRegisterEntity) async throws(FHKAppError) -> FHKRegisterResponse = { _ in
+    public var register: @Sendable (_ registerEntity: FHKRegisterParams) async throws(FHKAppError) -> FHKRegisterEntity = { _ in
         throw FHKAppError.unknown
     }
     
@@ -40,13 +40,13 @@ extension FHKRegisterRepository {
         var preview = Self()
         
         preview.register = { _ in
-            return FHKRegisterResponse(id: 1,
-                                       createdAt: Date().toUTC,
-                                       nameFamily: "Leon",
-                                       emailParent: "user@example.com",
-                                       approvePin: "1234",
-                                       isActive: true,
-                                       updatedAt: Date().toUTC)
+            return FHKRegisterEntity(id: 1,
+                                     createdAt: Date().toUTC,
+                                     nameFamily: "Leon",
+                                     emailParent: "user@example.com",
+                                     approvePin: "1234",
+                                     isActive: true,
+                                     updatedAt: Date().toUTC)
         }
         
         return preview

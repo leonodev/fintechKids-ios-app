@@ -2,24 +2,37 @@
 //  FHKRegisterEntity.swift
 //  FintechHomeKids
 //
-//  Created by Fredy Leon on 4/9/26.
+//  Created by Fredy Leon on 25/11/2026.
 //
 
-public struct FHKRegisterEntity: Sendable, Equatable, Encodable {
-    public let email: String
-    public let password: String
-    public let familyName: String
-    public let approvePIN: String
+import Foundation
+
+public struct FHKRegisterEntity: Sendable, Equatable {
+    public let id: Int
+    public let createdAt: String
+    public let nameFamily: String
+    public let emailParent: String
+    public let approvePin: String
+    public let isActive: Bool
+    public let updatedAt: String
 
     public init(
-        email: String,
-        password: String,
-        familyName: String,
-        approvePIN: String
+        id: Int,
+        createdAt: String,
+        nameFamily: String,
+        emailParent: String,
+        approvePin: String,
+        isActive: Bool,
+        updatedAt: String
     ) {
-        self.email = email
-        self.password = password
-        self.familyName = familyName
-        self.approvePIN = approvePIN
+        self.id = id
+        self.createdAt = createdAt
+        self.nameFamily = nameFamily
+        self.emailParent = emailParent
+        self.approvePin = approvePin
+        self.isActive = isActive
+        self.updatedAt = updatedAt
     }
 }
+
+

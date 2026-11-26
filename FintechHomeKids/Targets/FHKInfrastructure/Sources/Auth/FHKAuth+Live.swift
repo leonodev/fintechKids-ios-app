@@ -31,9 +31,9 @@ public extension FHKAuth {
             try await supabaseService.refreshSession(emailParent: email)
         }
         
-        auth.register = { entity in
-            try await supabaseService.register(registerEntity: entity)
-        }
+//        auth.register = { entity in
+//            try await supabaseService.register(registerEntity: entity)
+//        }
         
         auth.setSession = { token in
             try await supabaseService.setSession(accessToken: token)
@@ -65,33 +65,33 @@ internal struct FHKSupabase: Sendable, FHKSupabaseErrorProtocol {
         }
     }
     
-    public func register(registerEntity: FHKRegisterEntity) async throws -> FHKUserSession {
-        do {
-            let signUp = try await client.auth.signUp(
-                email: registerEntity.email,
-                password: registerEntity.password
-            )
-            
-            let familyData: [String: String] = [
-                FHK_SUPABASE_DB.TABLE_FAMILIES.COLUMN.emailParent: registerEntity.email,
-                FHK_SUPABASE_DB.TABLE_FAMILIES.COLUMN.nameFamily: registerEntity.familyName.lowercased(),
-                FHK_SUPABASE_DB.TABLE_FAMILIES.COLUMN.approvePin: registerEntity.approvePIN
-            ]
-    
-            try await client
-                .from(FHK_SUPABASE_DB.TABLE_FAMILIES.NAME)
-                .insert(familyData)
-                .execute()
-            
-            let aditionalInfo = InfoAditional(pinApproved: registerEntity.approvePIN,
-                                              familyName: registerEntity.familyName.lowercased())
-            
-            return signUp.toDomain(aditionalInfo: aditionalInfo)
-            
-        } catch {
-            throw handleAuthError(error, context: registerEntity.toSafeLogString())
-        }
-    }
+//    public func register(registerEntity: FHKRegisterParams) async throws -> FHKUserSession {
+//        do {
+//            let signUp = try await client.auth.signUp(
+//                email: registerEntity.email,
+//                password: registerEntity.password
+//            )
+//            
+//            let familyData: [String: String] = [
+//                FHK_SUPABASE_DB.TABLE_FAMILIES.COLUMN.emailParent: registerEntity.email,
+//                FHK_SUPABASE_DB.TABLE_FAMILIES.COLUMN.nameFamily: registerEntity.familyName.lowercased(),
+//                FHK_SUPABASE_DB.TABLE_FAMILIES.COLUMN.approvePin: registerEntity.approvePIN
+//            ]
+//    
+//            try await client
+//                .from(FHK_SUPABASE_DB.TABLE_FAMILIES.NAME)
+//                .insert(familyData)
+//                .execute()
+//            
+//            let aditionalInfo = InfoAditional(pinApproved: registerEntity.approvePIN,
+//                                              familyName: registerEntity.familyName.lowercased())
+//            
+//            return signUp.toDomain(aditionalInfo: aditionalInfo)
+//            
+//        } catch {
+//            throw handleAuthError(error, context: registerEntity.toSafeLogString())
+//        }
+//    }
     
     public func logout() async throws {
         try await client.auth.signOut()

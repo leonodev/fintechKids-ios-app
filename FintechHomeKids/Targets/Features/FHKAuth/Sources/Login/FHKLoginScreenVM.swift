@@ -88,49 +88,17 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
             let loginEntity = FHKLoginParams(email: viewState.email, password: viewState.password)
             let login = try await fhkLoginRepository.login(loginEntity)
             
-            guard !login.accessToken.isEmpty else {
-                informateError(FHKLoginError.accessTokenInvalid)
+            guard isDataValid(loginInfo: login) else {
                 return
             }
             
-            // We saved the Session Token PROTECTED by Face ID for the future
-            guard saveSessionToken(tokenAccess: login.accessToken,
-                                   isHasBiometry: isBiometryAvailable) else {
-                return
-            }
+            async let tokenResult: () = proccessAccessToken(token: login.accessToken)
+            async let pinResult: () = proccessValidationPIN(pin: login.approvePin)
+            async let familyResult: () = proccessFamily(nameFamily: login.familyName)
+            async let emailResult: () = proccessEmailParent(email: viewState.email)
             
-//            guard let pinToApprovedTask = userSession?.infoAditional?.pinApproved, !pinToApprovedTask.isEmpty else {
-//                informateError(FHKLoginError.pinApproveInvalid)
-//                return
-//            }
-//            
-//            guard let familyName = userSession?.infoAditional?.familyName, !familyName.isEmpty else {
-//                informateError(FHKLoginError.familyNameInvalid)
-//                return
-//            }
-            
-//            do {
-//                try fhkRegisterRepository.saveFamilyInfoKeychain(familyName)
-//            } catch {
-//                informateError(FHKLoginError.familyNameInvalid)
-//                return
-//            }
-            
-//            do {
-//                try await fhkLoginRepository.savePinApproveTask(pinToApprovedTask)
-//            } catch {
-//                informateError(FHKLoginError.pinApproveInvalid)
-//                return
-//            }
-            
-            guard await saveUserIntoKeychain() else {
-                return
-            }
-            
-            //try await fhkSession.login()
-//        } catch let error as FHKSupabaseError {
-//            viewState.loginState = .error
-//            informateError(error)
+            let _ = await (tokenResult, pinResult, familyResult, emailResult)
+            viewState.loginState = .finish(result: .success)
         } catch let appError {
             // If the Task was cancelled when the view was closed, we exit silently.
             if appError == .cancelled { return }
@@ -141,11 +109,74 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
             // If you want to react to a specific case from the backend:
             if case .backend(.recoveryCodeExpired, _) = appError {/* Here */}
         }
+    }
+    
+    private func isDataValid(loginInfo: FHKLoginEntity) -> Bool {
+        guard !loginInfo.accessToken.isEmpty,
+              !loginInfo.approvePin.isEmpty,
+              !loginInfo.familyName.isEmpty,
+              !viewState.email.isEmpty else {
+            Logger.error("Data Validation Login Failed")
+            return false
+        }
         
-//        catch {
-//            viewState.loginState = .finish(result: .error)
-//            informateError(FHKLoginError.loginUserFailed)
-//        }
+        return true
+    }
+    
+    private func proccessAccessToken(token: String) async {
+        guard !token.isEmpty else {
+            informateError(FHKAppError.saveTokenAccessKeychainFailed)
+            return
+        }
+        
+        // We saved the Session Token PROTECTED by Face ID for the future
+        guard saveSessionToken(tokenAccess: token,
+                               isHasBiometry: isBiometryAvailable) else {
+            informateError(FHKAppError.saveTokenAccessKeychainFailed)
+            return
+        }
+        
+        Logger.info("(1 of 4) Token session saved success")
+    }
+    
+    private func proccessValidationPIN(pin: String) async {
+        guard !pin.isEmpty else {
+            informateError(FHKAppError.pinApproveFailed)
+            return
+        }
+        
+        do {
+            try await fhkLoginRepository.savePinApproveTask(pin)
+            Logger.info("(2 of 4) PIN saved success")
+        } catch {
+            informateError(FHKAppError.pinApproveFailed)
+            return
+        }
+    }
+    
+    private func proccessFamily(nameFamily: String) async {
+        guard !nameFamily.isEmpty else {
+            informateError(FHKAppError.familyNameFailed)
+            return
+        }
+        
+        do {
+            try fhkRegisterRepository.saveFamilyInfoKeychain(nameFamily)
+            Logger.info("(3 of 4) Family Name saved success")
+        } catch {
+            informateError(FHKAppError.familyNameFailed)
+            return
+        }
+    }
+    
+    private func proccessEmailParent(email: String) async  {
+        do {
+            try await fhkLoginRepository.saveUserIntoKeychain(email)
+            Logger.info("(4 of 4) User saved success")
+        } catch {
+            viewState.loginState = .finish(result: .error)
+            informateError(FHKAppError.saveUserMailKeychainFailed)
+        }
     }
     
     @MainActor
@@ -181,18 +212,6 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
         } catch {
             viewState.loginState = .finish(result: .error)
             informateError(FHKAppError.saveTokenAccessKeychainFailed)
-            return false
-        }
-    }
-    
-    func saveUserIntoKeychain() async -> Bool {
-        do {
-            try await fhkLoginRepository.saveUserIntoKeychain(viewState.email)
-            Logger.info("USER SAVED INTO KEYCHAIN SUCCESS")
-            return true
-        } catch {
-            viewState.loginState = .finish(result: .error)
-            informateError(FHKAppError.saveUserMailKeychainFailed)
             return false
         }
     }

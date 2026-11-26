@@ -13,7 +13,6 @@ import FLibStorage
 public extension FHKLoginRepository {
     
     static var live: Self {
-        let supabase = inject.fhkAuth
         let storage = inject.fhkStorage
         let configuration = inject.fhkConfiguration
         
@@ -40,7 +39,7 @@ public extension FHKLoginRepository {
                 throw FHKAppError.biometryNotAvailable
             }
             
-            guard let savedToken = try storage.readSecureKeychain(
+            guard let _ = try storage.readSecureKeychain(
                 String.self,
                 for: KeychainKeys.accessTokenKey,
                 prompt: prompt

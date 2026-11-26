@@ -62,7 +62,7 @@ public struct FHKRegisterScreen: View {
     }
     
     var loadingView: some View {
-        LoadingView(msn: viewModel.viewState.msnLoading)
+        LoadingView(msn: viewModel.viewState.msnRegisterLoading)
     }
     
     var loadedView: some View {

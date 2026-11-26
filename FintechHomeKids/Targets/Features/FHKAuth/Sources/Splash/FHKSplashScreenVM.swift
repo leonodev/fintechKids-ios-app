@@ -29,6 +29,10 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
         fhkLoginRepository.hasSavedToken()
     }
     
+    private var fhkConfiguration: FHKConfiguration {
+        inject.fhkConfiguration
+    }
+    
     public enum Action: Equatable {
         case readLanguageCurrent
         case checkVersion
@@ -69,7 +73,9 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
     @MainActor
     private func checkVersion() async {
         do {
-            let checkVersion = try await fhkSplashRepository.checkVersion()
+            let params = FHKAppVersionParams(platform: "IOS",
+                                             currentVersion: fhkConfiguration.versionAPP())
+            let checkVersion = try await fhkSplashRepository.checkVersion(params)
             
             if let versionInfo = checkVersion {
                 await validateStateVersionApp(info: versionInfo)

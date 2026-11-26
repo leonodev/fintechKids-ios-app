@@ -26,7 +26,7 @@ public struct GradientText: View {
                     Color(red: 0.3, green: 0.7, blue: 1.0), // Azul
                     Color(red: 0.4, green: 0.9, blue: 0.9)  // Cian
                 ],
-                shadowColor: Color = .black.opacity(0.2),
+                shadowColor: Color = .black.opacity(0.7),
                 shadowRadius: CGFloat = FHKSize.size04,
                 shadowX: CGFloat = 2,
                 shadowY: CGFloat = 2

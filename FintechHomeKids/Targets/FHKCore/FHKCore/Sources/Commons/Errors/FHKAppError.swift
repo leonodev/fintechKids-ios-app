@@ -17,6 +17,8 @@ public enum FHKAppError: FHKError, Sendable, Equatable {
     case biometryNotAvailable
     case biometryCancelAuthentication
     case biometryAuthenticationFailed
+    case pinApproveFailed
+    case familyNameFailed
     
     // Network & Transport
     case invalidURL(String)
@@ -52,6 +54,10 @@ public enum FHKAppError: FHKError, Sendable, Equatable {
             return "Biometry: user explicitly cancelled the biometric authentication"
         case .biometryAuthenticationFailed:
             return "Biometry: the biometric authentication failed"
+        case .pinApproveFailed:
+            return "PIN: the pin validation failed"
+        case .familyNameFailed:
+            return "Family name failed"
         case .invalidURL(let url):
             return "Invalid URL: \(url)"
         case .notConnectedInternet:
@@ -87,6 +93,8 @@ public enum FHKAppError: FHKError, Sendable, Equatable {
             return "msn_biometry_not_available_error"
         case .biometryAuthenticationFailed:
             return "msn_biometry_not_failed_error"
+        case .pinApproveFailed, .familyNameFailed:
+            return "msn_generic_error"
         case .notConnectedInternet:
             return "msn_not_connection_internet_error"
         case .timeout:
@@ -117,6 +125,10 @@ public enum FHKAppError: FHKError, Sendable, Equatable {
             return "remote_config_failed"
         case .invalidURL:
             return "invalid_url"
+        case .pinApproveFailed:
+            return "pin_approve_failed"
+        case .familyNameFailed:
+            return "family_name_failed"
         case .notConnectedInternet:
             return "not_connected_internet_failed"
         case .timeout:

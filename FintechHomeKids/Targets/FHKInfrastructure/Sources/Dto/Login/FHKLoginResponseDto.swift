@@ -12,12 +12,16 @@ public struct FHKLoginResponseDto: Sendable, Decodable {
     let refreshToken: String
     let tokenType: String
     let expiresInMinutes: Int
+    let approvePin: String
+    let familyName: String
     
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
         case refreshToken = "refresh_token"
         case tokenType = "token_type"
         case expiresInMinutes = "expires_in_minutes"
+        case approvePin = "approve_pin"
+        case familyName = "name_family"
     }
 }
 
@@ -27,7 +31,10 @@ public extension FHKLoginResponseDto {
         FHKLoginEntity(accessToken: self.accessToken,
                        refreshToken: self.refreshToken,
                        tokenType: self.tokenType,
-                       expiresInMinutes: self.expiresInMinutes)
+                       expiresInMinutes: self.expiresInMinutes,
+                       approvePin: self.approvePin,
+                       familyName: self.familyName
+        )
     }
 }
 
@@ -36,6 +43,9 @@ public extension FHKLoginEntity {
         FHKLoginResponseDto(accessToken: self.accessToken,
                             refreshToken: self.refreshToken,
                             tokenType: self.tokenType,
-                            expiresInMinutes: self.expiresInMinutes)
+                            expiresInMinutes: self.expiresInMinutes,
+                            approvePin: self.approvePin,
+                            familyName: self.familyName
+        )
     }
 }

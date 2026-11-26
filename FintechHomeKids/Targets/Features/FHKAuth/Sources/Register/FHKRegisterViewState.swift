@@ -20,7 +20,6 @@ public class FHKRegisterViewState {
     public var password = ""
     public var confirmPassword = ""
     public var pinApproveTask = ""
-    public var msnLoading = ""
     public var msnRegisterFail = ""
     
     // Properties View
@@ -46,6 +45,10 @@ public class FHKRegisterViewState {
     
     public var pinApproveTaskPlaceholder: String {
         "title_pin_approve_task_placeholder".localized.capitalizingFirstLetter()
+    }
+    
+    public var msnRegisterLoading: String {
+        "title_loading_registering_user".localized
     }
     
     public var titleRegisterBtn: String {
@@ -80,8 +83,6 @@ public class FHKRegisterViewState {
         set {
             _registerState = newValue
             switch newValue {
-            case .loading:
-                updateLoadingView()
                 
             case .loaded:
                 informateSuccess()
@@ -115,9 +116,6 @@ public class FHKRegisterViewState {
 }
 
 extension FHKRegisterViewState {
-    private func updateLoadingView() {
-        msnLoading = "title_loading_registering_user".localized().capitalizingFirstLetter()
-    }
     
     private func informateSuccess() {
         Logger.info("REGISTER USER SUCCESS")

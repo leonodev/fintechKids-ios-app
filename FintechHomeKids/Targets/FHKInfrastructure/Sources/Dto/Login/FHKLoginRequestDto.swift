@@ -5,7 +5,6 @@
 //  Created by Fredy Leon on 25/11/2026.
 //
 
-// Módulo: FHKInfrastructure
 import FHKDomain
 
 public struct FHKLoginRequestDto: Encodable, Sendable {

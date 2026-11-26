@@ -34,15 +34,15 @@ public struct FHKRegisterDto: Encodable, Sendable {
 }
 
 public extension FHKRegisterDto {
-    func toDomain() -> FHKRegisterEntity {
-        return FHKRegisterEntity(email: self.emailParent,
+    func toDomain() -> FHKRegisterParams {
+        return FHKRegisterParams(email: self.emailParent,
                                  password: self.password,
                                  familyName: self.nameFamily,
                                  approvePIN: self.approvePin)
     }
 }
 
-public extension FHKRegisterEntity {
+public extension FHKRegisterParams {
     func toDto() -> FHKRegisterDto {
         return FHKRegisterDto(emailParent: self.email,
                               password: self.password,

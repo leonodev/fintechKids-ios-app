@@ -51,7 +51,9 @@ public extension FHKLoginRepository {
             FHKLoginEntity(accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
                            refreshToken: "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkZy",
                            tokenType: "bearer",
-                           expiresInMinutes: 1
+                           expiresInMinutes: 1,
+                           approvePin: "0000",
+                           familyName: "familyName"
             )
         }
         
