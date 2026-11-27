@@ -26,7 +26,7 @@ public final class FHKSplashScreenVM: FHKCore.ViewModel {
     }
     
     var hasSavedAuthToken: Bool {
-        fhkLoginRepository.hasSavedToken()
+        inject.fhkConfiguration.hasSavedToken()
     }
     
     private var fhkConfiguration: FHKConfiguration {

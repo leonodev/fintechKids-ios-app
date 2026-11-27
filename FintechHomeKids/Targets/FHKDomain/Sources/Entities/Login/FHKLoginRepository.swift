@@ -16,12 +16,9 @@ public struct FHKLoginRepository: Sendable {
     
     public var loginWithBiometrics: @Sendable (_ prompt: String) async throws(FHKAppError) -> Void = { _ in }
     
-    public var saveAuthToken: @Sendable (_ token: String, _ requiresBiometry: Bool) throws(FHKAppError) -> Void = { _, _ in }
-    
     public var saveUserIntoKeychain: @Sendable (_ email: String) async throws(FHKAppError) -> Void = { _ in }
     public var savePinApproveTask: @Sendable (_ pin: String) async throws(FHKAppError) -> Void = { _ in }
     public var refreshParentMail: @Sendable () -> Void = {}
-    public var hasSavedToken: @Sendable () -> Bool = { false }
 
     public init() {}
 }
@@ -44,8 +41,6 @@ public extension FHKLoginRepository {
     
     static var preview: Self {
         var preview = Self()
-        
-        preview.hasSavedToken = { true }
         
         preview.login = { _ in
             FHKLoginEntity(accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",

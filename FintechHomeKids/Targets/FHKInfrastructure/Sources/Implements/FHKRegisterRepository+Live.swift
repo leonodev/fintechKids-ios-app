@@ -12,9 +12,11 @@ import FLibStorage
 
 public extension FHKRegisterRepository {
     
+    
+    
     static var live: Self {
         var repo = Self()
-
+    
         repo.register = { registerParams throws(FHKAppError) in
             let responseDto: FHKRegisterResponseDto = try await FHKAPI.Builder()
                             .setPath(.register)
@@ -28,6 +30,7 @@ public extension FHKRegisterRepository {
         
         repo.saveFamilyInfoKeychain = { familyName throws(FHKAppError) in
             try inject.fhkStorage .saveSecureKeychain(familyName, for: KeychainKeys.familyNameKey)
+            inject.fhkConfiguration.refreshFamilyName()
         }
         
         return repo

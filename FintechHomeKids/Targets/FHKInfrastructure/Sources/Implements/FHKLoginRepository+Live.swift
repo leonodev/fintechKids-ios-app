@@ -18,10 +18,6 @@ public extension FHKLoginRepository {
         
         var repository = Self()
         
-        repository.hasSavedToken = {
-            storage.exists(key: KeychainKeys.accessTokenKey)
-        }
-        
         repository.login = { loginParams throws(FHKAppError) in
             let responseDto: FHKLoginResponseDto = try await FHKAPI.Builder()
                 .setPath(.login)
@@ -47,17 +43,10 @@ public extension FHKLoginRepository {
                 throw FHKAppError.biometryNotAvailable
             }
         }
-        
-        repository.saveAuthToken = { token, requiresBiometry throws(FHKAppError) in
-            try storage.saveSecureKeychain(
-                token,
-                for: KeychainKeys.accessTokenKey,
-                requireBiometry: requiresBiometry
-            )
-        }
-        
+
         repository.savePinApproveTask = { pin throws(FHKAppError) in
             try storage.saveSecureKeychain(pin, for: KeychainKeys.approvePinKey)
+            configuration.refreshApprovePin()
         }
         
         repository.saveUserIntoKeychain = { email throws(FHKAppError) in

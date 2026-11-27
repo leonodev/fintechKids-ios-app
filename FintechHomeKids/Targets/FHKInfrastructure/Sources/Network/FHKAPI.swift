@@ -174,7 +174,10 @@ public struct FHKAPI: Sendable {
     }
     
     // MARK: - Execute (Swift 6 Async/Await + Typed Throws + Smart Retry)
-    public func execute<T: Decodable & Sendable>(retries: Int = 1) async throws(FHKAppError) -> T {
+    public func execute<T: Decodable & Sendable>(
+        retries: Int = 1,
+        allowTokenRefresh: Bool = true
+    ) async throws(FHKAppError) -> T {
         let baseURL = getBaseURLAPI()
         let pathString = self.path?.rawValue ?? ""
         
@@ -201,7 +204,38 @@ public struct FHKAPI: Sendable {
                 }
                 
                 guard 200...299 ~= responseStatus.statusCode else {
-                    throw parseBackendError(statusCode: responseStatus.statusCode, data: data)
+                    let parsedError = parseBackendError(statusCode: responseStatus.statusCode, data: data)
+                    
+                    // We only refresh if the token has expired (401 INVALID_OR_EXPIRED_TOKEN)—never during login, registration, or a refresh operation.
+                    let isProtectedRoute = (url != .login && url != .register && url != .refreshToken)
+                    
+                    if case .backend(.invalidOrExpiredToken, _) = parsedError, allowTokenRefresh, isProtectedRoute {
+                        
+                        
+                        let newAccessToken = try await FHKTokenRefresher.shared.refreshAccessToken(
+                            environment: environmentType
+                        )
+                        
+                        var retryRequest = requestURL
+                        retryRequest.setValue("Bearer \(newAccessToken)", forHTTPHeaderField: "Authorization")
+                        Logger.request(retryRequest)
+                        
+                        let (retryData, retryResponse) = try await session.data(for: retryRequest)
+                        Logger.response(retryResponse, data: retryData)
+                        
+                        guard let retryHttp = retryResponse as? HTTPURLResponse else {
+                            throw FHKAppError.unknown
+                        }
+                        guard 200...299 ~= retryHttp.statusCode else {
+                            throw parseBackendError(statusCode: retryHttp.statusCode, data: retryData)
+                        }
+                        guard !retryData.isEmpty else {
+                            throw FHKAppError.emptyResponse
+                        }
+                        return try JSONDecoder().decode(T.self, from: retryData)
+                    }
+                    
+                    throw parsedError
                 }
                 
                 guard !data.isEmpty else {

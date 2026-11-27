@@ -10,7 +10,7 @@ import FLibUtils
 public enum FHKAppError: FHKError, Sendable, Equatable {
     // Storage & Device
     case readUserMailKeychainFailed
-    case saveTokenAccessKeychainFailed
+    case saveTokensKeychainFailed
     case saveUserMailKeychainFailed
     case userDefaultsFailed
     case remoteConfigFailed
@@ -40,8 +40,8 @@ public enum FHKAppError: FHKError, Sendable, Equatable {
         switch self {
         case .readUserMailKeychainFailed:
             return "Security: failed to read user email from secure keychain storage"
-        case .saveTokenAccessKeychainFailed:
-            return "Security: failure saving access token to keychain"
+        case .saveTokensKeychainFailed:
+            return "Security: failure saving tokens to keychain"
         case .saveUserMailKeychainFailed:
             return "Security: failed to save user email in secure keychain storage"
         case .userDefaultsFailed:
@@ -87,7 +87,7 @@ public enum FHKAppError: FHKError, Sendable, Equatable {
     
     public var msnLocalizedKey: String {
         switch self {
-        case .saveTokenAccessKeychainFailed, .readUserMailKeychainFailed:
+        case .saveTokensKeychainFailed, .readUserMailKeychainFailed:
             return "msn_proccessing_information_secure"
         case .biometryNotAvailable:
             return "msn_biometry_not_available_error"
@@ -115,8 +115,8 @@ public enum FHKAppError: FHKError, Sendable, Equatable {
         switch self {
         case .readUserMailKeychainFailed:
             return "read_user_mail_keychain_failed"
-        case .saveTokenAccessKeychainFailed:
-            return "save_token_access_keychain_failed"
+        case .saveTokensKeychainFailed:
+            return "save_tokens_access_keychain_failed"
         case .saveUserMailKeychainFailed:
             return "save_user_mail_keychain_failed"
         case .userDefaultsFailed:

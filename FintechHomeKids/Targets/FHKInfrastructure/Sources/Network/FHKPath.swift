@@ -13,4 +13,5 @@ public enum FHKPath: String, Sendable {
     case forgotPassword = "/api/v1/auth/forgot-password"
     case resetPassword = "/api/v1/auth/reset-password"
     case login = "/api/v1/auth/login"
+    case refreshToken = "/api/v1/auth/refresh"
 }

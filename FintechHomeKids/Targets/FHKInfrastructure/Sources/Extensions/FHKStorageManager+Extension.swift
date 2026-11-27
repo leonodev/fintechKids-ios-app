@@ -51,7 +51,7 @@ public extension FHKStorageManager {
         _ value: T,
         for key: String,
         requireBiometry: Bool = false,
-        orThrow appError: FHKAppError = .saveTokenAccessKeychainFailed
+        orThrow appError: FHKAppError = .saveTokensKeychainFailed
     ) throws(FHKAppError) {
         do {
             try saveKeychain(value, for: key, requireBiometry: requireBiometry)

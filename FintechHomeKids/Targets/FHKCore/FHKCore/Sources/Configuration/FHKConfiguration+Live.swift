@@ -43,6 +43,14 @@ public extension FHKConfiguration {
             env in state.setEnvironment(env)
         }
         
+        config.versionAPP = {
+            Bundle.main.appVersion
+        }
+        
+        config.buildNumberApp = {
+            Bundle.main.buildNumber
+        }
+        
         config.accessToken = {
             state.readAccessToken()
         }
@@ -51,16 +59,22 @@ public extension FHKConfiguration {
             state.readRefreshToken()
         }
         
+        config.refreshApprovePin = {
+            state.refreshApprovePin()
+        }
+        
         config.deleteTokens = {
             try state.clearTokens()
         }
         
-        config.versionAPP = {
-            Bundle.main.appVersion
+        config.saveTokens = { accessToken, refreshToken in
+            try state.saveTokens(accessToken: accessToken, refreshToken: refreshToken)
         }
         
-        config.buildNumberApp = {
-            Bundle.main.buildNumber
+        config.hasSavedToken = {
+            let hasAccess = !(state.readAccessToken() ?? "").isEmpty
+            let hasRefresh = !(state.readRefreshToken() ?? "").isEmpty
+            return hasAccess && hasRefresh
         }
         
         return config
@@ -132,6 +146,11 @@ private final class LiveState: @unchecked Sendable {
     func refreshFamilyName() {
         let newValue = try? storage.readKeychain(String.self, for: KeychainKeys.familyNameKey, prompt: nil)
         lock.withLock { familyName = newValue }
+    }
+    
+    func refreshApprovePin() {
+        let newValue = try? storage.readKeychain(String.self, for: KeychainKeys.approvePinKey, prompt: nil)
+        lock.withLock { approvePin = newValue }
     }
     
     func readAccessToken() -> String? {

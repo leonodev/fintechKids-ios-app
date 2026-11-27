@@ -39,16 +39,19 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
         inject.fhkModal
     }
     
-    public var fhkSession: FHKSession {
-        inject.fhkSession
-    }
+//    public var fhkSession: FHKSession {
+//        inject.fhkSession
+//    }
     
-    // Other properties
-    var hasSavedAuthToken: Bool {
-        fhkLoginRepository.hasSavedToken()
+    public var fhKConfiguration: FHKConfiguration {
+        inject.fhkConfiguration
     }
     
     // Others Properties
+    var hasSavedAuthToken: Bool {
+        inject.fhkConfiguration.hasSavedToken()
+    }
+    
     var isBiometryAvailable: Bool {
         fhkSecurity.getBiometryType() != .none
     }
@@ -89,15 +92,16 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
             let login = try await fhkLoginRepository.login(loginEntity)
             
             guard isDataValid(loginInfo: login) else {
+                viewState.loginState = .finish(result: .error)
                 return
             }
             
-            async let tokenResult: () = proccessAccessToken(token: login.accessToken)
+            async let tokensResult: () = proccessTokens(token: login.accessToken, refreshToken: login.refreshToken)
             async let pinResult: () = proccessValidationPIN(pin: login.approvePin)
             async let familyResult: () = proccessFamily(nameFamily: login.familyName)
             async let emailResult: () = proccessEmailParent(email: viewState.email)
             
-            let _ = await (tokenResult, pinResult, familyResult, emailResult)
+            let _ = await (tokensResult, pinResult, familyResult, emailResult)
             viewState.loginState = .finish(result: .success)
         } catch let appError {
             // If the Task was cancelled when the view was closed, we exit silently.
@@ -107,12 +111,14 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
             informateError(appError)
             
             // If you want to react to a specific case from the backend:
-            if case .backend(.recoveryCodeExpired, _) = appError {/* Here */}
+            if case .backend(.invalidCredentials, _) = appError {/* Here */}
+            if case .backend(.accountInactive, _) = appError {/* Here */}
         }
     }
     
     private func isDataValid(loginInfo: FHKLoginEntity) -> Bool {
         guard !loginInfo.accessToken.isEmpty,
+              !loginInfo.refreshToken.isEmpty,
               !loginInfo.approvePin.isEmpty,
               !loginInfo.familyName.isEmpty,
               !viewState.email.isEmpty else {
@@ -123,20 +129,24 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
         return true
     }
     
-    private func proccessAccessToken(token: String) async {
+    private func proccessTokens(token: String, refreshToken: String) async {
         guard !token.isEmpty else {
-            informateError(FHKAppError.saveTokenAccessKeychainFailed)
+            informateError(FHKAppError.saveTokensKeychainFailed)
             return
         }
         
-        // We saved the Session Token PROTECTED by Face ID for the future
-        guard saveSessionToken(tokenAccess: token,
-                               isHasBiometry: isBiometryAvailable) else {
-            informateError(FHKAppError.saveTokenAccessKeychainFailed)
+        guard !refreshToken.isEmpty else {
+            informateError(FHKAppError.saveTokensKeychainFailed)
             return
         }
         
-        Logger.info("(1 of 4) Token session saved success")
+        do {
+            try fhKConfiguration.saveTokens(token, refreshToken)
+            Logger.info("(1 of 4) Token session saved success")
+        } catch {
+            informateError(FHKAppError.saveTokensKeychainFailed)
+            return
+        }
     }
     
     private func proccessValidationPIN(pin: String) async {
@@ -202,17 +212,6 @@ public final class FHKLoginScreenVM: FHKCore.ViewModel {
    
         default:
             return viewState.msnGenericId
-        }
-    }
-
-    private func saveSessionToken(tokenAccess: String, isHasBiometry: Bool) -> Bool {
-        do {
-            try fhkLoginRepository.saveAuthToken(tokenAccess, isHasBiometry)
-            return true
-        } catch {
-            viewState.loginState = .finish(result: .error)
-            informateError(FHKAppError.saveTokenAccessKeychainFailed)
-            return false
         }
     }
 

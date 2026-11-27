@@ -15,13 +15,18 @@ public struct FHKConfiguration: Sendable {
     
     public var refreshParentMail: @Sendable() -> Void = { }
     public var refreshFamilyName: @Sendable() -> Void = { }
+    public var refreshApprovePin: @Sendable() -> Void = { }
+    public var refreshToken: @Sendable() -> String? = { nil }
     public var setEnvironment: @Sendable(FHKEnvironmentType) -> Void = { _ in }
     public var getEnvironment: @Sendable() -> FHKEnvironmentType = { .current }
-    public var accessToken: @Sendable() -> String? = { nil }
-    public var refreshToken: @Sendable() -> String? = { nil }
-    public var deleteTokens: @Sendable() throws -> Void = { }
+
     public var versionAPP: @Sendable() -> String = { "" }
     public var buildNumberApp: @Sendable() -> String = { "" }
+    
+    public var accessToken: @Sendable() -> String? = { nil }
+    public var saveTokens: @Sendable (_ accessToken: String, _ refreshToken: String) throws -> Void = { _, _ in }
+    public var deleteTokens: @Sendable () throws -> Void = { }
+    public var hasSavedToken: @Sendable () -> Bool = { false }
     
     public init() {}
 }
@@ -61,6 +66,14 @@ extension FHKConfiguration {
             .production
         }
         
+        preview.versionAPP = {
+            "1.0.1"
+        }
+        
+        preview.buildNumberApp = {
+            "1"
+        }
+        
         preview.accessToken = {
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
         }
@@ -69,17 +82,14 @@ extension FHKConfiguration {
             "lYWQ6dXNlcnMiLCJpYXQiOjE3MzE5MjM0MDB9"
         }
         
-        preview.deleteTokens = {
-            
-        }
+        preview.refreshParentMail = {}
+        preview.refreshApprovePin = {}
+
+        preview.deleteTokens = {}
         
-        preview.versionAPP = {
-            "1.0.1"
-        }
+        preview.saveTokens = {_,_ in }
         
-        preview.buildNumberApp = {
-            "1"
-        }
+        preview.hasSavedToken = { true }
         
      return preview
     }
